@@ -17,6 +17,17 @@ export class ChecksService {
     return this.db.getClientForCurrentContext();
   }
 
+  private argentinaDateStart(value = new Date()) {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Argentina/Buenos_Aires',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(value);
+    const part = (type: string) => parts.find((item) => item.type === type)?.value ?? '';
+    return new Date(Date.UTC(Number(part('year')), Number(part('month')) - 1, Number(part('day'))));
+  }
+
   private async validateBankAccount(bankAccountId: string | undefined, currencyCode: string) {
     if (!bankAccountId) return;
     const account = await this.prisma.bank_accounts.findFirst({
@@ -118,6 +129,22 @@ export class ChecksService {
             party: { select: { id: true, name: true, type: true } },
           },
         },
+        payment_allocations: {
+          select: {
+            amount_applied: true,
+            payment: {
+              select: {
+                id: true,
+                number: true,
+                type: true,
+                amount: true,
+                party_id: true,
+                party_type: true,
+                party: { select: { id: true, name: true, type: true } },
+              },
+            },
+          },
+        },
         bank_account: {
           select: { id: true, name: true, bank_name: true, currency_code: true },
         },
@@ -143,6 +170,10 @@ export class ChecksService {
 
   async update(id: string, dto: UpdateCheckDto, userId: string) {
     const check = await this.findOne(id);
+
+    if (dto.status !== undefined) {
+      throw new BadRequestException('El estado del cheque se actualiza mediante sus acciones de pago, depósito, débito o rechazo');
+    }
 
     if (check.is_own && !(dto.bank_account_id ?? check.bank_account_id)) {
       throw new BadRequestException('El cheque propio debe tener una cuenta bancaria a debitar');
@@ -171,7 +202,6 @@ export class ChecksService {
       data.due_date = new Date(dto.due_date);
       data.notification_sent = false;
     }
-    if (dto.status) data.status = dto.status;
     if (dto.notes !== undefined) data.notes = dto.notes;
     if (dto.payment_date) data.payment_date = new Date(dto.payment_date);
     if (dto.deposit_date) data.deposit_date = new Date(dto.deposit_date);
@@ -589,46 +619,12 @@ export class ChecksService {
     return this.findOne(id);
   }
 
-  async confirm(id: string, userId: string) {
+  async confirm(id: string) {
     const check = await this.findOne(id);
     if (!check.is_own) {
-      throw new BadRequestException('Solo se pueden confirmar cheques propios');
+      throw new BadRequestException('Los cheques de terceros no se confirman manualmente; se depositan, cobran o aplican a un pago');
     }
-    if (check.status !== 'PENDING') {
-      throw new BadRequestException('Solo se pueden confirmar cheques pendientes');
-    }
-    if (!check.bank_account_id) {
-      throw new BadRequestException('El cheque no tiene cuenta bancaria asociada. Editá el cheque y asignale una cuenta.');
-    }
-
-    const bankAccount = await this.prisma.bank_accounts.findUnique({
-      where: { id: check.bank_account_id },
-    });
-    if (!bankAccount) {
-      throw new NotFoundException('Cuenta bancaria no encontrada');
-    }
-
-    if (!bankAccount.active) {
-      throw new BadRequestException('La cuenta bancaria seleccionada está inactiva');
-    }
-    if (bankAccount.currency_code !== check.currency_code) {
-      throw new BadRequestException('La moneda del cheque debe coincidir con la moneda de la cuenta bancaria');
-    }
-
-    // Confirmar autoriza el cheque, pero no mueve el banco. La fecha efectiva
-    // se registra manualmente cuando el débito aparece en el extracto.
-    await this.prisma.checks.update({
-      where: { id },
-      data: {
-        status: 'CONFIRMED',
-        confirmed_by: userId,
-        confirmed_at: new Date(),
-        updated_at: new Date(),
-        updated_by: userId,
-      },
-    });
-
-    return this.findOne(id);
+    throw new BadRequestException('El cheque propio se confirma automáticamente al confirmar el pago asociado');
   }
 
   async debitOwnCheck(id: string, debitDate: string, userId: string) {
@@ -847,9 +843,9 @@ export class ChecksService {
   }
 
   async findUpcoming(days: number = 7) {
-    const today = new Date();
-    const futureDate = new Date();
-    futureDate.setDate(today.getDate() + days);
+    const today = this.argentinaDateStart();
+    const futureDate = new Date(today);
+    futureDate.setUTCDate(futureDate.getUTCDate() + days);
 
     return this.prisma.checks.findMany({
       where: {
@@ -862,16 +858,80 @@ export class ChecksService {
   }
 
   async findPendingNotification() {
-    const endOfToday = new Date();
-    endOfToday.setHours(23, 59, 59, 999);
+    const today = this.argentinaDateStart();
 
     return this.prisma.checks.findMany({
       where: {
         deleted_at: null,
         status: { in: ['PENDING', 'CONFIRMED'] },
-        due_date: { lte: endOfToday },
+        due_date: { lte: today },
       },
     });
+  }
+
+  async findNotificationAlerts(userId: string, upcomingDays = 30) {
+    const today = this.argentinaDateStart();
+    const upcomingLimit = new Date(today);
+    upcomingLimit.setUTCDate(upcomingLimit.getUTCDate() + Math.max(1, Math.min(365, upcomingDays)));
+    const existingCheckNotifications = await this.prisma.user_notifications.findMany({
+      where: {
+        recipient_user_id: userId,
+        dismissed_until: null,
+        type: { in: ['CHECK_DUE', 'CHECK_OVERDUE'] },
+        target_id: { not: null },
+      },
+      select: { type: true, target_id: true },
+      take: 500,
+    });
+    const upcomingNotifiedIds = existingCheckNotifications
+      .filter(notification => notification.type === 'CHECK_DUE' && notification.target_id)
+      .map(notification => notification.target_id as string);
+    const overdueNotifiedIds = existingCheckNotifications
+      .filter(notification => notification.type === 'CHECK_OVERDUE' && notification.target_id)
+      .map(notification => notification.target_id as string);
+    const thirdPartyWhere: Record<string, any> = {
+      deleted_at: null,
+      is_own: false,
+      status: { in: ['PENDING', 'CONFIRMED'] },
+      due_date: { lte: today },
+      ...(overdueNotifiedIds.length ? { id: { notIn: overdueNotifiedIds } } : {}),
+    };
+    const ownWhere: Record<string, any> = {
+      deleted_at: null,
+      is_own: true,
+      status: 'CONFIRMED' as const,
+      due_date: { lte: today },
+      ...(overdueNotifiedIds.length ? { id: { notIn: overdueNotifiedIds } } : {}),
+    };
+    const upcomingWhere: Record<string, any> = {
+      deleted_at: null,
+      status: { in: ['PENDING', 'CONFIRMED'] },
+      due_date: { gt: today, lte: upcomingLimit },
+      ...(upcomingNotifiedIds.length ? { id: { notIn: upcomingNotifiedIds } } : {}),
+    };
+
+    const preview = (where: Record<string, any>) => this.prisma.checks.findMany({
+      where,
+      select: { id: true, check_number: true, bank_name: true, due_date: true, is_own: true },
+      orderBy: { due_date: 'asc' },
+      take: 5,
+    });
+
+    const [thirdPartyCount, thirdPartyChecks, ownCount, ownChecks, upcomingCount, upcomingChecks] =
+      await Promise.all([
+        this.prisma.checks.count({ where: thirdPartyWhere }),
+        preview(thirdPartyWhere),
+        this.prisma.checks.count({ where: ownWhere }),
+        preview(ownWhere),
+        this.prisma.checks.count({ where: upcomingWhere }),
+        preview(upcomingWhere),
+      ]);
+
+    return {
+      third_party: { count: thirdPartyCount, checks: thirdPartyChecks },
+      own: { count: ownCount, checks: ownChecks },
+      upcoming: { count: upcomingCount, checks: upcomingChecks, days: upcomingDays },
+    };
   }
 
   async markNotificationSent(id: string) {

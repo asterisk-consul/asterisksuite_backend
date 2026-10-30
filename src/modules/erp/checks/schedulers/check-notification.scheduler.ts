@@ -147,35 +147,10 @@ export class CheckNotificationScheduler {
     const upcomingLimit = this.argentinaDate(2);
     const batchSize = 100;
     let upcomingNotified = 0;
+    let upcomingReviewed = 0;
     let overdueReviewed = 0;
     let remindersCreatedOrReopened = 0;
     let remindersResolved = 0;
-    while (true) {
-      const upcomingChecks = await prisma.checks.findMany({
-        where: {
-          status: { in: ['PENDING', 'CONFIRMED'] },
-          due_date: { gt: today, lte: upcomingLimit },
-          notification_sent: false,
-          deleted_at: null,
-        },
-        select: { id: true, is_own: true, check_number: true, due_date: true },
-        orderBy: { id: 'asc' },
-        take: batchSize,
-      });
-      if (!upcomingChecks.length) break;
-
-      for (const check of upcomingChecks) {
-        this.logger.log(
-          `[${companyName}] Aviso preventivo: cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number} vence ${check.due_date.toISOString().slice(0, 10)}`,
-        );
-        await prisma.checks.update({ where: { id: check.id }, data: { notification_sent: true } });
-        upcomingNotified += 1;
-      }
-    }
-
-    // WhatsApp has its own daily deduplication key and must not depend on
-    // notification_sent, which only controls the one-time in-app reminder.
-    let upcomingReviewed = 0;
     let upcomingAfterId: string | undefined;
     const upcomingDigest: string[] = [];
     while (true) {
@@ -186,16 +161,79 @@ export class CheckNotificationScheduler {
           deleted_at: null,
           ...(upcomingAfterId ? { id: { gt: upcomingAfterId } } : {}),
         },
-        select: { id: true, is_own: true, check_number: true, due_date: true },
+        select: {
+          id: true,
+          is_own: true,
+          check_number: true,
+          due_date: true,
+          notification_sent: true,
+          created_by: true,
+          payment: { select: { created_by: true } },
+          payment_allocations: {
+            select: { payment: { select: { created_by: true } } },
+          },
+        },
         orderBy: { id: 'asc' },
         take: batchSize,
       });
       if (!upcomingChecks.length) break;
       upcomingReviewed += upcomingChecks.length;
       for (const check of upcomingChecks) {
+        const dueDate = check.due_date.toISOString().slice(0, 10);
         if (upcomingDigest.length < 8) {
-          upcomingDigest.push(`• Cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number}: vence el ${check.due_date.toISOString().slice(0, 10)}`);
+          upcomingDigest.push(`• Cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number}: vence el ${dueDate}`);
         }
+
+        const recipients = [...new Set([
+          ...administratorIds,
+          check.created_by,
+          check.payment?.created_by,
+          ...check.payment_allocations.map((allocation: any) => allocation.payment?.created_by),
+        ].filter((userId): userId is string => Boolean(userId) && memberIds.has(userId)))];
+        const title = check.is_own ? 'Cheque propio próximo a vencer' : 'Cheque de tercero próximo a vencer';
+        const message = check.is_own
+          ? `El cheque propio #${check.check_number} vence el ${dueDate}. Prepará la revisión del saldo y el registro del débito cuando se acredite.`
+          : `El cheque de tercero #${check.check_number} vence el ${dueDate}. Prepará su depósito, cobro por caja o aplicación a un pago.`;
+        const reminderData = {
+          actor_user_id: null,
+          type: 'CHECK_DUE',
+          title,
+          message,
+          target_path: '/erp/treasury/checks?alert=upcoming&days=2',
+          target_type: 'CHECK_DUE',
+          target_id: check.id,
+        };
+
+        for (const recipientUserId of recipients) {
+          const existingReminder = await prisma.user_notifications.findFirst({
+            where: {
+              recipient_user_id: recipientUserId,
+              type: 'CHECK_DUE',
+              target_type: 'CHECK_DUE',
+              target_id: check.id,
+            },
+            select: { id: true },
+          });
+          if (existingReminder) {
+            await prisma.user_notifications.update({ where: { id: existingReminder.id }, data: reminderData });
+          } else {
+            await prisma.user_notifications.create({
+              data: {
+                ...reminderData,
+                recipient_user_id: recipientUserId,
+                created_at: new Date(),
+                read_at: null,
+              },
+            });
+          }
+          remindersCreatedOrReopened += 1;
+        }
+
+        if (!check.notification_sent) {
+          await prisma.checks.update({ where: { id: check.id }, data: { notification_sent: true } });
+        }
+        upcomingNotified += 1;
+        this.logger.log(`[${companyName}] Aviso preventivo: cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number} vence ${dueDate}`);
       }
       upcomingAfterId = upcomingChecks[upcomingChecks.length - 1].id;
     }
@@ -248,11 +286,12 @@ export class CheckNotificationScheduler {
       });
       if (!overdueChecks.length) break;
 
-      this.logger.log(`[${companyName}] ${overdueChecks.length} cheque(s) vencidos requieren una acción`);
+      this.logger.log(`[${companyName}] ${overdueChecks.length} cheque(s) con vencimiento hoy o anterior requieren una acción`);
       overdueReviewed += overdueChecks.length;
       for (const check of overdueChecks) {
+        const checkDueDate = check.due_date.toISOString().slice(0, 10);
         if (overdueDigest.length < 8) {
-          overdueDigest.push(`• Cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number}: venció el ${check.due_date.toISOString().slice(0, 10)}`);
+          overdueDigest.push(`• Cheque ${check.is_own ? 'propio' : 'de tercero'} #${check.check_number}: ${checkDueDate === today.toISOString().slice(0, 10) ? 'vence hoy' : `venció el ${checkDueDate}`}`);
         }
         const linkedPayments = [
           ...(check.payment ? [check.payment] : []),
@@ -263,14 +302,18 @@ export class CheckNotificationScheduler {
           ...linkedPayments.map((payment: any) => payment.created_by),
         ].filter((userId): userId is string => Boolean(userId) && memberIds.has(userId));
         const recipients = [...new Set([...administratorIds, ...creatorIds])];
-        const dueDate = check.due_date.toISOString().slice(0, 10);
+        const dueDate = checkDueDate;
+        const dueToday = dueDate === today.toISOString().slice(0, 10);
+        const dueState = dueToday ? 'vence hoy' : `venció el ${dueDate}`;
         const linkedPaymentLabel = linkedPayments[0]
           ? `${linkedPayments[0].type === 'COLLECTION' ? ' · Cobro' : ' · Pago'} #${linkedPayments[0].number}`
           : '';
-        const title = check.is_own ? 'Resolver cheque propio vencido' : 'Cheque vencido pendiente de depósito';
+        const title = check.is_own
+          ? dueToday ? 'Débito de cheque propio para verificar hoy' : 'Resolver cheque propio vencido'
+          : dueToday ? 'Cheque de tercero vence hoy' : 'Cheque vencido pendiente de depósito';
         const message = check.is_own
-          ? `El cheque propio #${check.check_number}${linkedPaymentLabel} venció el ${dueDate}. Registrá su débito cuando aparezca en el banco o su pago desde caja si corresponde.`
-          : `El cheque de tercero #${check.check_number}${linkedPaymentLabel} venció el ${dueDate}. Depositá, cobrá por caja o registrá su entrega a un proveedor.`;
+          ? `El cheque propio #${check.check_number}${linkedPaymentLabel} ${dueState}. Registrá su débito cuando aparezca en el banco o su pago desde caja si corresponde.`
+          : `El cheque de tercero #${check.check_number}${linkedPaymentLabel} ${dueState}. Depositá, cobrá por caja o registrá su entrega a un proveedor.`;
 
         for (const recipientUserId of recipients) {
           const existingReminder = await prisma.user_notifications.findFirst({
@@ -287,7 +330,9 @@ export class CheckNotificationScheduler {
             type: 'CHECK_OVERDUE',
             title,
             message,
-            target_path: '/erp/treasury/checks',
+            target_path: check.is_own
+              ? '/erp/treasury/checks?alert=own'
+              : '/erp/treasury/checks?alert=third-party',
             target_type: 'CHECK_OVERDUE',
             target_id: check.id,
           };
@@ -328,7 +373,7 @@ export class CheckNotificationScheduler {
           companyId,
           eventType: 'CHECK_OVERDUE',
           deduplicationKey: `check-overdue-digest:${this.argentinaDate().toISOString().slice(0, 10)}`,
-          title: 'Cheques vencidos pendientes de resolver',
+          title: 'Cheques vencidos o con vencimiento hoy',
           message: [
             `Hay ${overdueReviewed} cheque(s) vencido(s) que requieren una acción.`,
             ...overdueDigest,
@@ -341,17 +386,16 @@ export class CheckNotificationScheduler {
       }
     }
 
-    // Remove reminders for checks that were cleared, cancelled, bounced,
-    // deleted, or moved to a future due date. This also removes dismissed rows.
+    // Remove reminders when their check is resolved or leaves its reminder window.
     let notificationAfterId: string | undefined;
     while (true) {
       const reminders = await prisma.user_notifications.findMany({
         where: {
-          type: 'CHECK_OVERDUE',
-          target_type: 'CHECK_OVERDUE',
+          type: { in: ['CHECK_DUE', 'CHECK_OVERDUE'] },
+          target_type: { in: ['CHECK_DUE', 'CHECK_OVERDUE'] },
           ...(notificationAfterId ? { id: { gt: notificationAfterId } } : {}),
         },
-        select: { id: true, target_id: true },
+        select: { id: true, type: true, target_id: true },
         orderBy: { id: 'asc' },
         take: batchSize,
       });
@@ -363,14 +407,25 @@ export class CheckNotificationScheduler {
             where: {
               id: { in: checkIds },
               status: { in: ['PENDING', 'CONFIRMED'] },
-              due_date: { lte: today },
+              OR: [
+                { due_date: { lte: today } },
+                { due_date: { gt: today, lte: upcomingLimit } },
+              ],
               deleted_at: null,
             },
-            select: { id: true },
+            select: { id: true, due_date: true },
           })
         : [];
-      const activeCheckIds = new Set(activeChecks.map((check: any) => check.id));
-      const resolvedIds = reminders.filter((reminder) => !activeCheckIds.has(reminder.target_id ?? ''))
+      const activeOverdueIds = new Set(activeChecks
+        .filter((check: any) => check.due_date <= today)
+        .map((check: any) => check.id));
+      const activeUpcomingIds = new Set(activeChecks
+        .filter((check: any) => check.due_date > today && check.due_date <= upcomingLimit)
+        .map((check: any) => check.id));
+      const resolvedIds = reminders.filter((reminder) => {
+        const activeIds = reminder.type === 'CHECK_DUE' ? activeUpcomingIds : activeOverdueIds;
+        return !reminder.target_id || !activeIds.has(reminder.target_id);
+      })
         .map((reminder) => reminder.id);
       if (resolvedIds.length) {
         const result = await prisma.user_notifications.deleteMany({

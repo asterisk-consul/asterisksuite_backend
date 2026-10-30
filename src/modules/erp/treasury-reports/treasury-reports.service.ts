@@ -13,14 +13,24 @@ export class TreasuryReportsService {
     return this.db.getClientForCurrentContext();
   }
 
+  private argentinaDateStart(value = new Date()) {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Argentina/Buenos_Aires',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(value);
+    const part = (type: string) => parts.find((item) => item.type === type)?.value ?? '';
+    return new Date(Date.UTC(Number(part('year')), Number(part('month')) - 1, Number(part('day'))));
+  }
+
   async dashboard(checksDays?: number, userId?: string, companyUserRole?: string) {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const today = this.argentinaDateStart();
     const checksAhead = new Date(today);
     const safeChecksDays = Number.isFinite(checksDays)
       ? Math.min(365, Math.max(1, Math.trunc(checksDays!)))
       : 30;
-    checksAhead.setDate(checksAhead.getDate() + safeChecksDays);
+    checksAhead.setUTCDate(checksAhead.getUTCDate() + safeChecksDays);
 
     const isOwnerOrAdmin = companyUserRole === 'OWNER' || companyUserRole === 'ADMIN';
 
@@ -76,10 +86,10 @@ export class TreasuryReportsService {
         },
       }),
       this.prisma.checks.count({
-        where: { is_own: true, status: 'PENDING', deleted_at: null },
+        where: { is_own: true, status: { in: ['PENDING', 'CONFIRMED'] }, deleted_at: null },
       }),
       this.prisma.checks.count({
-        where: { is_own: false, status: 'PENDING', deleted_at: null },
+        where: { is_own: false, status: { in: ['PENDING', 'CONFIRMED'] }, deleted_at: null },
       }),
       this.prisma.checks.findMany({
         where: {

@@ -174,7 +174,7 @@ export class DashboardService {
     const tomorrow = new Date(today);
     tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
     const checksAhead = new Date(today);
-    checksAhead.setDate(checksAhead.getDate() + (checksDays ?? 30));
+    checksAhead.setUTCDate(checksAhead.getUTCDate() + (checksDays ?? 30));
 
     // Rango de fechas para los documentos del dashboard (default: 30 días).
     // documentDays = 1 → desde hoy (00:00)
@@ -350,11 +350,11 @@ export class DashboardService {
         },
         _count: { id: true },
       }),
-      // Cheques a vencer: propios, pendientes, due_date en N días
+      // Cheques propios pendientes de débito con vencimiento dentro del período.
       this.prisma.checks.findMany({
         where: {
           is_own: true,
-          status: 'PENDING',
+          status: { in: ['PENDING', 'CONFIRMED'] },
           due_date: { gte: today, lte: checksAhead },
           deleted_at: null,
         },

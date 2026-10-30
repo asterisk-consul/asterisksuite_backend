@@ -49,6 +49,14 @@ export class ChecksController {
     return this.checksService.findPendingNotification();
   }
 
+  @Get('notification-alerts')
+  @RequirePermissions('checks.read')
+  findNotificationAlerts(@Query('days') days: string | undefined, @CurrentUser() user: AuthUser) {
+    const parsedDays = Number(days ?? 30);
+    const safeDays = Number.isFinite(parsedDays) ? Math.min(365, Math.max(1, Math.trunc(parsedDays))) : 30;
+    return this.checksService.findNotificationAlerts(user.id, safeDays);
+  }
+
   @Get('available')
   @RequirePermissions('checks.read')
   findAvailable(@Query('is_own') isOwn?: string) {
@@ -114,11 +122,8 @@ export class ChecksController {
 
   @Patch(':id/confirm')
   @RequirePermissions('checks.update')
-  confirm(
-    @Param('id') id: string,
-    @CurrentUser() user: AuthUser,
-  ) {
-    return this.checksService.confirm(id, user.id);
+  confirm(@Param('id') id: string) {
+    return this.checksService.confirm(id);
   }
 
   @Patch(':id/debit')

@@ -130,13 +130,15 @@ export class NotificationsService {
 
   private async removeResolvedCheckReminders(userId: string) {
     const today = this.argentinaDateStart();
+    const upcomingLimit = new Date(today);
+    upcomingLimit.setUTCDate(upcomingLimit.getUTCDate() + 2);
     const reminders = await this.prisma.user_notifications.findMany({
       where: {
         recipient_user_id: userId,
-        type: 'CHECK_OVERDUE',
-        target_type: 'CHECK_OVERDUE',
+        type: { in: ['CHECK_DUE', 'CHECK_OVERDUE'] },
+        target_type: { in: ['CHECK_DUE', 'CHECK_OVERDUE'] },
       },
-      select: { id: true, target_id: true },
+      select: { id: true, type: true, target_id: true },
       orderBy: { created_at: 'desc' },
       take: 500,
     });
@@ -148,15 +150,25 @@ export class NotificationsService {
           where: {
             id: { in: checkIds },
             status: { in: ['PENDING', 'CONFIRMED'] },
-            due_date: { lte: today },
+            OR: [
+              { due_date: { lte: today } },
+              { due_date: { gt: today, lte: upcomingLimit } },
+            ],
             deleted_at: null,
           },
-          select: { id: true },
+          select: { id: true, due_date: true },
         })
       : [];
-    const activeIds = new Set(activeChecks.map(check => check.id));
-    const resolvedIds = reminders
-      .filter(row => !row.target_id || !activeIds.has(row.target_id))
+    const activeOverdueIds = new Set(activeChecks
+      .filter(check => check.due_date <= today)
+      .map(check => check.id));
+    const activeUpcomingIds = new Set(activeChecks
+      .filter(check => check.due_date > today && check.due_date <= upcomingLimit)
+      .map(check => check.id));
+    const resolvedIds = reminders.filter(row => {
+      const activeIds = row.type === 'CHECK_DUE' ? activeUpcomingIds : activeOverdueIds;
+      return !row.target_id || !activeIds.has(row.target_id);
+    })
       .map(row => row.id);
     if (resolvedIds.length) {
       await this.prisma.user_notifications.deleteMany({
