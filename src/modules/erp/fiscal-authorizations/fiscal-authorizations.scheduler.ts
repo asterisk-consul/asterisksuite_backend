@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '@/prisma/prisma.service';
 import { FiscalAuthorizationsService } from './fiscal-authorizations.service';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 
 @Injectable()
 export class FiscalAuthorizationsScheduler {
@@ -11,6 +12,7 @@ export class FiscalAuthorizationsScheduler {
   constructor(
     private readonly db: PrismaService,
     private readonly service: FiscalAuthorizationsService,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   @Cron('0 9 * * *', { timeZone: 'America/Argentina/Buenos_Aires' })
@@ -59,6 +61,10 @@ export class FiscalAuthorizationsScheduler {
           if (!company.schema_name) continue;
           const tenantStartedAt = Date.now();
           try {
+            if (!(await this.platformModules.hasAnyModuleOrLegacyAccess(company.id, ['SALES', 'PURCHASES']))) {
+              tenantsSkipped += 1;
+              continue;
+            }
             const alerts = await this.db.withTemporaryTenantClient(company.schema_name, (client) =>
               this.service.refreshAlerts(client),
             );

@@ -271,6 +271,7 @@ export class BankAccountsService {
       include: {
         bank_concept: { select: { id: true, code: true, name: true, nature: true, concept_type: true } },
         operation: true,
+        payment: { select: { status: true } },
       },
       orderBy: [{ date: 'desc' }, { created_at: 'desc' }],
     });

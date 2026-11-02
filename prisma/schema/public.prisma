@@ -1,24 +1,131 @@
 model companies {
-  id            String          @id @default(uuid()) @db.Uuid
-  name          String          @db.VarChar(255)
-  tax_id        String?         @db.VarChar(50)
-  vat_condition String?         @db.VarChar(30) // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, EXENTO
-  address       String?         @db.VarChar(500)
-  email         String?         @db.VarChar(255)
-  phone         String?         @db.VarChar(30)
-  subdomain     String?         @unique @db.VarChar(100)
-  schema_name   String?         @unique @db.VarChar(100)
-  created_at    DateTime        @default(now()) @db.Timestamp(6)
-  updated_at    DateTime        @updatedAt @db.Timestamp(6)
-  deleted_at    DateTime?
-  created_by    String?         @db.Uuid
-  updated_by    String?         @db.Uuid
-  deleted_by    String?         @db.Uuid
-  companyUsers  company_users[]
-  tablePreferences user_table_preferences[]
+  id                     String                            @id @default(uuid()) @db.Uuid
+  name                   String                            @db.VarChar(255)
+  tax_id                 String?                           @db.VarChar(50)
+  vat_condition          String?                           @db.VarChar(30) // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, EXENTO
+  address                String?                           @db.VarChar(500)
+  email                  String?                           @db.VarChar(255)
+  phone                  String?                           @db.VarChar(30)
+  subdomain              String?                           @unique @db.VarChar(100)
+  schema_name            String?                           @unique @db.VarChar(100)
+  created_at             DateTime                          @default(now()) @db.Timestamp(6)
+  updated_at             DateTime                          @updatedAt @db.Timestamp(6)
+  deleted_at             DateTime?
+  created_by             String?                           @db.Uuid
+  updated_by             String?                           @db.Uuid
+  deleted_by             String?                           @db.Uuid
+  companyUsers           company_users[]
+  tablePreferences       user_table_preferences[]
   whatsappReportSettings company_whatsapp_report_settings?
   whatsappReportRuns     company_whatsapp_report_runs[]
   mcpGrants              mcp_oauth_grants[]
+  platformAdminScopes    platform_admin_company_scopes[]
+  subscription           company_subscriptions?
+  moduleOverrides        company_module_overrides[]
+
+  @@schema("public")
+}
+
+// Licencias comerciales globales por empresa. Mantener separadas de
+// tenant.system_modules, que representa los módulos internos del ERP.
+model platform_modules {
+  code         String    @id @db.VarChar(50)
+  name         String    @db.VarChar(120)
+  description  String?   @db.VarChar(500)
+  icon         String?   @db.VarChar(100)
+  sort_order   Int       @default(0)
+  is_core      Boolean   @default(false)
+  active       Boolean   @default(true)
+  dependencies Json      @default("[]")
+  created_at   DateTime  @default(now()) @db.Timestamp(6)
+  updated_at   DateTime? @updatedAt @db.Timestamp(6)
+
+  planModules subscription_plan_modules[]
+  overrides   company_module_overrides[]
+
+  @@schema("public")
+}
+
+model subscription_plans {
+  id          String    @id @default(uuid()) @db.Uuid
+  code        String    @unique @db.VarChar(50)
+  name        String    @db.VarChar(120)
+  description String?   @db.VarChar(500)
+  is_legacy   Boolean   @default(false)
+  active      Boolean   @default(true)
+  created_at  DateTime  @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @updatedAt @db.Timestamp(6)
+
+  modules       subscription_plan_modules[]
+  subscriptions company_subscriptions[]
+
+  @@schema("public")
+}
+
+model subscription_plan_modules {
+  plan_id     String  @db.Uuid
+  module_code String  @db.VarChar(50)
+  enabled     Boolean @default(true)
+  limits      Json    @default("{}")
+
+  plan   subscription_plans @relation(fields: [plan_id], references: [id], onDelete: Cascade)
+  module platform_modules   @relation(fields: [module_code], references: [code], onDelete: Cascade)
+
+  @@id([plan_id, module_code])
+  @@schema("public")
+}
+
+model company_subscriptions {
+  id            String             @id @default(uuid()) @db.Uuid
+  company_id    String             @unique @db.Uuid
+  plan_id       String             @db.Uuid
+  status        SubscriptionStatus @default(ACTIVE)
+  starts_at     DateTime           @default(now()) @db.Timestamp(6)
+  trial_ends_at DateTime?          @db.Timestamp(6)
+  renews_at     DateTime?          @db.Timestamp(6)
+  cancelled_at  DateTime?          @db.Timestamp(6)
+  created_at    DateTime           @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?          @updatedAt @db.Timestamp(6)
+
+  company companies          @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  plan    subscription_plans @relation(fields: [plan_id], references: [id], onDelete: Restrict)
+
+  @@index([plan_id, status])
+  @@schema("public")
+}
+
+model company_module_overrides {
+  id          String              @id @default(uuid()) @db.Uuid
+  company_id  String              @db.Uuid
+  module_code String              @db.VarChar(50)
+  state       ModuleOverrideState
+  reason      String?             @db.VarChar(500)
+  expires_at  DateTime?           @db.Timestamp(6)
+  created_at  DateTime            @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?           @updatedAt @db.Timestamp(6)
+
+  company companies        @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  module  platform_modules @relation(fields: [module_code], references: [code], onDelete: Cascade)
+
+  @@unique([company_id, module_code])
+  @@index([expires_at])
+  @@schema("public")
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  SUSPENDED
+  CANCELLED
+
+  @@schema("public")
+}
+
+enum ModuleOverrideState {
+  ENABLED
+  READ_ONLY
+  DISABLED
 
   @@schema("public")
 }
@@ -56,24 +163,27 @@ model audit_logs_public {
 }
 
 model users {
-  id            String           @id @default(uuid()) @db.Uuid
-  name          String           @db.VarChar(255)
-  email         String           @unique @db.VarChar(255)
-  password_hash String?
-  role          PlatformRole?
-  active        Boolean?         @default(true)
-  employee_id   String?          @db.Uuid
-  partner_id    String?          @db.Uuid
-  created_at    DateTime         @default(now()) @db.Timestamp(6)
-  updated_at    DateTime         @updatedAt @db.Timestamp(6)
-  deleted_at    DateTime?
-  created_by    String?          @db.Uuid
-  updated_by    String?          @db.Uuid
-  deleted_by    String?          @db.Uuid
-  refreshTokens refresh_tokens[]
-  companyUsers     company_users[]
-  tablePreferences user_table_preferences[]
-  mcpGrants       mcp_oauth_grants[]
+  id                      String                       @id @default(uuid()) @db.Uuid
+  name                    String                       @db.VarChar(255)
+  email                   String                       @unique @db.VarChar(255)
+  password_hash           String?
+  role                    PlatformRole?
+  active                  Boolean?                     @default(true)
+  employee_id             String?                      @db.Uuid
+  partner_id              String?                      @db.Uuid
+  created_at              DateTime                     @default(now()) @db.Timestamp(6)
+  updated_at              DateTime                     @updatedAt @db.Timestamp(6)
+  deleted_at              DateTime?
+  created_by              String?                      @db.Uuid
+  updated_by              String?                      @db.Uuid
+  deleted_by              String?                      @db.Uuid
+  refreshTokens           refresh_tokens[]
+  companyUsers            company_users[]
+  tablePreferences        user_table_preferences[]
+  mcpGrants               mcp_oauth_grants[]
+  platformAdminAssignment platform_admin_assignments?  @relation("platform_admin_user")
+  platformAdminGrants     platform_admin_assignments[] @relation("platform_admin_granted_by")
+  platformAdminUpdates    platform_admin_assignments[] @relation("platform_admin_updated_by")
 
   @@schema("public")
 }
@@ -86,6 +196,37 @@ model company_users {
   user       users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@id([company_id, user_id])
+  @@schema("public")
+}
+
+// Rol global de administración de plataforma y alcance explícito por empresa.
+// Se mantiene separado de company_users para no dar acceso al ERP tenant.
+model platform_admin_assignments {
+  user_id       String        @id @db.Uuid
+  previous_role PlatformRole?
+  granted_by    String?       @db.Uuid
+  updated_by    String?       @db.Uuid
+  created_at    DateTime      @default(now()) @db.Timestamp(6)
+  updated_at    DateTime      @updatedAt @db.Timestamp(6)
+
+  user      users                           @relation("platform_admin_user", fields: [user_id], references: [id], onDelete: Cascade)
+  grantor   users?                          @relation("platform_admin_granted_by", fields: [granted_by], references: [id], onDelete: SetNull)
+  updater   users?                          @relation("platform_admin_updated_by", fields: [updated_by], references: [id], onDelete: SetNull)
+  companies platform_admin_company_scopes[]
+
+  @@schema("public")
+}
+
+model platform_admin_company_scopes {
+  user_id    String   @db.Uuid
+  company_id String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamp(6)
+
+  assignment platform_admin_assignments @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  company    companies                  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, company_id])
+  @@index([company_id, user_id])
   @@schema("public")
 }
 
@@ -120,16 +261,16 @@ model company_tax_settings {
 }
 
 model user_table_preferences {
-  id                 String   @id @default(uuid()) @db.Uuid
-  user_id            String   @db.Uuid
-  company_id         String   @db.Uuid
-  table_key          String   @db.VarChar(200)
-  column_order       Json     @default("[]")
-  column_visibility  Json     @default("{}")
-  created_at         DateTime @default(now()) @db.Timestamp(6)
-  updated_at         DateTime @default(now()) @updatedAt @db.Timestamp(6)
-  user               users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  company            companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  id                String    @id @default(uuid()) @db.Uuid
+  user_id           String    @db.Uuid
+  company_id        String    @db.Uuid
+  table_key         String    @db.VarChar(200)
+  column_order      Json      @default("[]")
+  column_visibility Json      @default("{}")
+  created_at        DateTime  @default(now()) @db.Timestamp(6)
+  updated_at        DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+  user              users     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  company           companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, company_id, table_key], map: "user_table_preferences_user_company_table_key")
   @@index([company_id, user_id], map: "user_table_preferences_company_user_idx")

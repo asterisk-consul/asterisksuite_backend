@@ -802,6 +802,26 @@ export const TireLocationType = {
 export type TireLocationType = (typeof TireLocationType)[keyof typeof TireLocationType]
 
 
+export const SubscriptionStatus = {
+  TRIAL: 'TRIAL',
+  ACTIVE: 'ACTIVE',
+  PAST_DUE: 'PAST_DUE',
+  SUSPENDED: 'SUSPENDED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const ModuleOverrideState = {
+  ENABLED: 'ENABLED',
+  READ_ONLY: 'READ_ONLY',
+  DISABLED: 'DISABLED'
+} as const
+
+export type ModuleOverrideState = (typeof ModuleOverrideState)[keyof typeof ModuleOverrideState]
+
+
 export const CompanyRole = {
   OWNER: 'OWNER',
   ADMIN: 'ADMIN',

@@ -3,6 +3,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 import { PrismaService } from '@/prisma/prisma.service';
 import { OpenWaClient } from '@/modules/erp/whatsapp-reports/openwa.client';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 
 export interface SaveWhatsAppNotificationSettingsInput {
   enabled: boolean;
@@ -70,6 +71,7 @@ export class WhatsAppNotificationsService {
   constructor(
     private readonly db: PrismaService,
     private readonly openWa: OpenWaClient,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   isDeliveryEnabled() {
@@ -317,6 +319,7 @@ export class WhatsAppNotificationsService {
   }
 
   private async getOrderNotificationContact(companyId: string, recipientUserId: string, eventLabel: string) {
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(companyId, 'WHATSAPP'))) return null;
     if (!this.isDeliveryEnabled()) {
       this.logger.warn(`No se encoló el aviso de OV (${eventLabel}): WHATSAPP_NOTIFICATIONS_ENABLED no está en true.`);
       return null;
@@ -359,6 +362,7 @@ export class WhatsAppNotificationsService {
 
   async enqueueConfiguredRoute(input: WhatsAppNotificationItem) {
     if (!this.isDeliveryEnabled()) return 0;
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(input.companyId, 'WHATSAPP'))) return 0;
     const route = ROUTES[input.eventType];
     if (!route) return 0;
     const settings = await this.findCompanySettings(input.companyId);
@@ -382,6 +386,7 @@ export class WhatsAppNotificationsService {
 
   async enqueueConfiguredDigest(input: WhatsAppNotificationItem) {
     if (!this.isDeliveryEnabled()) return 0;
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(input.companyId, 'WHATSAPP'))) return 0;
     const route = ROUTES[input.eventType];
     if (!route) return 0;
     const settings = await this.findCompanySettings(input.companyId);
@@ -400,6 +405,7 @@ export class WhatsAppNotificationsService {
 
   async enqueueAgedAccountAlerts(companyId: string, tenant: any, today: Date) {
     if (!this.isDeliveryEnabled()) return { queued: 0, reviewed: 0 };
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(companyId, 'WHATSAPP'))) return { queued: 0, reviewed: 0 };
     const settings = await this.findCompanySettings(companyId);
     if (!settings?.enabled) return { queued: 0, reviewed: 0 };
 
@@ -539,6 +545,15 @@ export class WhatsAppNotificationsService {
     if (!candidates.length) return false;
 
     const candidate = candidates[0];
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(candidate.company_id, 'WHATSAPP'))) {
+      await publicDb.$executeRaw`
+        UPDATE public.whatsapp_notification_outbox
+        SET status = 'CANCELLED', locked_at = NULL,
+            last_error = 'La empresa ya no tiene habilitado el módulo WhatsApp.', updated_at = NOW()
+        WHERE company_id = ${candidate.company_id}::uuid AND status = 'PENDING'
+      `;
+      return true;
+    }
     const minInterval = Math.max(15, Math.min(300, Number(candidate.min_interval_seconds) || 15));
     const batchWindow = Math.max(10, Math.min(120, Number(candidate.batch_window_seconds) || 20));
     await publicDb.$executeRaw`

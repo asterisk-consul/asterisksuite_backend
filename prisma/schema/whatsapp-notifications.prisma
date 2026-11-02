@@ -2,30 +2,30 @@
 // Estas tablas viven en la base pública para centralizar los envíos de la sesión OpenWA.
 
 model user_whatsapp_contacts {
-  user_id     String    @id @db.Uuid
-  phone_e164  String    @db.VarChar(20)
-  opted_in    Boolean   @default(false)
-  consent_at  DateTime? @db.Timestamp(6)
-  updated_at  DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+  user_id    String    @id @db.Uuid
+  phone_e164 String    @db.VarChar(20)
+  opted_in   Boolean   @default(false)
+  consent_at DateTime? @db.Timestamp(6)
+  updated_at DateTime  @default(now()) @updatedAt @db.Timestamp(6)
 
   @@schema("public")
 }
 
 model company_whatsapp_notification_settings {
-  company_id                       String    @id @db.Uuid
-  enabled                          Boolean   @default(false)
-  assignments_enabled              Boolean   @default(true)
-  customer_balances_enabled        Boolean   @default(false)
-  customer_balance_recipient_ids   Json      @default("[]")
-  supplier_balances_enabled        Boolean   @default(false)
-  supplier_balance_recipient_ids   Json      @default("[]")
-  checks_enabled                   Boolean   @default(false)
-  check_recipient_ids              Json      @default("[]")
-  min_interval_seconds             Int       @default(15)
-  batch_window_seconds             Int       @default(20)
-  configured_by                    String?   @db.Uuid
-  created_at                       DateTime  @default(now()) @db.Timestamp(6)
-  updated_at                       DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+  company_id                     String   @id @db.Uuid
+  enabled                        Boolean  @default(false)
+  assignments_enabled            Boolean  @default(true)
+  customer_balances_enabled      Boolean  @default(false)
+  customer_balance_recipient_ids Json     @default("[]")
+  supplier_balances_enabled      Boolean  @default(false)
+  supplier_balance_recipient_ids Json     @default("[]")
+  checks_enabled                 Boolean  @default(false)
+  check_recipient_ids            Json     @default("[]")
+  min_interval_seconds           Int      @default(15)
+  batch_window_seconds           Int      @default(20)
+  configured_by                  String?  @db.Uuid
+  created_at                     DateTime @default(now()) @db.Timestamp(6)
+  updated_at                     DateTime @default(now()) @updatedAt @db.Timestamp(6)
 
   @@schema("public")
 }

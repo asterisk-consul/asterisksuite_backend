@@ -7,6 +7,7 @@ import { PermissionContextBuilder } from '@/access-control/authorization/permiss
 import { DocumentAccessService } from '@/access-control/services/document-access.service';
 import { DocumentsPurchasesService } from '@/modules/erp/documents-purchases/documents_purchases.service';
 import { FilesService } from '@/modules/logistica/media/files/files.service';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 import type { McpIdentity } from './mcp-oauth.provider';
 
 const MAX_MCP_FILE_BYTES = 5 * 1024 * 1024;
@@ -22,6 +23,7 @@ export class McpToolsService {
     private readonly documentAccess: DocumentAccessService,
     private readonly purchases: DocumentsPurchasesService,
     private readonly files: FilesService,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   private get prisma() {
@@ -43,6 +45,12 @@ export class McpToolsService {
       : await this.permissions.build(identity.userId);
     const can = (permission: string) => identity.companyRole === 'OWNER' || Boolean(context?.can(permission));
     const textResult = (value: unknown) => ({ content: [{ type: 'text' as const, text: JSON.stringify(value, null, 2) }] });
+    const [hasMasterData, hasInventory, hasPurchases, hasSales] = await Promise.all([
+      this.platformModules.hasModuleOrLegacyAccess(identity.companyId, 'MASTER_DATA'),
+      this.platformModules.hasModuleOrLegacyAccess(identity.companyId, 'INVENTORY'),
+      this.platformModules.hasModuleOrLegacyAccess(identity.companyId, 'PURCHASES'),
+      this.platformModules.hasModuleOrLegacyAccess(identity.companyId, 'SALES'),
+    ]);
 
     if (identity.scopes.includes('erp:read')) server.registerTool('get_company', {
       title: 'Ver empresa conectada',
@@ -59,7 +67,7 @@ export class McpToolsService {
       return textResult(company);
     });
 
-    if (identity.scopes.includes('erp:read') && can('products.read')) {
+    if (identity.scopes.includes('erp:read') && hasMasterData && can('products.read')) {
       server.registerTool('search_products', {
         title: 'Buscar productos',
         description: 'Busca productos activos por nombre o SKU. Devuelve hasta 50 coincidencias y sus categorías.',
@@ -96,7 +104,7 @@ export class McpToolsService {
       });
     }
 
-    if (identity.scopes.includes('erp:read') && can('stock.read')) {
+    if (identity.scopes.includes('erp:read') && hasInventory && can('stock.read')) {
       server.registerTool('get_stock', {
         title: 'Consultar existencias',
         description: 'Consulta existencias y reservas por depósito, con búsqueda acotada a 50 productos.',
@@ -133,7 +141,7 @@ export class McpToolsService {
       });
     }
 
-    if (identity.scopes.includes('erp:read') && can('business_parties.read')) {
+    if (identity.scopes.includes('erp:read') && hasMasterData && can('business_parties.read')) {
       server.registerTool('search_parties', {
         title: 'Buscar clientes y proveedores',
         description: 'Busca terceros activos por nombre, razón social o CUIT. Devuelve hasta 50 coincidencias.',
@@ -158,8 +166,10 @@ export class McpToolsService {
       });
     }
 
-    const purchaseReadCategories = await this.documentAccess.allowedCategories(identity.userId, identity.companyRole, 'purchases', 'read');
-    if (identity.scopes.includes('erp:read') && (purchaseReadCategories === undefined || purchaseReadCategories.length > 0)) {
+    const purchaseReadCategories = hasPurchases
+      ? await this.documentAccess.allowedCategories(identity.userId, identity.companyRole, 'purchases', 'read')
+      : [];
+    if (identity.scopes.includes('erp:read') && hasPurchases && (purchaseReadCategories === undefined || purchaseReadCategories.length > 0)) {
       server.registerTool('search_purchase_documents', {
         title: 'Buscar documentos de compra',
         description: 'Busca facturas, órdenes y otros documentos del circuito de compras que el usuario tenga permiso para leer.',
@@ -174,8 +184,10 @@ export class McpToolsService {
       });
     }
 
-    const salesReadCategories = await this.documentAccess.allowedCategories(identity.userId, identity.companyRole, 'sales', 'read');
-    if (identity.scopes.includes('erp:read') && (salesReadCategories === undefined || salesReadCategories.length > 0)) {
+    const salesReadCategories = hasSales
+      ? await this.documentAccess.allowedCategories(identity.userId, identity.companyRole, 'sales', 'read')
+      : [];
+    if (identity.scopes.includes('erp:read') && hasSales && (salesReadCategories === undefined || salesReadCategories.length > 0)) {
       server.registerTool('search_sales_documents', {
         title: 'Buscar documentos de venta',
         description: 'Busca facturas, órdenes y otros documentos del circuito de ventas que el usuario tenga permiso para leer.',
@@ -190,7 +202,7 @@ export class McpToolsService {
       });
     }
 
-    if (identity.scopes.includes('intake:files.read') && can('intake.read') && can('media.read')) {
+    if (identity.scopes.includes('intake:files.read') && hasPurchases && can('intake.read') && can('media.read')) {
       server.registerTool('list_invoice_uploads', {
         title: 'Ver facturas cargadas para procesar',
         description: 'Lista capturas y archivos que el usuario creó o tiene asignados. Para que la IA lea un comprobante, usá read_invoice_file con el intake_id y file_id. El archivo se mantiene guardado en Asterisk Suite.',
@@ -236,8 +248,11 @@ export class McpToolsService {
       });
     }
 
-    const purchaseCreateCategories = await this.documentAccess.allowedCategories(identity.userId, identity.companyRole, 'purchases', 'create');
-    const canCreateInvoice = identity.scopes.includes('purchases:drafts.write')
+    const purchaseCreateCategories = hasPurchases
+      ? await this.documentAccess.allowedCategories(identity.userId, identity.companyRole, 'purchases', 'create')
+      : [];
+    const canCreateInvoice = hasPurchases
+      && identity.scopes.includes('purchases:drafts.write')
       && (purchaseCreateCategories === undefined || purchaseCreateCategories.includes('INVOICE'))
       && can('intake.process');
     if (canCreateInvoice) {

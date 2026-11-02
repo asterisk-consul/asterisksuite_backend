@@ -177,10 +177,17 @@ export const ModelName = {
   price_lists: 'price_lists',
   product_list_prices: 'product_list_prices',
   companies: 'companies',
+  platform_modules: 'platform_modules',
+  subscription_plans: 'subscription_plans',
+  subscription_plan_modules: 'subscription_plan_modules',
+  company_subscriptions: 'company_subscriptions',
+  company_module_overrides: 'company_module_overrides',
   refresh_tokens: 'refresh_tokens',
   audit_logs_public: 'audit_logs_public',
   users: 'users',
   company_users: 'company_users',
+  platform_admin_assignments: 'platform_admin_assignments',
+  platform_admin_company_scopes: 'platform_admin_company_scopes',
   company_tax_settings: 'company_tax_settings',
   user_table_preferences: 'user_table_preferences',
   company_whatsapp_report_settings: 'company_whatsapp_report_settings',
@@ -2768,6 +2775,76 @@ export const CompaniesScalarFieldEnum = {
 export type CompaniesScalarFieldEnum = (typeof CompaniesScalarFieldEnum)[keyof typeof CompaniesScalarFieldEnum]
 
 
+export const Platform_modulesScalarFieldEnum = {
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  icon: 'icon',
+  sort_order: 'sort_order',
+  is_core: 'is_core',
+  active: 'active',
+  dependencies: 'dependencies',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Platform_modulesScalarFieldEnum = (typeof Platform_modulesScalarFieldEnum)[keyof typeof Platform_modulesScalarFieldEnum]
+
+
+export const Subscription_plansScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  is_legacy: 'is_legacy',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Subscription_plansScalarFieldEnum = (typeof Subscription_plansScalarFieldEnum)[keyof typeof Subscription_plansScalarFieldEnum]
+
+
+export const Subscription_plan_modulesScalarFieldEnum = {
+  plan_id: 'plan_id',
+  module_code: 'module_code',
+  enabled: 'enabled',
+  limits: 'limits'
+} as const
+
+export type Subscription_plan_modulesScalarFieldEnum = (typeof Subscription_plan_modulesScalarFieldEnum)[keyof typeof Subscription_plan_modulesScalarFieldEnum]
+
+
+export const Company_subscriptionsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  plan_id: 'plan_id',
+  status: 'status',
+  starts_at: 'starts_at',
+  trial_ends_at: 'trial_ends_at',
+  renews_at: 'renews_at',
+  cancelled_at: 'cancelled_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_subscriptionsScalarFieldEnum = (typeof Company_subscriptionsScalarFieldEnum)[keyof typeof Company_subscriptionsScalarFieldEnum]
+
+
+export const Company_module_overridesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  module_code: 'module_code',
+  state: 'state',
+  reason: 'reason',
+  expires_at: 'expires_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_module_overridesScalarFieldEnum = (typeof Company_module_overridesScalarFieldEnum)[keyof typeof Company_module_overridesScalarFieldEnum]
+
+
 export const Refresh_tokensScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -2824,6 +2901,27 @@ export const Company_usersScalarFieldEnum = {
 } as const
 
 export type Company_usersScalarFieldEnum = (typeof Company_usersScalarFieldEnum)[keyof typeof Company_usersScalarFieldEnum]
+
+
+export const Platform_admin_assignmentsScalarFieldEnum = {
+  user_id: 'user_id',
+  previous_role: 'previous_role',
+  granted_by: 'granted_by',
+  updated_by: 'updated_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Platform_admin_assignmentsScalarFieldEnum = (typeof Platform_admin_assignmentsScalarFieldEnum)[keyof typeof Platform_admin_assignmentsScalarFieldEnum]
+
+
+export const Platform_admin_company_scopesScalarFieldEnum = {
+  user_id: 'user_id',
+  company_id: 'company_id',
+  created_at: 'created_at'
+} as const
+
+export type Platform_admin_company_scopesScalarFieldEnum = (typeof Platform_admin_company_scopesScalarFieldEnum)[keyof typeof Platform_admin_company_scopesScalarFieldEnum]
 
 
 export const Company_tax_settingsScalarFieldEnum = {

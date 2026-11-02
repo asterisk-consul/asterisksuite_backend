@@ -180,16 +180,60 @@ export class CompaniesService {
   }
 
   async create(createCompanyDto: CreateCompanyDto, userId: string) {
+    return this.provisionCompany(createCompanyDto, userId, { enforceOwnerLimit: true });
+  }
+
+  async createForPlatform(
+    createCompanyDto: CreateCompanyDto,
+    userId: string,
+    subscription: {
+      planId: string;
+      status: 'TRIAL' | 'ACTIVE' | 'PAST_DUE' | 'SUSPENDED' | 'CANCELLED';
+      trialEndsAt?: string | null;
+    },
+  ) {
+    return this.provisionCompany(createCompanyDto, userId, {
+      enforceOwnerLimit: false,
+      subscription,
+    });
+  }
+
+  private async provisionCompany(
+    createCompanyDto: CreateCompanyDto,
+    userId: string,
+    options: {
+      enforceOwnerLimit: boolean;
+      subscription?: {
+        planId: string;
+        status: 'TRIAL' | 'ACTIVE' | 'PAST_DUE' | 'SUSPENDED' | 'CANCELLED';
+        trialEndsAt?: string | null;
+      };
+    },
+  ) {
     const subdomain = createCompanyDto.subdomain?.toLowerCase().trim();
+    if (!subdomain || !/^[a-z0-9](?:[a-z0-9-]{1,48}[a-z0-9])$/.test(subdomain)) {
+      throw new BadRequestException('El subdominio debe tener entre 3 y 50 caracteres, en minúsculas, números o guiones.');
+    }
     const tenantDb = `${subdomain}_db`;
     const tenantDbUrl = `${process.env.DATABASE_URL_BASE}${tenantDb}`;
 
     // Check company limit: max 3 per user as OWNER
-    const ownerCount = await this.prisma.company_users.count({
-      where: { user_id: userId, role: 'OWNER' },
+    if (options.enforceOwnerLimit) {
+      const ownerCount = await this.prisma.company_users.count({
+        where: { user_id: userId, role: 'OWNER' },
+      });
+      if (ownerCount >= 3) {
+        throw new BadRequestException('Máximo 3 empresas por usuario');
+      }
+    }
+
+    const user = await this.prisma.users.findUnique({
+      where: { id: userId },
+      select: { id: true },
     });
-    if (ownerCount >= 3) {
-      throw new BadRequestException('Máximo 3 empresas por usuario');
+
+    if (!user) {
+      throw new ConflictException('El usuario titular no existe en la base de datos');
     }
 
     const existingCompany = await this.prisma.companies.findFirst({
@@ -254,15 +298,6 @@ export class CompaniesService {
       throw new ConflictException(`Error al crear la empresa: ${error.message}`);
     }
 
-    const user = await this.prisma.users.findUnique({
-      where: { id: userId },
-      select: { id: true },
-    });
-
-    if (!user) {
-      throw new ConflictException('El usuario autenticado no existe en la base de datos');
-    }
-
     const company = await this.prisma.companies.create({
       data: {
         name: createCompanyDto.name,
@@ -275,6 +310,37 @@ export class CompaniesService {
         schema_name: tenantDb,
       },
     });
+
+    if (options.subscription) {
+      await this.prisma.company_subscriptions.create({
+        data: {
+          company_id: company.id,
+          plan_id: options.subscription.planId,
+          status: options.subscription.status,
+          trial_ends_at: options.subscription.trialEndsAt ? new Date(options.subscription.trialEndsAt) : null,
+        },
+      });
+    } else {
+      // Mantiene el acceso histórico de las empresas nuevas hasta que un
+      // administrador de plataforma asigne un plan específico.
+      try {
+        const legacyPlan = await this.prisma.subscription_plans.findUnique({
+          where: { code: 'LEGACY_FULL' },
+          select: { id: true },
+        });
+        if (legacyPlan) {
+          await this.prisma.company_subscriptions.create({
+            data: { company_id: company.id, plan_id: legacyPlan.id, status: 'ACTIVE' },
+          });
+        } else {
+          this.logger.warn(`No se encontró LEGACY_FULL al crear ${company.name}; la empresa queda pendiente de asignación de plan.`);
+        }
+      } catch (error) {
+        const code = (error as { code?: string })?.code;
+        if (code !== 'P2021' && code !== 'P2022') throw error;
+        this.logger.warn(`No se asignó plan a ${company.name}: falta aplicar la migración de módulos de plataforma.`);
+      }
+    }
 
     const cu = await this.prisma.company_users.create({
       data: {

@@ -29,21 +29,21 @@ model document_sequences {
 /// Reusable commercial discount/bonus templates. Documents keep their own
 /// immutable snapshot in documents.commercial_adjustments.
 model commercial_adjustment_concepts {
-  id           String    @id @default(uuid()) @db.Uuid
-  name         String    @db.VarChar(120)
-  description  String?   @db.Text
-  applies_to   String    @default("BOTH") @db.VarChar(20) // SALES, PURCHASES, BOTH
-  value_type   String    @db.VarChar(20) // PERCENTAGE, AMOUNT
-  basis        String    @db.VarChar(10) // NET, GROSS
-  default_value Decimal? @db.Decimal(15, 4)
-  is_active    Boolean   @default(true)
-  sort_order   Int       @default(0)
-  created_at   DateTime  @default(now()) @db.Timestamp(6)
-  updated_at   DateTime? @updatedAt @db.Timestamp(6)
-  deleted_at   DateTime? @db.Timestamp(6)
-  created_by   String?   @db.Uuid
-  updated_by   String?   @db.Uuid
-  deleted_by   String?   @db.Uuid
+  id            String    @id @default(uuid()) @db.Uuid
+  name          String    @db.VarChar(120)
+  description   String?   @db.Text
+  applies_to    String    @default("BOTH") @db.VarChar(20) // SALES, PURCHASES, BOTH
+  value_type    String    @db.VarChar(20) // PERCENTAGE, AMOUNT
+  basis         String    @db.VarChar(10) // NET, GROSS
+  default_value Decimal?  @db.Decimal(15, 4)
+  is_active     Boolean   @default(true)
+  sort_order    Int       @default(0)
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime? @updatedAt @db.Timestamp(6)
+  deleted_at    DateTime? @db.Timestamp(6)
+  created_by    String?   @db.Uuid
+  updated_by    String?   @db.Uuid
+  deleted_by    String?   @db.Uuid
 
   @@index([is_active, applies_to, sort_order], map: "idx_commercial_adjustment_concepts_active_scope_order")
   @@schema("tenant")
@@ -167,39 +167,39 @@ model document_taxes {
 }
 
 model document_types {
-  id                      String                    @id @default(uuid()) @db.Uuid
-  document_sequence_id    String?                   @db.Uuid
-  module_id               String?                   @db.Uuid
-  code                    String                    @unique @db.VarChar(20)
-  description             String                    @db.VarChar(150)
-  direction               Int                       @db.SmallInt
-  affects_stock           Boolean                   @default(false)
-  affects_accounting      Boolean                   @default(false)
-  affects_tax_book        Boolean                   @default(false)
-  affects_payment         Boolean                   @default(false)
-  calculates_taxes        Boolean                   @default(true) // false = comprobante sin desglose de impuestos (X, internos)
-  accepts_commercial_adjustments Boolean              @default(false)
-  active                  Boolean                   @default(true)
-  category                String?                   @db.VarChar(30) // INVOICE, CREDIT_NOTE, DEBIT_NOTE, ORDER, QUOTE
-  letter_type             String?                   @db.VarChar(5) // A, B, C, X
-  afip_code               String?                   @db.VarChar(5) // 01, 06, 11, etc.
-  requires_cae            Boolean                   @default(false)
-  is_electronic           Boolean                   @default(false)
-  custom_fields_config    Json?
-  enabled_statuses        Json? // Array de enteros: [0,1,2,3] o null = todos
-  hidden_amount_statuses  Json? // Estados de OV en los que los importes requieren sales.orders.view_amounts
-  created_at              DateTime                  @default(now()) @db.Timestamp(6)
-  updated_at              DateTime?                 @updatedAt @db.Timestamp(6)
-  deleted_at              DateTime?
-  created_by              String?                   @db.Uuid
-  updated_by              String?                   @db.Uuid
-  deleted_by              String?                   @db.Uuid
-  document_type_taxes     document_type_taxes[]
-  document_sequences      document_sequences?       @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  system_modules          system_modules?           @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  documents               documents[]
-  document_type_sequences document_type_sequences[]
-  fiscal_authorizations   fiscal_authorizations[]
+  id                             String                    @id @default(uuid()) @db.Uuid
+  document_sequence_id           String?                   @db.Uuid
+  module_id                      String?                   @db.Uuid
+  code                           String                    @unique @db.VarChar(20)
+  description                    String                    @db.VarChar(150)
+  direction                      Int                       @db.SmallInt
+  affects_stock                  Boolean                   @default(false)
+  affects_accounting             Boolean                   @default(false)
+  affects_tax_book               Boolean                   @default(false)
+  affects_payment                Boolean                   @default(false)
+  calculates_taxes               Boolean                   @default(true) // false = comprobante sin desglose de impuestos (X, internos)
+  accepts_commercial_adjustments Boolean                   @default(false)
+  active                         Boolean                   @default(true)
+  category                       String?                   @db.VarChar(30) // INVOICE, CREDIT_NOTE, DEBIT_NOTE, ORDER, QUOTE
+  letter_type                    String?                   @db.VarChar(5) // A, B, C, X
+  afip_code                      String?                   @db.VarChar(5) // 01, 06, 11, etc.
+  requires_cae                   Boolean                   @default(false)
+  is_electronic                  Boolean                   @default(false)
+  custom_fields_config           Json?
+  enabled_statuses               Json? // Array de enteros: [0,1,2,3] o null = todos
+  hidden_amount_statuses         Json? // Estados de OV en los que los importes requieren sales.orders.view_amounts
+  created_at                     DateTime                  @default(now()) @db.Timestamp(6)
+  updated_at                     DateTime?                 @updatedAt @db.Timestamp(6)
+  deleted_at                     DateTime?
+  created_by                     String?                   @db.Uuid
+  updated_by                     String?                   @db.Uuid
+  deleted_by                     String?                   @db.Uuid
+  document_type_taxes            document_type_taxes[]
+  document_sequences             document_sequences?       @relation(fields: [document_sequence_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  system_modules                 system_modules?           @relation(fields: [module_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  documents                      documents[]
+  document_type_sequences        document_type_sequences[]
+  fiscal_authorizations          fiscal_authorizations[]
 
   @@schema("tenant")
 }
@@ -247,7 +247,7 @@ model documents {
   converted_taxable_base          Decimal?                            @db.Decimal(18, 2)
   converted_paid_amount           Decimal?                            @db.Decimal(18, 2)
   custom_fields                   Json?
-  commercial_adjustments         Json?
+  commercial_adjustments          Json?
   assigned_to                     String?                             @db.Uuid
   validity_date                   DateTime?                           @db.Date
   delivery_date                   DateTime?                           @db.Date
@@ -285,7 +285,7 @@ model documents {
   sales_commission_assignments    sales_commission_assignments[]
   international_operation_docs    international_operation_documents[]
   international_operation_quotes  international_operation_quotes[]
-  converted_international_quote international_operation_quotes? @relation("converted_international_quote")
+  converted_international_quote   international_operation_quotes?     @relation("converted_international_quote")
   withholding_allocations         withholding_allocations[]
   maintenance_services            maintenance_services[]
   purchase_tires                  tires[]

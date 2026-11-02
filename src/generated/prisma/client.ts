@@ -672,6 +672,31 @@ export type product_list_prices = Prisma.product_list_pricesModel
  */
 export type companies = Prisma.companiesModel
 /**
+ * Model platform_modules
+ * 
+ */
+export type platform_modules = Prisma.platform_modulesModel
+/**
+ * Model subscription_plans
+ * 
+ */
+export type subscription_plans = Prisma.subscription_plansModel
+/**
+ * Model subscription_plan_modules
+ * 
+ */
+export type subscription_plan_modules = Prisma.subscription_plan_modulesModel
+/**
+ * Model company_subscriptions
+ * 
+ */
+export type company_subscriptions = Prisma.company_subscriptionsModel
+/**
+ * Model company_module_overrides
+ * 
+ */
+export type company_module_overrides = Prisma.company_module_overridesModel
+/**
  * Model refresh_tokens
  * 
  */
@@ -691,6 +716,16 @@ export type users = Prisma.usersModel
  * 
  */
 export type company_users = Prisma.company_usersModel
+/**
+ * Model platform_admin_assignments
+ * 
+ */
+export type platform_admin_assignments = Prisma.platform_admin_assignmentsModel
+/**
+ * Model platform_admin_company_scopes
+ * 
+ */
+export type platform_admin_company_scopes = Prisma.platform_admin_company_scopesModel
 /**
  * Model company_tax_settings
  * 
@@ -873,7 +908,7 @@ export type cash_box_transfers = Prisma.cash_box_transfersModel
 export type payments = Prisma.paymentsModel
 /**
  * Model payment_tenders
- *
+ * 
  */
 export type payment_tenders = Prisma.payment_tendersModel
 /**

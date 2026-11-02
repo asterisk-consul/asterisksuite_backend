@@ -9,6 +9,7 @@ import { requestContext } from '@/common/context/request-context';
 import { ConfigService } from '@nestjs/config';
 import { McpOAuthProvider } from './mcp-oauth.provider';
 import { McpToolsService } from './mcp-tools.service';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 
 @Controller('mcp')
 export class McpController {
@@ -16,6 +17,7 @@ export class McpController {
     private readonly oauth: McpOAuthProvider,
     private readonly tools: McpToolsService,
     private readonly config: ConfigService,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   @All()
@@ -41,6 +43,9 @@ export class McpController {
       userId: string; companyId: string; companyRole: string; grantId: string;
       clientId: string; scopes: string[]; tenantDb: string;
     };
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(identity.companyId, 'MCP'))) {
+      return res.status(403).json({ message: 'Las conexiones MCP no están habilitadas para esta empresa.' });
+    }
     (req as Request & { auth?: typeof authInfo }).auth = authInfo;
     return requestContext.run({
       schema: identity.tenantDb,
