@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { getCancelledDocumentStatus } from '@/modules/erp/documents/types/document-statuses';
 
 const DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES = new Set([
   'document',
@@ -7,14 +8,6 @@ const DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES = new Set([
   'order_invoice_replacement',
   'order_invoice_replacement_reversal',
 ]);
-
-function cancelledStatusFor(document: { document_types: { category: string | null; direction: number } }) {
-  if (document.document_types.category === 'QUOTE') return 6;
-  if (document.document_types.category === 'ORDER') {
-    return document.document_types.direction === -1 ? 3 : 8;
-  }
-  return 3;
-}
 
 @Injectable()
 export class TrashService {
@@ -359,7 +352,7 @@ export class TrashService {
       const openingBalanceDocuments = documents.filter(
         (document) => document.document_types.category === 'OPENING_BALANCE'
           && document.source === 'opening_balance'
-          && document.status === 2,
+          && [2, 3].includes(document.status),
       );
       const deletedOpeningBalanceEntries = openingBalanceDocuments.length
         ? await tx.current_account_entries.findMany({
@@ -395,16 +388,18 @@ export class TrashService {
         const category = document.document_types.category;
         const isSafelyRemovedOpeningBalance = category === 'OPENING_BALANCE'
           && document.source === 'opening_balance'
-          && document.status === 2
+          && [2, 3].includes(document.status)
           && safelyRemovedOpeningBalanceIds.has(document.id);
         const isCancelledInvoice = category === 'INVOICE' && document.status === 3;
+        const cancelledStatus = getCancelledDocumentStatus(category ?? '', document.document_types.direction);
         // For manual records, entry into the trash is the cancellation gate for permanent
-        // deletion. A draft may keep status 0 because it was never issued; relying only on
-        // the category's terminal status incorrectly blocks safe accidental-entry cleanup.
+        // deletion, but a confirmed document must already carry its category's cancelled
+        // status. Drafts remain eligible because they were never confirmed.
         const isManualTrashedDocument = Boolean(category)
           && category !== 'OPENING_BALANCE'
           && document.source === 'manual'
-          && document.deleted_at !== null;
+          && document.deleted_at !== null
+          && (document.status === 0 || document.status === cancelledStatus);
         const documentAccountEntries = manuallyTrashedDocumentAccountEntriesByDocument.get(document.id) ?? [];
         const hasFiscalAuthorization = Boolean(
           document.fiscal_authorization_id
@@ -419,7 +414,6 @@ export class TrashService {
           && documentAccountEntries.every((entry) => entry.deleted_at !== null
             && !entry.payment_id
             && DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES.has(entry.reference_type ?? ''));
-        const cancelledStatus = cancelledStatusFor(document);
         let reason: string | null = null;
 
         if (!isSafelyRemovedOpeningBalance && !isManualTrashedDocument && document.status !== cancelledStatus) {

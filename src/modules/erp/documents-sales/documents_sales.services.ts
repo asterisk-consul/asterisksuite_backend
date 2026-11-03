@@ -2314,7 +2314,7 @@ export class DocumentsSalesService {
     return this.prisma.$transaction(async (tx) => {
       const doc = await this.findOne(id);
       const category = doc.document_types?.category;
-      const cancelledStatus = category === 'ORDER' ? 8 : category === 'QUOTE' ? 6 : STATUS_CANCELLED;
+      const cancelledStatus = getCancelledDocumentStatus(category ?? '', doc.document_types?.direction ?? 1);
 
       // La cancelación debe ser idempotente. Esto también repara documentos que
       // llegaron al estado terminal por una transición histórica sin ejecutar
@@ -2458,7 +2458,7 @@ export class DocumentsSalesService {
           await tx.documents.update({ where: { id }, data: { status: STATUS_CANCELLED, updated_at: new Date(), updated_by: userId } });
         }
         await this.currentAccountsService.removeDocumentEffects(id, userId, tx);
-      } else if (![STATUS_DRAFT, STATUS_CANCELLED].includes(doc.status)) {
+      } else if (![STATUS_DRAFT, getCancelledDocumentStatus(category ?? '', doc.document_types?.direction ?? 1)].includes(doc.status)) {
         throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados. Las NC/ND confirmadas deben estar sin factura, pagos ni otros movimientos asociados.');
       }
 

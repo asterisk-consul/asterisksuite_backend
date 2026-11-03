@@ -3,7 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateHrValeDto } from './dto/create-hr-vale.dto';
 import { ConfirmHrValeDto } from './dto/confirm-hr-vale.dto';
 import { parseLocalDateTime } from '@/common/utils/dates';
-import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
+import { recalculateCurrentAccountLedger, removeDocumentAccountEffects } from '../current-accounts/current-account-ledger';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
 
 @Injectable()
@@ -173,25 +173,58 @@ export class HrService {
     });
 
     const employeeVales = vales.filter((vale) => vale.party_type === 'EMPLOYEE' || ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'].includes(vale.type));
-    const valeDocuments = employeeVales.length
+    const cancelledVales = vales.filter((vale) => vale.status === 'CANCELLED');
+    const documentLookupVales = [...new Map([...employeeVales, ...cancelledVales].map((vale) => [vale.id, vale])).values()];
+    const valeDocuments = documentLookupVales.length
       ? await this.prisma.documents.findMany({
           where: {
-            deleted_at: null,
             document_types: { category: 'VALE' },
-            OR: employeeVales.map((vale) => ({ party_id: vale.party_id, descrip: `Vale #${vale.number}` })),
+            OR: documentLookupVales.map((vale) => ({ party_id: vale.party_id, descrip: `Vale #${vale.number}` })),
           },
-          select: { id: true, party_id: true, descrip: true, total: true, paid_amount: true },
+          orderBy: { created_at: 'desc' },
+          select: { id: true, party_id: true, descrip: true, total: true, paid_amount: true, status: true, deleted_at: true },
         })
       : [];
-    const paymentDocumentByVale = new Map(
-      valeDocuments.map((document) => [
-        `${document.party_id}:${document.descrip}`,
-        {
+    const cancelledValeKeys = new Set(cancelledVales.map((vale) => `${vale.party_id}:Vale #${vale.number}`));
+    const cancelledValeDocuments = valeDocuments.filter((document) => cancelledValeKeys.has(`${document.party_id}:${document.descrip}`));
+    const cancelledValeDocumentIds = cancelledValeDocuments.map((document) => document.id);
+    const [activeValeLedgerEntries, activeValePayments] = cancelledValeDocumentIds.length
+      ? await Promise.all([
+          this.prisma.current_account_entries.findMany({
+            where: {
+              reference_id: { in: cancelledValeDocumentIds },
+              reference_type: { in: ['document', 'document_reversal', 'order_invoice_replacement', 'order_invoice_replacement_reversal'] },
+              deleted_at: null,
+            },
+            select: { reference_id: true },
+          }),
+          this.prisma.payment_documents.findMany({
+            where: {
+              document_id: { in: cancelledValeDocumentIds },
+              deleted_at: null,
+              payment: { deleted_at: null, status: { notIn: ['CANCELLED', 'REVERSED'] } },
+            },
+            select: { document_id: true },
+          }),
+        ])
+      : [[], []];
+    const valeDocumentsByKey = new Map<string, (typeof valeDocuments)[number]>();
+    for (const document of valeDocuments) {
+      const key = `${document.party_id}:${document.descrip}`;
+      if (!valeDocumentsByKey.has(key)) valeDocumentsByKey.set(key, document);
+    }
+    const valeDocumentsWithLedgerEntries = new Set(activeValeLedgerEntries.map((entry) => entry.reference_id).filter(Boolean));
+    const valeDocumentsWithActivePayments = new Set(activeValePayments.map((payment) => payment.document_id));
+    const paymentDocumentByVale = new Map<string, { id: string; pending: number }>();
+    for (const vale of employeeVales) {
+      const document = valeDocumentsByKey.get(`${vale.party_id}:Vale #${vale.number}`);
+      if (document) {
+        paymentDocumentByVale.set(`${document.party_id}:${document.descrip}`, {
           id: document.id,
           pending: Math.max(0, Number(document.total) - Number(document.paid_amount)),
-        },
-      ]),
-    );
+        });
+      }
+    }
 
     const partnerValeIds = vales.filter((vale) => vale.party_type === 'PARTNER').map((vale) => vale.id);
     const [cashMovements, bankMovements] = partnerValeIds.length
@@ -239,6 +272,19 @@ export class HrService {
       ...v,
       created_by_name: v.created_by ? (userMap.get(v.created_by) ?? null) : null,
       treasury_target: treasuryTargetByVale.get(v.id) ?? null,
+      document_needs_reconciliation: (() => {
+        const document = valeDocumentsByKey.get(`${v.party_id}:Vale #${v.number}`);
+        return v.status === 'CANCELLED' && Boolean(document) && (
+          document.status !== 3
+          || Number(document.paid_amount) !== 0
+          || document.deleted_at === null
+          || valeDocumentsWithLedgerEntries.has(document.id)
+        );
+      })(),
+      document_reconciliation_blocked: (() => {
+        const document = valeDocumentsByKey.get(`${v.party_id}:Vale #${v.number}`);
+        return Boolean(document && valeDocumentsWithActivePayments.has(document.id));
+      })(),
       payment_document: v.party_type === 'EMPLOYEE' || ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'].includes(v.type)
         ? paymentDocumentByVale.get(`${v.party_id}:Vale #${v.number}`) ?? null
         : null,
@@ -492,21 +538,13 @@ export class HrService {
       await tx.$queryRaw`SELECT id FROM tenant.business_parties WHERE id = ${party.party_id}::uuid FOR UPDATE`;
       const vale = await tx.hr_vales.findUnique({ where: { id } });
       if (!vale) throw new NotFoundException('Vale no encontrado');
-      if (vale.status === 'CANCELLED') throw new BadRequestException('El vale ya está anulado');
-      if (vale.party_type === 'PARTNER' && vale.type === 'APORTE' && ['CONFIRMED', 'PAID'].includes(vale.status)) {
-        const funds = await this.getPartnerFunds(vale.party_id, vale.currency_code, tx);
-        if (funds.balance - Number(vale.amount) < 0) {
-          throw new BadRequestException('No se puede anular este aporte porque dejaría retiros sin respaldo. Primero anulá los retiros correspondientes.');
-        }
-      }
-
       const valeDocument = await tx.documents.findFirst({
         where: {
           descrip: `Vale #${vale.number}`,
           party_id: vale.party_id,
-          deleted_at: null,
           document_types: { category: 'VALE' },
         },
+        orderBy: { created_at: 'desc' },
         select: { id: true },
       });
 
@@ -530,6 +568,24 @@ export class HrService {
           throw new BadRequestException(
             `No se puede anular el vale porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`,
           );
+        }
+      }
+
+      // Legacy cancellations could leave the linked document confirmed, paid, or with
+      // both the original and reversal ledger rows still active. Reconcile that state
+      // without repeating the HR or treasury cancellation effects.
+      if (vale.status === 'CANCELLED') {
+        await this.reverseValeDocument(vale, userId, tx);
+        return tx.hr_vales.findUnique({
+          where: { id },
+          include: { party: { select: { id: true, name: true, tax_id: true } } },
+        });
+      }
+
+      if (vale.party_type === 'PARTNER' && vale.type === 'APORTE' && ['CONFIRMED', 'PAID'].includes(vale.status)) {
+        const funds = await this.getPartnerFunds(vale.party_id, vale.currency_code, tx);
+        if (funds.balance - Number(vale.amount) < 0) {
+          throw new BadRequestException('No se puede anular este aporte porque dejaría retiros sin respaldo. Primero anulá los retiros correspondientes.');
         }
       }
 
@@ -805,8 +861,9 @@ export class HrService {
       where: {
         descrip: `Vale #${vale.number}`,
         party_id: vale.party_id,
-        deleted_at: null,
+        document_types: { category: 'VALE' },
       },
+      orderBy: { created_at: 'desc' },
     });
 
     if (!doc) {
@@ -814,56 +871,19 @@ export class HrService {
       return;
     }
 
-    // Revertir current_account_entries
-    const entry = await prisma.current_account_entries.findFirst({
-      where: {
-        reference_id: doc.id,
-        reference_type: 'document',
-        deleted_at: null,
-      },
-    });
+    await removeDocumentAccountEffects(prisma, doc.id, userId);
 
-    if (entry) {
-      const account = await prisma.current_accounts.findUnique({
-        where: { id: entry.current_account_id },
-      });
-
-      if (account) {
-        const currentBalance = account.balance.toNumber();
-        const amount = entry.amount.toNumber();
-        const originalDelta = Number(entry.balance_after) - Number(entry.balance_before);
-        const balanceAfter = currentBalance - originalDelta;
-
-        await prisma.current_account_entries.create({
-          data: {
-            current_account_id: account.id,
-            type: 'CREDIT_NOTE',
-            amount,
-            currency_code: doc.currency_code,
-            balance_before: currentBalance,
-            balance_after: balanceAfter,
-            description: `Reversión Vale #${vale.number}`,
-            reference_type: 'document_reversal',
-            reference_id: doc.id,
-            date: new Date(),
-            created_by: userId,
-          },
-        });
-
-        await prisma.current_accounts.update({
-          where: { id: account.id },
-          data: { balance: balanceAfter, updated_at: new Date() },
-        });
-        await recalculateCurrentAccountLedger(prisma, account.id);
-      }
-    }
-
-    // Soft-delete el documento
+    const now = new Date();
     await prisma.documents.update({
       where: { id: doc.id },
       data: {
-        deleted_at: new Date(),
-        deleted_by: userId,
+        status: 3,
+        paid_amount: 0,
+        converted_paid_amount: 0,
+        deleted_at: doc.deleted_at ?? now,
+        deleted_by: doc.deleted_by ?? userId,
+        updated_at: now,
+        updated_by: userId,
       },
     });
 

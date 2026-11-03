@@ -1856,10 +1856,14 @@ export class DocumentsPurchasesService {
     return this.prisma.$transaction(async (tx) => {
       await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${id}::uuid FOR UPDATE`;
       const doc = await this.findOne(id, tx);
+      const cancelledStatus = getCancelledDocumentStatus(
+        doc.document_types?.category ?? '',
+        doc.document_types?.direction ?? -1,
+      );
       const internationalLink = await tx.international_operation_documents.findFirst({ where: { document_id: id, container_id: { not: null } }, select: { container_id: true } });
       if (internationalLink?.container_id) await tx.$queryRaw`SELECT id FROM tenant.international_containers WHERE id = ${internationalLink.container_id}::uuid FOR UPDATE`;
 
-      if (doc.status === STATUS_CANCELLED) {
+      if (doc.status === cancelledStatus) {
         await this.currentAccountsService.removeDocumentEffects(doc.id, userId, tx);
         return tx.documents.findUnique({ where: { id } });
       }
@@ -1932,7 +1936,7 @@ export class DocumentsPurchasesService {
       await tx.documents.update({
         where: { id },
         data: {
-          status: STATUS_CANCELLED,
+          status: cancelledStatus,
           updated_at: new Date(),
         },
       });
@@ -1983,7 +1987,7 @@ export class DocumentsPurchasesService {
           await tx.documents.update({ where: { id }, data: { status: STATUS_CANCELLED, updated_at: new Date(), updated_by: userId } });
         }
         await this.currentAccountsService.removeDocumentEffects(id, userId, tx);
-      } else if (![STATUS_DRAFT, STATUS_CANCELLED].includes(doc.status)) {
+      } else if (![STATUS_DRAFT, getCancelledDocumentStatus(category ?? '', doc.document_types?.direction ?? -1)].includes(doc.status)) {
         throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados. Las NC/ND confirmadas deben estar sin factura, pagos ni otros movimientos asociados.');
       }
 
