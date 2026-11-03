@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { getCancelledDocumentStatus } from '@/modules/erp/documents/types/document-statuses';
 
@@ -8,6 +8,52 @@ const DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES = new Set([
   'order_invoice_replacement',
   'order_invoice_replacement_reversal',
 ]);
+
+const TRASH_DISPLAY_CONFIG: Record<string, { fields: string[]; primary: string[]; secondary?: string[] }> = {
+  users: { fields: ['name', 'email'], primary: ['name'], secondary: ['email'] },
+  business_parties: { fields: ['name', 'tax_id', 'type'], primary: ['name'], secondary: ['tax_id', 'type'] },
+  companies: { fields: ['name', 'subdomain'], primary: ['name'], secondary: ['subdomain'] },
+  products: { fields: ['name', 'sku'], primary: ['name'], secondary: ['sku'] },
+  drivers: { fields: ['first_name', 'last_name', 'document'], primary: ['first_name', 'last_name'], secondary: ['document'] },
+  vehicles: { fields: ['plate', 'brand', 'model'], primary: ['plate'], secondary: ['brand', 'model'] },
+  trips: { fields: ['reference_number', 'status', 'departure_time'], primary: ['reference_number', 'status'], secondary: ['departure_time'] },
+  delivery_notes: { fields: ['number', 'type', 'status'], primary: ['type', 'number'], secondary: ['status'] },
+  pallets: { fields: ['code', 'status'], primary: ['code'], secondary: ['status'] },
+  locations: { fields: ['address', 'city', 'province', 'country'], primary: ['city', 'province'], secondary: ['address', 'country'] },
+  warehouses: { fields: ['name', 'code'], primary: ['name'], secondary: ['code'] },
+  picking_orders: { fields: ['status', 'delivery_note_id'], primary: ['status'], secondary: ['delivery_note_id'] },
+  corridors: { fields: ['name', 'description'], primary: ['name'], secondary: ['description'] },
+  transfer_rates: { fields: ['name', 'rate_type', 'description'], primary: ['name'], secondary: ['rate_type', 'description'] },
+  dispatch_rates: { fields: ['value', 'currency_code', 'rate_id'], primary: ['value', 'currency_code'], secondary: ['rate_id'] },
+  document_sequences: { fields: ['name', 'point_of_sale', 'prefix'], primary: ['name'], secondary: ['point_of_sale', 'prefix'] },
+  document_types: { fields: ['description', 'code', 'category', 'direction'], primary: ['description'], secondary: ['code', 'category'] },
+  accounts: { fields: ['code', 'name'], primary: ['name'], secondary: ['code'] },
+  tags: { fields: ['name'], primary: ['name'] },
+  categories: { fields: ['name', 'slug'], primary: ['name'], secondary: ['slug'] },
+  attributes: { fields: ['name', 'code'], primary: ['name'], secondary: ['code'] },
+  units: { fields: ['name', 'symbol'], primary: ['name'], secondary: ['symbol'] },
+  currencies: { fields: ['code', 'name'], primary: ['name'], secondary: ['code'] },
+  bank_accounts: { fields: ['name', 'bank_name', 'account_number'], primary: ['name'], secondary: ['bank_name', 'account_number'] },
+  bank_account_movements: { fields: ['type', 'date', 'description', 'reference', 'amount', 'currency_code'], primary: ['type', 'reference', 'description'], secondary: ['date', 'amount', 'currency_code'] },
+  payments: { fields: ['number', 'type', 'date', 'amount', 'currency_code', 'reference'], primary: ['type', 'number'], secondary: ['date', 'amount', 'currency_code', 'reference'] },
+};
+
+function displayFieldText(record: Record<string, unknown>, fields: string[] = []) {
+  return fields
+    .map((field) => record[field])
+    .filter((value) => value !== null && value !== undefined && String(value).trim().length > 0)
+    .map((value) => String(value).trim())
+    .join(' · ');
+}
+
+function getTrashDisplayData(model: string, record: Record<string, unknown>) {
+  const config = TRASH_DISPLAY_CONFIG[model];
+  if (!config) return {};
+  return {
+    displayName: displayFieldText(record, config.primary) || null,
+    displayDetail: displayFieldText(record, config.secondary) || null,
+  };
+}
 
 @Injectable()
 export class TrashService {
@@ -28,6 +74,9 @@ export class TrashService {
     const client = this.prisma.getClientForCurrentContext();
     const queries = filteredModels.map((model) => {
       const where = { deleted_at: since ? { gte: since } : { not: null } };
+      const displaySelect = Object.fromEntries(
+        (TRASH_DISPLAY_CONFIG[model]?.fields ?? []).map((field) => [field, true]),
+      );
       if (model === 'documents') {
         return client.documents.findMany({
           where,
@@ -35,8 +84,11 @@ export class TrashService {
             id: true,
             deleted_at: true,
             deleted_by: true,
+            source: true,
+            party_id: true,
             number: true,
             status: true,
+            paid_amount: true,
             ref: true,
             descrip: true,
             document_types: { select: { category: true, description: true, direction: true } },
@@ -45,7 +97,7 @@ export class TrashService {
       }
       return client[model].findMany({
         where,
-        select: { id: true, deleted_at: true, deleted_by: true },
+        select: { id: true, deleted_at: true, deleted_by: true, ...displaySelect },
       });
     });
 
@@ -56,10 +108,14 @@ export class TrashService {
         table: filteredModels[index],
         deletedAt: r.deleted_at?.toISOString() ?? null,
         deletedBy: r.deleted_by ?? null,
+        ...getTrashDisplayData(filteredModels[index]!, r),
         ...(filteredModels[index] === 'documents'
           ? {
               documentNumber: r.number,
               documentStatus: r.status,
+              documentPaidAmount: Number(r.paid_amount ?? 0),
+              documentSource: r.source,
+              documentPartyId: r.party_id,
               documentReference: r.ref,
               documentDescription: r.descrip,
               documentCategory: r.document_types?.category ?? null,
@@ -70,7 +126,121 @@ export class TrashService {
       })),
     );
 
-    const userIds = [...new Set(items.map((i) => i.deletedBy).filter(Boolean))] as string[];
+    const trashedValeDocuments = items.filter((item: any) =>
+      item.table === 'documents'
+      && item.documentCategory === 'VALE'
+      && item.documentSource === 'manual'
+      && item.documentPartyId
+      && /^Vale #\d+$/i.test(item.documentDescription?.trim() ?? ''),
+    ) as any[];
+    if (trashedValeDocuments.length) {
+      const valeRefs = trashedValeDocuments.map((document) => ({
+        document,
+        number: Number(/^Vale #(\d+)$/i.exec(document.documentDescription.trim())?.[1]),
+      }));
+      const relatedVales = await client.hr_vales.findMany({
+        where: {
+          status: 'CANCELLED',
+          party_id: { in: [...new Set(trashedValeDocuments.map((document) => document.documentPartyId))] },
+          number: { in: [...new Set(valeRefs.map((reference) => reference.number))] },
+        },
+        select: { id: true, party_id: true, number: true, party_type: true },
+      });
+      const valeByKey = new Map<string, (typeof relatedVales)[number]>(
+        relatedVales.map((vale) => [`${vale.party_id}:${vale.number}`, vale] as const),
+      );
+      const linkedVales = valeRefs.flatMap(({ document, number }) => {
+        const vale = valeByKey.get(`${document.documentPartyId}:${number}`);
+        return vale ? [{ document, vale }] : [];
+      });
+      const linkedDocumentIds = linkedVales.map(({ document }) => document.id);
+      const partnerValeIds = linkedVales
+        .filter(({ vale }) => vale.party_type === 'PARTNER')
+        .map(({ vale }) => vale.id);
+      if (linkedDocumentIds.length) {
+        const [activeAccountEntries, activePayments, cashMovements, bankMovements, cashCancellations, bankCancellations] = await Promise.all([
+          client.current_account_entries.findMany({
+            where: {
+              reference_id: { in: linkedDocumentIds },
+              reference_type: { in: [...DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES] },
+              deleted_at: null,
+            },
+            select: { reference_id: true },
+          }),
+          client.payment_documents.findMany({
+            where: {
+              document_id: { in: linkedDocumentIds },
+              deleted_at: null,
+              payment: { deleted_at: null, status: { notIn: ['CANCELLED', 'REVERSED'] } },
+            },
+            select: { document_id: true },
+          }),
+          partnerValeIds.length
+            ? client.cash_box_movements.findMany({
+                where: { reference_type: 'hr_vale', reference_id: { in: partnerValeIds }, deleted_at: null },
+                select: { reference_id: true },
+              })
+            : Promise.resolve([]),
+          partnerValeIds.length
+            ? client.bank_account_movements.findMany({
+                where: { reference_type: 'hr_vale', reference_id: { in: partnerValeIds }, deleted_at: null },
+                select: { reference_id: true },
+              })
+            : Promise.resolve([]),
+          partnerValeIds.length
+            ? client.cash_box_movements.findMany({
+                where: { reference_type: 'hr_vale_cancellation', reference_id: { in: partnerValeIds }, deleted_at: null },
+                select: { reference_id: true },
+              })
+            : Promise.resolve([]),
+          partnerValeIds.length
+            ? client.bank_account_movements.findMany({
+                where: { reference_type: 'hr_vale_cancellation', reference_id: { in: partnerValeIds }, deleted_at: null },
+                select: { reference_id: true },
+              })
+            : Promise.resolve([]),
+        ]);
+        const documentsWithActiveEntries = new Set(activeAccountEntries.map((entry) => entry.reference_id).filter(Boolean));
+        const documentsWithActivePayments = new Set(activePayments.map((payment) => payment.document_id));
+        const valeIdsWithCash = new Set(cashMovements.map((movement) => movement.reference_id).filter(Boolean));
+        const valeIdsWithBank = new Set(bankMovements.map((movement) => movement.reference_id).filter(Boolean));
+        const valeIdsWithCashReversal = new Set(cashCancellations.map((movement) => movement.reference_id).filter(Boolean));
+        const valeIdsWithBankReversal = new Set(bankCancellations.map((movement) => movement.reference_id).filter(Boolean));
+
+        for (const { document, vale } of linkedVales) {
+          const documentStatusNeedsReconciliation = Number(document.documentStatus) !== 3;
+          const documentPaidAmountNeedsReconciliation = Number(document.documentPaidAmount) !== 0;
+          const documentAccountEntriesNeedReconciliation = documentsWithActiveEntries.has(document.id);
+          const documentNeedsReconciliation = documentStatusNeedsReconciliation
+            || documentPaidAmountNeedsReconciliation
+            || documentAccountEntriesNeedReconciliation;
+          const treasuryNeedsReconciliation = vale.party_type === 'PARTNER'
+            && (valeIdsWithCash.has(vale.id)
+              ? !valeIdsWithCashReversal.has(vale.id)
+              : valeIdsWithBank.has(vale.id) && !valeIdsWithBankReversal.has(vale.id));
+          document.hrValeId = vale.id;
+          document.hrValeDocumentNeedsReconciliation = documentNeedsReconciliation;
+          document.hrValeDocumentStatusNeedsReconciliation = documentStatusNeedsReconciliation;
+          document.hrValePaidAmountNeedsReconciliation = documentPaidAmountNeedsReconciliation;
+          document.hrValeAccountEntriesNeedReconciliation = documentAccountEntriesNeedReconciliation;
+          document.hrValeTreasuryNeedsReconciliation = treasuryNeedsReconciliation;
+          document.hrValeNeedsReconciliation = documentNeedsReconciliation || treasuryNeedsReconciliation;
+          document.hrValeReconciliationBlocked = documentsWithActivePayments.has(document.id);
+        }
+      }
+    }
+
+    const visibleItems = items.map((item: any) => {
+      const {
+        documentPaidAmount: _documentPaidAmount,
+        documentPartyId: _documentPartyId,
+        documentSource: _documentSource,
+        ...visibleItem
+      } = item;
+      return visibleItem;
+    });
+
+    const userIds = [...new Set(visibleItems.map((i) => i.deletedBy).filter(Boolean))] as string[];
 
     let userMap = new Map<string, string>();
     if (userIds.length > 0) {
@@ -82,10 +252,159 @@ export class TrashService {
       userMap = new Map(users.map((u) => [u.id, u.name]));
     }
 
-    return items.map((item) => ({
+    return visibleItems.map((item) => ({
       ...item,
       deletedByName: item.deletedBy ? (userMap.get(item.deletedBy) ?? null) : null,
     }));
+  }
+
+  async getTrashedValeTreasuryImpacts(documentId: string) {
+    const client = this.prisma.getClientForCurrentContext();
+    const document = await client.documents.findFirst({
+      where: {
+        id: documentId,
+        deleted_at: { not: null },
+        document_types: { category: 'VALE' },
+      },
+      select: { id: true, party_id: true, descrip: true },
+    });
+    if (!document) throw new NotFoundException('Comprobante VALE no encontrado en la Papelera.');
+
+    const valeNumber = /^Vale #(\d+)$/i.exec(document.descrip?.trim() ?? '')?.[1];
+    if (!document.party_id || !valeNumber) return { impacts: [] };
+
+    const vale = await client.hr_vales.findFirst({
+      where: { party_id: document.party_id, number: Number(valeNumber) },
+      select: { id: true },
+    });
+    if (!vale) return { impacts: [] };
+
+    const [cashMovements, bankMovements, paymentLinks] = await Promise.all([
+      client.cash_box_movements.findMany({
+        where: {
+          reference_type: { in: ['hr_vale', 'hr_vale_cancellation'] },
+          reference_id: vale.id,
+          deleted_at: null,
+        },
+        select: {
+          id: true,
+          type: true,
+          currency_code: true,
+          balance_before: true,
+          balance_after: true,
+          date: true,
+          description: true,
+          reference_type: true,
+          cash_box: { select: { name: true } },
+        },
+      }),
+      client.bank_account_movements.findMany({
+        where: {
+          reference_type: { in: ['hr_vale', 'hr_vale_cancellation'] },
+          reference_id: vale.id,
+          deleted_at: null,
+        },
+        select: {
+          id: true,
+          type: true,
+          currency_code: true,
+          balance_before: true,
+          balance_after: true,
+          date: true,
+          description: true,
+          reference_type: true,
+          bank_account: { select: { name: true, bank_name: true } },
+        },
+      }),
+      client.payment_documents.findMany({
+        where: { document_id: document.id },
+        select: {
+          payment: {
+            select: {
+              cash_box_movements: {
+                where: { deleted_at: null },
+                select: {
+                  id: true,
+                  type: true,
+                  currency_code: true,
+                  balance_before: true,
+                  balance_after: true,
+                  date: true,
+                  description: true,
+                  reference_type: true,
+                  cash_box: { select: { name: true } },
+                },
+              },
+              bank_account_movements: {
+                where: { deleted_at: null },
+                select: {
+                  id: true,
+                  type: true,
+                  currency_code: true,
+                  balance_before: true,
+                  balance_after: true,
+                  date: true,
+                  description: true,
+                  reference_type: true,
+                  bank_account: { select: { name: true, bank_name: true } },
+                },
+              },
+            },
+          },
+        },
+      }),
+    ]);
+
+    const impacts = new Map<string, {
+      id: string;
+      accountLabel: string;
+      movementLabel: string;
+      amount: number;
+      currencyCode: string;
+      date: string;
+      isReversal: boolean;
+    }>();
+    const addImpact = (movement: any, accountLabel: string) => {
+      const movementType = String(movement.type ?? '').toUpperCase();
+      const description = String(movement.description ?? '').toLowerCase();
+      const referenceType = String(movement.reference_type ?? '').toLowerCase();
+      const isReversal = referenceType === 'hr_vale_cancellation'
+        || referenceType.includes('reversal')
+        || description.startsWith('reversión');
+      const movementLabel = movementType === 'PAYMENT'
+        ? 'Pago / débito'
+        : movementType === 'COLLECTION'
+          ? 'Cobro / crédito'
+          : movementType === 'ADJUSTMENT'
+            ? 'Ajuste'
+            : movementType || 'Movimiento';
+      impacts.set(movement.id, {
+        id: movement.id,
+        accountLabel,
+        movementLabel: isReversal ? `Reversión · ${movementLabel}` : movementLabel,
+        amount: Number(movement.balance_after) - Number(movement.balance_before),
+        currencyCode: movement.currency_code,
+        date: movement.date.toISOString(),
+        isReversal,
+      });
+    };
+
+    for (const movement of cashMovements) addImpact(movement, `Caja · ${movement.cash_box.name}`);
+    for (const movement of bankMovements) {
+      const bankName = [movement.bank_account.bank_name, movement.bank_account.name].filter(Boolean).join(' · ');
+      addImpact(movement, `Banco · ${bankName}`);
+    }
+    for (const { payment } of paymentLinks) {
+      for (const movement of payment.cash_box_movements) addImpact(movement, `Caja · ${movement.cash_box.name}`);
+      for (const movement of payment.bank_account_movements) {
+        const bankName = [movement.bank_account.bank_name, movement.bank_account.name].filter(Boolean).join(' · ');
+        addImpact(movement, `Banco · ${bankName}`);
+      }
+    }
+
+    return {
+      impacts: [...impacts.values()].sort((a, b) => a.date.localeCompare(b.date)),
+    };
   }
 
   // 🗑️ soft delete
@@ -245,6 +564,8 @@ export class TrashService {
         select: {
           id: true,
           number: true,
+          descrip: true,
+          party_id: true,
           status: true,
           source: true,
           deleted_at: true,
@@ -292,6 +613,29 @@ export class TrashService {
       if (documents.length !== new Set(ids).size) {
         throw new BadRequestException('Todos los comprobantes deben estar en la papelera para eliminarlos definitivamente.');
       }
+
+      const trashedValeRefs = documents.flatMap((document) => {
+        if (document.document_types.category !== 'VALE' || document.source !== 'manual' || !document.party_id) return [];
+        const match = /^Vale #(\d+)$/i.exec(document.descrip?.trim() ?? '');
+        return match ? [{ documentId: document.id, partyId: document.party_id, number: Number(match[1]) }] : [];
+      });
+      const relatedCancelledVales = trashedValeRefs.length
+        ? await tx.hr_vales.findMany({
+            where: {
+              status: 'CANCELLED',
+              party_id: { in: [...new Set(trashedValeRefs.map((reference) => reference.partyId))] },
+              number: { in: [...new Set(trashedValeRefs.map((reference) => reference.number))] },
+            },
+            select: { id: true, party_id: true, number: true },
+          })
+        : [];
+      const cancelledValeDocumentIds = new Set(
+        trashedValeRefs
+          .filter((reference) => relatedCancelledVales.some(
+            (vale) => vale.party_id === reference.partyId && vale.number === reference.number,
+          ))
+          .map((reference) => reference.documentId),
+      );
 
       const documentIds = documents.map((document) => document.id);
       const manuallyTrashedDocumentIds = documents
@@ -417,7 +761,9 @@ export class TrashService {
         let reason: string | null = null;
 
         if (!isSafelyRemovedOpeningBalance && !isManualTrashedDocument && document.status !== cancelledStatus) {
-          reason = 'no está anulado';
+          reason = cancelledValeDocumentIds.has(document.id)
+            ? 'el vale RRHH asociado está anulado, pero su comprobante interno requiere regularización antes de purgarse'
+            : 'no está anulado';
         } else if (
           isManualTrashedDocument
           && !canPurgeManualTrashedDocument

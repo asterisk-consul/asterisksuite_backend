@@ -219,6 +219,48 @@ export class DocumentsSalesController {
     return this.service.findPending(partyId);
   }
 
+  @Get('reference-invoices')
+  async findInvoiceReferences(
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+    @Query('search') search?: string,
+  ) {
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      'INVOICE',
+      'read',
+    );
+    return this.service.findInvoiceReferences(
+      page !== undefined ? Number(page) : 1,
+      pageSize !== undefined ? Number(pageSize) : 50,
+      search,
+      req['companyUserRole'] === 'USER' ? user.id : undefined,
+    );
+  }
+
+  @Get('reference-invoices/:id')
+  async findInvoiceReference(
+    @Param('id') id: string,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      'INVOICE',
+      'read',
+    );
+    return this.service.findInvoiceReference(
+      id,
+      req['companyUserRole'] === 'USER' ? user.id : undefined,
+    );
+  }
+
   @Get(':id/stock-availability')
   async getStockAvailability(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     await this.documentAccess.assertDocument(

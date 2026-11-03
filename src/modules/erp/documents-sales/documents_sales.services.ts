@@ -107,6 +107,120 @@ export class DocumentsSalesService {
     return this.db.getClientForCurrentContext();
   }
 
+  async findInvoiceReferences(page = 1, pageSize = 50, search?: string, userId?: string) {
+    const safePage = Math.max(1, Math.trunc(Number.isFinite(page) ? page : 1));
+    const safePageSize = Math.min(100, Math.max(1, Math.trunc(Number.isFinite(pageSize) ? pageSize : 50)));
+    const normalizedSearch = search?.trim();
+    const and: any[] = [];
+    if (normalizedSearch) {
+      const searchConditions: any[] = [
+          { descrip: { contains: normalizedSearch, mode: 'insensitive' } },
+          { ref: { contains: normalizedSearch, mode: 'insensitive' } },
+          { business_parties: { name: { contains: normalizedSearch, mode: 'insensitive' } } },
+          ...(/^\d+$/.test(normalizedSearch) ? [{ number: Number(normalizedSearch) }] : []),
+      ];
+      and.push({ OR: searchConditions });
+    }
+    if (userId) and.push({ OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] });
+    const where: any = {
+      deleted_at: null,
+      status: 2,
+      document_types: { category: 'INVOICE', direction: 1 },
+      ...(and.length ? { AND: and } : {}),
+    };
+    const [items, total] = await Promise.all([
+      this.prisma.documents.findMany({
+        where,
+        select: {
+          id: true,
+          number: true,
+          date: true,
+          total: true,
+          party_id: true,
+          currency_code: true,
+          ref: true,
+          descrip: true,
+          document_types: { select: { code: true } },
+          business_parties: {
+            select: {
+              id: true,
+              name: true,
+              type: true,
+              business_names: true,
+              email: true,
+              tax_id: true,
+              vat_condition: true,
+              exemption_rate: true,
+              active: true,
+              roles: { select: { id: true, role: true, active: true } },
+            },
+          },
+        },
+        orderBy: [{ date: 'desc' }, { number: 'desc' }],
+        skip: (safePage - 1) * safePageSize,
+        take: safePageSize,
+      }),
+      this.prisma.documents.count({ where }),
+    ]);
+    return {
+      items,
+      pagination: { page: safePage, pageSize: safePageSize, total, pageCount: Math.ceil(total / safePageSize) },
+    };
+  }
+
+  async findInvoiceReference(id: string, userId?: string) {
+    const where: any = {
+      id,
+      deleted_at: null,
+      status: STATUS_CONFIRMED,
+      document_types: { category: 'INVOICE', direction: 1 },
+      ...(userId ? { OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] } : {}),
+    };
+    const invoice = await this.prisma.documents.findFirst({
+      where,
+      select: {
+        id: true,
+        number: true,
+        date: true,
+        total: true,
+        party_id: true,
+        currency_code: true,
+        ref: true,
+        descrip: true,
+        document_types: { select: { code: true } },
+        business_parties: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            business_names: true,
+            email: true,
+            tax_id: true,
+            vat_condition: true,
+            exemption_rate: true,
+            active: true,
+            roles: { select: { id: true, role: true, active: true } },
+          },
+        },
+        document_items: {
+          where: { deleted_at: null },
+          select: {
+            id: true,
+            product_id: true,
+            variant_id: true,
+            quantity: true,
+            quantity_invoiced: true,
+            unit_price: true,
+            products: { select: { name: true } },
+            product_variants: { select: { name: true } },
+          },
+        },
+      },
+    });
+    if (!invoice) throw new NotFoundException('Factura confirmada no encontrada');
+    return invoice;
+  }
+
   private carryCommercialAdjustments(source: any, targetType: any, targetItems: ItemInput[]) {
     const sourceAdjustments = Array.isArray(source?.commercial_adjustments) ? source.commercial_adjustments : [];
     if (!sourceAdjustments.length) return { adjustments: [], netDiscount: 0, taxReduction: 0, totalReduction: 0 };
@@ -239,6 +353,14 @@ export class DocumentsSalesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
+    const isCreditOrDebitNote = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(docType.category);
+    if (isCreditOrDebitNote && !dto.parent_document_id) {
+      throw new BadRequestException('La nota de crédito/débito debe crearse desde una factura confirmada');
+    }
+    if (isCreditOrDebitNote && !dto.party_id) {
+      throw new BadRequestException('El cliente se toma de la factura de referencia');
+    }
+
     const resolvedSequenceId = await this.resolveSequence(
       dto.document_type_id,
       dto.document_sequence_id,
@@ -270,6 +392,9 @@ export class DocumentsSalesService {
       if (isNcNd && parentCategory !== 'INVOICE') {
         throw new BadRequestException('Solo se puede referenciar una factura');
       }
+      if (isNcNd && parentDoc.status !== STATUS_CONFIRMED) {
+        throw new BadRequestException('La nota de crédito/débito debe crearse desde una factura confirmada y activa');
+      }
       if (isInvoice && !['ORDER', 'INVOICE'].includes(parentCategory)) {
         throw new BadRequestException('Por configuración, un remito no puede originar una factura');
       }
@@ -278,6 +403,9 @@ export class DocumentsSalesService {
       }
       if (dto.party_id && parentDoc.party_id && dto.party_id !== parentDoc.party_id) {
         throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada');
+      }
+      if (isNcNd && (!parentDoc.party_id || dto.party_id !== parentDoc.party_id)) {
+        throw new BadRequestException('El cliente de la nota debe coincidir con el de la factura');
       }
       if (dto.commercial_adjustments === undefined && Array.isArray(parentDoc.commercial_adjustments)) {
         commercialAdjustments = (parentDoc.commercial_adjustments as any[]).map((adjustment) => ({
@@ -1506,10 +1634,28 @@ export class DocumentsSalesService {
             id: true,
             number: true,
             date: true,
+            total: true,
+            currency_code: true,
+            party_id: true,
+            ref: true,
             descrip: true,
             status: true,
             document_sequences: { select: { point_of_sale: true } },
             document_types: { select: { code: true, description: true, category: true, direction: true } },
+            business_parties: {
+              select: {
+                id: true,
+                name: true,
+                type: true,
+                business_names: true,
+                email: true,
+                tax_id: true,
+                vat_condition: true,
+                exemption_rate: true,
+                active: true,
+                roles: { select: { id: true, role: true, active: true } },
+              },
+            },
           },
         },
 
@@ -1815,6 +1961,9 @@ export class DocumentsSalesService {
 
     if (!docType) {
       throw new NotFoundException('Tipo de documento no encontrado');
+    }
+    if (docType.direction !== 1 || docType.category !== 'INVOICE') {
+      throw new BadRequestException('Desde viajes solo se pueden generar facturas. Las notas deben crearse desde una factura confirmada.');
     }
 
     // ─────────────────────────────────────────────
@@ -3315,11 +3464,14 @@ export class DocumentsSalesService {
   ): Promise<{ results: { tripId: string; created: number; skipped: number }[] }> {
     const docType = await this.prisma.document_types.findUnique({
       where: { id: documentTypeId },
-      select: { id: true, code: true, direction: true },
+      select: { id: true, code: true, direction: true, category: true },
     });
 
     if (!docType) {
       throw new NotFoundException('Tipo de documento no encontrado');
+    }
+    if (docType.direction !== 1 || docType.category !== 'INVOICE') {
+      throw new BadRequestException('Desde viajes solo se pueden generar facturas. Las notas deben crearse desde una factura confirmada.');
     }
 
     const results: { tripId: string; created: number; skipped: number }[] = [];

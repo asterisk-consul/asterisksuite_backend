@@ -27,6 +27,10 @@ export const PLATFORM_MODULE_ROUTES: PlatformModuleRoute[] = [
     ],
   },
   {
+    moduleCode: 'ARCA',
+    patterns: [/^\/api\/erp\/arca(?:\/|$)/],
+  },
+  {
     moduleCode: 'TREASURY',
     patterns: [
       /^\/api\/erp\/(?:bank-accounts|bank-concepts|checks|credit-cards|current-accounts|financial-investments|payment-reports|payments|treasury)(?:\/|$)/,

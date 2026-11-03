@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { createPrivateKey, randomBytes, sign, verify, X509Certificate } from 'node:crypto';
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { ArcaHomologationClient, type ArcaAccessTicket } from './arca-homologation.client';
 import { decryptArcaSecret, encryptArcaSecret } from './arca-credentials-crypto';
@@ -15,6 +16,7 @@ export class ArcaSettingsService {
   constructor(
     private readonly db: PrismaService,
     private readonly homologation: ArcaHomologationClient,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   async getSettings(userId: string) {
@@ -233,6 +235,18 @@ export class ArcaSettingsService {
     if (!membership || membership.company.deleted_at) throw new ForbiddenException('No tenés acceso a esta empresa.');
     if (membership.role !== 'OWNER' && membership.role !== 'ADMIN') {
       throw new ForbiddenException('Solo OWNER o ADMIN pueden configurar la conexión con ARCA.');
+    }
+    const arcaModule = await this.platformModules.getModule(companyId, 'ARCA');
+    if (!arcaModule?.enabled) {
+      throw new ForbiddenException({
+        statusCode: 403,
+        error: 'Forbidden',
+        code: 'MODULE_NOT_AVAILABLE',
+        message: 'El módulo ARCA no está habilitado para esta empresa.',
+        module: 'ARCA',
+        moduleState: arcaModule?.state ?? 'DISABLED',
+        reason: arcaModule?.reason ?? 'Un administrador de plataforma debe habilitarlo para esta empresa.',
+      });
     }
     return companyId;
   }

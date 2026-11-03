@@ -37,3 +37,25 @@ CREATE TABLE IF NOT EXISTS public.company_arca_settings (
       (access_ticket_ciphertext IS NOT NULL AND access_ticket_iv IS NOT NULL AND access_ticket_auth_tag IS NOT NULL)
     )
 );
+
+-- ARCA queda fuera de los planes existentes y apagado para las empresas hasta
+-- que un administrador de plataforma lo habilite en un plan o excepción.
+INSERT INTO public.platform_modules (code, name, description, icon, sort_order, is_core, dependencies, active)
+VALUES (
+  'ARCA',
+  'ARCA',
+  'Configuración fiscal y conexión de homologación con ARCA',
+  'i-lucide-badge-check',
+  150,
+  false,
+  '["CORE"]'::jsonb,
+  true
+)
+ON CONFLICT (code) DO UPDATE SET
+  name = EXCLUDED.name,
+  description = EXCLUDED.description,
+  icon = EXCLUDED.icon,
+  sort_order = EXCLUDED.sort_order,
+  is_core = EXCLUDED.is_core,
+  dependencies = EXCLUDED.dependencies,
+  active = EXCLUDED.active;

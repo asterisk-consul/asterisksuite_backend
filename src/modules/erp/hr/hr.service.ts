@@ -227,18 +227,45 @@ export class HrService {
     }
 
     const partnerValeIds = vales.filter((vale) => vale.party_type === 'PARTNER').map((vale) => vale.id);
-    const [cashMovements, bankMovements] = partnerValeIds.length
-      ? await Promise.all([
-          this.prisma.cash_box_movements.findMany({
+    const cancelledPartnerValeIds = vales
+      .filter((vale) => vale.party_type === 'PARTNER' && vale.status === 'CANCELLED')
+      .map((vale) => vale.id);
+    const [cashMovements, bankMovements, cashCancellations, bankCancellations] = await Promise.all([
+      partnerValeIds.length
+        ? this.prisma.cash_box_movements.findMany({
             where: { reference_type: 'hr_vale', reference_id: { in: partnerValeIds }, deleted_at: null },
             select: { reference_id: true, cash_box: { select: { name: true } } },
-          }),
-          this.prisma.bank_account_movements.findMany({
+          })
+        : Promise.resolve([]),
+      partnerValeIds.length
+        ? this.prisma.bank_account_movements.findMany({
             where: { reference_type: 'hr_vale', reference_id: { in: partnerValeIds }, deleted_at: null },
             select: { reference_id: true, bank_account: { select: { name: true, bank_name: true } } },
-          }),
-        ])
-      : [[], []];
+          })
+        : Promise.resolve([]),
+      cancelledPartnerValeIds.length
+        ? this.prisma.cash_box_movements.findMany({
+            where: { reference_type: 'hr_vale_cancellation', reference_id: { in: cancelledPartnerValeIds }, deleted_at: null },
+            select: { reference_id: true },
+          })
+        : Promise.resolve([]),
+      cancelledPartnerValeIds.length
+        ? this.prisma.bank_account_movements.findMany({
+            where: { reference_type: 'hr_vale_cancellation', reference_id: { in: cancelledPartnerValeIds }, deleted_at: null },
+            select: { reference_id: true },
+          })
+        : Promise.resolve([]),
+    ]);
+    const activeCashValeIds = new Set(cashMovements.map((movement) => movement.reference_id).filter(Boolean));
+    const activeBankValeIds = new Set(bankMovements.map((movement) => movement.reference_id).filter(Boolean));
+    const cancelledCashValeIds = new Set(cashCancellations.map((movement) => movement.reference_id).filter(Boolean));
+    const cancelledBankValeIds = new Set(bankCancellations.map((movement) => movement.reference_id).filter(Boolean));
+    const treasuryReconciliationValeIds = new Set(
+      cancelledPartnerValeIds.filter((id) =>
+        (activeCashValeIds.has(id) && !cancelledCashValeIds.has(id))
+        || (!activeCashValeIds.has(id) && activeBankValeIds.has(id) && !cancelledBankValeIds.has(id)),
+      ),
+    );
     const treasuryTargetByVale = new Map<string, { type: 'CASH_BOX' | 'BANK_ACCOUNT'; label: string }>();
     for (const movement of cashMovements) {
       if (movement.reference_id) {
@@ -285,6 +312,7 @@ export class HrService {
         const document = valeDocumentsByKey.get(`${v.party_id}:Vale #${v.number}`);
         return Boolean(document && valeDocumentsWithActivePayments.has(document.id));
       })(),
+      treasury_needs_reconciliation: treasuryReconciliationValeIds.has(v.id),
       payment_document: v.party_type === 'EMPLOYEE' || ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'].includes(v.type)
         ? paymentDocumentByVale.get(`${v.party_id}:Vale #${v.number}`) ?? null
         : null,
@@ -531,7 +559,35 @@ export class HrService {
     );
   }
 
-  async cancelVale(id: string, userId: string) {
+  async reconcileTrashedCancelledValeDocument(documentId: string, userId: string) {
+    const document = await this.prisma.documents.findFirst({
+      where: {
+        id: documentId,
+        deleted_at: { not: null },
+        source: 'manual',
+        document_types: { category: 'VALE' },
+      },
+      select: { id: true, party_id: true, descrip: true },
+    });
+    if (!document) throw new NotFoundException('Comprobante VALE no encontrado en la Papelera.');
+
+    const match = /^Vale #(\d+)$/i.exec(document.descrip?.trim() ?? '');
+    if (!match || !document.party_id) {
+      throw new BadRequestException('No se pudo identificar el vale RRHH asociado a este comprobante.');
+    }
+
+    const vale = await this.prisma.hr_vales.findFirst({
+      where: { party_id: document.party_id, number: Number(match[1]), status: 'CANCELLED' },
+      select: { id: true },
+    });
+    if (!vale) {
+      throw new BadRequestException('El vale RRHH asociado todavía no está anulado. Anulalo desde RRHH antes de regularizar el comprobante.');
+    }
+
+    return this.cancelVale(vale.id, userId, document.id);
+  }
+
+  async cancelVale(id: string, userId: string, targetDocumentId?: string) {
     return this.prisma.$transaction(async (tx) => {
       const party = await tx.hr_vales.findUnique({ where: { id }, select: { party_id: true } });
       if (!party) throw new NotFoundException('Vale no encontrado');
@@ -540,6 +596,7 @@ export class HrService {
       if (!vale) throw new NotFoundException('Vale no encontrado');
       const valeDocument = await tx.documents.findFirst({
         where: {
+          ...(targetDocumentId ? { id: targetDocumentId } : {}),
           descrip: `Vale #${vale.number}`,
           party_id: vale.party_id,
           document_types: { category: 'VALE' },
@@ -572,10 +629,11 @@ export class HrService {
       }
 
       // Legacy cancellations could leave the linked document confirmed, paid, or with
-      // both the original and reversal ledger rows still active. Reconcile that state
-      // without repeating the HR or treasury cancellation effects.
+      // both the original and reversal ledger rows still active. Reconcile that state,
+      // and restore a missing treasury reversal without duplicating an existing one.
       if (vale.status === 'CANCELLED') {
-        await this.reverseValeDocument(vale, userId, tx);
+        await this.reverseValeDocument(vale, userId, tx, valeDocument?.id);
+        await this.reversePartnerTreasuryMovement(vale, userId, tx);
         return tx.hr_vales.findUnique({
           where: { id },
           include: { party: { select: { id: true, name: true, tax_id: true } } },
@@ -651,6 +709,17 @@ export class HrService {
     ]);
     const original = cashMovement ?? bankMovement;
     if (!original) return; // Vale histórico: nunca impactó Tesorería.
+
+    const existingCancellation = cashMovement
+      ? await prisma.cash_box_movements.findFirst({
+          where: { reference_type: 'hr_vale_cancellation', reference_id: vale.id, deleted_at: null },
+          select: { id: true },
+        })
+      : await prisma.bank_account_movements.findFirst({
+          where: { reference_type: 'hr_vale_cancellation', reference_id: vale.id, deleted_at: null },
+          select: { id: true },
+        });
+    if (existingCancellation) return;
 
     const originalWasOutflow = original.type === 'PAYMENT';
     const amount = original.amount.toNumber();
@@ -855,16 +924,20 @@ export class HrService {
   // REVERTIR DOCUMENTO VALE
   // ══════════════════════════════════════════════════════════
 
-  private async reverseValeDocument(vale: any, userId: string, prisma: any = this.prisma) {
+  private async reverseValeDocument(vale: any, userId: string, prisma: any = this.prisma, targetDocumentId?: string) {
     // Buscar el documento VALE asociado al vale
-    const doc = await prisma.documents.findFirst({
-      where: {
-        descrip: `Vale #${vale.number}`,
-        party_id: vale.party_id,
-        document_types: { category: 'VALE' },
-      },
-      orderBy: { created_at: 'desc' },
-    });
+    const doc = targetDocumentId
+      ? await prisma.documents.findFirst({
+          where: { id: targetDocumentId, party_id: vale.party_id, document_types: { category: 'VALE' } },
+        })
+      : await prisma.documents.findFirst({
+          where: {
+            descrip: `Vale #${vale.number}`,
+            party_id: vale.party_id,
+            document_types: { category: 'VALE' },
+          },
+          orderBy: { created_at: 'desc' },
+        });
 
     if (!doc) {
       this.logger.warn(`No se encontró documento VALE para revertir vale #${vale.number}`);
