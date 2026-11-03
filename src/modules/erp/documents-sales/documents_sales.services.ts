@@ -33,6 +33,7 @@ import { StockReservationsService } from './stock-reservations.service';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
+import { assertCanTrashConfirmedOrphanNote } from '../documents/utils/orphan-note-trash';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -1338,6 +1339,8 @@ export class DocumentsSalesService {
 
         business_parties: true,
 
+        _count: { select: { child_documents: true, payment_documents: true } },
+
         warehouse: true,
 
         commercial_operation: true,
@@ -1552,6 +1555,8 @@ export class DocumentsSalesService {
           where: { deleted_at: null },
           select: { id: true, amount_applied: true },
         },
+
+        _count: { select: { child_documents: true, payment_documents: true } },
       },
     });
 
@@ -2422,15 +2427,45 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // REMOVE
   // ─────────────────────────────────────────────
-  async remove(id: string, userId: string) {
-    const doc = await this.findOne(id);
+  async getRemovalContext(id: string) {
+    if (!id || id === 'undefined') throw new BadRequestException('ID inválido');
+    const document = await this.prisma.documents.findFirst({
+      where: { id, deleted_at: null },
+      select: { status: true, document_types: { select: { category: true } } },
+    });
+    if (!document) throw new NotFoundException('Documento no encontrado');
+    return document;
+  }
 
-    if (![STATUS_DRAFT, STATUS_CANCELLED].includes(doc.status)) {
-      throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados');
-    }
-    return this.prisma.documents.update({
-      where: { id },
-      data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
+  async remove(id: string, userId: string) {
+    if (!id || id === 'undefined') throw new BadRequestException('ID inválido');
+
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${id}::uuid FOR UPDATE`;
+      const doc = await tx.documents.findFirst({
+        where: { id, deleted_at: null },
+        include: { document_types: true },
+      });
+      if (!doc) throw new NotFoundException('Documento no encontrado');
+
+      const category = doc.document_types?.category;
+      const isNote = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(category ?? '');
+      const canTrashOrphanNote = isNote && [STATUS_CONFIRMED, STATUS_CANCELLED].includes(doc.status);
+
+      if (canTrashOrphanNote) {
+        await assertCanTrashConfirmedOrphanNote(tx, doc);
+        if (doc.status !== STATUS_CANCELLED) {
+          await tx.documents.update({ where: { id }, data: { status: STATUS_CANCELLED, updated_at: new Date(), updated_by: userId } });
+        }
+        await this.currentAccountsService.removeDocumentEffects(id, userId, tx);
+      } else if (![STATUS_DRAFT, STATUS_CANCELLED].includes(doc.status)) {
+        throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados. Las NC/ND confirmadas deben estar sin factura, pagos ni otros movimientos asociados.');
+      }
+
+      return tx.documents.update({
+        where: { id },
+        data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
+      });
     });
   }
 

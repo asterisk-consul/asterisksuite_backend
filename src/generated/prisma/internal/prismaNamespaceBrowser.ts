@@ -189,6 +189,7 @@ export const ModelName = {
   platform_admin_assignments: 'platform_admin_assignments',
   platform_admin_company_scopes: 'platform_admin_company_scopes',
   company_tax_settings: 'company_tax_settings',
+  company_arca_settings: 'company_arca_settings',
   user_table_preferences: 'user_table_preferences',
   company_whatsapp_report_settings: 'company_whatsapp_report_settings',
   company_whatsapp_report_runs: 'company_whatsapp_report_runs',
@@ -2936,6 +2937,33 @@ export const Company_tax_settingsScalarFieldEnum = {
 } as const
 
 export type Company_tax_settingsScalarFieldEnum = (typeof Company_tax_settingsScalarFieldEnum)[keyof typeof Company_tax_settingsScalarFieldEnum]
+
+
+export const Company_arca_settingsScalarFieldEnum = {
+  company_id: 'company_id',
+  issuer_cuit: 'issuer_cuit',
+  environment: 'environment',
+  point_of_sale: 'point_of_sale',
+  credentials_ciphertext: 'credentials_ciphertext',
+  credentials_iv: 'credentials_iv',
+  credentials_auth_tag: 'credentials_auth_tag',
+  access_ticket_ciphertext: 'access_ticket_ciphertext',
+  access_ticket_iv: 'access_ticket_iv',
+  access_ticket_auth_tag: 'access_ticket_auth_tag',
+  access_ticket_expires_at: 'access_ticket_expires_at',
+  certificate_subject: 'certificate_subject',
+  certificate_serial: 'certificate_serial',
+  certificate_valid_to: 'certificate_valid_to',
+  available_point_sales: 'available_point_sales',
+  last_test_status: 'last_test_status',
+  last_test_message: 'last_test_message',
+  last_tested_at: 'last_tested_at',
+  configured_by: 'configured_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_arca_settingsScalarFieldEnum = (typeof Company_arca_settingsScalarFieldEnum)[keyof typeof Company_arca_settingsScalarFieldEnum]
 
 
 export const User_table_preferencesScalarFieldEnum = {

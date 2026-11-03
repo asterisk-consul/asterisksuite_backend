@@ -52,9 +52,9 @@ export class TrashController {
   @Delete('hard/:table')
   hardDeleteMany(
     @Param('table') table: string,
-    @Body() body: { ids: string[] },
+    @Body() body: { ids: string[]; confirmAccidentalDocuments?: boolean },
   ) {
-    return this.trashService.hardDeleteMany(table, body.ids);
+    return this.trashService.hardDeleteMany(table, body.ids, body.confirmAccidentalDocuments);
   }
 
   @RequirePermissions('trash.delete')

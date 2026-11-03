@@ -1,6 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 
+const DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES = new Set([
+  'document',
+  'document_reversal',
+  'order_invoice_replacement',
+  'order_invoice_replacement_reversal',
+]);
+
+function cancelledStatusFor(document: { document_types: { category: string | null; direction: number } }) {
+  if (document.document_types.category === 'QUOTE') return 6;
+  if (document.document_types.category === 'ORDER') {
+    return document.document_types.direction === -1 ? 3 : 8;
+  }
+  return 3;
+}
+
 @Injectable()
 export class TrashService {
   constructor(private readonly prisma: PrismaService) {}
@@ -131,9 +146,15 @@ export class TrashService {
   }
 
   // 💀 hard delete BULK (elimina físicamente)
-  async hardDeleteMany(model: string, ids: string[]) {
+  async hardDeleteMany(model: string, ids: string[], confirmAccidentalDocuments = false) {
     if (model === 'documents') {
+      if (!confirmAccidentalDocuments) {
+        throw new BadRequestException('Confirmá que los comprobantes seleccionados se cargaron por error y no representan documentos reales emitidos o recibidos.');
+      }
       return this.hardDeleteDocuments(ids);
+    }
+    if (model === 'business_parties') {
+      return this.hardDeleteBusinessParties(ids);
     }
     if (this.permanentlyProtectedModels.has(model)) {
       throw new BadRequestException('Los pagos y cobros conservan efectos de tesorería y no admiten eliminación definitiva');
@@ -153,6 +174,72 @@ export class TrashService {
       }
       throw error;
     }
+  }
+
+  private async hardDeleteBusinessParties(ids: string[]) {
+    if (!ids.length) return { count: 0 };
+
+    const db = this.prisma.getClientForCurrentContext();
+    return db.$transaction(async (tx) => {
+      const parties = await tx.business_parties.findMany({
+        where: { id: { in: ids }, deleted_at: { not: null } },
+        select: {
+          id: true,
+          name: true,
+          _count: {
+            select: {
+              delivery_notes: true,
+              dispatch_orders: true,
+              documents: true,
+              party_bank_accounts: true,
+              employees: true,
+              partners: true,
+              payments: true,
+              credit_cards: true,
+              current_accounts: true,
+              commercial_operations: true,
+              hr_accounts: true,
+              hr_vales: true,
+              product_suppliers: true,
+              product_party_prices: true,
+              product_party_price_history: true,
+              international_operations: true,
+              withholding_profiles: true,
+              iibb_registrations: true,
+              withholdings: true,
+              maintenance_orders_as_supplier: true,
+              maintenance_services_as_supplier: true,
+              tires_as_supplier: true,
+            },
+          },
+        },
+      });
+
+      if (parties.length !== new Set(ids).size) {
+        throw new BadRequestException('Todas las partes interesadas deben estar en la papelera para eliminarlas definitivamente.');
+      }
+
+      const withHistory = parties.filter((party) =>
+        Object.values(party._count as Record<string, number>).some((count) => count > 0),
+      );
+      if (withHistory.length) {
+        const examples = withHistory.slice(0, 3).map((party) => party.name).join(', ');
+        const more = withHistory.length > 3 ? ` y ${withHistory.length - 3} más` : '';
+        throw new BadRequestException(
+          `No se pueden eliminar partes interesadas con documentos, pagos, movimientos u otros datos asociados: ${examples}${more}. Reasigná la historia a la ficha que vas a conservar.`,
+        );
+      }
+
+      return tx.business_parties.deleteMany({
+        where: { id: { in: ids }, deleted_at: { not: null } },
+      });
+    }).catch((error) => {
+      const code = (error as { code?: string })?.code;
+      if (code === 'P2003') {
+        throw new BadRequestException('No se puede eliminar definitivamente esta parte interesada porque todavía tiene datos vinculados.');
+      }
+      throw error;
+    });
   }
 
   private async hardDeleteDocuments(ids: string[]) {
@@ -175,6 +262,7 @@ export class TrashService {
           fiscal_authorization_id: true,
           fiscal_authorization_type: true,
           fiscal_authorization_code: true,
+          fiscal_authorization_expires_at: true,
           fiscal_authorization_range_from: true,
           fiscal_authorization_range_to: true,
           document_types: {
@@ -213,6 +301,12 @@ export class TrashService {
       }
 
       const documentIds = documents.map((document) => document.id);
+      const manuallyTrashedDocumentIds = documents
+        .filter((document) => Boolean(document.document_types.category)
+          && document.document_types.category !== 'OPENING_BALANCE'
+          && document.source === 'manual')
+        .map((document) => document.id);
+      const manuallyTrashedDocumentIdSet = new Set(manuallyTrashedDocumentIds);
       const [stockMovements, stockReservations, reservationSources, accountEntries, allAccountEntries, bankMovements, cashMovements, obligations, attachments, intakeCaptures] = await Promise.all([
         tx.warehouse_stock_movements.groupBy({
           by: ['reference_id'], where: { reference_id: { in: documentIds } }, _count: { _all: true },
@@ -247,6 +341,20 @@ export class TrashService {
           _count: { _all: true },
         }),
       ]);
+
+      const manuallyTrashedDocumentAccountEntries = manuallyTrashedDocumentIds.length
+        ? await tx.current_account_entries.findMany({
+            where: { reference_id: { in: manuallyTrashedDocumentIds } },
+            select: { id: true, reference_id: true, reference_type: true, payment_id: true, deleted_at: true },
+          })
+        : [];
+      const manuallyTrashedDocumentAccountEntriesByDocument = new Map<string, typeof manuallyTrashedDocumentAccountEntries>();
+      for (const entry of manuallyTrashedDocumentAccountEntries) {
+        if (!entry.reference_id) continue;
+        const entries = manuallyTrashedDocumentAccountEntriesByDocument.get(entry.reference_id) ?? [];
+        entries.push(entry);
+        manuallyTrashedDocumentAccountEntriesByDocument.set(entry.reference_id, entries);
+      }
 
       const openingBalanceDocuments = documents.filter(
         (document) => document.document_types.category === 'OPENING_BALANCE'
@@ -290,30 +398,69 @@ export class TrashService {
           && document.status === 2
           && safelyRemovedOpeningBalanceIds.has(document.id);
         const isCancelledInvoice = category === 'INVOICE' && document.status === 3;
-        const cancelledStatus = category === 'QUOTE'
-          ? 6
-          : category === 'ORDER'
-            ? document.document_types.direction === -1 ? 3 : 8
-            : 3;
+        // For manual records, entry into the trash is the cancellation gate for permanent
+        // deletion. A draft may keep status 0 because it was never issued; relying only on
+        // the category's terminal status incorrectly blocks safe accidental-entry cleanup.
+        const isManualTrashedDocument = Boolean(category)
+          && category !== 'OPENING_BALANCE'
+          && document.source === 'manual'
+          && document.deleted_at !== null;
+        const documentAccountEntries = manuallyTrashedDocumentAccountEntriesByDocument.get(document.id) ?? [];
+        const hasFiscalAuthorization = Boolean(
+          document.fiscal_authorization_id
+          || document.fiscal_authorization_type
+          || document.fiscal_authorization_code
+          || document.fiscal_authorization_expires_at
+          || document.fiscal_authorization_range_from !== null
+          || document.fiscal_authorization_range_to !== null,
+        );
+        const canPurgeManualTrashedDocument = isManualTrashedDocument
+          && !hasFiscalAuthorization
+          && documentAccountEntries.every((entry) => entry.deleted_at !== null
+            && !entry.payment_id
+            && DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES.has(entry.reference_type ?? ''));
+        const cancelledStatus = cancelledStatusFor(document);
         let reason: string | null = null;
 
-        if (!isSafelyRemovedOpeningBalance && document.status !== cancelledStatus) {
+        if (!isSafelyRemovedOpeningBalance && !isManualTrashedDocument && document.status !== cancelledStatus) {
           reason = 'no está anulado';
-        } else if (!isSafelyRemovedOpeningBalance && !['QUOTE', 'ORDER', 'INVOICE'].includes(category ?? '')) {
+        } else if (
+          isManualTrashedDocument
+          && !canPurgeManualTrashedDocument
+        ) {
+          reason = hasFiscalAuthorization
+            ? 'tiene autorización fiscal asociada y debe conservarse'
+            : 'conserva asientos de cuenta corriente o relaciones de pago que deben preservarse';
+        } else if (
+          !isSafelyRemovedOpeningBalance
+          && !['QUOTE', 'ORDER', 'INVOICE'].includes(category ?? '')
+          && !canPurgeManualTrashedDocument
+        ) {
           reason = 'su tipo de comprobante debe conservarse por trazabilidad fiscal u operativa';
-        } else if (isCancelledInvoice && accountEntryIds.has(document.id)) {
+        } else if (isCancelledInvoice && accountEntryIds.has(document.id) && !canPurgeManualTrashedDocument) {
           reason = 'conserva asientos de cuenta corriente, incluso si fueron revertidos';
         } else if (
-          document.document_types.affects_stock
-          || (document.document_types.affects_accounting && !isSafelyRemovedOpeningBalance && !isCancelledInvoice)
-          || document.document_types.affects_tax_book
-          || (document.document_types.affects_payment && !isSafelyRemovedOpeningBalance && !isCancelledInvoice)
-          || document.document_types.requires_cae
-          || document.document_types.is_electronic
-          || document.document_types.afip_code
+          (document.document_types.affects_stock && !canPurgeManualTrashedDocument)
+          || (
+            document.document_types.affects_accounting
+            && !isSafelyRemovedOpeningBalance
+            && !isCancelledInvoice
+            && !canPurgeManualTrashedDocument
+          )
+          || (document.document_types.affects_tax_book && !canPurgeManualTrashedDocument)
+          || (
+            document.document_types.affects_payment
+            && !isSafelyRemovedOpeningBalance
+            && !isCancelledInvoice
+            && !canPurgeManualTrashedDocument
+          )
+          || (document.document_types.requires_cae && !canPurgeManualTrashedDocument)
+          || (document.document_types.is_electronic && !canPurgeManualTrashedDocument)
+          || (document.document_types.afip_code && !canPurgeManualTrashedDocument)
           || document.fiscal_authorization_id
           || document.fiscal_authorization_type
           || document.fiscal_authorization_code
+          || document.fiscal_authorization_expires_at
           || document.fiscal_authorization_range_from !== null
           || document.fiscal_authorization_range_to !== null
         ) {
@@ -360,6 +507,21 @@ export class TrashService {
             type: 'OPENING_BALANCE',
             deleted_at: { not: null },
           },
+        });
+      }
+
+      const safelyRemovedCancelledDocumentEntries = manuallyTrashedDocumentAccountEntries
+        .filter((entry) => entry.reference_id
+          && manuallyTrashedDocumentIdSet.has(entry.reference_id)
+          && entry.deleted_at !== null
+          && !entry.payment_id
+          && DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES.has(entry.reference_type ?? ''))
+        .map((entry) => entry.id);
+      if (safelyRemovedCancelledDocumentEntries.length) {
+        // These entries were already reversed and excluded from the ledger when the document
+        // entered the trash. Purging them must not apply a second balance adjustment.
+        await tx.current_account_entries.deleteMany({
+          where: { id: { in: safelyRemovedCancelledDocumentEntries }, deleted_at: { not: null } },
         });
       }
 

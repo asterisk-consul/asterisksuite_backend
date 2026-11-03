@@ -16,6 +16,7 @@ model companies {
   deleted_by             String?                           @db.Uuid
   companyUsers           company_users[]
   tablePreferences       user_table_preferences[]
+  arcaSettings           company_arca_settings?
   whatsappReportSettings company_whatsapp_report_settings?
   whatsappReportRuns     company_whatsapp_report_runs[]
   mcpGrants              mcp_oauth_grants[]
@@ -256,6 +257,33 @@ model company_tax_settings {
   country            String     @default("AR") @db.VarChar(3)
   created_at         DateTime   @default(now()) @db.Timestamp(6)
   updated_at         DateTime?  @updatedAt @db.Timestamp(6)
+
+  @@schema("public")
+}
+
+model company_arca_settings {
+  company_id                String    @id @db.Uuid
+  issuer_cuit               String    @db.VarChar(11)
+  environment               String    @default("HOMOLOGATION") @db.VarChar(20)
+  point_of_sale             Int?
+  credentials_ciphertext    String    @db.Text
+  credentials_iv            String    @db.VarChar(32)
+  credentials_auth_tag      String    @db.VarChar(32)
+  access_ticket_ciphertext  String?   @db.Text
+  access_ticket_iv          String?   @db.VarChar(32)
+  access_ticket_auth_tag    String?   @db.VarChar(32)
+  access_ticket_expires_at  DateTime? @db.Timestamp(6)
+  certificate_subject       String?   @db.Text
+  certificate_serial        String?   @db.VarChar(100)
+  certificate_valid_to      DateTime? @db.Timestamp(6)
+  available_point_sales     Json?
+  last_test_status          String    @default("NOT_TESTED") @db.VarChar(20)
+  last_test_message         String?   @db.Text
+  last_tested_at            DateTime? @db.Timestamp(6)
+  configured_by             String?   @db.Uuid
+  created_at                DateTime  @default(now()) @db.Timestamp(6)
+  updated_at                DateTime  @updatedAt @db.Timestamp(6)
+  company                   companies @relation(fields: [company_id], references: [id], onDelete: Cascade)
 
   @@schema("public")
 }

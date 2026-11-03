@@ -145,13 +145,21 @@ export class DocumentsPurchasesController {
 
   @Delete(':id')
   async remove(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    const role = req['companyUserRole'] as string | undefined;
     await this.documentAccess.assertDocument(
       user.id,
-      req['companyUserRole'] as string | undefined,
+      role,
       'purchases',
       id,
       'delete',
     );
+    const document = await this.service.getRemovalContext(id);
+    if (
+      document.status === 2
+      && ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(document.document_types?.category ?? '')
+    ) {
+      await this.documentAccess.assertDocument(user.id, role, 'purchases', id, 'cancel');
+    }
     return this.service.remove(id, user.id);
   }
 }

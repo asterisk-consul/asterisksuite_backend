@@ -31,6 +31,7 @@ import { FiscalValidationService } from '@/common/services/fiscal-validation.ser
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
 import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
+import { assertCanTrashConfirmedOrphanNote } from '../documents/utils/orphan-note-trash';
 import {
   receiveInternationalRemitoFromTransit,
   registerInternationalPurchaseInTransit,
@@ -124,12 +125,20 @@ export class DocumentsPurchasesService {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
 
+    const isNcNd = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(docType.category);
+    if (isNcNd && !dto.parent_document_id) {
+      throw new BadRequestException('Seleccioná la factura de referencia para la nota de crédito/débito');
+    }
+    if (isNcNd && !dto.party_id) {
+      throw new BadRequestException('Seleccioná el proveedor de la factura de referencia');
+    }
+
     let commercialAdjustments = dto.commercial_adjustments ?? [];
 
     // ─── Validar parent_document_id ───────────
     if (dto.parent_document_id) {
-      const parentDoc = await this.prisma.documents.findUnique({
-        where: { id: dto.parent_document_id },
+      const parentDoc = await this.prisma.documents.findFirst({
+        where: { id: dto.parent_document_id, deleted_at: null },
         include: {
           document_types: { select: { category: true, direction: true } },
         },
@@ -142,7 +151,6 @@ export class DocumentsPurchasesService {
       }
       const parentCategory = parentDoc.document_types?.category;
       const newCategory = docType.category;
-      const isNcNd = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(newCategory);
       const isInvoice = newCategory === 'INVOICE';
       const isRemito = newCategory === 'REMITO';
 
@@ -163,6 +171,12 @@ export class DocumentsPurchasesService {
       }
       if (parentDoc.document_types?.direction !== docType.direction) {
         throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante');
+      }
+      if (isNcNd && parentDoc.status !== STATUS_CONFIRMED) {
+        throw new BadRequestException('La factura de referencia debe estar confirmada y activa');
+      }
+      if (isNcNd && (!parentDoc.party_id || dto.party_id !== parentDoc.party_id)) {
+        throw new BadRequestException('El proveedor seleccionado debe coincidir con el de la factura de referencia.');
       }
       if (dto.party_id && parentDoc.party_id && dto.party_id !== parentDoc.party_id) {
         throw new BadRequestException('El cliente/proveedor no coincide con el de la factura referenciada');
@@ -553,6 +567,38 @@ export class DocumentsPurchasesService {
       throw new BadRequestException('No se puede modificar un documento anulado');
     }
 
+    const docCategory = doc.document_types?.category;
+    const isNcNd = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(docCategory);
+    const referenceParentId = dto.parent_document_id !== undefined
+      ? dto.parent_document_id
+      : doc.parent_document_id;
+    if (isNcNd) {
+      const referencePartyId = dto.party_id ?? doc.party_id;
+      if (!referenceParentId) {
+        throw new BadRequestException('Seleccioná la factura de referencia para la nota de crédito/débito');
+      }
+      if (!referencePartyId) {
+        throw new BadRequestException('Seleccioná el proveedor de la factura de referencia');
+      }
+
+      const parentDoc = await this.prisma.documents.findFirst({
+        where: { id: referenceParentId, deleted_at: null },
+        include: { document_types: { select: { category: true, direction: true } } },
+      });
+      if (!parentDoc || parentDoc.document_types?.category !== 'INVOICE') {
+        throw new BadRequestException('Solo se puede referenciar una factura activa');
+      }
+      if (parentDoc.status !== STATUS_CONFIRMED) {
+        throw new BadRequestException('La factura de referencia debe estar confirmada y activa');
+      }
+      if (parentDoc.document_types?.direction !== doc.document_types?.direction) {
+        throw new BadRequestException('El documento referenciado no coincide con la dirección del comprobante');
+      }
+      if (!parentDoc.party_id || referencePartyId !== parentDoc.party_id) {
+        throw new BadRequestException('El proveedor seleccionado debe coincidir con el de la factura de referencia.');
+      }
+    }
+
     const hasNewAdjustments = Boolean(dto.commercial_adjustments?.length)
       && (!Array.isArray(doc.commercial_adjustments) || doc.commercial_adjustments.length === 0);
     if (hasNewAdjustments && !doc.document_types?.accepts_commercial_adjustments) {
@@ -758,6 +804,7 @@ export class DocumentsPurchasesService {
 
         data: {
           party_id: dto.party_id ?? doc.party_id,
+          ...(isNcNd ? { parent_document_id: referenceParentId! } : {}),
           warehouse_id: dto.warehouse_id ?? doc.warehouse_id,
 
           date: dto.date ? parseLocalDateTime(dto.date) : doc.date,
@@ -1037,6 +1084,8 @@ export class DocumentsPurchasesService {
 
         business_parties: true,
 
+        _count: { select: { child_documents: true, payment_documents: true } },
+
         document_items: {
           include: {
             products: true,
@@ -1168,6 +1217,8 @@ export class DocumentsPurchasesService {
           where: { deleted_at: null },
           select: { id: true, amount_applied: true },
         },
+
+        _count: { select: { child_documents: true, payment_documents: true } },
       },
     });
 
@@ -1901,15 +1952,45 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // REMOVE
   // ─────────────────────────────────────────────
-  async remove(id: string, userId: string) {
-    const doc = await this.findOne(id);
+  async getRemovalContext(id: string) {
+    if (!id || id === 'undefined') throw new BadRequestException('ID inválido');
+    const document = await this.prisma.documents.findFirst({
+      where: { id, deleted_at: null },
+      select: { status: true, document_types: { select: { category: true } } },
+    });
+    if (!document) throw new NotFoundException('Documento no encontrado');
+    return document;
+  }
 
-    if (![STATUS_DRAFT, STATUS_CANCELLED].includes(doc.status)) {
-      throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados');
-    }
-    return this.prisma.documents.update({
-      where: { id },
-      data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
+  async remove(id: string, userId: string) {
+    if (!id || id === 'undefined') throw new BadRequestException('ID inválido');
+
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${id}::uuid FOR UPDATE`;
+      const doc = await tx.documents.findFirst({
+        where: { id, deleted_at: null },
+        include: { document_types: true },
+      });
+      if (!doc) throw new NotFoundException('Documento no encontrado');
+
+      const category = doc.document_types?.category;
+      const isNote = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(category ?? '');
+      const canTrashOrphanNote = isNote && [STATUS_CONFIRMED, STATUS_CANCELLED].includes(doc.status);
+
+      if (canTrashOrphanNote) {
+        await assertCanTrashConfirmedOrphanNote(tx, doc);
+        if (doc.status !== STATUS_CANCELLED) {
+          await tx.documents.update({ where: { id }, data: { status: STATUS_CANCELLED, updated_at: new Date(), updated_by: userId } });
+        }
+        await this.currentAccountsService.removeDocumentEffects(id, userId, tx);
+      } else if (![STATUS_DRAFT, STATUS_CANCELLED].includes(doc.status)) {
+        throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados. Las NC/ND confirmadas deben estar sin factura, pagos ni otros movimientos asociados.');
+      }
+
+      return tx.documents.update({
+        where: { id },
+        data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
+      });
     });
   }
 

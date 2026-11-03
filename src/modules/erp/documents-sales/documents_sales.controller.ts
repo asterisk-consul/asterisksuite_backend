@@ -235,7 +235,7 @@ export class DocumentsSalesController {
   async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     const companyRole = req['companyUserRole'] as string | undefined;
     await this.documentAccess.assertDocument(user.id, companyRole, 'sales', id, 'read');
-    const document = await this.service.findOne(id);
+    const document = await this.service.getRemovalContext(id);
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
     return this.service.applyOrderAmountVisibility(document, canViewAmounts);
   }
@@ -348,13 +348,21 @@ export class DocumentsSalesController {
 
   @Delete(':id')
   async remove(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    const role = req['companyUserRole'] as string | undefined;
     await this.documentAccess.assertDocument(
       user.id,
-      req['companyUserRole'] as string | undefined,
+      role,
       'sales',
       id,
       'delete',
     );
+    const document = await this.service.findOne(id);
+    if (
+      document.status === 2
+      && ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(document.document_types?.category ?? '')
+    ) {
+      await this.documentAccess.assertDocument(user.id, role, 'sales', id, 'cancel');
+    }
     return this.service.remove(id, user.id);
   }
 }
