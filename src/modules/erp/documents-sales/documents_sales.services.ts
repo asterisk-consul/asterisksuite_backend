@@ -1,6 +1,6 @@
 // src/modules/erp/documents-sales/documents_sales.service.ts
 
-import { Injectable, NotFoundException, BadRequestException, ConflictException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ConflictException, ForbiddenException, Logger } from '@nestjs/common';
 
 import { PrismaService } from '@/prisma/prisma.service';
 import { parseLocalDateTime, today } from '@/common/utils/dates';
@@ -32,7 +32,7 @@ import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-aut
 import { StockReservationsService } from './stock-reservations.service';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
-import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
+import { getCancelledDocumentStatus, getStatusLabel } from '../documents/types/document-statuses';
 import { assertCanTrashConfirmedOrphanNote } from '../documents/utils/orphan-note-trash';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
@@ -334,6 +334,124 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // CREATE
   // ─────────────────────────────────────────────
+  private async validateRequiredOrderDeliveryAddress(address?: string | null) {
+    const settings = await this.prisma.sales_flow_settings.findUnique({
+      where: { settings_key: 'default' },
+    });
+    if ((settings as any)?.require_order_delivery_address && !address?.trim()) {
+      throw new BadRequestException('Completá la dirección de entrega de la Orden de Venta según el Circuito de ventas');
+    }
+  }
+
+  private documentTargetPath(documentId: string, category?: string, direction?: number) {
+    return category === 'REMITO' && Number(direction) === 1
+      ? `/erp/remitos/${documentId}`
+      : `/erp/sales/${documentId}`;
+  }
+
+  private async recordDocumentActivity(
+    tx: any,
+    document: {
+      id: string;
+      number: number;
+      status?: number;
+      auditor_user_id?: string | null;
+      document_types?: { category?: string | null; direction?: number | null; description?: string | null } | null;
+    },
+    input: {
+      eventType: string;
+      message: string;
+      actorUserId?: string | null;
+      notificationTitle?: string;
+      fromStatus?: number | null;
+      toStatus?: number | null;
+    },
+  ) {
+    return this.notifications.createDocumentActivity({
+      tx,
+      documentId: document.id,
+      auditorUserId: document.auditor_user_id,
+      actorUserId: input.actorUserId,
+      eventType: input.eventType,
+      message: input.message,
+      notificationTitle: input.notificationTitle,
+      targetPath: this.documentTargetPath(
+        document.id,
+        document.document_types?.category ?? undefined,
+        document.document_types?.direction ?? undefined,
+      ),
+      fromStatus: input.fromStatus,
+      toStatus: input.toStatus,
+    });
+  }
+
+  private async recordStatusChange(tx: any, document: any, newStatus: number, actorUserId?: string) {
+    if (document.status === newStatus) return;
+    const category = document.document_types?.category ?? '';
+    const label = document.document_types?.description ?? 'Documento';
+    const message = `${label} N.º ${document.number}: ${getStatusLabel(category, document.status)} → ${getStatusLabel(category, newStatus)}.`;
+    await this.recordDocumentActivity(tx, document, {
+      eventType: 'STATUS_CHANGED',
+      message,
+      actorUserId,
+      notificationTitle: 'Cambió el estado de un documento bajo tu seguimiento',
+      fromStatus: document.status,
+      toStatus: newStatus,
+    });
+  }
+
+  private async recordDocumentCreated(tx: any, document: any, actorUserId?: string) {
+    const category = document.document_types?.category ?? '';
+    const label = document.document_types?.description ?? 'Documento';
+    const message = `${label} N.º ${document.number} creado en estado ${getStatusLabel(category, document.status)}.`;
+    await this.recordDocumentActivity(tx, document, {
+      eventType: 'DOCUMENT_CREATED',
+      message,
+      actorUserId,
+      notificationTitle: 'Nuevo documento en seguimiento',
+      toStatus: document.status,
+    });
+  }
+
+  async listDocumentActivity(documentId: string, userId: string, companyRole?: string) {
+    const document = await this.prisma.documents.findFirst({
+      where: { id: documentId, deleted_at: null },
+      select: { auditor_user_id: true },
+    });
+    if (!document) throw new NotFoundException('Documento no encontrado');
+    if (companyRole !== 'OWNER' && document.auditor_user_id !== userId) {
+      throw new ForbiddenException('El seguimiento solo está disponible para el auditor asignado y el propietario de la empresa');
+    }
+
+    const rows = await this.prisma.document_activity_events.findMany({
+      where: { document_id: documentId },
+      orderBy: { created_at: 'desc' },
+      take: 50,
+    });
+    const actorIds = [...new Set(rows.map(row => row.actor_user_id).filter(Boolean))] as string[];
+    const actors = actorIds.length
+      ? await this.db.getDefaultClient().users.findMany({
+          where: { id: { in: actorIds } },
+          select: { id: true, name: true },
+        })
+      : [];
+    const actorNames = new Map(actors.map(actor => [actor.id, actor.name]));
+    return rows.map(row => ({
+      ...row,
+      actor: row.actor_user_id
+        ? { id: row.actor_user_id, name: actorNames.get(row.actor_user_id) ?? 'Usuario' }
+        : null,
+    }));
+  }
+
+  async listSalespeople() {
+    return this.prisma.employees.findMany({
+      where: { is_salesperson: true, is_active: true, deleted_at: null },
+      select: { id: true, first_name: true, last_name: true },
+      orderBy: [{ last_name: 'asc' }, { first_name: 'asc' }],
+    });
+  }
+
   async create(dto: CreateDocumentDto, userId?: string) {
     console.log('[SalesService] create() called with dto:', JSON.stringify(dto, null, 2));
 
@@ -351,6 +469,10 @@ export class DocumentsSalesService {
 
     if (!docType) {
       throw new NotFoundException('Tipo de documento no encontrado');
+    }
+
+    if (docType.category === 'ORDER' && Number(docType.direction) === 1) {
+      await this.validateRequiredOrderDeliveryAddress(dto.delivery_address);
     }
 
     const isCreditOrDebitNote = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(docType.category);
@@ -371,6 +493,7 @@ export class DocumentsSalesService {
     let commercialAdjustments = dto.commercial_adjustments ?? [];
 
     // ─── Validar parent_document_id ───────────
+    let inheritedAssignments: { assigned_to: string | null; auditor_user_id: string | null } | null = null;
     if (dto.parent_document_id) {
       const parentDoc = await this.prisma.documents.findUnique({
         where: { id: dto.parent_document_id },
@@ -381,6 +504,10 @@ export class DocumentsSalesService {
       if (!parentDoc) {
         throw new BadRequestException('El documento referenciado no existe');
       }
+      inheritedAssignments = {
+        assigned_to: parentDoc.assigned_to,
+        auditor_user_id: parentDoc.auditor_user_id,
+      };
       if (parentDoc.status < 1) {
         throw new BadRequestException('El documento referenciado debe estar aprobado');
       }
@@ -574,6 +701,17 @@ export class DocumentsSalesService {
 
       const number = await this.getNextNumber(dto.document_type_id, sequenceId, tx);
 
+      const orderFlowSettings = docType.category === 'ORDER' && Number(docType.direction) === 1
+        ? await tx.sales_flow_settings.upsert({
+            where: { settings_key: 'default' },
+            update: {},
+            create: { settings_key: 'default' },
+          })
+        : null;
+      const auditorUserId = inheritedAssignments?.auditor_user_id
+        ?? orderFlowSettings?.default_order_auditor_id
+        ?? null;
+
       const document = await tx.documents.create({
         data: {
           document_type_id: dto.document_type_id,
@@ -611,6 +749,10 @@ export class DocumentsSalesService {
           ref: dto.ref ?? null,
 
           parent_document_id: dto.parent_document_id ?? null,
+
+          assigned_to: inheritedAssignments?.assigned_to ?? null,
+
+          auditor_user_id: auditorUserId,
 
           validity_date: dto.validity_date ? new Date(dto.validity_date) : null,
 
@@ -653,14 +795,19 @@ export class DocumentsSalesService {
       }
 
       if (docType.category === 'ORDER') {
-        // Inherit commission_base from seller if not provided
-        let commissionBase = dto.commission_base ?? null;
-        if (!commissionBase && dto.seller_id) {
-          const seller = await tx.employees.findUnique({
-            where: { id: dto.seller_id },
-            select: { commission_base: true },
+        if (dto.seller_id) {
+          const seller = await tx.employees.findFirst({
+            where: {
+              id: dto.seller_id,
+              is_salesperson: true,
+              is_active: true,
+              deleted_at: null,
+            },
+            select: { id: true },
           });
-          commissionBase = seller?.commission_base ?? 'INVOICED';
+          if (!seller) {
+            throw new BadRequestException('El vendedor debe estar activo y habilitado como vendedor en esta empresa');
+          }
         }
 
         await tx.orden_venta_documents.create({
@@ -676,7 +823,7 @@ export class DocumentsSalesService {
             confirmed_delivery_date: dto.confirmed_delivery_date ? new Date(dto.confirmed_delivery_date) : null,
             seller_id: dto.seller_id ?? null,
             commission_rate: dto.commission_rate ?? null,
-            commission_base: commissionBase,
+            commission_base: dto.commission_base ?? null,
           },
         });
       }
@@ -777,6 +924,8 @@ export class DocumentsSalesService {
           // Facturación se deriva de child_documents, no de status
         }
       }
+
+      await this.recordDocumentCreated(tx, { ...document, document_types: docType }, userId);
     });
 
     if (!createdId) {
@@ -793,7 +942,9 @@ export class DocumentsSalesService {
     id: string,
 
     dto: UpdateDocumentDto,
+    userId?: string,
   ) {
+    const clearDeliveryFields = new Set<string>(dto.clear_delivery_fields ?? []);
     const doc = await this.findOne(id);
 
     if (dto.expected_updated_at && new Date(dto.expected_updated_at).getTime() !== new Date(doc.updated_at).getTime()) {
@@ -828,6 +979,12 @@ export class DocumentsSalesService {
       : doc.document_sequence_id;
     const isSalesOrder = doc.document_types?.category === 'ORDER'
       && Number(doc.document_types?.direction) === 1;
+    if (isSalesOrder) {
+      const effectiveDeliveryAddress = dto.delivery_address !== undefined
+        ? dto.delivery_address
+        : doc.orden_venta_doc?.delivery_address;
+      await this.validateRequiredOrderDeliveryAddress(effectiveDeliveryAddress);
+    }
     const storedItemsForSequenceChange = sequenceChanged && isSalesOrder
       ? (doc.document_items ?? []).map((item: any) => ({
           product_id: item.product_id,
@@ -1149,6 +1306,7 @@ export class DocumentsSalesService {
             : {}),
         },
       });
+      await this.recordStatusChange(tx, doc, dto.status ?? doc.status, userId);
 
       // ─── Update OV extension if applicable ─────────────
       const existingExtension = await tx.orden_venta_documents.findUnique({
@@ -1156,20 +1314,60 @@ export class DocumentsSalesService {
       });
 
       if (existingExtension) {
+        if (
+          dto.seller_id !== undefined
+          && dto.seller_id !== null
+          && dto.seller_id !== existingExtension.seller_id
+        ) {
+          const seller = await tx.employees.findFirst({
+            where: {
+              id: dto.seller_id,
+              is_salesperson: true,
+              is_active: true,
+              deleted_at: null,
+            },
+            select: { id: true },
+          });
+          if (!seller) {
+            throw new BadRequestException('El vendedor debe estar activo y habilitado como vendedor en esta empresa');
+          }
+        }
+
+        const mergeDeliveryText = (
+          field:
+            | 'delivery_address'
+            | 'delivery_contact'
+            | 'delivery_phone'
+            | 'delivery_time'
+            | 'delivery_instructions'
+            | 'transport_provider',
+        ) => {
+          const incoming = dto[field];
+          if (clearDeliveryFields.has(field) && !incoming?.trim()) return null;
+          // Un campo vacío no borra información persistida por accidente.
+          // Para borrarlo, la UI debe enviar el campo en clear_delivery_fields.
+          if (!incoming?.trim()) return existingExtension[field] ?? null;
+          return incoming;
+        };
+        const clearConfirmedDeliveryDate = clearDeliveryFields.has('confirmed_delivery_date')
+          && !dto.confirmed_delivery_date?.trim();
+
         await tx.orden_venta_documents.update({
           where: { document_id: id },
           data: {
             priority: dto.priority ?? existingExtension.priority,
-            delivery_address: dto.delivery_address ?? existingExtension.delivery_address,
-            delivery_contact: dto.delivery_contact ?? existingExtension.delivery_contact,
-            delivery_phone: dto.delivery_phone ?? existingExtension.delivery_phone,
-            delivery_time: dto.delivery_time ?? existingExtension.delivery_time,
-            delivery_instructions: dto.delivery_instructions ?? existingExtension.delivery_instructions,
-            transport_provider: dto.transport_provider ?? existingExtension.transport_provider,
+            delivery_address: mergeDeliveryText('delivery_address'),
+            delivery_contact: mergeDeliveryText('delivery_contact'),
+            delivery_phone: mergeDeliveryText('delivery_phone'),
+            delivery_time: mergeDeliveryText('delivery_time'),
+            delivery_instructions: mergeDeliveryText('delivery_instructions'),
+            transport_provider: mergeDeliveryText('transport_provider'),
             confirmed_delivery_date: dto.confirmed_delivery_date
               ? new Date(dto.confirmed_delivery_date)
-              : existingExtension.confirmed_delivery_date,
-            seller_id: dto.seller_id ?? existingExtension.seller_id,
+              : clearConfirmedDeliveryDate
+                ? null
+                : existingExtension.confirmed_delivery_date,
+            seller_id: dto.seller_id !== undefined ? dto.seller_id : existingExtension.seller_id,
             commission_rate: dto.commission_rate ?? existingExtension.commission_rate,
             commission_base: dto.commission_base ?? existingExtension.commission_base,
             updated_at: new Date(),
@@ -1274,10 +1472,13 @@ export class DocumentsSalesService {
   }
 
   /** Recalcula la entrega de una OV desde sus remitos confirmados. */
-  private async refreshOrderDeliveredQuantities(orderId: string, tx: any) {
+  private async refreshOrderDeliveredQuantities(orderId: string, tx: any, actorUserId?: string) {
     const order = await tx.documents.findFirst({
       where: { id: orderId, document_types: { category: 'ORDER' } },
-      include: { document_items: { orderBy: { created_at: 'asc' } } },
+      include: {
+        document_items: { orderBy: { created_at: 'asc' } },
+        document_types: true,
+      },
     });
     if (!order) return;
 
@@ -1314,6 +1515,7 @@ export class DocumentsSalesService {
     const orderedTotal = refreshedItems.reduce((sum: number, item: any) => sum + Number(item.quantity), 0);
     const status = deliveredTotal <= 0 ? 3 : deliveredTotal + 0.000001 >= orderedTotal ? 5 : 4;
     await tx.documents.update({ where: { id: orderId }, data: { status, updated_at: new Date() } });
+    await this.recordStatusChange(tx, order, status, actorUserId);
   }
 
   // ─────────────────────────────────────────────
@@ -1349,6 +1551,10 @@ export class DocumentsSalesService {
     rawFilters?: string,
 
     deliveryStatus?: string,
+
+    excludeOpeningBalances = false,
+
+    sellerId?: string,
   ) {
     const and: any[] = [];
     const categories = Array.isArray(category) ? category : category ? [category] : [];
@@ -1453,6 +1659,10 @@ export class DocumentsSalesService {
 
         ...(partyId ? { party_id: partyId } : {}),
 
+        ...(sellerId && isOrderList ? { orden_venta_doc: { is: { seller_id: sellerId } } } : {}),
+
+        ...(excludeOpeningBalances ? { source: { not: 'opening_balance' } } : {}),
+
         ...(and.length || cancelledFilters.length ? { AND: [...and, ...cancelledFilters] } : {}),
     };
     const directionOrder = order === 'asc' ? 'asc' : 'desc';
@@ -1472,6 +1682,14 @@ export class DocumentsSalesService {
         warehouse: true,
 
         commercial_operation: true,
+
+        ...(isOrderList ? {
+          orden_venta_doc: {
+            include: {
+              seller: { select: { id: true, first_name: true, last_name: true } },
+            },
+          },
+        } : {}),
 
         document_items: {
           include: {
@@ -1710,27 +1928,33 @@ export class DocumentsSalesService {
       throw new NotFoundException('Documento no encontrado');
     }
 
-    // No consultar la extensión de OV para presupuestos/facturas. Prisma
-    // selecciona todas las columnas de una relación incluida aun cuando no
-    // exista una fila relacionada; un desfase de schema en OV no debe impedir
-    // abrir documentos de otras categorías.
-    const ordenVentaDoc =
-      doc.document_types.category === 'ORDER'
-        ? await this.prisma.orden_venta_documents.findUnique({
-            where: { document_id: id },
-            include: {
-              seller: {
-                select: {
-                  id: true,
-                  first_name: true,
-                  last_name: true,
-                  party_id: true,
-                  user_id: true,
-                },
+    // Las vistas de una OV necesitan su extensión. El remito de venta muestra
+    // los datos de entrega de la OV de origen, que no se duplican en el remito.
+    // Consultar condicionalmente evita acoplar documentos no relacionados con
+    // OV a esta extensión.
+    const sourceOrderId = doc.document_types.category === 'ORDER'
+      ? id
+      : doc.document_types.category === 'REMITO'
+        && doc.document_types.direction === 1
+        && doc.parent_document?.document_types?.category === 'ORDER'
+        ? doc.parent_document.id
+        : null;
+    const ordenVentaDoc = sourceOrderId
+      ? await this.prisma.orden_venta_documents.findUnique({
+          where: { document_id: sourceOrderId },
+          include: {
+            seller: {
+              select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                party_id: true,
+                user_id: true,
               },
             },
-          })
-        : null;
+          },
+        })
+      : null;
 
     return { ...doc, orden_venta_doc: ordenVentaDoc };
   }
@@ -2195,6 +2419,7 @@ export class DocumentsSalesService {
           ...(fiscalAuthorizationSnapshot ?? {}),
         },
       });
+      await this.recordStatusChange(tx, doc, STATUS_CONFIRMED, userId);
 
       if (category === 'ORDER' && assignedTo && assignedTo !== doc.assigned_to) {
         await this.notifications.createAssignment({
@@ -2208,6 +2433,14 @@ export class DocumentsSalesService {
           targetType: 'SALES_ORDER',
           targetId: doc.id,
         });
+        if (doc.auditor_user_id) {
+          await this.recordDocumentActivity(tx, doc, {
+            eventType: 'RESPONSIBLE_ASSIGNED',
+            message: `Orden de Venta N.º ${doc.number}: se asignó un responsable al confirmar.`,
+            actorUserId: userId,
+            notificationTitle: 'Cambió el responsable de un documento bajo tu seguimiento',
+          });
+        }
       }
 
       if (category === 'ORDER' && doc.document_types?.direction === 1) {
@@ -2219,7 +2452,7 @@ export class DocumentsSalesService {
       }
 
       if (category === 'REMITO' && doc.parent_document_id) {
-        await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx);
+        await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx, userId);
       }
 
       // ─── Stock automático si affects_stock ──────────────────────
@@ -2541,9 +2774,10 @@ export class DocumentsSalesService {
           updated_at: new Date(),
         },
       });
+      await this.recordStatusChange(tx, doc, cancelledStatus, userId);
 
       if (doc.document_types?.category === 'REMITO' && doc.parent_document_id) {
-        await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx);
+        await this.refreshOrderDeliveredQuantities(doc.parent_document_id, tx, userId);
         await this.stockReservations.restoreRemitoConsumption(tx, doc.id, userId);
       }
 
@@ -2605,6 +2839,7 @@ export class DocumentsSalesService {
         await assertCanTrashConfirmedOrphanNote(tx, doc);
         if (doc.status !== STATUS_CANCELLED) {
           await tx.documents.update({ where: { id }, data: { status: STATUS_CANCELLED, updated_at: new Date(), updated_by: userId } });
+          await this.recordStatusChange(tx, doc, STATUS_CANCELLED, userId);
         }
         await this.currentAccountsService.removeDocumentEffects(id, userId, tx);
       } else if (![STATUS_DRAFT, getCancelledDocumentStatus(category ?? '', doc.document_types?.direction ?? 1)].includes(doc.status)) {
@@ -2674,6 +2909,12 @@ export class DocumentsSalesService {
     await this.prisma.$transaction(async (tx) => {
       const sequenceId = await this.resolveSequence(orderType.id, null, orderType.document_sequences?.id ?? null, tx);
       const number = await this.getNextNumber(orderType.id, sequenceId, tx);
+      const flowSettings = await tx.sales_flow_settings.upsert({
+        where: { settings_key: 'default' },
+        update: {},
+        create: { settings_key: 'default' },
+      });
+      const auditorUserId = doc.auditor_user_id ?? flowSettings.default_order_auditor_id ?? null;
 
       const newDoc = await tx.documents.create({
         data: {
@@ -2682,6 +2923,7 @@ export class DocumentsSalesService {
           party_id: doc.party_id,
           parent_document_id: doc.id,
           assigned_to: doc.assigned_to,
+          auditor_user_id: auditorUserId,
           created_by: userId,
           number,
           date: new Date(),
@@ -2702,12 +2944,14 @@ export class DocumentsSalesService {
 
       await this.persistItems(newDoc.id, items, tx);
       await this.commercialFlow.createForOrder(tx, newDoc, userId);
+      await this.recordDocumentCreated(tx, { ...newDoc, auditor_user_id: auditorUserId, document_types: orderType }, userId);
 
       // Actualizar presupuesto a "Convertido" (status 5)
       await tx.documents.update({
         where: { id: doc.id },
         data: { status: 5, updated_at: new Date() },
       });
+      await this.recordStatusChange(tx, doc, 5, userId);
     });
 
     return this.findOne(createdId);
@@ -2787,6 +3031,7 @@ export class DocumentsSalesService {
           party_id: doc.party_id,
           parent_document_id: doc.id,
           assigned_to: doc.assigned_to,
+          auditor_user_id: doc.auditor_user_id,
           created_by: userId,
           number,
           date: new Date(),
@@ -2807,6 +3052,7 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, items, tx);
+      await this.recordDocumentCreated(tx, { ...newDoc, auditor_user_id: doc.auditor_user_id, document_types: remitoType }, userId);
       await this.commercialFlow.inheritFromParent(tx, newDoc.id, doc.id);
 
       if (doc.commercial_operation_id) {
@@ -2907,6 +3153,8 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          assigned_to: doc.assigned_to,
+          auditor_user_id: doc.auditor_user_id,
           created_by: userId,
           number,
           date: new Date(),
@@ -2927,6 +3175,7 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, remitoItems, tx);
+      await this.recordDocumentCreated(tx, { ...newDoc, auditor_user_id: doc.auditor_user_id, document_types: remitoType }, userId);
       await this.commercialFlow.inheritFromParent(tx, newDoc.id, doc.id);
 
       // Actualizar tracking en items de la OV
@@ -3089,6 +3338,8 @@ export class DocumentsSalesService {
           document_sequence_id: sequenceId,
           party_id: doc.party_id,
           parent_document_id: doc.id,
+          assigned_to: doc.assigned_to,
+          auditor_user_id: doc.auditor_user_id,
           fiscal_jurisdiction_id: doc.fiscal_jurisdiction_id ?? null,
           created_by: userId,
           number,
@@ -3126,6 +3377,7 @@ export class DocumentsSalesService {
       createdId = newDoc.id;
 
       await this.persistItems(newDoc.id, invoiceItems, tx);
+      await this.recordDocumentCreated(tx, { ...newDoc, auditor_user_id: doc.auditor_user_id, document_types: invoiceType }, userId);
       if (totals.documentTaxes.length) {
         await tx.document_taxes.createMany({
           data: totals.documentTaxes.map((tax) => ({
@@ -3264,6 +3516,7 @@ export class DocumentsSalesService {
           party_id: dispatch.customer_id,
           parent_document_id: dispatch.source_document_id,
           assigned_to: dispatch.source_document?.assigned_to ?? null,
+          auditor_user_id: dispatch.source_document?.auditor_user_id ?? null,
           dispatch_order_id: dispatch.id,
           number,
           date: new Date(),
@@ -3281,6 +3534,11 @@ export class DocumentsSalesService {
         },
       });
       createdId = created.id;
+      await this.recordDocumentCreated(tx, {
+        ...created,
+        auditor_user_id: dispatch.source_document?.auditor_user_id ?? null,
+        document_types: remitoType,
+      }, userId);
       await this.commercialFlow.inheritFromParent(tx, created.id, dispatch.source_document_id);
       await this.persistItems(created.id, remitoItems, tx);
     });
@@ -3314,9 +3572,12 @@ export class DocumentsSalesService {
     if (closesRemito) {
       await this.confirm(id, userId);
     } else {
-      await this.prisma.documents.update({
-        where: { id },
-        data: { status: newStatus, updated_at: new Date() },
+      await this.prisma.$transaction(async (tx) => {
+        await tx.documents.update({
+          where: { id },
+          data: { status: newStatus, updated_at: new Date() },
+        });
+        await this.recordStatusChange(tx, doc, newStatus, userId);
       });
     }
 

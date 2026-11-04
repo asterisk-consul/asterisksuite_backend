@@ -1,22 +1,36 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import type { Request } from 'express';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
-import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { AllowCompanyAdmins } from '@/access-control/decorators/allow-company-admins.decorator';
+import { RequireAnyPermission, RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { TAX_NOTIFICATION_ADMIN_PERMISSIONS, TaxNotificationAudienceService } from '@/access-control/authorization/tax-notification-audience.service';
 import { TreasuryObligationsService } from './treasury-obligations.service';
 import { CreateObligationDto, CreateObligationTemplateDto, UpdateObligationDto } from './dto/upsert-obligation.dto';
 
 @Controller('erp/treasury/obligations')
 @UseGuards(JwtAuthGuard)
 export class TreasuryObligationsController {
-  constructor(private readonly service: TreasuryObligationsService) {}
+  constructor(
+    private readonly service: TreasuryObligationsService,
+    private readonly taxNotificationAudience: TaxNotificationAudienceService,
+  ) {}
 
   @Get() @RequirePermissions('payments.read')
   findAll(@Query('status') status?: string, @Query('category') category?: string, @Query('from') from?: string, @Query('to') to?: string, @Query('search') search?: string) {
     return this.service.findAll({ status, category, from, to, search });
   }
-  @Get('notifications') @RequirePermissions('payments.read')
-  notifications() { return this.service.findNotificationAlerts(); }
+  @Get('notifications')
+  @RequireAnyPermission('payments.read', ...TAX_NOTIFICATION_ADMIN_PERMISSIONS)
+  @AllowCompanyAdmins()
+  async notifications(@CurrentUser() user: AuthUser, @Req() req: Request) {
+    const audience = await this.taxNotificationAudience.resolveTreasuryAlerts(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+    );
+    return this.service.findNotificationAlerts(audience);
+  }
   @Get('summary') @RequirePermissions('payments.read')
   summary() { return this.service.summary(); }
   @Get('templates') @RequirePermissions('payments.read')

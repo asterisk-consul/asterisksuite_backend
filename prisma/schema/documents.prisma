@@ -249,6 +249,7 @@ model documents {
   custom_fields                   Json?
   commercial_adjustments          Json?
   assigned_to                     String?                             @db.Uuid
+  auditor_user_id                 String?                             @db.Uuid
   validity_date                   DateTime?                           @db.Date
   delivery_date                   DateTime?                           @db.Date
   created_at                      DateTime?                           @default(now()) @db.Timestamp(6)
@@ -290,15 +291,32 @@ model documents {
   maintenance_services            maintenance_services[]
   purchase_tires                  tires[]
   fiscal_authorization            fiscal_authorizations?              @relation(fields: [fiscal_authorization_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  activity_events                 document_activity_events[]
 
   @@unique([document_type_id, document_sequence_id, number], map: "uq_document_number")
   @@index([currency_code, date], map: "idx_documents_currency_date")
   @@index([assigned_to])
+  @@index([auditor_user_id])
   @@index([commercial_operation_id])
   @@index([warehouse_id])
   @@index([deleted_at, created_at(sort: Desc)], map: "idx_documents_deleted_created")
   @@index([document_type_id, status, created_at(sort: Desc)], map: "idx_documents_type_status_created")
   @@index([party_id, date(sort: Desc)], map: "idx_documents_party_date")
+  @@schema("tenant")
+}
+
+model document_activity_events {
+  id             String    @id @default(uuid()) @db.Uuid
+  document_id    String    @db.Uuid
+  actor_user_id  String?   @db.Uuid
+  event_type     String    @db.VarChar(40)
+  message        String    @db.VarChar(500)
+  from_status    Int?      @db.SmallInt
+  to_status      Int?      @db.SmallInt
+  created_at     DateTime  @default(now()) @db.Timestamp(6)
+  document       documents @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([document_id, created_at(sort: Desc)], map: "document_activity_document_created_idx")
   @@schema("tenant")
 }
 

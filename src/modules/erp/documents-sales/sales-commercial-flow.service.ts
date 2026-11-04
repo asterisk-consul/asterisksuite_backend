@@ -3,6 +3,8 @@ import { PrismaService } from '@/prisma/prisma.service';
 import type { UpdateSalesFlowSettingsDto } from './sales-flow-settings.dto';
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
+import { NotificationsService } from '@/modules/notifications/notifications.service';
+import { requestContext } from '@/common/context/request-context';
 
 @Injectable()
 export class SalesCommercialFlowService {
@@ -11,6 +13,7 @@ export class SalesCommercialFlowService {
   constructor(
     private readonly db: PrismaService,
     private readonly whatsAppNotifications: WhatsAppNotificationsService,
+    private readonly notifications: NotificationsService,
   ) {}
 
   private get prisma() {
@@ -47,6 +50,15 @@ export class SalesCommercialFlowService {
     ]);
   }
 
+  private deliveryStatusLabel(status: string) {
+    return ({
+      PENDING: 'pendiente de condiciones',
+      ELIGIBLE: 'habilitada para remitir',
+      DRAFT_CREATED: 'con remito en borrador',
+      DELIVERED: 'entregada',
+    } as Record<string, string>)[status] ?? status;
+  }
+
   async updateSettings(dto: UpdateSalesFlowSettingsDto, userId: string) {
     if (dto.require_payment_for_delivery && dto.delivery_payment_percentage <= 0) {
       throw new BadRequestException('El porcentaje requerido debe ser mayor que cero cuando se controla el pago');
@@ -59,6 +71,15 @@ export class SalesCommercialFlowService {
           })
         : null;
       if (!membership) throw new BadRequestException('El responsable predeterminado no pertenece a esta empresa');
+    }
+    if (dto.default_order_auditor_id) {
+      const companyId = getCurrentCompanyId();
+      const membership = companyId
+        ? await this.db.getDefaultClient().company_users.findUnique({
+            where: { company_id_user_id: { company_id: companyId, user_id: dto.default_order_auditor_id } },
+          })
+        : null;
+      if (!membership) throw new BadRequestException('El auditor predeterminado no pertenece a esta empresa');
     }
     return this.prisma.$transaction(async (tx) => {
       const settings = await tx.sales_flow_settings.upsert({
@@ -188,6 +209,39 @@ export class SalesCommercialFlowService {
         ...(!alreadyDelivered ? { delivery_status: eligible ? 'ELIGIBLE' : 'PENDING', released_at: eligible ? operation.released_at ?? new Date() : null } : {}),
       },
     });
+
+    const isDeliveryConditionTransition = operation.delivery_status !== updated.delivery_status
+      && ['PENDING', 'ELIGIBLE'].includes(operation.delivery_status)
+      && ['PENDING', 'ELIGIBLE'].includes(updated.delivery_status);
+    if (isDeliveryConditionTransition) {
+      const root = await client.documents.findUnique({
+        where: { id: operation.root_document_id },
+        select: {
+          id: true,
+          number: true,
+          auditor_user_id: true,
+          document_types: { select: { description: true } },
+        },
+      });
+      if (root) {
+        const message = `${root.document_types.description} N.º ${root.number}: condición de entrega ${this.deliveryStatusLabel(operation.delivery_status)} → ${this.deliveryStatusLabel(updated.delivery_status)}.`;
+        const recordActivity = (tx: any) => this.notifications.createDocumentActivity({
+          tx,
+          documentId: root.id,
+          auditorUserId: root.auditor_user_id,
+          actorUserId: requestContext.getStore()?.userId ?? null,
+          eventType: 'DELIVERY_STATUS_CHANGED',
+          message,
+          notificationTitle: 'Cambió la condición de entrega de una OV bajo tu seguimiento',
+          targetPath: `/erp/sales/${root.id}`,
+        });
+        if (typeof client.$transaction === 'function') {
+          await client.$transaction(recordActivity);
+        } else {
+          await recordActivity(client);
+        }
+      }
+    }
 
     const becameReadyForDelivery = operation.delivery_status !== 'ELIGIBLE'
       && updated.delivery_status === 'ELIGIBLE'

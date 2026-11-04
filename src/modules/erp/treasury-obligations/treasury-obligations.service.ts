@@ -54,7 +54,9 @@ export class TreasuryObligationsService {
     return data;
   }
 
-  async findNotificationAlerts() {
+  async findNotificationAlerts(audience: { includeTaxAlerts: boolean; includeOtherObligationAlerts: boolean }) {
+    if (!audience.includeTaxAlerts && !audience.includeOtherObligationAlerts) return [];
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const horizon = new Date(today);
@@ -68,10 +70,14 @@ export class TreasuryObligationsService {
       notification_days: true,
       status: true,
     } as const;
+    const categoryFilter = audience.includeTaxAlerts
+      ? (audience.includeOtherObligationAlerts ? {} : { category: 'TAX' })
+      : { category: { not: 'TAX' } };
     const [overdue, upcoming] = await Promise.all([
       this.prisma.treasury_obligations.findMany({
         where: {
           deleted_at: null,
+          ...categoryFilter,
           status: { notIn: ['PAID', 'CANCELLED'] },
           due_date: { lt: today },
         },
@@ -82,6 +88,7 @@ export class TreasuryObligationsService {
       this.prisma.treasury_obligations.findMany({
         where: {
           deleted_at: null,
+          ...categoryFilter,
           status: { notIn: ['PAID', 'CANCELLED'] },
           due_date: { gte: today, lte: horizon },
           OR: [

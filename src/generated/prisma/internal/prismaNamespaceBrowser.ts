@@ -72,6 +72,7 @@ export const ModelName = {
   document_types: 'document_types',
   document_type_taxes: 'document_type_taxes',
   documents: 'documents',
+  document_activity_events: 'document_activity_events',
   fiscal_authorizations: 'fiscal_authorizations',
   fiscal_authorization_settings: 'fiscal_authorization_settings',
   fiscal_authorization_alerts: 'fiscal_authorization_alerts',
@@ -689,6 +690,7 @@ export const DocumentsScalarFieldEnum = {
   custom_fields: 'custom_fields',
   commercial_adjustments: 'commercial_adjustments',
   assigned_to: 'assigned_to',
+  auditor_user_id: 'auditor_user_id',
   validity_date: 'validity_date',
   delivery_date: 'delivery_date',
   created_at: 'created_at',
@@ -708,6 +710,20 @@ export const DocumentsScalarFieldEnum = {
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+export const Document_activity_eventsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  actor_user_id: 'actor_user_id',
+  event_type: 'event_type',
+  message: 'message',
+  from_status: 'from_status',
+  to_status: 'to_status',
+  created_at: 'created_at'
+} as const
+
+export type Document_activity_eventsScalarFieldEnum = (typeof Document_activity_eventsScalarFieldEnum)[keyof typeof Document_activity_eventsScalarFieldEnum]
 
 
 export const Fiscal_authorizationsScalarFieldEnum = {
@@ -3153,6 +3169,8 @@ export const Sales_flow_settingsScalarFieldEnum = {
   require_payment_for_delivery: 'require_payment_for_delivery',
   delivery_payment_percentage: 'delivery_payment_percentage',
   require_invoice_for_delivery: 'require_invoice_for_delivery',
+  require_order_delivery_address: 'require_order_delivery_address',
+  warn_when_order_delivery_data_empty: 'warn_when_order_delivery_data_empty',
   auto_create_delivery_note: 'auto_create_delivery_note',
   allow_partial_delivery: 'allow_partial_delivery',
   reserve_stock_on_order_confirmation: 'reserve_stock_on_order_confirmation',
@@ -3161,6 +3179,7 @@ export const Sales_flow_settingsScalarFieldEnum = {
   prompt_order_assignee_on_confirmation: 'prompt_order_assignee_on_confirmation',
   require_order_assignee_on_confirmation: 'require_order_assignee_on_confirmation',
   default_order_assignee_id: 'default_order_assignee_id',
+  default_order_auditor_id: 'default_order_auditor_id',
   active_from: 'active_from',
   created_at: 'created_at',
   updated_at: 'updated_at',

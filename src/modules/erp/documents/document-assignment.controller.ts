@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, ForbiddenException, Get, Logger, NotFoundException, Param, ParseUUIDPipe, Patch, Req, UseGuards } from '@nestjs/common';
-import { IsUUID } from 'class-validator';
+import { IsOptional, IsUUID } from 'class-validator';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { PermissionsGuard } from '@/access-control/guards/permissions.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
@@ -14,6 +14,12 @@ import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-n
 export class AssignDocumentDto {
   @IsUUID()
   user_id: string;
+}
+
+export class AssignDocumentAuditorDto {
+  @IsOptional()
+  @IsUUID()
+  user_id?: string | null;
 }
 
 @Controller('documents/assignment')
@@ -68,6 +74,85 @@ export class DocumentAssignmentController {
     });
   }
 
+  @Get(':id/auditor')
+  async currentAuditor(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    this.context();
+    await this.documentAccess.assertAnyDocument(user.id, req['companyUserRole'] as string | undefined, id, 'read');
+    const document = await this.db.getClientForCurrentContext().documents.findFirst({
+      where: { id, deleted_at: null },
+      select: { auditor_user_id: true },
+    });
+    if (!document) throw new NotFoundException('Documento no encontrado');
+    if (!document.auditor_user_id) return null;
+    return this.db.getDefaultClient().users.findUnique({
+      where: { id: document.auditor_user_id },
+      select: { id: true, name: true },
+    });
+  }
+
+  @Patch(':id/auditor')
+  async assignAuditor(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: AssignDocumentAuditorDto,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
+    const context = this.context();
+    await this.documentAccess.assertAnyDocument(user.id, req['companyUserRole'] as string | undefined, id, 'update');
+
+    const member = dto.user_id
+      ? await this.db.getDefaultClient().company_users.findFirst({
+          where: {
+            company_id: context.companyId,
+            user_id: dto.user_id,
+            user: { active: true, deleted_at: null },
+          },
+          select: { user: { select: { id: true, name: true } } },
+        })
+      : null;
+    if (dto.user_id && !member) throw new BadRequestException('El auditor debe estar activo y pertenecer a esta empresa');
+
+    const client = this.db.getClientForCurrentContext();
+    const document = await client.documents.findFirst({
+      where: { id, deleted_at: null },
+      select: {
+        id: true,
+        number: true,
+        auditor_user_id: true,
+        document_types: { select: { category: true, direction: true, description: true } },
+      },
+    });
+    if (!document) throw new NotFoundException('Documento no encontrado');
+    if (document.document_types.direction !== 1) {
+      throw new BadRequestException('El auditor de seguimiento solo se asigna a documentos de venta');
+    }
+    if (document.auditor_user_id === (dto.user_id ?? null)) return member?.user ?? null;
+
+    const targetPath = document.document_types.category === 'REMITO'
+      ? `/erp/remitos/${id}`
+      : `/erp/sales/${id}`;
+    const auditorName = member?.user.name ?? null;
+    const message = auditorName
+      ? `${document.document_types.description} N.º ${document.number}: ${auditorName} quedó asignado como auditor de seguimiento.`
+      : `${document.document_types.description} N.º ${document.number}: se quitó el auditor de seguimiento.`;
+
+    await client.$transaction(async tx => {
+      await tx.documents.update({ where: { id }, data: { auditor_user_id: dto.user_id ?? null } });
+      await this.notifications?.createDocumentActivity({
+        tx,
+        documentId: id,
+        auditorUserId: dto.user_id ?? null,
+        actorUserId: user.id,
+        eventType: 'AUDITOR_ASSIGNED',
+        message,
+        notificationTitle: 'Te asignaron como auditor de seguimiento',
+        targetPath,
+      });
+    });
+
+    return member?.user ?? null;
+  }
+
   @Patch(':id')
   async assign(@Param('id', ParseUUIDPipe) id: string, @Body() dto: AssignDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
     const context = this.context();
@@ -86,8 +171,9 @@ export class DocumentAssignmentController {
         descrip: true,
         ref: true,
         assigned_to: true,
+        auditor_user_id: true,
         business_parties: { select: { name: true } },
-        document_types: { select: { direction: true, category: true } },
+        document_types: { select: { direction: true, category: true, description: true } },
         commercial_operation: {
           select: {
             id: true,
@@ -126,6 +212,19 @@ export class DocumentAssignmentController {
           targetType: isSale ? 'SALES_DOCUMENT' : 'PURCHASE_DOCUMENT',
           targetId: id,
         });
+
+        if (isSale && document.auditor_user_id) {
+          await this.notifications?.createDocumentActivity({
+            tx,
+            documentId: id,
+            auditorUserId: document.auditor_user_id,
+            actorUserId: user.id,
+            eventType: 'RESPONSIBLE_ASSIGNED',
+            message: `${document.document_types.description} N.º ${document.number}: ${member.user.name} quedó asignado como responsable.`,
+            notificationTitle: 'Cambió el responsable de un documento bajo tu seguimiento',
+            targetPath,
+          });
+        }
       }
     });
 

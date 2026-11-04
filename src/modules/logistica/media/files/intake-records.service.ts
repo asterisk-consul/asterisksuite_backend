@@ -14,6 +14,19 @@ export class IntakeRecordsService {
     return this.db.getClientForCurrentContext();
   }
 
+  private describeCapture(record: { title: string; suggested_type?: string | null }) {
+    const typeLabels: Record<string, string> = {
+      PAYMENT: 'Pago o cobro',
+      CHECK: 'Cheque',
+      PURCHASE_DOCUMENT: 'Documento de compra',
+      SALES_DOCUMENT: 'Documento de venta',
+      CHECK_DEPOSIT: 'Depósito de cheque',
+      OTHER: 'Sin clasificar',
+    };
+    const type = record.suggested_type ? typeLabels[record.suggested_type] ?? record.suggested_type : 'Sin clasificar';
+    return `“${record.title}” · Tipo sugerido: ${type}`;
+  }
+
   async create(body: { title?: string; notes?: string; suggested_type?: string }, userId: string) {
     return this.prisma.intake_records.create({
       data: {
@@ -83,7 +96,7 @@ export class IntakeRecordsService {
         recipientUserId: assignedTo,
         actorUserId: userId,
         title: 'Te asignaron una captura',
-        message: record.title,
+        message: this.describeCapture(record),
         targetPath: `/erp/treasury/intake?record=${encodeURIComponent(id)}`,
         targetType: 'INTAKE_RECORD',
         targetId: id,
@@ -97,7 +110,23 @@ export class IntakeRecordsService {
     const record = await this.findOne(id);
     if (record.assigned_to !== userId) throw new BadRequestException('La captura está asignada a otro usuario');
     if (record.status !== 'SENT') throw new BadRequestException('La captura no está pendiente de procesamiento');
-    return this.prisma.intake_records.update({ where: { id }, data: { status: 'IN_PROGRESS', updated_by: userId } });
+    return this.prisma.$transaction(async tx => {
+      const updated = await tx.intake_records.update({
+        where: { id },
+        data: { status: 'IN_PROGRESS', updated_by: userId },
+      });
+      await this.notifications.createIntakeActivity({
+        tx,
+        companyId: getCurrentCompanyId(),
+        recipientUserId: record.created_by,
+        actorUserId: userId,
+        title: 'Empezaron a procesar tu captura',
+        message: this.describeCapture(record),
+        targetPath: `/erp/treasury/intake?record=${encodeURIComponent(id)}`,
+        targetId: id,
+      });
+      return updated;
+    });
   }
 
   async complete(id: string, body: { target_type: string; target_id: string }, userId: string) {
@@ -121,13 +150,31 @@ export class IntakeRecordsService {
           })),
         });
       }
-      return tx.intake_records.update({
+      const completed = await tx.intake_records.update({
         where: { id },
         data: {
           status: 'COMPLETED', target_type: body.target_type, target_id: body.target_id,
           completed_at: new Date(), completed_by: userId, updated_by: userId,
         },
       });
+      const targetLabels: Record<string, string> = {
+        PAYMENT: 'pago o cobro',
+        CHECK: 'cheque',
+        PURCHASE_DOCUMENT: 'documento de compra',
+        SALES_DOCUMENT: 'documento de venta',
+        CHECK_DEPOSIT: 'depósito de cheque',
+      };
+      await this.notifications.createIntakeActivity({
+        tx,
+        companyId: getCurrentCompanyId(),
+        recipientUserId: record.created_by,
+        actorUserId: userId,
+        title: 'Completaron tu captura',
+        message: `${this.describeCapture(record)} · Se registró un ${targetLabels[body.target_type] ?? 'documento'}.`,
+        targetPath: `/erp/treasury/intake?record=${encodeURIComponent(id)}`,
+        targetId: id,
+      });
+      return completed;
     });
   }
 

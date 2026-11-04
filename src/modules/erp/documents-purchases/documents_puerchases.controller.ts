@@ -58,6 +58,7 @@ export class DocumentsPurchasesController {
     @Query('order') order?: 'asc' | 'desc',
     @Query('excludeCancelled') excludeCancelled?: string,
     @Query('filters') filters?: string,
+    @Query('excludeOpeningBalances') excludeOpeningBalances?: string,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
     const allowedCategories = await this.documentAccess.allowedCategories(user.id, companyRole, 'purchases', 'read');
@@ -82,6 +83,7 @@ export class DocumentsPurchasesController {
       order,
       excludeCancelled === 'true',
       filters,
+      excludeOpeningBalances === 'true',
     );
   }
 

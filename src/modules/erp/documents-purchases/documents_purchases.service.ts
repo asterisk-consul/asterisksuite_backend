@@ -1122,6 +1122,8 @@ export class DocumentsPurchasesService {
     excludeCancelled = false,
 
     rawFilters?: string,
+
+    excludeOpeningBalances = false,
   ) {
     const and: any[] = [];
     if (userId) and.push({ OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] });
@@ -1185,6 +1187,8 @@ export class DocumentsPurchasesService {
           : excludeCancelled && categories.length === 0
             ? { status: { not: STATUS_CANCELLED } }
             : {}),
+
+        ...(excludeOpeningBalances ? { source: { not: 'opening_balance' } } : {}),
 
         ...(and.length || cancelledFilters.length ? { AND: [...and, ...cancelledFilters] } : {}),
     };

@@ -102,6 +102,18 @@ export class DocumentsSalesController {
     return this.service.getCompletedTripsPending();
   }
 
+  @Get('salespeople')
+  async getSalespeople(@CurrentUser() user: AuthUser, @Req() req: Request) {
+    const companyRole = req['companyUserRole'] as string | undefined;
+    const canAccess = await Promise.all((['read', 'create', 'update'] as const).map(action =>
+      this.documentAccess.can(user.id, companyRole, 'sales', 'ORDER', action),
+    ));
+    if (!canAccess.some(Boolean)) {
+      throw new ForbiddenException('No tenés permiso para consultar vendedores del circuito de ventas');
+    }
+    return this.service.listSalespeople();
+  }
+
   @Post()
   async create(@Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
     await this.documentAccess.assertDocumentType(
@@ -161,6 +173,8 @@ export class DocumentsSalesController {
     @Query('excludeCancelled') excludeCancelled?: string,
     @Query('filters') filters?: string,
     @Query('deliveryStatus') deliveryStatus?: string,
+    @Query('excludeOpeningBalances') excludeOpeningBalances?: string,
+    @Query('seller_id') sellerId?: string,
   ) {
     const validDeliveryStatuses = ['PENDING', 'ELIGIBLE', 'DRAFT_CREATED'];
     if (deliveryStatus && !validDeliveryStatuses.includes(deliveryStatus)) {
@@ -196,6 +210,8 @@ export class DocumentsSalesController {
       excludeCancelled === 'true',
       filters,
       effectiveDeliveryStatus,
+      excludeOpeningBalances === 'true',
+      sellerId,
     );
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
     if (Array.isArray(documents)) {
@@ -273,6 +289,22 @@ export class DocumentsSalesController {
     return this.service.getSalesOrderAvailability(id);
   }
 
+  @Get(':id/activity')
+  async getDocumentActivity(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      id,
+      'read',
+    );
+    return this.service.listDocumentActivity(
+      id,
+      user.id,
+      req['companyUserRole'] as string | undefined,
+    );
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     const companyRole = req['companyUserRole'] as string | undefined;
@@ -297,7 +329,7 @@ export class DocumentsSalesController {
     if (visibleDocument?.amounts_visible === false) {
       throw new ForbiddenException('No tenés permiso para editar importes de esta orden en su estado actual');
     }
-    return this.service.update(id, dto);
+    return this.service.update(id, dto, user.id);
   }
 
   @Patch(':id/confirm')

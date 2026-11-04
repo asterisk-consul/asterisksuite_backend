@@ -6,6 +6,8 @@ model sales_flow_settings {
   require_payment_for_delivery           Boolean  @default(false)
   delivery_payment_percentage            Decimal  @default(100) @db.Decimal(5, 2)
   require_invoice_for_delivery           Boolean  @default(false)
+  require_order_delivery_address         Boolean  @default(false)
+  warn_when_order_delivery_data_empty    Boolean  @default(true)
   auto_create_delivery_note              Boolean  @default(false)
   allow_partial_delivery                 Boolean  @default(true)
   reserve_stock_on_order_confirmation    Boolean  @default(true)
@@ -14,6 +16,7 @@ model sales_flow_settings {
   prompt_order_assignee_on_confirmation  Boolean  @default(true)
   require_order_assignee_on_confirmation Boolean  @default(false)
   default_order_assignee_id              String?  @db.Uuid
+  default_order_auditor_id                String?  @db.Uuid
   active_from                            DateTime @default(now()) @db.Timestamp(6)
   created_at                             DateTime @default(now()) @db.Timestamp(6)
   updated_at                             DateTime @updatedAt @db.Timestamp(6)

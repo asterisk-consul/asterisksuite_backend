@@ -19,6 +19,14 @@ export class UpdateSalesFlowSettingsDto {
   require_invoice_for_delivery!: boolean;
 
   @IsBoolean()
+  @IsOptional()
+  require_order_delivery_address?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  warn_when_order_delivery_data_empty?: boolean;
+
+  @IsBoolean()
   auto_create_delivery_note!: boolean;
 
   @IsBoolean()
@@ -47,4 +55,8 @@ export class UpdateSalesFlowSettingsDto {
   @IsUUID()
   @IsOptional()
   default_order_assignee_id?: string | null;
+
+  @IsUUID()
+  @IsOptional()
+  default_order_auditor_id?: string | null;
 }
