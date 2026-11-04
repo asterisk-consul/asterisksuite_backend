@@ -277,7 +277,7 @@ export class DocumentsSalesController {
   async findOne(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     const companyRole = req['companyUserRole'] as string | undefined;
     await this.documentAccess.assertDocument(user.id, companyRole, 'sales', id, 'read');
-    const document = await this.service.getRemovalContext(id);
+    const document = await this.service.findOne(id);
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
     return this.service.applyOrderAmountVisibility(document, canViewAmounts);
   }
