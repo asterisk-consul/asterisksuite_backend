@@ -69,6 +69,18 @@ type ConsolidatedCompany = {
   };
 };
 
+type PaymentDestinationRow = {
+  method: string;
+  amount: number | null;
+  bank_account: {
+    bank_name: string;
+    account_number: string | null;
+    alias: string | null;
+    name: string;
+  } | null;
+  cash_box: { name: string } | null;
+};
+
 type ReportRow = {
   id: string;
   date: Date;
@@ -85,6 +97,10 @@ type ReportRow = {
   payment_state: ManagementPaymentState;
   invoicing_state: ManagementProgressState;
   delivery_state: ManagementProgressState;
+  /** Solo aplica a Cobros: medio con el que se registró el cobro. */
+  payment_method?: string | null;
+  /** Solo aplica a Cobros: cuentas y cajas donde ingresó el dinero. */
+  payment_destinations: PaymentDestinationRow[];
   product_lines: Array<{
     product_id: string;
     product_name: string;
@@ -1273,6 +1289,8 @@ export class ManagementReportsService {
           : this.paymentState(Math.abs(amount), Math.abs(paid)),
         invoicing_state: this.progressState(totalQuantity, invoicedQuantity),
         delivery_state: this.progressState(totalQuantity, deliveredQuantity),
+        payment_method: null,
+        payment_destinations: [],
         product_lines: doc.document_items
           .filter((item) => item.product_id && (!query.product_id || item.product_id === query.product_id))
           .map((item) => ({
@@ -1301,29 +1319,74 @@ export class ManagementReportsService {
         ...(query.party_id ? { party_id: query.party_id } : {}),
         ...(query.currency_code ? { currency_code: query.currency_code } : {}),
       },
-      include: { party: { select: { id: true, name: true } } },
+      include: {
+        party: { select: { id: true, name: true } },
+        bank_account: { select: { bank_name: true, account_number: true, alias: true, name: true } },
+        cash_box: { select: { name: true } },
+        tenders: {
+          where: { deleted_at: null },
+          select: {
+            method: true,
+            amount: true,
+            bank_account: { select: { bank_name: true, account_number: true, alias: true, name: true } },
+            cash_box: { select: { name: true } },
+          },
+          orderBy: { amount: 'desc' },
+        },
+      },
       orderBy: { date: 'desc' },
     });
-    return payments.map((payment) => ({
-      id: payment.id,
-      date: payment.date,
-      label: `Cobro #${payment.number}`,
-      party_id: payment.party_id,
-      party_name: payment.party?.name ?? 'Sin tercero',
-      seller_id: null,
-      seller_name: 'Sin vendedor',
-      currency_code: payment.currency_code,
-      amount: Number(payment.amount),
-      converted_amount: payment.converted_amount != null
-        ? Number(payment.converted_amount)
-        : payment.currency_code === 'ARS' ? Number(payment.amount) : null,
-      paid_amount: Number(payment.amount),
-      pending_amount: 0,
-      payment_state: ManagementPaymentState.PAID,
-      invoicing_state: ManagementProgressState.ALL,
-      delivery_state: ManagementProgressState.ALL,
-      product_lines: [],
-    }));
+    return payments.map((payment) => {
+      const destinations = payment.tenders.length
+        ? payment.tenders.map((tender) => ({
+            method: tender.method as string,
+            amount: Number(tender.amount),
+            bank_account: tender.bank_account,
+            cash_box: tender.cash_box,
+          }))
+        : this.paymentDestinationEntries(
+            payment.payment_method as string,
+            Number(payment.amount),
+            payment.bank_account,
+            payment.cash_box,
+          );
+      return {
+        id: payment.id,
+        date: payment.date,
+        label: `Cobro #${payment.number}`,
+        party_id: payment.party_id,
+        party_name: payment.party?.name ?? 'Sin tercero',
+        seller_id: null,
+        seller_name: 'Sin vendedor',
+        currency_code: payment.currency_code,
+        amount: Number(payment.amount),
+        converted_amount: payment.converted_amount != null
+          ? Number(payment.converted_amount)
+          : payment.currency_code === 'ARS' ? Number(payment.amount) : null,
+        paid_amount: Number(payment.amount),
+        pending_amount: 0,
+        payment_state: ManagementPaymentState.PAID,
+        invoicing_state: ManagementProgressState.ALL,
+        delivery_state: ManagementProgressState.ALL,
+        payment_method: payment.payment_method,
+        payment_destinations: destinations,
+        product_lines: [],
+      };
+    });
+  }
+
+  private paymentDestinationEntries(
+    method: string,
+    amount: number,
+    bankAccount: PaymentDestinationRow['bank_account'],
+    cashBox: PaymentDestinationRow['cash_box'],
+  ): PaymentDestinationRow[] {
+    const destinations: PaymentDestinationRow[] = [];
+    if (cashBox) destinations.push({ method, amount: null, bank_account: null, cash_box: cashBox });
+    if (bankAccount) destinations.push({ method, amount: null, bank_account: bankAccount, cash_box: null });
+    // Con un solo destino el importe del cobro coincide con la cuenta o caja receptora.
+    if (destinations.length === 1) destinations[0].amount = amount;
+    return destinations;
   }
 
   private buildCommercialPerformance(rows: ReportRow[]) {
