@@ -105,6 +105,7 @@ model document_items {
   converted_price        Decimal?              @db.Decimal(18, 2)
   quantity_delivered     Decimal?              @db.Decimal(15, 3)
   quantity_invoiced      Decimal?              @db.Decimal(15, 3)
+  item_instructions      String?               @db.Text
   created_at             DateTime              @default(now()) @db.Timestamp(6)
   updated_at             DateTime?             @updatedAt @db.Timestamp(6)
   deleted_at             DateTime?

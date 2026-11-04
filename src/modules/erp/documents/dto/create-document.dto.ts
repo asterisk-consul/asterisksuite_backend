@@ -12,6 +12,12 @@ export class CreateDocumentItemTaxDto {
   tax_amount!: number;
 }
 export class CreateDocumentItemDto {
+  @IsString()
+  @IsOptional()
+  @MaxLength(1000)
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
+  item_instructions?: string;
+
   @IsUUID()
   @IsOptional()
   product_id?: string;

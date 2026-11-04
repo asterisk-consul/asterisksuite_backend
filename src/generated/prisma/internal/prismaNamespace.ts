@@ -15586,6 +15586,7 @@ export const Document_itemsScalarFieldEnum = {
   converted_price: 'converted_price',
   quantity_delivered: 'quantity_delivered',
   quantity_invoiced: 'quantity_invoiced',
+  item_instructions: 'item_instructions',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',

@@ -13,6 +13,8 @@ export interface TaxInput {
 }
 
 export interface ItemInput {
+  item_instructions?: string | null;
+
   product_id: string | null;
 
   variant_id?: string | null;

@@ -632,6 +632,7 @@ export class DocumentsSalesService {
 
       return {
         product_id: item.productId ?? null,
+        item_instructions: dtoItems[idx]?.item_instructions?.trim() || null,
         variant_id: dtoItems[idx]?.variant_id ?? null,
         warehouse_id: dtoItems[idx]?.warehouse_id ?? dto.warehouse_id ?? null,
         quantity: item.quantity,
@@ -997,6 +998,7 @@ export class DocumentsSalesService {
           discount_percentage: Number(item.discount_percentage ?? 0),
           variant_id: item.variant_id ?? null,
           warehouse_id: item.warehouse_id ?? null,
+          item_instructions: item.item_instructions ?? null,
         }))
       : [];
     const calculationItems = dto.items?.length ? dto.items : storedItemsForSequenceChange;
@@ -1098,6 +1100,9 @@ export class DocumentsSalesService {
 
         return {
           product_id: item.productId ?? null,
+          item_instructions: calculationItems[idx]?.item_instructions
+            ?? doc.document_items[idx]?.item_instructions
+            ?? null,
           variant_id: calculationItems[idx]?.variant_id ?? null,
           warehouse_id: calculationItems[idx]?.warehouse_id ?? dto.warehouse_id ?? doc.warehouse_id ?? null,
           quantity: item.quantity,
@@ -1395,6 +1400,8 @@ export class DocumentsSalesService {
       const docItem = await tx.document_items.create({
         data: {
           document_id: documentId,
+
+          item_instructions: item.item_instructions?.trim() || null,
 
           product_id: item.product_id ?? null,
 
@@ -2885,6 +2892,7 @@ export class DocumentsSalesService {
       const price = Number(item.quantity) * unitPrice * (1 - discountPercentage / 100);
       return {
         product_id: item.product_id,
+        item_instructions: item.item_instructions ?? null,
         variant_id: item.variant_id,
         quantity: Number(item.quantity),
         currency: item.currency_code ?? doc.currency_code ?? 'ARS',
@@ -3121,6 +3129,7 @@ export class DocumentsSalesService {
       const price = unitPrice * req.quantity * (1 - discountPercentage / 100);
       return {
         product_id: sourceItem.product_id,
+        item_instructions: sourceItem.item_instructions ?? null,
         variant_id: sourceItem.variant_id,
         warehouse_id: sourceItem.warehouse_id ?? doc.warehouse_id ?? null,
         quantity: req.quantity,
@@ -3483,6 +3492,7 @@ export class DocumentsSalesService {
       const price = Number(item.quantity) * unitPrice * (1 - discountPercentage / 100);
       return {
         product_id: item.product_id,
+        item_instructions: sourceItem?.item_instructions ?? null,
         variant_id: sourceItem?.variant_id ?? null,
         warehouse_id: sourceItem?.warehouse_id ?? null,
         quantity: Number(item.quantity),
