@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsBoolean, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean, IsUUID, Min } from 'class-validator';
 
 export class UpdateBankAccountDto {
   @IsString()
@@ -28,6 +28,10 @@ export class UpdateBankAccountDto {
   @IsString()
   @IsOptional()
   currency_code?: string;
+
+  @IsUUID()
+  @IsOptional()
+  accounting_account_id?: string | null;
 
   @IsNumber()
   @Min(0)

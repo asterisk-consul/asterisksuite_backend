@@ -343,6 +343,18 @@ export class DocumentsSalesService {
     }
   }
 
+  private hasOrderDeliveryInformation(delivery: any): boolean {
+    return [
+      delivery?.delivery_address,
+      delivery?.delivery_contact,
+      delivery?.delivery_phone,
+      delivery?.delivery_time,
+      delivery?.delivery_instructions,
+      delivery?.transport_provider,
+      delivery?.confirmed_delivery_date,
+    ].some((value) => String(value ?? '').trim() !== '');
+  }
+
   private documentTargetPath(documentId: string, category?: string, direction?: number) {
     return category === 'REMITO' && Number(direction) === 1
       ? `/erp/remitos/${documentId}`
@@ -445,11 +457,42 @@ export class DocumentsSalesService {
   }
 
   async listSalespeople() {
-    return this.prisma.employees.findMany({
-      where: { is_salesperson: true, is_active: true, deleted_at: null },
-      select: { id: true, first_name: true, last_name: true },
-      orderBy: [{ last_name: 'asc' }, { first_name: 'asc' }],
-    });
+    const [employees, partners] = await Promise.all([
+      this.prisma.employees.findMany({
+        where: { is_salesperson: true, is_active: true, deleted_at: null },
+        select: { id: true, first_name: true, last_name: true, default_commission_rate: true, commission_base: true },
+        orderBy: [{ last_name: 'asc' }, { first_name: 'asc' }],
+      }),
+      this.prisma.partners.findMany({
+        where: {
+          deleted_at: null,
+          is_active: true,
+          partner_kind: 'PARTNER',
+          is_salesperson: true,
+          party_id: { not: null },
+        },
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+        },
+        orderBy: [{ last_name: 'asc' }, { first_name: 'asc' }],
+      }),
+    ]);
+    return [
+      ...employees.map((seller: any) => ({
+        id: seller.id,
+        first_name: seller.first_name,
+        last_name: seller.last_name,
+        seller_type: 'EMPLOYEE' as const,
+      })),
+      ...partners.map((seller: any) => ({
+        id: seller.id,
+        first_name: seller.first_name,
+        last_name: seller.last_name,
+        seller_type: 'PARTNER' as const,
+      })),
+    ].sort((a, b) => `${a.last_name} ${a.first_name}`.localeCompare(`${b.last_name} ${b.first_name}`, 'es'));
   }
 
   async create(dto: CreateDocumentDto, userId?: string) {
@@ -796,16 +839,29 @@ export class DocumentsSalesService {
       }
 
       if (docType.category === 'ORDER') {
+        const sellerType = dto.seller_type === 'PARTNER' ? 'PARTNER' : 'EMPLOYEE';
         if (dto.seller_id) {
-          const seller = await tx.employees.findFirst({
-            where: {
-              id: dto.seller_id,
-              is_salesperson: true,
-              is_active: true,
-              deleted_at: null,
-            },
-            select: { id: true },
-          });
+          const seller = sellerType === 'PARTNER'
+            ? await tx.partners.findFirst({
+                where: {
+                  id: dto.seller_id,
+                  partner_kind: 'PARTNER',
+                  is_salesperson: true,
+                  is_active: true,
+                  deleted_at: null,
+                  party_id: { not: null },
+                },
+                select: { id: true },
+              })
+            : await tx.employees.findFirst({
+                where: {
+                  id: dto.seller_id,
+                  is_salesperson: true,
+                  is_active: true,
+                  deleted_at: null,
+                },
+                select: { id: true },
+              });
           if (!seller) {
             throw new BadRequestException('El vendedor debe estar activo y habilitado como vendedor en esta empresa');
           }
@@ -822,7 +878,9 @@ export class DocumentsSalesService {
             delivery_instructions: dto.delivery_instructions ?? null,
             transport_provider: dto.transport_provider ?? null,
             confirmed_delivery_date: dto.confirmed_delivery_date ? new Date(dto.confirmed_delivery_date) : null,
-            seller_id: dto.seller_id ?? null,
+            seller_id: sellerType === 'EMPLOYEE' ? dto.seller_id ?? null : null,
+            seller_partner_id: sellerType === 'PARTNER' ? dto.seller_id ?? null : null,
+            seller_type: dto.seller_id ? sellerType : 'EMPLOYEE',
             commission_rate: dto.commission_rate ?? null,
             commission_base: dto.commission_base ?? null,
           },
@@ -1319,20 +1377,33 @@ export class DocumentsSalesService {
       });
 
       if (existingExtension) {
-        if (
-          dto.seller_id !== undefined
-          && dto.seller_id !== null
-          && dto.seller_id !== existingExtension.seller_id
-        ) {
-          const seller = await tx.employees.findFirst({
-            where: {
-              id: dto.seller_id,
-              is_salesperson: true,
-              is_active: true,
-              deleted_at: null,
-            },
-            select: { id: true },
-          });
+        const sellerWasSent = dto.seller_id !== undefined;
+        const sellerType = dto.seller_type === 'PARTNER' ? 'PARTNER' : 'EMPLOYEE';
+        const existingSellerId = existingExtension.seller_type === 'PARTNER'
+          ? existingExtension.seller_partner_id
+          : existingExtension.seller_id;
+        if (sellerWasSent && dto.seller_id && (dto.seller_id !== existingSellerId || sellerType !== existingExtension.seller_type)) {
+          const seller = sellerType === 'PARTNER'
+            ? await tx.partners.findFirst({
+                where: {
+                  id: dto.seller_id,
+                  partner_kind: 'PARTNER',
+                  is_salesperson: true,
+                  is_active: true,
+                  deleted_at: null,
+                  party_id: { not: null },
+                },
+                select: { id: true },
+              })
+            : await tx.employees.findFirst({
+                where: {
+                  id: dto.seller_id,
+                  is_salesperson: true,
+                  is_active: true,
+                  deleted_at: null,
+                },
+                select: { id: true },
+              });
           if (!seller) {
             throw new BadRequestException('El vendedor debe estar activo y habilitado como vendedor en esta empresa');
           }
@@ -1372,7 +1443,15 @@ export class DocumentsSalesService {
               : clearConfirmedDeliveryDate
                 ? null
                 : existingExtension.confirmed_delivery_date,
-            seller_id: dto.seller_id !== undefined ? dto.seller_id : existingExtension.seller_id,
+            seller_id: sellerWasSent
+              ? dto.seller_id && sellerType === 'EMPLOYEE' ? dto.seller_id : null
+              : existingExtension.seller_id,
+            seller_partner_id: sellerWasSent
+              ? dto.seller_id && sellerType === 'PARTNER' ? dto.seller_id : null
+              : existingExtension.seller_partner_id,
+            seller_type: sellerWasSent
+              ? dto.seller_id ? sellerType : 'EMPLOYEE'
+              : existingExtension.seller_type,
             commission_rate: dto.commission_rate ?? existingExtension.commission_rate,
             commission_base: dto.commission_base ?? existingExtension.commission_base,
             updated_at: new Date(),
@@ -1666,7 +1745,11 @@ export class DocumentsSalesService {
 
         ...(partyId ? { party_id: partyId } : {}),
 
-        ...(sellerId && isOrderList ? { orden_venta_doc: { is: { seller_id: sellerId } } } : {}),
+        ...(sellerId && isOrderList
+          ? sellerId.startsWith('PARTNER:')
+            ? { orden_venta_doc: { is: { seller_partner_id: sellerId.slice('PARTNER:'.length) } } }
+            : { orden_venta_doc: { is: { seller_id: sellerId.startsWith('EMPLOYEE:') ? sellerId.slice('EMPLOYEE:'.length) : sellerId } } }
+          : {}),
 
         ...(excludeOpeningBalances ? { source: { not: 'opening_balance' } } : {}),
 
@@ -1694,6 +1777,7 @@ export class DocumentsSalesService {
           orden_venta_doc: {
             include: {
               seller: { select: { id: true, first_name: true, last_name: true } },
+              seller_partner: { select: { id: true, first_name: true, last_name: true } },
             },
           },
         } : {}),
@@ -1959,10 +2043,19 @@ export class DocumentsSalesService {
                 user_id: true,
               },
             },
+            seller_partner: {
+              select: {
+                id: true,
+                first_name: true,
+                last_name: true,
+                party_id: true,
+              },
+            },
           },
         })
       : null;
 
+    if (!ordenVentaDoc) return { ...doc, orden_venta_doc: null };
     return { ...doc, orden_venta_doc: ordenVentaDoc };
   }
 
@@ -2359,7 +2452,7 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string, userId: string, assignedTo?: string | null) {
+  async confirm(id: string, userId: string, assignedTo?: string | null, confirmEmptyDeliveryData = false) {
     const companyId = getCurrentCompanyId();
     let previousOrderAssignee: string | null = null;
     if (assignedTo) {
@@ -2383,6 +2476,28 @@ export class DocumentsSalesService {
           update: {},
           create: { settings_key: 'default' },
         });
+        const deliveryData = await tx.orden_venta_documents.findUnique({
+          where: { document_id: id },
+          select: {
+            delivery_address: true,
+            delivery_contact: true,
+            delivery_phone: true,
+            delivery_time: true,
+            delivery_instructions: true,
+            transport_provider: true,
+            confirmed_delivery_date: true,
+          },
+        });
+        const deliveryAddress = deliveryData?.delivery_address;
+        if (settings.require_order_delivery_address && !deliveryAddress?.trim()) {
+          throw new BadRequestException('Completá la dirección de entrega de la Orden de Venta antes de confirmarla');
+        }
+        if (!settings.require_order_delivery_address
+          && settings.warn_when_order_delivery_data_empty
+          && !this.hasOrderDeliveryInformation(deliveryData)
+          && !confirmEmptyDeliveryData) {
+          throw new BadRequestException('La Orden de Venta no tiene datos de entrega. Confirmá explícitamente si querés continuar sin ellos');
+        }
         const effectiveAssignee = assignedTo || doc.assigned_to || null;
         if (settings.require_order_assignee_on_confirmation && !effectiveAssignee) {
           throw new BadRequestException('Asigná un responsable antes de confirmar la Orden de Venta');

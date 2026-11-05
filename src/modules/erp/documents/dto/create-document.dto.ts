@@ -274,6 +274,10 @@ export class CreateDocumentDto {
   seller_id?: string | null;
 
   @IsOptional()
+  @IsIn(['EMPLOYEE', 'PARTNER'])
+  seller_type?: 'EMPLOYEE' | 'PARTNER' | null;
+
+  @IsOptional()
   commission_rate?: number;
 
   @IsOptional()

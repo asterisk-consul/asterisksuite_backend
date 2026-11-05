@@ -75,6 +75,35 @@ export class TenantAccessGuard implements CanActivate {
     req['companyUserRole'] = membership.role;
     req['tenantUserId'] = userId;
 
+    const requestPath = req.path.replace(/\/$/, '');
+    const isAuditReadRequest = req.method === 'GET'
+      && /^\/(?:api\/)?erp\/audit(?:\/|$)/.test(requestPath);
+
+    if (isAuditReadRequest) {
+      const publicClient = this.prisma.getDefaultClient();
+      const platformUser = await publicClient.users.findUnique({
+        where: { id: userId },
+        select: { role: true, active: true, deleted_at: true },
+      });
+
+      if (platformUser?.active && !platformUser.deleted_at) {
+        if (platformUser.role === 'PLATFORM_OWNER') {
+          req['platformAuditReadAuthorized'] = true;
+        } else if (platformUser.role === 'PLATFORM_ADMIN') {
+          const scope = await publicClient.platform_admin_company_scopes.findUnique({
+            where: {
+              user_id_company_id: {
+                user_id: userId,
+                company_id: company.id,
+              },
+            },
+            select: { user_id: true },
+          });
+          req['platformAuditReadAuthorized'] = Boolean(scope);
+        }
+      }
+    }
+
     return true;
   }
 }

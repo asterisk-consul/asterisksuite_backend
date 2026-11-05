@@ -1,4 +1,40 @@
-import { IsBoolean, IsIn, IsNumber, IsOptional, IsUUID, Max, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsArray, IsBoolean, IsIn, IsNumber, IsOptional, IsUUID, Max, Min, ValidateNested } from 'class-validator';
+
+export class SalesFlowCommissionAssignmentDto {
+  @IsIn(['EMPLOYEE', 'PARTNER'])
+  seller_type!: 'EMPLOYEE' | 'PARTNER';
+
+  @IsUUID()
+  seller_id!: string;
+
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0.01)
+  @Max(100)
+  participation_rate!: number;
+
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  commission_rate!: number;
+
+  @IsIn(['INVOICED', 'PAID'])
+  commission_base!: 'INVOICED' | 'PAID';
+}
+
+export class UpdateSalesFlowCommissionSettingsDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SalesFlowCommissionAssignmentDto)
+  assignments!: SalesFlowCommissionAssignmentDto[];
+}
+
+export class UpdatePartnerShareSettingsDto {
+  @IsIn(['ORDER', 'INVOICED'])
+  partner_share_basis!: 'ORDER' | 'INVOICED';
+}
 
 export class UpdateSalesFlowSettingsDto {
   @IsIn(['INVOICE', 'ORDER', 'ORDER_THEN_INVOICE'])

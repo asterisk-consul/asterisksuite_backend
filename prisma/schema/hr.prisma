@@ -117,9 +117,67 @@ model hr_vales {
   party business_parties @relation(fields: [party_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   commission_details hr_vale_commission_details[]
+  partner_share_details hr_vale_partner_share_details[]
+  investment_installment hr_partner_investment_installments?
 
   @@unique([party_id, number])
   @@index([party_id])
+  @@schema("tenant")
+}
+
+model hr_vale_partner_share_details {
+  id                String   @id @default(uuid()) @db.Uuid
+  hr_vale_id        String   @db.Uuid
+  document_id       String   @db.Uuid
+  partner_id        String   @db.Uuid
+  base_amount       Decimal  @db.Decimal(15, 2)
+  share_percentage  Decimal  @db.Decimal(5, 2)
+  share_amount      Decimal  @db.Decimal(15, 2)
+  calculation_basis String   @default("ORDER") @db.VarChar(20)
+  date              DateTime @db.Date
+  created_at        DateTime @default(now()) @db.Timestamp(6)
+
+  hr_vale  hr_vales  @relation(fields: [hr_vale_id], references: [id], onDelete: Cascade)
+  document documents @relation(fields: [document_id], references: [id], onDelete: NoAction)
+  partner  partners  @relation(fields: [partner_id], references: [id], onDelete: NoAction)
+
+  @@index([hr_vale_id])
+  @@index([document_id, partner_id])
+  @@index([partner_id])
+  @@schema("tenant")
+}
+
+model hr_partner_investment_plans {
+  id             String   @id @default(uuid()) @db.Uuid
+  idempotency_key String  @unique @db.Uuid
+  partner_id     String   @db.Uuid
+  currency_code  String   @db.VarChar(10)
+  total_amount   Decimal  @db.Decimal(15, 2)
+  description    String?  @db.VarChar(255)
+  created_at     DateTime @default(now()) @db.Timestamp(6)
+  created_by     String?  @db.Uuid
+
+  partner     partners                              @relation(fields: [partner_id], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  installments hr_partner_investment_installments[]
+
+  @@index([partner_id, currency_code, created_at])
+  @@schema("tenant")
+}
+
+model hr_partner_investment_installments {
+  id                 String   @id @default(uuid()) @db.Uuid
+  plan_id            String   @db.Uuid
+  installment_number Int
+  amount             Decimal  @db.Decimal(15, 2)
+  due_date           DateTime @db.Date
+  vale_id            String   @unique @db.Uuid
+  created_at         DateTime @default(now()) @db.Timestamp(6)
+
+  plan hr_partner_investment_plans @relation(fields: [plan_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  vale hr_vales                   @relation(fields: [vale_id], references: [id], onDelete: NoAction, onUpdate: Cascade)
+
+  @@unique([plan_id, installment_number])
+  @@index([plan_id, due_date])
   @@schema("tenant")
 }
 
@@ -132,6 +190,8 @@ model hr_vale_commission_details {
   hr_vale_id        String   @db.Uuid
   document_id       String   @db.Uuid
   seller_id         String?  @db.Uuid
+  seller_type       String   @default("EMPLOYEE") @db.VarChar(20)
+  partner_id        String?  @db.Uuid
   subtotal          Decimal  @db.Decimal(15, 2)
   commission_rate   Decimal  @db.Decimal(5, 2)
   commission_amount Decimal  @db.Decimal(15, 2)
@@ -144,5 +204,6 @@ model hr_vale_commission_details {
 
   @@index([hr_vale_id])
   @@index([document_id])
+  @@index([partner_id])
   @@schema("tenant")
 }

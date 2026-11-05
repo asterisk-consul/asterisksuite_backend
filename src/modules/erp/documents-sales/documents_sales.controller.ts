@@ -335,7 +335,7 @@ export class DocumentsSalesController {
   @Patch(':id/confirm')
   async confirm(
     @Param('id') id: string,
-    @Body() body: { assigned_to?: string | null },
+    @Body() body: { assigned_to?: string | null; confirm_empty_delivery_data?: boolean } | undefined,
     @CurrentUser() user: AuthUser,
     @Req() req: Request,
   ) {
@@ -346,7 +346,7 @@ export class DocumentsSalesController {
       id,
       'confirm',
     );
-    return this.service.confirm(id, user.id, body?.assigned_to);
+    return this.service.confirm(id, user.id, body?.assigned_to, body?.confirm_empty_delivery_data === true);
   }
 
   @Patch(':id/cancel')

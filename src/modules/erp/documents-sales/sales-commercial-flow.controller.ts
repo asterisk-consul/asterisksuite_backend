@@ -3,8 +3,9 @@ import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { AllowCompanyAdmins } from '@/access-control/decorators/allow-company-admins.decorator';
 import { SalesCommercialFlowService } from './sales-commercial-flow.service';
-import { UpdateSalesFlowSettingsDto } from './sales-flow-settings.dto';
+import { UpdatePartnerShareSettingsDto, UpdateSalesFlowCommissionSettingsDto, UpdateSalesFlowSettingsDto } from './sales-flow-settings.dto';
 import { DocumentPrintTemplatesService } from './document-print-templates.service';
 import { SaveDocumentPrintTemplateDto } from './document-print-template.dto';
 
@@ -46,6 +47,25 @@ export class SalesCommercialFlowController {
   @RequirePermissions('document_types.update')
   updateSettings(@Body() dto: UpdateSalesFlowSettingsDto, @CurrentUser() user: AuthUser) {
     return this.service.updateSettings(dto, user.id);
+  }
+
+  @Get('settings/commission-defaults')
+  @RequirePermissions('commissions.manage')
+  @AllowCompanyAdmins()
+  commissionSettings() { return this.service.getCommissionSettings(); }
+
+  @Patch('settings/commission-defaults')
+  @RequirePermissions('commissions.manage')
+  @AllowCompanyAdmins()
+  updateCommissionSettings(@Body() dto: UpdateSalesFlowCommissionSettingsDto, @CurrentUser() user: AuthUser) {
+    return this.service.updateCommissionSettings(dto, user.id);
+  }
+
+  @Patch('settings/partner-share')
+  @RequirePermissions('commissions.manage')
+  @AllowCompanyAdmins()
+  updatePartnerShareSettings(@Body() dto: UpdatePartnerShareSettingsDto, @CurrentUser() user: AuthUser) {
+    return this.service.updatePartnerShareSettings(dto, user.id);
   }
 
   @Get('delivery-queue')

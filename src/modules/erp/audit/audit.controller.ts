@@ -3,8 +3,9 @@ import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { AuditService } from './audit.service';
 import { QueryAuditDto } from './dto/query-audit.dto';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { PermissionsGuard } from '@/access-control/guards/permissions.guard';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
 @Controller('erp/audit')
 export class AuditController {
   constructor(private readonly auditService: AuditService) {}

@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsOptional, IsString, Max, MaxLength, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export enum AuditActionFilter {
@@ -24,6 +24,24 @@ export class QueryAuditDto {
   @IsOptional()
   @IsString()
   user_id?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  search?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(10000)
+  filters?: string;
+
+  @IsOptional()
+  @IsIn(['changed_at', 'table_name', 'record_id', 'action'])
+  sort?: string;
+
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
+  order?: 'asc' | 'desc';
 
   @IsOptional()
   @IsInt()

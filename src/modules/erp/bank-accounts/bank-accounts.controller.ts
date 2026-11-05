@@ -11,6 +11,7 @@ import { UpdateBankAccountDto } from './dto/update-bank-account.dto';
 import { BankAccountAccessGuard } from '@/common/guards/bank-account-access.guard';
 import { DeleteBankAccountDto } from './dto/delete-bank-account.dto';
 import { CreateBankMovementDto } from './dto/create-bank-movement.dto';
+import { ImportBankStatementDto } from './dto/import-bank-statement.dto';
 import { CreateBankChargeRuleDto, SuggestedBankChargesQueryDto, UpdateBankChargeRuleDto } from './dto/bank-charge-rule.dto';
 
 @UseGuards(JwtAuthGuard)
@@ -77,6 +78,17 @@ export class BankAccountsController {
     @CurrentUser() user: AuthUser,
   ) {
     return this.bankAccountsService.createMovement(id, dto, user.id);
+  }
+
+  @Post(':id/movements/import')
+  @UseGuards(BankAccountAccessGuard)
+  @RequirePermissions('bank_movements.create')
+  importStatementMovements(
+    @Param('id') id: string,
+    @Body() dto: ImportBankStatementDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.bankAccountsService.importStatementMovements(id, dto, user.id);
   }
 
   @Post(':id/transfers')

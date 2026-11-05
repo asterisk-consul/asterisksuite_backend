@@ -59,6 +59,15 @@ export class PermissionsGuard implements CanActivate {
       // console.log('OWNER BYPASS -> ALLOW');
       return true;
     }
+    if (
+      request.platformAuditReadAuthorized === true
+      && request.method === 'GET'
+      && requiredPermissions?.length === 1
+      && requiredPermissions[0] === 'audit.read'
+      && !anyPermissions?.length
+    ) {
+      return true;
+    }
     if (allowCompanyAdmins && request.companyUserRole === 'ADMIN') {
       return true;
     }

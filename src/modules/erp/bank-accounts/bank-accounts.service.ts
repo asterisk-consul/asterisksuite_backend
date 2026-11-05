@@ -1,9 +1,11 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateBankAccountDto } from './dto/create-bank-account.dto';
 import { UpdateBankAccountDto } from './dto/update-bank-account.dto';
 import { DeleteBankAccountDto } from './dto/delete-bank-account.dto';
 import { CreateBankMovementDto } from './dto/create-bank-movement.dto';
+import { ImportBankStatementDto } from './dto/import-bank-statement.dto';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
 import { CreateBankChargeRuleDto, SuggestedBankChargesQueryDto, UpdateBankChargeRuleDto } from './dto/bank-charge-rule.dto';
@@ -32,6 +34,7 @@ export class BankAccountsService {
         alias: dto.alias,
         account_number: dto.account_number,
         currency_code: dto.currency_code,
+        accounting_account_id: dto.accounting_account_id ?? null,
         balance: 0,
         active: dto.active ?? true,
         created_by: userId,
@@ -73,7 +76,10 @@ export class BankAccountsService {
     const accounts = await this.prisma.bank_accounts.findMany({
       where,
       orderBy: { name: 'asc' },
-      include: { _count: { select: { movements: true } } },
+      include: {
+        _count: { select: { movements: true } },
+        accounting_account: { select: { id: true, code: true, name: true, account_type: true } },
+      },
     });
 
     const pendingChecks = accounts.length
@@ -104,6 +110,7 @@ export class BankAccountsService {
       include: {
         movements: { orderBy: { date: 'desc' }, take: 20 },
         _count: { select: { movements: true } },
+        accounting_account: { select: { id: true, code: true, name: true, account_type: true } },
       },
     });
     if (!account) throw new NotFoundException('Cuenta bancaria no encontrada');
@@ -233,6 +240,25 @@ export class BankAccountsService {
           await tx.bank_accounts.update({ where: { id }, data: { balance: 0 } });
         }
         if (dto.delete_movements) {
+          let cursor: string | undefined;
+          while (true) {
+            const importedMovements = await tx.bank_account_movements.findMany({
+              where: {
+                bank_account_id: id,
+                deleted_at: null,
+                reference_type: 'bank_statement_import',
+              },
+              select: { id: true },
+              orderBy: { id: 'asc' },
+              take: 100,
+              ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+            });
+            if (!importedMovements.length) break;
+            for (const movement of importedMovements) {
+              await this.bankMovements.reverseImportedAccountingEntry(movement.id, userId, tx);
+            }
+            cursor = importedMovements[importedMovements.length - 1]!.id;
+          }
           await tx.bank_account_movements.updateMany({
             where: { bank_account_id: id, deleted_at: null },
             data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
@@ -279,9 +305,19 @@ export class BankAccountsService {
 
   async getMovementDetails(accountId: string, movementId: string) {
     const movement = await this.prisma.bank_account_movements.findFirst({
-      where: { id: movementId, bank_account_id: accountId, deleted_at: null },
+      where: { id: movementId, bank_account_id: accountId },
       include: {
         bank_concept: { select: { id: true, code: true, name: true, nature: true, concept_type: true } },
+        accounting_entry: {
+          include: {
+            lines: { include: { account: { select: { id: true, code: true, name: true, account_type: true } } }, orderBy: { line_number: 'asc' } },
+            reversal: {
+              include: {
+                lines: { include: { account: { select: { id: true, code: true, name: true, account_type: true } } }, orderBy: { line_number: 'asc' } },
+              },
+            },
+          },
+        },
         operation: true,
         charge: {
           select: {
@@ -472,6 +508,233 @@ export class BankAccountsService {
     });
   }
 
+  async importStatementMovements(accountId: string, dto: ImportBankStatementDto, userId: string) {
+    const rows = dto.rows.map((row) => ({
+      ...row,
+      amount: Math.round((Number(row.amount) + Number.EPSILON) * 100) / 100,
+      description: row.description.trim(),
+      reference: row.reference?.trim() || null,
+      date: parseLocalDateTime(row.date),
+      importKey: `${accountId}:${dto.file_hash.toLowerCase()}:${row.row_number}`,
+      movementId: randomUUID(),
+      operationId: randomUUID(),
+      entryId: randomUUID(),
+    }));
+
+    if (rows.some((row) => !row.description || !Number.isFinite(row.amount) || row.amount === 0)) {
+      throw new BadRequestException('Cada fila debe tener descripción e importe distinto de cero');
+    }
+    if (new Set(rows.map((row) => row.row_number)).size !== rows.length) {
+      throw new BadRequestException('El archivo contiene números de fila repetidos en el lote');
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${accountId}::uuid FOR UPDATE`;
+      const account = await tx.bank_accounts.findFirst({
+        where: { id: accountId, deleted_at: null, active: true },
+        include: { accounting_account: true },
+      });
+      if (!account) throw new NotFoundException('Cuenta bancaria no encontrada o inactiva');
+
+      const existing = await tx.bank_account_movements.findMany({
+        where: { import_key: { in: rows.map((row) => row.importKey) } },
+        select: { import_key: true },
+      });
+      const existingKeys = new Set(existing.map((movement: any) => movement.import_key));
+      const pendingRows = rows.filter((row) => !existingKeys.has(row.importKey));
+      if (!pendingRows.length) {
+        return { created: 0, already_imported: rows.length, balance: Number(account.balance) };
+      }
+
+      const bankAccountingAccount = account.accounting_account;
+      if (!bankAccountingAccount || !bankAccountingAccount.active || bankAccountingAccount.deleted_at || bankAccountingAccount.account_type !== 'ASSET') {
+        throw new BadRequestException('Configurá una cuenta contable activa de tipo Activo en la cuenta bancaria antes de importar movimientos');
+      }
+
+      const conceptIds = [...new Set(pendingRows.map((row) => row.bank_concept_id))];
+      const concepts = await tx.bank_concepts.findMany({
+        where: { id: { in: conceptIds }, deleted_at: null, is_active: true, affects_balance: true },
+      });
+      if (concepts.length !== conceptIds.length) {
+        throw new BadRequestException('Uno o más conceptos no existen, están inactivos o no afectan el saldo bancario');
+      }
+      const codes = [...new Set(concepts.map((concept: any) => concept.accounting_account?.trim()).filter(Boolean))];
+      if (concepts.some((concept: any) => !concept.accounting_account?.trim())) {
+        throw new BadRequestException('Cada concepto seleccionado debe tener una cuenta contable configurada');
+      }
+      const accounts = await tx.accounts.findMany({
+        where: { code: { in: codes }, active: true, deleted_at: null },
+        select: { id: true, code: true, name: true, account_type: true },
+      });
+      const accountingByCode = new Map(accounts.map((entry: any) => [entry.code, entry]));
+      const conceptById = new Map(concepts.map((concept: any) => [concept.id, concept]));
+      for (const concept of concepts as any[]) {
+        if (!concept.accounting_account?.trim() || !accountingByCode.has(concept.accounting_account.trim())) {
+          throw new BadRequestException(`El concepto ${concept.code} requiere una cuenta contable activa existente en el plan de cuentas`);
+        }
+        if (concept.requires_receipt) {
+          throw new BadRequestException(`El concepto ${concept.code} requiere un comprobante adjunto y no se puede registrar desde el extracto`);
+        }
+      }
+
+      const baseCurrency = await tx.currencies.findFirst({ where: { is_base: true, active: true } });
+      if (!baseCurrency) throw new BadRequestException('Configurá la moneda base antes de registrar movimientos bancarios');
+
+      const accountCurrency = account.currency_code.toUpperCase();
+      const baseCurrencyCode = baseCurrency.code.toUpperCase();
+      const ratesByDate = new Map<string, number>();
+      if (accountCurrency !== baseCurrencyCode) {
+        const sourceCurrency = await tx.currencies.findUnique({ where: { code: accountCurrency } });
+        if (!sourceCurrency) throw new BadRequestException(`No existe la moneda ${accountCurrency} configurada`);
+        const pairRates = await tx.currency_rates.findMany({
+          where: {
+            active: true,
+            deleted_at: null,
+            rate_type: 'OFFICIAL',
+            effective_date: { lte: pendingRows.reduce((latest, row) => row.date > latest ? row.date : latest, pendingRows[0]!.date) },
+            OR: [
+              { from_currency_id: sourceCurrency.id, to_currency_id: baseCurrency.id },
+              { from_currency_id: baseCurrency.id, to_currency_id: sourceCurrency.id },
+            ],
+          },
+          orderBy: [{ effective_date: 'desc' }, { created_at: 'desc' }],
+        });
+
+        for (const row of pendingRows) {
+          const dateKey = row.date.toISOString().slice(0, 10);
+          if (ratesByDate.has(dateKey)) continue;
+          const direct = pairRates.find((rate: any) =>
+            rate.from_currency_id === sourceCurrency.id
+            && rate.to_currency_id === baseCurrency.id
+            && rate.effective_date <= row.date,
+          );
+          const reverse = pairRates.find((rate: any) =>
+            rate.from_currency_id === baseCurrency.id
+            && rate.to_currency_id === sourceCurrency.id
+            && rate.effective_date <= row.date,
+          );
+          const selected = direct ?? reverse;
+          if (!selected || Number(selected.rate) <= 0) {
+            throw new BadRequestException(`No hay cotización oficial de ${accountCurrency} a ${baseCurrencyCode} para ${dateKey}`);
+          }
+          ratesByDate.set(dateKey, direct ? Number(selected.rate) : 1 / Number(selected.rate));
+        }
+      }
+
+      const orderedRows = [...pendingRows].sort((left, right) =>
+        left.date.getTime() - right.date.getTime() || left.row_number - right.row_number,
+      );
+      const accountingEntries: any[] = [];
+      const accountingLines: any[] = [];
+      const operations: any[] = [];
+      const movements: any[] = [];
+      let runningBalance = Number(account.balance);
+      let totalDelta = 0;
+
+      for (const row of orderedRows) {
+        const concept: any = conceptById.get(row.bank_concept_id);
+        const conceptAccount: any = accountingByCode.get(concept.accounting_account.trim());
+        const signedAmount = row.amount;
+        const absoluteAmount = Math.abs(signedAmount);
+        const rate = accountCurrency === baseCurrencyCode ? 1 : ratesByDate.get(row.date.toISOString().slice(0, 10))!;
+        const baseAmount = Math.round((absoluteAmount * rate + Number.EPSILON) * 100) / 100;
+        const dateKey = row.date.toISOString().slice(0, 10);
+        const nature = signedAmount < 0 ? 'DEBIT' : 'CREDIT';
+        const movementType = this.mapConceptToMovementType(concept.concept_type, nature);
+        const balanceBefore = Math.round((runningBalance + Number.EPSILON) * 100) / 100;
+        const balanceAfter = Math.round((balanceBefore + signedAmount + Number.EPSILON) * 100) / 100;
+        runningBalance = balanceAfter;
+        totalDelta += signedAmount;
+
+        operations.push({
+          id: row.operationId,
+          bank_account_id: accountId,
+          operation_type: 'MANUAL',
+          source_type: 'bank_statement_import',
+          source_id: row.movementId,
+          date: row.date,
+          currency_code: account.currency_code,
+          gross_amount: absoluteAmount,
+          charges_amount: 0,
+          retentions_amount: 0,
+          net_amount: signedAmount,
+          description: row.description,
+          reference: row.reference,
+          created_by: userId,
+        });
+        movements.push({
+          id: row.movementId,
+          bank_account_id: accountId,
+          bank_operation_id: row.operationId,
+          type: movementType,
+          nature,
+          amount: signedAmount,
+          currency_code: account.currency_code,
+          exchange_rate: rate,
+          rate_type: 'OFFICIAL',
+          converted_amount: baseAmount,
+          amount_account_currency: absoluteAmount,
+          balance_before: balanceBefore,
+          balance_after: balanceAfter,
+          description: row.description,
+          reference: row.reference,
+          reference_type: 'bank_statement_import',
+          bank_concept_id: concept.id,
+          concept_code_snapshot: concept.code,
+          concept_name_snapshot: concept.name,
+          effective_date: row.date,
+          date: row.date,
+          import_key: row.importKey,
+          created_by: userId,
+        });
+
+        accountingEntries.push({
+          id: row.entryId,
+          bank_account_movement_id: row.movementId,
+          entry_date: row.date,
+          description: row.description,
+          currency_code: account.currency_code,
+          exchange_rate: rate,
+          base_amount: baseAmount,
+          created_by: userId,
+        });
+
+        const foreignAmount = accountCurrency === baseCurrencyCode ? null : absoluteAmount;
+        const bankIsDebit = nature === 'CREDIT';
+        accountingLines.push(
+          {
+            id: randomUUID(), entry_id: row.entryId, line_number: 1,
+            account_id: bankAccountingAccount.id, description: row.description,
+            debit: bankIsDebit ? baseAmount : 0, credit: bankIsDebit ? 0 : baseAmount,
+            currency_code: baseCurrency.code, foreign_amount: foreignAmount,
+          },
+          {
+            id: randomUUID(), entry_id: row.entryId, line_number: 2,
+            account_id: conceptAccount.id, description: row.description,
+            debit: bankIsDebit ? 0 : baseAmount, credit: bankIsDebit ? baseAmount : 0,
+            currency_code: baseCurrency.code, foreign_amount: foreignAmount,
+          },
+        );
+      }
+
+      await tx.bank_operations.createMany({ data: operations });
+      await tx.bank_account_movements.createMany({ data: movements });
+      await tx.bank_movement_accounting_entries.createMany({ data: accountingEntries });
+      await tx.bank_movement_accounting_lines.createMany({ data: accountingLines });
+      await tx.bank_accounts.update({
+        where: { id: accountId },
+        data: { balance: { increment: Math.round((totalDelta + Number.EPSILON) * 100) / 100 }, updated_at: new Date() },
+      });
+      await recalculateBankAccountLedger(tx, accountId);
+
+      return {
+        created: orderedRows.length,
+        already_imported: rows.length - orderedRows.length,
+        balance: Number(account.balance) + Math.round((totalDelta + Number.EPSILON) * 100) / 100,
+      };
+    }, { timeout: 30000, maxWait: 10000 });
+  }
+
   async transfer(sourceId: string, dto: BankAccountTransferDto, userId: string, companyRole?: string) {
     const amount = Math.round((Number(dto.amount) + Number.EPSILON) * 100) / 100;
     if (!Number.isFinite(amount) || amount <= 0) throw new BadRequestException('El importe debe ser mayor que cero');
@@ -596,7 +859,7 @@ export class BankAccountsService {
     if (movement.reference_type === 'bank_account_transfer') {
       throw new BadRequestException('Este movimiento pertenece a una transferencia interna; no se puede anular por separado');
     }
-    return this.bankMovements.cancelMovement(movementId, userId, this.prisma);
+    return this.prisma.$transaction((tx) => this.bankMovements.cancelMovement(movementId, userId, tx));
   }
 
   private mapConceptToMovementType(

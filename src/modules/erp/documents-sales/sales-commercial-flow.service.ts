@@ -1,6 +1,10 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
-import type { UpdateSalesFlowSettingsDto } from './sales-flow-settings.dto';
+import type {
+  UpdatePartnerShareSettingsDto,
+  UpdateSalesFlowCommissionSettingsDto,
+  UpdateSalesFlowSettingsDto,
+} from './sales-flow-settings.dto';
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
@@ -28,8 +32,132 @@ export class SalesCommercialFlowService {
         create: { settings_key: 'default' },
       });
       await this.syncDocumentTypes(tx, settings.accounting_basis, settings.payment_document_basis);
-      return settings;
+      const { default_commission_assignments: _commissionAssignments, ...visibleSettings } = settings;
+      return visibleSettings;
     });
+  }
+
+  private async getCommissionSellers(client: any) {
+    const [employees, partners] = await Promise.all([
+      client.employees.findMany({
+        where: { deleted_at: null, is_active: true, is_salesperson: true },
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          party_id: true,
+          default_commission_rate: true,
+          commission_base: true,
+        },
+      }),
+      client.partners.findMany({
+        where: { deleted_at: null, is_active: true, is_salesperson: true, partner_kind: 'PARTNER', party_id: { not: null } },
+        select: { id: true, first_name: true, last_name: true, party_id: true, default_commission_rate: true, commission_base: true },
+      }),
+    ]);
+
+    return [
+      ...employees.map((seller: any) => ({
+        id: seller.id,
+        seller_type: 'EMPLOYEE' as const,
+        name: `${seller.first_name} ${seller.last_name}`.trim(),
+        party_id: seller.party_id,
+        default_commission_rate: Number(seller.default_commission_rate ?? 0),
+        commission_base: seller.commission_base ?? 'INVOICED',
+      })),
+      ...partners.map((seller: any) => ({
+        id: seller.id,
+        seller_type: 'PARTNER' as const,
+        name: `${seller.first_name} ${seller.last_name}`.trim(),
+        party_id: seller.party_id,
+        default_commission_rate: Number(seller.default_commission_rate ?? 0),
+        commission_base: seller.commission_base ?? 'INVOICED',
+      })),
+    ].sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  }
+
+  async getCommissionSettings() {
+    return this.prisma.$transaction(async (tx) => {
+      const settings = await tx.sales_flow_settings.upsert({
+        where: { settings_key: 'default' },
+        update: {},
+        create: { settings_key: 'default' },
+      });
+      const assignments = Array.isArray(settings.default_commission_assignments)
+        ? settings.default_commission_assignments
+        : [];
+      return {
+        assignments,
+        sellers: await this.getCommissionSellers(tx),
+      };
+    });
+  }
+
+  async updateCommissionSettings(dto: UpdateSalesFlowCommissionSettingsDto, userId: string) {
+    const assignments = dto.assignments ?? [];
+    const identity = (item: { seller_type: string; seller_id: string }) => `${item.seller_type}:${item.seller_id}`;
+    if (new Set(assignments.map(identity)).size !== assignments.length) {
+      throw new BadRequestException('Un vendedor no puede repetirse en la configuración');
+    }
+    if (assignments.some((item) =>
+      !Number.isFinite(Number(item.participation_rate))
+      || Number(item.participation_rate) < 0.01
+      || Number(item.participation_rate) > 100
+      || !Number.isFinite(Number(item.commission_rate))
+      || Number(item.commission_rate) < 0
+      || Number(item.commission_rate) > 100
+    )) {
+      throw new BadRequestException('La participación debe ser mayor que 0% y hasta 100%; la comisión puede ser de 0% a 100%');
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      const employeeIds = assignments.filter((item) => item.seller_type === 'EMPLOYEE').map((item) => item.seller_id);
+      const partnerIds = assignments.filter((item) => item.seller_type === 'PARTNER').map((item) => item.seller_id);
+      const [employees, partners] = await Promise.all([
+        employeeIds.length
+          ? tx.employees.findMany({
+              where: { id: { in: employeeIds }, deleted_at: null, is_active: true, is_salesperson: true },
+              select: { id: true },
+            })
+          : [],
+        partnerIds.length
+          ? tx.partners.findMany({
+              where: { id: { in: partnerIds }, deleted_at: null, is_active: true, is_salesperson: true, partner_kind: 'PARTNER', party_id: { not: null } },
+              select: { id: true },
+            })
+          : [],
+      ]);
+      if (employees.length !== employeeIds.length || partners.length !== partnerIds.length) {
+        throw new BadRequestException('Cada vendedor debe estar activo y habilitado para comisionar');
+      }
+
+      await tx.sales_flow_settings.upsert({
+        where: { settings_key: 'default' },
+        update: { default_commission_assignments: assignments as any, active_from: new Date(), updated_by: userId },
+        create: {
+          settings_key: 'default',
+          default_commission_assignments: assignments as any,
+          created_by: userId,
+          updated_by: userId,
+        },
+      });
+    });
+
+    return this.getCommissionSettings();
+  }
+
+  async updatePartnerShareSettings(dto: UpdatePartnerShareSettingsDto, userId: string) {
+    await this.prisma.sales_flow_settings.upsert({
+      where: { settings_key: 'default' },
+      update: { partner_share_basis: dto.partner_share_basis, active_from: new Date(), updated_by: userId },
+      create: {
+        settings_key: 'default',
+        partner_share_basis: dto.partner_share_basis,
+        created_by: userId,
+        updated_by: userId,
+      },
+    });
+    return this.getSettings();
   }
 
   private async syncDocumentTypes(tx: any, accountingBasis: string, paymentDocumentBasis: string) {
@@ -92,7 +220,8 @@ export class SalesCommercialFlowService {
 
       const recalculatedDeliveryOrders = await this.reapplyDeliveryRulesToUnstartedOrders(tx, settings, userId);
 
-      return { ...settings, recalculated_delivery_orders: recalculatedDeliveryOrders };
+      const { default_commission_assignments: _commissionAssignments, ...visibleSettings } = settings;
+      return { ...visibleSettings, recalculated_delivery_orders: recalculatedDeliveryOrders };
     }, { maxWait: 10_000, timeout: 60_000 });
   }
 
@@ -165,6 +294,50 @@ export class SalesCommercialFlowService {
       },
     });
     await tx.documents.update({ where: { id: document.id }, data: { commercial_operation_id: operation.id } });
+    const sharePartners = await tx.partners.findMany({
+      where: {
+        deleted_at: null,
+        is_active: true,
+        partner_kind: 'PARTNER',
+        party_id: { not: null },
+        share_percentage: { gt: 0, lte: 100 },
+      },
+      select: { id: true, share_percentage: true },
+    });
+    if (sharePartners.length) {
+      await tx.sales_partner_share_assignments.createMany({
+        data: sharePartners.map((partner: any) => ({
+          document_id: document.id,
+          partner_id: partner.id,
+          share_percentage: partner.share_percentage,
+          calculation_basis: settings.partner_share_basis ?? 'ORDER',
+          created_by: userId,
+        })),
+      });
+    }
+    const defaults = Array.isArray(settings.default_commission_assignments)
+      ? settings.default_commission_assignments as Array<{
+          seller_type: 'EMPLOYEE' | 'PARTNER';
+          seller_id: string;
+          participation_rate: number;
+          commission_rate: number;
+          commission_base: 'INVOICED' | 'PAID';
+        }>
+      : [];
+    if (defaults.length) {
+      await tx.sales_commission_assignments.createMany({
+        data: defaults.map((assignment) => ({
+          document_id: document.id,
+          seller_type: assignment.seller_type,
+          seller_id: assignment.seller_type === 'EMPLOYEE' ? assignment.seller_id : null,
+          partner_id: assignment.seller_type === 'PARTNER' ? assignment.seller_id : null,
+          participation_rate: assignment.participation_rate,
+          commission_rate: assignment.commission_rate,
+          commission_base: assignment.commission_base,
+          created_by: userId,
+        })),
+      });
+    }
     return operation;
   }
 

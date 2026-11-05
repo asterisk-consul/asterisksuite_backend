@@ -302,6 +302,21 @@ export type hr_account_entries = Prisma.hr_account_entriesModel
  */
 export type hr_vales = Prisma.hr_valesModel
 /**
+ * Model hr_vale_partner_share_details
+ * 
+ */
+export type hr_vale_partner_share_details = Prisma.hr_vale_partner_share_detailsModel
+/**
+ * Model hr_partner_investment_plans
+ * 
+ */
+export type hr_partner_investment_plans = Prisma.hr_partner_investment_plansModel
+/**
+ * Model hr_partner_investment_installments
+ * 
+ */
+export type hr_partner_investment_installments = Prisma.hr_partner_investment_installmentsModel
+/**
  * Model hr_vale_commission_details
  * 
  */
@@ -812,6 +827,11 @@ export type user_permission_overrides = Prisma.user_permission_overridesModel
  */
 export type sales_flow_settings = Prisma.sales_flow_settingsModel
 /**
+ * Model sales_partner_share_assignments
+ * 
+ */
+export type sales_partner_share_assignments = Prisma.sales_partner_share_assignmentsModel
+/**
  * Model commercial_operations
  * 
  */
@@ -871,6 +891,16 @@ export type bank_operations = Prisma.bank_operationsModel
  * 
  */
 export type bank_account_movements = Prisma.bank_account_movementsModel
+/**
+ * Model bank_movement_accounting_entries
+ * 
+ */
+export type bank_movement_accounting_entries = Prisma.bank_movement_accounting_entriesModel
+/**
+ * Model bank_movement_accounting_lines
+ * 
+ */
+export type bank_movement_accounting_lines = Prisma.bank_movement_accounting_linesModel
 /**
  * Model payment_bank_charges
  * 

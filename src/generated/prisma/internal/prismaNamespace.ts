@@ -436,6 +436,9 @@ export const ModelName = {
   hr_accounts: 'hr_accounts',
   hr_account_entries: 'hr_account_entries',
   hr_vales: 'hr_vales',
+  hr_vale_partner_share_details: 'hr_vale_partner_share_details',
+  hr_partner_investment_plans: 'hr_partner_investment_plans',
+  hr_partner_investment_installments: 'hr_partner_investment_installments',
   hr_vale_commission_details: 'hr_vale_commission_details',
   international_operations: 'international_operations',
   international_operation_quotes: 'international_operation_quotes',
@@ -538,6 +541,7 @@ export const ModelName = {
   business_user_roles: 'business_user_roles',
   user_permission_overrides: 'user_permission_overrides',
   sales_flow_settings: 'sales_flow_settings',
+  sales_partner_share_assignments: 'sales_partner_share_assignments',
   commercial_operations: 'commercial_operations',
   tax_categories: 'tax_categories',
   tax_category_taxes: 'tax_category_taxes',
@@ -550,6 +554,8 @@ export const ModelName = {
   bank_account_user_roles: 'bank_account_user_roles',
   bank_operations: 'bank_operations',
   bank_account_movements: 'bank_account_movements',
+  bank_movement_accounting_entries: 'bank_movement_accounting_entries',
+  bank_movement_accounting_lines: 'bank_movement_accounting_lines',
   payment_bank_charges: 'payment_bank_charges',
   cash_boxes: 'cash_boxes',
   cash_box_sessions: 'cash_box_sessions',
@@ -597,7 +603,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "commercial_adjustment_concepts" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "document_activity_events" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "user_notification_alert_dismissals" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "platform_modules" | "subscription_plans" | "subscription_plan_modules" | "company_subscriptions" | "company_module_overrides" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "platform_admin_assignments" | "platform_admin_company_scopes" | "company_tax_settings" | "company_arca_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "mcp_oauth_clients" | "mcp_oauth_pending_authorizations" | "mcp_oauth_grants" | "mcp_oauth_codes" | "mcp_oauth_refresh_tokens" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_tenders" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies" | "user_whatsapp_contacts" | "company_whatsapp_notification_settings" | "whatsapp_notification_outbox" | "whatsapp_notification_dispatch_state"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "commercial_adjustment_concepts" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "document_activity_events" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_partner_share_details" | "hr_partner_investment_plans" | "hr_partner_investment_installments" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "user_notification_alert_dismissals" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "platform_modules" | "subscription_plans" | "subscription_plan_modules" | "company_subscriptions" | "company_module_overrides" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "platform_admin_assignments" | "platform_admin_company_scopes" | "company_tax_settings" | "company_arca_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "mcp_oauth_clients" | "mcp_oauth_pending_authorizations" | "mcp_oauth_grants" | "mcp_oauth_codes" | "mcp_oauth_refresh_tokens" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "sales_partner_share_assignments" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "bank_movement_accounting_entries" | "bank_movement_accounting_lines" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_tenders" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies" | "user_whatsapp_contacts" | "company_whatsapp_notification_settings" | "whatsapp_notification_outbox" | "whatsapp_notification_dispatch_state"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4446,6 +4452,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.hr_valesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Hr_valesCountAggregateOutputType> | number
+        }
+      }
+    }
+    hr_vale_partner_share_details: {
+      payload: Prisma.$hr_vale_partner_share_detailsPayload<ExtArgs>
+      fields: Prisma.hr_vale_partner_share_detailsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.hr_vale_partner_share_detailsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.hr_vale_partner_share_detailsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>
+        }
+        findFirst: {
+          args: Prisma.hr_vale_partner_share_detailsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.hr_vale_partner_share_detailsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>
+        }
+        findMany: {
+          args: Prisma.hr_vale_partner_share_detailsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>[]
+        }
+        create: {
+          args: Prisma.hr_vale_partner_share_detailsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>
+        }
+        createMany: {
+          args: Prisma.hr_vale_partner_share_detailsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.hr_vale_partner_share_detailsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>[]
+        }
+        delete: {
+          args: Prisma.hr_vale_partner_share_detailsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>
+        }
+        update: {
+          args: Prisma.hr_vale_partner_share_detailsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>
+        }
+        deleteMany: {
+          args: Prisma.hr_vale_partner_share_detailsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.hr_vale_partner_share_detailsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.hr_vale_partner_share_detailsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>[]
+        }
+        upsert: {
+          args: Prisma.hr_vale_partner_share_detailsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_vale_partner_share_detailsPayload>
+        }
+        aggregate: {
+          args: Prisma.Hr_vale_partner_share_detailsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHr_vale_partner_share_details>
+        }
+        groupBy: {
+          args: Prisma.hr_vale_partner_share_detailsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_vale_partner_share_detailsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.hr_vale_partner_share_detailsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_vale_partner_share_detailsCountAggregateOutputType> | number
+        }
+      }
+    }
+    hr_partner_investment_plans: {
+      payload: Prisma.$hr_partner_investment_plansPayload<ExtArgs>
+      fields: Prisma.hr_partner_investment_plansFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.hr_partner_investment_plansFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.hr_partner_investment_plansFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>
+        }
+        findFirst: {
+          args: Prisma.hr_partner_investment_plansFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.hr_partner_investment_plansFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>
+        }
+        findMany: {
+          args: Prisma.hr_partner_investment_plansFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>[]
+        }
+        create: {
+          args: Prisma.hr_partner_investment_plansCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>
+        }
+        createMany: {
+          args: Prisma.hr_partner_investment_plansCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.hr_partner_investment_plansCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>[]
+        }
+        delete: {
+          args: Prisma.hr_partner_investment_plansDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>
+        }
+        update: {
+          args: Prisma.hr_partner_investment_plansUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>
+        }
+        deleteMany: {
+          args: Prisma.hr_partner_investment_plansDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.hr_partner_investment_plansUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.hr_partner_investment_plansUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>[]
+        }
+        upsert: {
+          args: Prisma.hr_partner_investment_plansUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_plansPayload>
+        }
+        aggregate: {
+          args: Prisma.Hr_partner_investment_plansAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHr_partner_investment_plans>
+        }
+        groupBy: {
+          args: Prisma.hr_partner_investment_plansGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_partner_investment_plansGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.hr_partner_investment_plansCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_partner_investment_plansCountAggregateOutputType> | number
+        }
+      }
+    }
+    hr_partner_investment_installments: {
+      payload: Prisma.$hr_partner_investment_installmentsPayload<ExtArgs>
+      fields: Prisma.hr_partner_investment_installmentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.hr_partner_investment_installmentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.hr_partner_investment_installmentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>
+        }
+        findFirst: {
+          args: Prisma.hr_partner_investment_installmentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.hr_partner_investment_installmentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>
+        }
+        findMany: {
+          args: Prisma.hr_partner_investment_installmentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>[]
+        }
+        create: {
+          args: Prisma.hr_partner_investment_installmentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>
+        }
+        createMany: {
+          args: Prisma.hr_partner_investment_installmentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.hr_partner_investment_installmentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>[]
+        }
+        delete: {
+          args: Prisma.hr_partner_investment_installmentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>
+        }
+        update: {
+          args: Prisma.hr_partner_investment_installmentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.hr_partner_investment_installmentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.hr_partner_investment_installmentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.hr_partner_investment_installmentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.hr_partner_investment_installmentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$hr_partner_investment_installmentsPayload>
+        }
+        aggregate: {
+          args: Prisma.Hr_partner_investment_installmentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHr_partner_investment_installments>
+        }
+        groupBy: {
+          args: Prisma.hr_partner_investment_installmentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_partner_investment_installmentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.hr_partner_investment_installmentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Hr_partner_investment_installmentsCountAggregateOutputType> | number
         }
       }
     }
@@ -11997,6 +12225,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    sales_partner_share_assignments: {
+      payload: Prisma.$sales_partner_share_assignmentsPayload<ExtArgs>
+      fields: Prisma.sales_partner_share_assignmentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.sales_partner_share_assignmentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.sales_partner_share_assignmentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>
+        }
+        findFirst: {
+          args: Prisma.sales_partner_share_assignmentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.sales_partner_share_assignmentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>
+        }
+        findMany: {
+          args: Prisma.sales_partner_share_assignmentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>[]
+        }
+        create: {
+          args: Prisma.sales_partner_share_assignmentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>
+        }
+        createMany: {
+          args: Prisma.sales_partner_share_assignmentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.sales_partner_share_assignmentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>[]
+        }
+        delete: {
+          args: Prisma.sales_partner_share_assignmentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>
+        }
+        update: {
+          args: Prisma.sales_partner_share_assignmentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.sales_partner_share_assignmentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.sales_partner_share_assignmentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.sales_partner_share_assignmentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.sales_partner_share_assignmentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$sales_partner_share_assignmentsPayload>
+        }
+        aggregate: {
+          args: Prisma.Sales_partner_share_assignmentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSales_partner_share_assignments>
+        }
+        groupBy: {
+          args: Prisma.sales_partner_share_assignmentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Sales_partner_share_assignmentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.sales_partner_share_assignmentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Sales_partner_share_assignmentsCountAggregateOutputType> | number
+        }
+      }
+    }
     commercial_operations: {
       payload: Prisma.$commercial_operationsPayload<ExtArgs>
       fields: Prisma.commercial_operationsFieldRefs
@@ -12882,6 +13184,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.bank_account_movementsCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.Bank_account_movementsCountAggregateOutputType> | number
+        }
+      }
+    }
+    bank_movement_accounting_entries: {
+      payload: Prisma.$bank_movement_accounting_entriesPayload<ExtArgs>
+      fields: Prisma.bank_movement_accounting_entriesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.bank_movement_accounting_entriesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.bank_movement_accounting_entriesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>
+        }
+        findFirst: {
+          args: Prisma.bank_movement_accounting_entriesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.bank_movement_accounting_entriesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>
+        }
+        findMany: {
+          args: Prisma.bank_movement_accounting_entriesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>[]
+        }
+        create: {
+          args: Prisma.bank_movement_accounting_entriesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>
+        }
+        createMany: {
+          args: Prisma.bank_movement_accounting_entriesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.bank_movement_accounting_entriesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>[]
+        }
+        delete: {
+          args: Prisma.bank_movement_accounting_entriesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>
+        }
+        update: {
+          args: Prisma.bank_movement_accounting_entriesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>
+        }
+        deleteMany: {
+          args: Prisma.bank_movement_accounting_entriesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.bank_movement_accounting_entriesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.bank_movement_accounting_entriesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>[]
+        }
+        upsert: {
+          args: Prisma.bank_movement_accounting_entriesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_entriesPayload>
+        }
+        aggregate: {
+          args: Prisma.Bank_movement_accounting_entriesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBank_movement_accounting_entries>
+        }
+        groupBy: {
+          args: Prisma.bank_movement_accounting_entriesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_movement_accounting_entriesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.bank_movement_accounting_entriesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_movement_accounting_entriesCountAggregateOutputType> | number
+        }
+      }
+    }
+    bank_movement_accounting_lines: {
+      payload: Prisma.$bank_movement_accounting_linesPayload<ExtArgs>
+      fields: Prisma.bank_movement_accounting_linesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.bank_movement_accounting_linesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.bank_movement_accounting_linesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>
+        }
+        findFirst: {
+          args: Prisma.bank_movement_accounting_linesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.bank_movement_accounting_linesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>
+        }
+        findMany: {
+          args: Prisma.bank_movement_accounting_linesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>[]
+        }
+        create: {
+          args: Prisma.bank_movement_accounting_linesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>
+        }
+        createMany: {
+          args: Prisma.bank_movement_accounting_linesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.bank_movement_accounting_linesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>[]
+        }
+        delete: {
+          args: Prisma.bank_movement_accounting_linesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>
+        }
+        update: {
+          args: Prisma.bank_movement_accounting_linesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>
+        }
+        deleteMany: {
+          args: Prisma.bank_movement_accounting_linesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.bank_movement_accounting_linesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.bank_movement_accounting_linesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>[]
+        }
+        upsert: {
+          args: Prisma.bank_movement_accounting_linesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$bank_movement_accounting_linesPayload>
+        }
+        aggregate: {
+          args: Prisma.Bank_movement_accounting_linesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBank_movement_accounting_lines>
+        }
+        groupBy: {
+          args: Prisma.bank_movement_accounting_linesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_movement_accounting_linesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.bank_movement_accounting_linesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Bank_movement_accounting_linesCountAggregateOutputType> | number
         }
       }
     }
@@ -15839,6 +16289,8 @@ export const Orden_venta_documentsScalarFieldEnum = {
   transport_provider: 'transport_provider',
   confirmed_delivery_date: 'confirmed_delivery_date',
   seller_id: 'seller_id',
+  seller_partner_id: 'seller_partner_id',
+  seller_type: 'seller_type',
   commission_rate: 'commission_rate',
   commission_base: 'commission_base',
   commission_settled_at: 'commission_settled_at',
@@ -15853,7 +16305,9 @@ export type Orden_venta_documentsScalarFieldEnum = (typeof Orden_venta_documents
 export const Sales_commission_assignmentsScalarFieldEnum = {
   id: 'id',
   document_id: 'document_id',
+  seller_type: 'seller_type',
   seller_id: 'seller_id',
+  partner_id: 'partner_id',
   participation_rate: 'participation_rate',
   commission_rate: 'commission_rate',
   commission_base: 'commission_base',
@@ -15919,12 +16373,16 @@ export const PartnersScalarFieldEnum = {
   id: 'id',
   party_id: 'party_id',
   user_id: 'user_id',
+  partner_kind: 'partner_kind',
   first_name: 'first_name',
   last_name: 'last_name',
   document_type: 'document_type',
   document_number: 'document_number',
   share_percentage: 'share_percentage',
   capital_contributed: 'capital_contributed',
+  default_commission_rate: 'default_commission_rate',
+  commission_base: 'commission_base',
+  is_salesperson: 'is_salesperson',
   is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -16394,11 +16852,56 @@ export const Hr_valesScalarFieldEnum = {
 export type Hr_valesScalarFieldEnum = (typeof Hr_valesScalarFieldEnum)[keyof typeof Hr_valesScalarFieldEnum]
 
 
+export const Hr_vale_partner_share_detailsScalarFieldEnum = {
+  id: 'id',
+  hr_vale_id: 'hr_vale_id',
+  document_id: 'document_id',
+  partner_id: 'partner_id',
+  base_amount: 'base_amount',
+  share_percentage: 'share_percentage',
+  share_amount: 'share_amount',
+  calculation_basis: 'calculation_basis',
+  date: 'date',
+  created_at: 'created_at'
+} as const
+
+export type Hr_vale_partner_share_detailsScalarFieldEnum = (typeof Hr_vale_partner_share_detailsScalarFieldEnum)[keyof typeof Hr_vale_partner_share_detailsScalarFieldEnum]
+
+
+export const Hr_partner_investment_plansScalarFieldEnum = {
+  id: 'id',
+  idempotency_key: 'idempotency_key',
+  partner_id: 'partner_id',
+  currency_code: 'currency_code',
+  total_amount: 'total_amount',
+  description: 'description',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Hr_partner_investment_plansScalarFieldEnum = (typeof Hr_partner_investment_plansScalarFieldEnum)[keyof typeof Hr_partner_investment_plansScalarFieldEnum]
+
+
+export const Hr_partner_investment_installmentsScalarFieldEnum = {
+  id: 'id',
+  plan_id: 'plan_id',
+  installment_number: 'installment_number',
+  amount: 'amount',
+  due_date: 'due_date',
+  vale_id: 'vale_id',
+  created_at: 'created_at'
+} as const
+
+export type Hr_partner_investment_installmentsScalarFieldEnum = (typeof Hr_partner_investment_installmentsScalarFieldEnum)[keyof typeof Hr_partner_investment_installmentsScalarFieldEnum]
+
+
 export const Hr_vale_commission_detailsScalarFieldEnum = {
   id: 'id',
   hr_vale_id: 'hr_vale_id',
   document_id: 'document_id',
   seller_id: 'seller_id',
+  seller_type: 'seller_type',
+  partner_id: 'partner_id',
   subtotal: 'subtotal',
   commission_rate: 'commission_rate',
   commission_amount: 'commission_amount',
@@ -18206,6 +18709,8 @@ export const Sales_flow_settingsScalarFieldEnum = {
   require_order_assignee_on_confirmation: 'require_order_assignee_on_confirmation',
   default_order_assignee_id: 'default_order_assignee_id',
   default_order_auditor_id: 'default_order_auditor_id',
+  default_commission_assignments: 'default_commission_assignments',
+  partner_share_basis: 'partner_share_basis',
   active_from: 'active_from',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -18214,6 +18719,22 @@ export const Sales_flow_settingsScalarFieldEnum = {
 } as const
 
 export type Sales_flow_settingsScalarFieldEnum = (typeof Sales_flow_settingsScalarFieldEnum)[keyof typeof Sales_flow_settingsScalarFieldEnum]
+
+
+export const Sales_partner_share_assignmentsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  partner_id: 'partner_id',
+  share_percentage: 'share_percentage',
+  calculation_basis: 'calculation_basis',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Sales_partner_share_assignmentsScalarFieldEnum = (typeof Sales_partner_share_assignmentsScalarFieldEnum)[keyof typeof Sales_partner_share_assignmentsScalarFieldEnum]
 
 
 export const Commercial_operationsScalarFieldEnum = {
@@ -18385,6 +18906,7 @@ export const Bank_accountsScalarFieldEnum = {
   alias: 'alias',
   account_number: 'account_number',
   currency_code: 'currency_code',
+  accounting_account_id: 'accounting_account_id',
   balance: 'balance',
   active: 'active',
   created_at: 'created_at',
@@ -18488,6 +19010,7 @@ export const Bank_account_movementsScalarFieldEnum = {
   reference: 'reference',
   reference_type: 'reference_type',
   reference_id: 'reference_id',
+  import_key: 'import_key',
   attachment_file_id: 'attachment_file_id',
   bank_concept_id: 'bank_concept_id',
   concept_code_snapshot: 'concept_code_snapshot',
@@ -18506,6 +19029,39 @@ export const Bank_account_movementsScalarFieldEnum = {
 } as const
 
 export type Bank_account_movementsScalarFieldEnum = (typeof Bank_account_movementsScalarFieldEnum)[keyof typeof Bank_account_movementsScalarFieldEnum]
+
+
+export const Bank_movement_accounting_entriesScalarFieldEnum = {
+  id: 'id',
+  bank_account_movement_id: 'bank_account_movement_id',
+  reversal_of_entry_id: 'reversal_of_entry_id',
+  entry_date: 'entry_date',
+  description: 'description',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  base_amount: 'base_amount',
+  created_at: 'created_at',
+  created_by: 'created_by',
+  reversed_at: 'reversed_at',
+  reversed_by: 'reversed_by'
+} as const
+
+export type Bank_movement_accounting_entriesScalarFieldEnum = (typeof Bank_movement_accounting_entriesScalarFieldEnum)[keyof typeof Bank_movement_accounting_entriesScalarFieldEnum]
+
+
+export const Bank_movement_accounting_linesScalarFieldEnum = {
+  id: 'id',
+  entry_id: 'entry_id',
+  line_number: 'line_number',
+  account_id: 'account_id',
+  description: 'description',
+  debit: 'debit',
+  credit: 'credit',
+  currency_code: 'currency_code',
+  foreign_amount: 'foreign_amount'
+} as const
+
+export type Bank_movement_accounting_linesScalarFieldEnum = (typeof Bank_movement_accounting_linesScalarFieldEnum)[keyof typeof Bank_movement_accounting_linesScalarFieldEnum]
 
 
 export const Payment_bank_chargesScalarFieldEnum = {
@@ -20599,6 +21155,9 @@ export type GlobalOmitConfig = {
   hr_accounts?: Prisma.hr_accountsOmit
   hr_account_entries?: Prisma.hr_account_entriesOmit
   hr_vales?: Prisma.hr_valesOmit
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsOmit
+  hr_partner_investment_plans?: Prisma.hr_partner_investment_plansOmit
+  hr_partner_investment_installments?: Prisma.hr_partner_investment_installmentsOmit
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsOmit
   international_operations?: Prisma.international_operationsOmit
   international_operation_quotes?: Prisma.international_operation_quotesOmit
@@ -20701,6 +21260,7 @@ export type GlobalOmitConfig = {
   business_user_roles?: Prisma.business_user_rolesOmit
   user_permission_overrides?: Prisma.user_permission_overridesOmit
   sales_flow_settings?: Prisma.sales_flow_settingsOmit
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsOmit
   commercial_operations?: Prisma.commercial_operationsOmit
   tax_categories?: Prisma.tax_categoriesOmit
   tax_category_taxes?: Prisma.tax_category_taxesOmit
@@ -20713,6 +21273,8 @@ export type GlobalOmitConfig = {
   bank_account_user_roles?: Prisma.bank_account_user_rolesOmit
   bank_operations?: Prisma.bank_operationsOmit
   bank_account_movements?: Prisma.bank_account_movementsOmit
+  bank_movement_accounting_entries?: Prisma.bank_movement_accounting_entriesOmit
+  bank_movement_accounting_lines?: Prisma.bank_movement_accounting_linesOmit
   payment_bank_charges?: Prisma.payment_bank_chargesOmit
   cash_boxes?: Prisma.cash_boxesOmit
   cash_box_sessions?: Prisma.cash_box_sessionsOmit

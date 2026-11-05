@@ -6,6 +6,10 @@ import {
   IsBoolean,
   IsEnum,
   IsNumber,
+  IsIn,
+  Max,
+  Min,
+  MaxLength,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PartyType } from '@/generated/prisma/client';
@@ -84,6 +88,16 @@ export class CreateBusinessPartyDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(100)
+  first_name?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  last_name?: string;
+
+  @IsOptional()
+  @IsString()
   business_names?: string;
 
   @IsOptional()
@@ -151,13 +165,28 @@ export class CreateBusinessPartyDto {
 
   @IsOptional()
   @IsNumber()
+  @Min(0)
+  @Max(100)
   default_commission_rate?: number;
 
   @IsOptional()
-  @IsString()
+  @IsIn(['INVOICED', 'PAID'])
   commission_base?: string;
 
   @IsOptional()
   @IsBoolean()
   customer_enabled?: boolean;
+
+  // ─── Datos societarios del socio vinculado (type = PARTNER) ───
+  @IsOptional()
+  @IsIn(['PARTNER', 'INVESTOR'])
+  partner_kind?: 'PARTNER' | 'INVESTOR';
+
+  @IsOptional()
+  @IsString()
+  share_percentage?: string | null;
+
+  @IsOptional()
+  @IsString()
+  capital_contributed?: string | null;
 }

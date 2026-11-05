@@ -285,6 +285,8 @@ model documents {
   orden_compra_doc                orden_compra_documents?
   hr_vale_commission_details      hr_vale_commission_details[]
   sales_commission_assignments    sales_commission_assignments[]
+  sales_partner_share_assignments sales_partner_share_assignments[]
+  hr_vale_partner_share_details   hr_vale_partner_share_details[]
   international_operation_docs    international_operation_documents[]
   international_operation_quotes  international_operation_quotes[]
   converted_international_quote   international_operation_quotes?     @relation("converted_international_quote")
@@ -307,15 +309,15 @@ model documents {
 }
 
 model document_activity_events {
-  id             String    @id @default(uuid()) @db.Uuid
-  document_id    String    @db.Uuid
-  actor_user_id  String?   @db.Uuid
-  event_type     String    @db.VarChar(40)
-  message        String    @db.VarChar(500)
-  from_status    Int?      @db.SmallInt
-  to_status      Int?      @db.SmallInt
-  created_at     DateTime  @default(now()) @db.Timestamp(6)
-  document       documents @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id            String    @id @default(uuid()) @db.Uuid
+  document_id   String    @db.Uuid
+  actor_user_id String?   @db.Uuid
+  event_type    String    @db.VarChar(40)
+  message       String    @db.VarChar(500)
+  from_status   Int?      @db.SmallInt
+  to_status     Int?      @db.SmallInt
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  document      documents @relation(fields: [document_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([document_id, created_at(sort: Desc)], map: "document_activity_document_created_idx")
   @@schema("tenant")
@@ -423,6 +425,8 @@ model orden_venta_documents {
   transport_provider      String?   @db.VarChar(100)
   confirmed_delivery_date DateTime? @db.Date
   seller_id               String?   @db.Uuid
+  seller_partner_id       String?   @db.Uuid
+  seller_type             String    @default("EMPLOYEE") @db.VarChar(20)
   commission_rate         Decimal?  @db.Decimal(5, 2)
   commission_base         String?   @db.VarChar(20)
   commission_settled_at   DateTime? @db.Timestamp(6)
@@ -432,7 +436,9 @@ model orden_venta_documents {
 
   document documents  @relation(fields: [document_id], references: [id], onDelete: Cascade)
   seller   employees? @relation(fields: [seller_id], references: [id], onDelete: NoAction)
+  seller_partner partners? @relation(fields: [seller_partner_id], references: [id], onDelete: NoAction)
 
+  @@index([seller_partner_id])
   @@schema("tenant")
 }
 
@@ -440,7 +446,9 @@ model orden_venta_documents {
 model sales_commission_assignments {
   id                 String    @id @default(uuid()) @db.Uuid
   document_id        String    @db.Uuid
-  seller_id          String    @db.Uuid
+  seller_type        String    @default("EMPLOYEE") @db.VarChar(20)
+  seller_id          String?   @db.Uuid
+  partner_id         String?   @db.Uuid
   participation_rate Decimal   @default(100) @db.Decimal(5, 2)
   commission_rate    Decimal   @db.Decimal(5, 2)
   commission_base    String    @default("INVOICED") @db.VarChar(20)
@@ -451,10 +459,13 @@ model sales_commission_assignments {
   updated_by         String?   @db.Uuid
 
   document documents @relation(fields: [document_id], references: [id], onDelete: Cascade)
-  seller   employees @relation(fields: [seller_id], references: [id], onDelete: NoAction)
+  seller   employees? @relation(fields: [seller_id], references: [id], onDelete: NoAction)
+  partner  partners?  @relation(fields: [partner_id], references: [id], onDelete: NoAction)
 
   @@unique([document_id, seller_id])
+  @@unique([document_id, partner_id])
   @@index([seller_id, active])
+  @@index([partner_id, active])
   @@index([document_id, active])
   @@schema("tenant")
 }
