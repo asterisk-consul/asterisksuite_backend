@@ -98,6 +98,75 @@ export class PaymentsService {
     }
   }
 
+  /**
+   * An ARS payment applied to a USD document needs its own market quote so
+   * international-operation summaries can express the payment in USD. Prefer
+   * the document's saved quote, then the configured rate for the payment date.
+   */
+  private async resolveUsdArsPaymentRate(
+    currencyCode: string,
+    documentIds: string[],
+    date: string | Date,
+    proposedRate?: number | null,
+    proposedRateType?: string | null,
+    prisma: any = this.prisma,
+  ): Promise<{ required: boolean; exchangeRate: number | null; rateType: string | null }> {
+    const rate = proposedRate == null ? null : Number(proposedRate);
+    if (rate != null && (!Number.isFinite(rate) || rate <= 0)) {
+      throw new BadRequestException('La cotización debe ser un número mayor a cero');
+    }
+
+    if (currencyCode.toUpperCase() !== 'ARS' || !documentIds.length) {
+      return { required: false, exchangeRate: rate, rateType: proposedRateType ?? null };
+    }
+
+    const uniqueIds = [...new Set(documentIds)];
+    const documents = await prisma.documents.findMany({
+      where: { id: { in: uniqueIds }, deleted_at: null },
+      select: { id: true, currency_code: true, exchange_rate: true, rate_type: true },
+    });
+    if (documents.length !== uniqueIds.length) {
+      throw new BadRequestException('Uno de los comprobantes asociados ya no existe o no está disponible');
+    }
+    const usdDocuments = documents.filter((document: any) => document.currency_code?.toUpperCase() === 'USD');
+    if (!usdDocuments.length) {
+      return { required: false, exchangeRate: rate, rateType: proposedRateType ?? null };
+    }
+
+    if (rate != null) {
+      return { required: true, exchangeRate: rate, rateType: proposedRateType ?? 'OFFICIAL' };
+    }
+
+    // Preserve the selection order: the first USD document supplies the
+    // suggested value, matching the behavior of the payment form.
+    const firstSelectedUsd = uniqueIds
+      .map((id) => usdDocuments.find((document: any) => document.id === id))
+      .find(Boolean) as any;
+    const documentRate = firstSelectedUsd?.exchange_rate == null ? null : Number(firstSelectedUsd.exchange_rate);
+    if (documentRate != null && Number.isFinite(documentRate) && documentRate > 0) {
+      return {
+        required: true,
+        exchangeRate: documentRate,
+        rateType: proposedRateType ?? firstSelectedUsd.rate_type ?? 'OFFICIAL',
+      };
+    }
+
+    try {
+      const resolved = await this.conversionService.resolveRate(
+        'USD',
+        'ARS',
+        typeof date === 'string' ? parseLocalDateTime(date) : date,
+        (proposedRateType ?? undefined) as any,
+      );
+      if (resolved.rate > 0) {
+        return { required: true, exchangeRate: Number(resolved.rate), rateType: resolved.rateType ?? proposedRateType ?? 'OFFICIAL' };
+      }
+    } catch {
+      // Return the functional validation below instead of a provider error.
+    }
+    throw new BadRequestException('Ingresá la cotización en pesos por dólar para registrar un pago en ARS aplicado a un comprobante en USD');
+  }
+
   private tenderMovementPayment(payment: any, tender: any, convertedAmount: number | null) {
     return {
       ...payment,
@@ -258,8 +327,15 @@ export class PaymentsService {
 
     // ─── Auto-calculate converted_amount if not provided ─────────
     let convertedAmount = effectiveAmount === dto.amount ? (dto.converted_amount ?? null) : null;
-    let exchangeRate = dto.exchange_rate ?? null;
-    let rateType = (dto.rate_type as any) ?? null;
+    const paymentRate = await this.resolveUsdArsPaymentRate(
+      dto.currency_code,
+      (dto.documents ?? []).map((document) => document.document_id),
+      dto.date,
+      dto.exchange_rate,
+      dto.rate_type,
+    );
+    let exchangeRate = paymentRate.exchangeRate;
+    let rateType = (paymentRate.rateType as any) ?? null;
 
     if (dto.currency_code && !convertedAmount) {
       try {
@@ -554,6 +630,17 @@ export class PaymentsService {
     const paymentDocs = await this.prisma.payment_documents.findMany({
       where: { payment_id: id, deleted_at: null },
     });
+    const confirmationRate = await this.resolveUsdArsPaymentRate(
+      payment.currency_code,
+      paymentDocs.map((document: any) => document.document_id),
+      payment.date,
+      payment.exchange_rate == null ? null : Number(payment.exchange_rate),
+      payment.rate_type,
+    );
+    if (confirmationRate.required && payment.exchange_rate == null) {
+      payment.exchange_rate = confirmationRate.exchangeRate;
+      payment.rate_type = confirmationRate.rateType;
+    }
     const paymentObligations = await this.prisma.treasury_obligations.findMany({
       where: { payment_id: id, deleted_at: null },
     });
@@ -788,6 +875,10 @@ export class PaymentsService {
         where: { id },
         data: {
           status: 'CONFIRMED',
+          ...(confirmationRate.required ? {
+            exchange_rate: confirmationRate.exchangeRate,
+            rate_type: confirmationRate.rateType as any,
+          } : {}),
           confirmed_at: new Date(),
           confirmed_by: userId,
           updated_at: new Date(),
@@ -1269,6 +1360,18 @@ export class PaymentsService {
       throw new BadRequestException('Los servicios e impuestos pendientes solo pueden asociarse a un pago');
     }
 
+    const effectiveCurrency = dto.currency_code ?? payment.currency_code;
+    const effectiveDocumentIds = dto.documents !== undefined
+      ? dto.documents.map((document) => document.document_id)
+      : (payment.documents ?? []).map((document: any) => document.document_id);
+    const paymentRate = await this.resolveUsdArsPaymentRate(
+      effectiveCurrency,
+      effectiveDocumentIds,
+      dto.date ?? payment.date,
+      dto.exchange_rate ?? (payment.exchange_rate == null ? null : Number(payment.exchange_rate)),
+      dto.rate_type ?? payment.rate_type,
+    );
+
     const effectiveMethod = dto.payment_method ?? payment.payment_method;
     const effectiveTenders = dto.tenders ?? payment.tenders ?? [];
     if (effectiveMethod === 'MIXED') {
@@ -1317,9 +1420,9 @@ export class PaymentsService {
     if (dto.payment_method) data.payment_method = dto.payment_method;
     if (dto.amount !== undefined) data.amount = dto.amount;
     if (dto.currency_code) data.currency_code = dto.currency_code;
-    if (dto.exchange_rate) data.exchange_rate = dto.exchange_rate;
-    if (dto.rate_type) data.rate_type = dto.rate_type;
-    if (dto.converted_amount) data.converted_amount = dto.converted_amount;
+    if (dto.exchange_rate !== undefined || paymentRate.required) data.exchange_rate = paymentRate.exchangeRate;
+    if (dto.rate_type !== undefined || paymentRate.required) data.rate_type = paymentRate.rateType;
+    if (dto.converted_amount !== undefined) data.converted_amount = dto.converted_amount;
     if (dto.exchange_note) data.exchange_note = dto.exchange_note;
     if (dto.description) data.description = dto.description;
     if (dto.reference) data.reference = dto.reference;
@@ -1571,6 +1674,52 @@ export class PaymentsService {
     if (!['CONFIRMED', 'PAID'].includes(payment.status)) {
       throw new BadRequestException('Las retenciones y la cuenta contable solo se pueden ajustar en pagos confirmados o pagados');
     }
+    const documents = await this.prisma.payment_documents.findMany({
+      where: { payment_id: id, deleted_at: null },
+      select: { document_id: true, amount_applied: true },
+    });
+    const paymentRate = await this.resolveUsdArsPaymentRate(
+      payment.currency_code,
+      documents.map((document: any) => document.document_id),
+      payment.date,
+      dto.exchange_rate !== undefined
+        ? dto.exchange_rate
+        : payment.exchange_rate == null ? null : Number(payment.exchange_rate),
+      dto.rate_type !== undefined ? dto.rate_type : payment.rate_type,
+    );
+
+    if (dto.rate_only) {
+      const hasUsdDocument = documents.some((row: any) =>
+        payment.documents?.some((linked: any) => linked.document_id === row.document_id && linked.document?.currency_code?.toUpperCase() === 'USD'),
+      );
+      if (payment.currency_code?.toUpperCase() !== 'ARS' || !hasUsdDocument || !paymentRate.required) {
+        throw new BadRequestException('La corrección de cotización solo aplica a pagos en ARS asociados a comprobantes en USD');
+      }
+      if (dto.account_id !== undefined || dto.party_id !== undefined || dto.withholdings !== undefined) {
+        throw new BadRequestException('La corrección de cotización no permite modificar cuenta, tercero ni retenciones');
+      }
+
+      const now = new Date();
+      await this.prisma.$transaction(async (tx) => {
+        const rateData = {
+          exchange_rate: paymentRate.exchangeRate,
+          rate_type: paymentRate.rateType as any,
+          updated_at: now,
+          updated_by: userId,
+        };
+        await tx.payments.update({ where: { id }, data: rateData });
+        await tx.current_account_entries.updateMany({ where: { payment_id: id, deleted_at: null }, data: rateData });
+        await tx.cash_box_movements.updateMany({ where: { payment_id: id, deleted_at: null }, data: rateData });
+        await tx.bank_account_movements.updateMany({ where: { payment_id: id, deleted_at: null }, data: rateData });
+        await tx.withholdings.updateMany({ where: { payment_id: id, deleted_at: null }, data: {
+          exchange_rate: paymentRate.exchangeRate,
+          updated_at: now,
+          updated_by: userId,
+        } });
+      }, { timeout: 15_000 });
+      return this.findOne(id);
+    }
+
     if (!['CASH', 'BANK_TRANSFER'].includes(payment.payment_method)) {
       throw new BadRequestException('Este ajuste está disponible para pagos en efectivo o transferencia bancaria');
     }
@@ -1600,10 +1749,11 @@ export class PaymentsService {
     const effectivePartyId = payment.party_id ?? assignedParty?.id ?? null;
     const effectivePartyType = payment.party_type ?? assignedParty?.type ?? null;
 
-    const documents = await this.prisma.payment_documents.findMany({
-      where: { payment_id: id, deleted_at: null },
-      select: { document_id: true, amount_applied: true },
-    });
+    const financialPayment = {
+      ...payment,
+      exchange_rate: paymentRate.exchangeRate,
+      rate_type: paymentRate.rateType,
+    };
     if (!documents.length && payment.type !== 'EXPENSE') {
       throw new BadRequestException('El pago debe estar aplicado a documentos; los gastos varios se ajustan sobre su importe original');
     }
@@ -1695,31 +1845,46 @@ export class PaymentsService {
             select: { id: true, current_account_id: true, amount: true, converted_amount: true, balance_before: true, balance_after: true },
           })
         : null;
-      if (baseEntry && Math.abs(netDifference) > 0.001) {
-        const oldDelta = Number(baseEntry.balance_after) - Number(baseEntry.balance_before);
-        const nextBalanceAmount = nextConvertedAmount
-          ?? Math.round((nextNet * conversionFactor + Number.EPSILON) * 100) / 100;
-        const nextDelta = Math.sign(oldDelta || 1) * nextBalanceAmount;
-        await tx.current_account_entries.update({ where: { id: baseEntry.id }, data: {
-          amount: nextNet,
-          converted_amount: nextBalanceAmount,
-          balance_after: Number(baseEntry.balance_before) + nextDelta,
+      if (baseEntry) {
+        const entryData: Record<string, any> = {
+          exchange_rate: financialPayment.exchange_rate,
+          rate_type: financialPayment.rate_type,
           updated_at: now,
           updated_by: userId,
-        } });
-        await tx.current_accounts.update({ where: { id: baseEntry.current_account_id }, data: {
-          balance: { increment: nextDelta - oldDelta }, updated_at: now,
-        } });
+        };
+        if (Math.abs(netDifference) > 0.001) {
+          const oldDelta = Number(baseEntry.balance_after) - Number(baseEntry.balance_before);
+          const nextBalanceAmount = nextConvertedAmount
+            ?? Math.round((nextNet * conversionFactor + Number.EPSILON) * 100) / 100;
+          const nextDelta = Math.sign(oldDelta || 1) * nextBalanceAmount;
+          Object.assign(entryData, {
+            amount: nextNet,
+            converted_amount: nextBalanceAmount,
+            balance_after: Number(baseEntry.balance_before) + nextDelta,
+          });
+          await tx.current_accounts.update({ where: { id: baseEntry.current_account_id }, data: {
+            balance: { increment: nextDelta - oldDelta }, updated_at: now,
+          } });
+        }
+        await tx.current_account_entries.update({ where: { id: baseEntry.id }, data: entryData });
       }
 
       if (!baseEntry && assignedParty) {
         await this.createCurrentAccountEntry({
-          ...payment,
+          ...financialPayment,
           party_id: assignedParty.id,
           party_type: assignedParty.type,
           amount: { toNumber: () => nextNet },
         }, userId, tx, payment.type);
       }
+
+      // Updating the rate changes the USD equivalent of an ARS payment, not
+      // its posted peso balance. Keep the conversion metadata in sync across
+      // the active current-account entries without posting a new movement.
+      await tx.current_account_entries.updateMany({
+        where: { payment_id: id, deleted_at: null },
+        data: { exchange_rate: financialPayment.exchange_rate, rate_type: financialPayment.rate_type, updated_at: now, updated_by: userId },
+      });
 
       if (changed) {
         if (oldIds.length) {
@@ -1740,7 +1905,7 @@ export class PaymentsService {
               tax_rule_id: withholding.tax_rule_id ?? null,
               base_amount: withholding.base_amount, rate: withholding.rate ?? null,
               withheld_amount: withholding.withheld_amount, automatic_amount: withholding.withheld_amount,
-              currency_code: payment.currency_code, exchange_rate: payment.exchange_rate,
+              currency_code: payment.currency_code, exchange_rate: financialPayment.exchange_rate,
               certificate_number: withholding.certificate_number ?? null,
               certificate_date: withholding.certificate_date ? new Date(withholding.certificate_date) : null,
               status: 'APPLIED', date: payment.date, observations: withholding.observations ?? null,
@@ -1754,8 +1919,8 @@ export class PaymentsService {
             party_id: effectivePartyId, party_type: effectivePartyType ?? 'SUPPLIER',
             currency_code: payment.currency_code, type: 'WITHHOLDING',
             amount: Number(withholding.withheld_amount),
-            exchange_rate: payment.exchange_rate ? Number(payment.exchange_rate) : undefined,
-            rate_type: payment.rate_type ?? undefined,
+            exchange_rate: financialPayment.exchange_rate ? Number(financialPayment.exchange_rate) : undefined,
+            rate_type: financialPayment.rate_type ?? undefined,
             description: `Retención ${withholding.tax_type} - Pago #${payment.number}`,
             reference_type: 'withholding', reference_id: created.id, payment_id: id,
             date: payment.date instanceof Date ? payment.date.toISOString().slice(0, 10) : payment.date,
@@ -1763,12 +1928,19 @@ export class PaymentsService {
         }
       }
 
-      if (payment.cash_box_id) await this.updateFinalizedCashMovement(tx, payment, nextNet, nextConvertedAmount, userId, now);
-      if (payment.bank_account_id) await this.updateFinalizedBankMovement(tx, payment, nextNet, nextConvertedAmount, grossApplied, retainedTotal, userId, now);
+      await tx.withholdings.updateMany({
+        where: { payment_id: id, deleted_at: null },
+        data: { exchange_rate: financialPayment.exchange_rate, updated_at: now, updated_by: userId },
+      });
+
+      if (payment.cash_box_id) await this.updateFinalizedCashMovement(tx, financialPayment, nextNet, nextConvertedAmount, userId, now);
+      if (payment.bank_account_id) await this.updateFinalizedBankMovement(tx, financialPayment, nextNet, nextConvertedAmount, grossApplied, retainedTotal, userId, now);
 
       await tx.payments.update({ where: { id }, data: {
         amount: nextNet,
         converted_amount: nextConvertedAmount,
+        exchange_rate: financialPayment.exchange_rate,
+        rate_type: financialPayment.rate_type as any,
         ...(assignedParty ? { party_id: assignedParty.id, party_type: assignedParty.type } : {}),
         ...(dto.account_id !== undefined ? { account_id: dto.account_id || null } : {}),
         updated_at: now, updated_by: userId,
@@ -1814,6 +1986,8 @@ export class PaymentsService {
     await tx.cash_box_movements.update({ where: { id: movement.id }, data: {
       amount: Math.abs(nextNet),
       converted_amount: nextConvertedAmount == null ? null : Math.abs(nextConvertedAmount),
+      exchange_rate: payment.exchange_rate,
+      rate_type: payment.rate_type,
       balance_after: Number(movement.balance_before) + targetDelta,
       updated_at: now,
       updated_by: userId,
@@ -1906,6 +2080,8 @@ export class PaymentsService {
       amount: targetAmount,
       nature: isOutflow ? 'DEBIT' : 'CREDIT',
       converted_amount: nextConvertedAmount == null ? null : Math.abs(nextConvertedAmount),
+      exchange_rate: payment.exchange_rate,
+      rate_type: payment.rate_type,
       updated_at: now,
       updated_by: userId,
     } });
