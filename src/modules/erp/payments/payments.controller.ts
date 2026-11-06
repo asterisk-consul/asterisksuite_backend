@@ -56,6 +56,13 @@ export class PaymentsController {
     });
   }
 
+  @Get('by-document/:documentId')
+  @RequirePermissions('payments.read')
+  findByDocument(@Param('documentId') documentId: string, @Req() req: Request, @CurrentUser() user: AuthUser) {
+    const companyRole = req['companyUserRole'] as string | undefined;
+    return this.paymentsService.findByDocument(documentId, companyRole === 'USER' ? user.id : undefined);
+  }
+
   @Get(':id')
   @RequirePermissions('payments.read')
   findOne(@Param('id') id: string) {

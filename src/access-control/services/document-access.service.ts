@@ -39,7 +39,7 @@ export class DocumentAccessService {
   }
 
   async can(userId: string, companyRole: string | undefined, scope: DocumentScope, category: string, action: DocumentAction) {
-    if (companyRole === 'OWNER') return true;
+    if (companyRole === 'OWNER' || companyRole === 'ADMIN') return true;
     const context = await this.contexts.build(userId);
     if (this.legacyPermissions(scope, action).some(permission => context.can(permission))) return true;
     const exact = this.exactPermission(scope, category, action);
@@ -85,7 +85,7 @@ export class DocumentAccessService {
   }
 
   async allowedCategories(userId: string, companyRole: string | undefined, scope: DocumentScope, action: DocumentAction): Promise<string[] | undefined> {
-    if (companyRole === 'OWNER') return undefined;
+    if (companyRole === 'OWNER' || companyRole === 'ADMIN') return undefined;
     const context = await this.contexts.build(userId);
     if (this.legacyPermissions(scope, action).some(permission => context.can(permission))) return undefined;
     return Object.entries(CATEGORY_SLUG)

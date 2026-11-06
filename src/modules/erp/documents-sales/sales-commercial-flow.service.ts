@@ -14,6 +14,18 @@ import { requestContext } from '@/common/context/request-context';
 export class SalesCommercialFlowService {
   private readonly logger = new Logger(SalesCommercialFlowService.name);
 
+  private convertPaymentAmount(amount: number, fromCurrency: string, toCurrency: string, exchangeRate?: number | null) {
+    const from = fromCurrency?.toUpperCase();
+    const to = toCurrency?.toUpperCase();
+    const value = Number(amount);
+    if (from === to) return value;
+    const rate = Number(exchangeRate);
+    if (!Number.isFinite(rate) || rate <= 0) return value;
+    if (from === 'USD' && to === 'ARS') return value * rate;
+    if (from === 'ARS' && to === 'USD') return value / rate;
+    return value;
+  }
+
   constructor(
     private readonly db: PrismaService,
     private readonly whatsAppNotifications: WhatsAppNotificationsService,
@@ -352,7 +364,10 @@ export class SalesCommercialFlowService {
   async refresh(operationId: string, client: any = this.prisma) {
     const operation = await client.commercial_operations.findUnique({
       where: { id: operationId },
-      include: { documents: { where: { deleted_at: null }, include: { document_types: { select: { category: true } } } } },
+      include: {
+        documents: { where: { deleted_at: null }, include: { document_types: { select: { category: true } } } },
+        root_document: { select: { currency_code: true } },
+      },
     });
     if (!operation) return null;
 
@@ -364,9 +379,18 @@ export class SalesCommercialFlowService {
         document: { commercial_operation_id: operationId },
         payment: { status: { in: ['CONFIRMED', 'PAID'] }, deleted_at: null },
       },
-      select: { amount_applied: true },
+      select: {
+        amount_applied: true,
+        payment: { select: { currency_code: true, exchange_rate: true } },
+      },
     });
-    const paidTotal = applications.reduce((sum: number, item: any) => sum + Number(item.amount_applied), 0);
+    const operationCurrency = operation.currency_code ?? operation.root_document?.currency_code ?? 'ARS';
+    const paidTotal = applications.reduce((sum: number, item: any) => {
+      const amount = Number(item.amount_applied);
+      const paymentCurrency = item.payment?.currency_code ?? operationCurrency;
+      const rate = item.payment?.exchange_rate == null ? null : Number(item.payment.exchange_rate);
+      return sum + this.convertPaymentAmount(amount, paymentCurrency, operationCurrency, rate);
+    }, 0);
     const orderedTotal = Number(operation.ordered_total);
     const percentage = orderedTotal > 0 ? (paidTotal / orderedTotal) * 100 : 100;
     const paymentReady = !operation.require_payment_for_delivery || percentage + 0.0001 >= Number(operation.delivery_payment_percentage);

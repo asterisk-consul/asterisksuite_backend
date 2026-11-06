@@ -167,6 +167,43 @@ export class PaymentsService {
     throw new BadRequestException('Ingresá la cotización en pesos por dólar para registrar un pago en ARS aplicado a un comprobante en USD');
   }
 
+  private convertCurrencyAmount(amount: number, fromCurrency: string, toCurrency: string, exchangeRate?: number | null) {
+    const from = fromCurrency?.toUpperCase();
+    const to = toCurrency?.toUpperCase();
+    const value = Number(amount);
+    if (from === to) return Number(value.toFixed(2));
+
+    const rate = Number(exchangeRate);
+    if (!Number.isFinite(rate) || rate <= 0) return Number(value.toFixed(2));
+    if (from === 'USD' && to === 'ARS') return Number((value * rate).toFixed(2));
+    if (from === 'ARS' && to === 'USD') return Number((value / rate).toFixed(2));
+    return Number(value.toFixed(2));
+  }
+
+  private paymentExchangeRate(payment: any, document?: any) {
+    const candidates = [payment?.exchange_rate, document?.exchange_rate]
+      .map((value) => value == null ? null : Number(value));
+    return candidates.find((rate) => rate != null && Number.isFinite(rate) && rate > 0) ?? null;
+  }
+
+  private paymentAmountInDocumentCurrency(amount: number, payment: any, document: any) {
+    return this.convertCurrencyAmount(
+      amount,
+      payment.currency_code,
+      document.currency_code ?? payment.currency_code,
+      this.paymentExchangeRate(payment, document),
+    );
+  }
+
+  private documentAmountInPaymentCurrency(amount: number, document: any, payment: any) {
+    return this.convertCurrencyAmount(
+      amount,
+      document.currency_code ?? payment.currency_code,
+      payment.currency_code,
+      this.paymentExchangeRate(payment, document),
+    );
+  }
+
   private tenderMovementPayment(payment: any, tender: any, convertedAmount: number | null) {
     return {
       ...payment,
@@ -678,10 +715,7 @@ export class PaymentsService {
         if (document.document_types?.category === 'VALE' && docCurrency !== payCurrency) {
           throw new BadRequestException(`El pago del Vale #${document.descrip?.match(/Vale #(\d+)/)?.[1] ?? document.number} debe registrarse en ${docCurrency}`);
         }
-        let pendingInPayCurrency = pending;
-        if (docCurrency !== payCurrency && document.exchange_rate) {
-          pendingInPayCurrency = Number((pending * Number(document.exchange_rate)).toFixed(2));
-        }
+        const pendingInPayCurrency = this.documentAmountInPaymentCurrency(pending, document, payment);
         if (pd.amount_applied.toNumber() > pendingInPayCurrency + 0.01) {
           throw new BadRequestException(
             `El monto aplicado (${pd.amount_applied}) excede el saldo pendiente (${pendingInPayCurrency} ${payCurrency}) del documento ${document.number}`,
@@ -693,13 +727,30 @@ export class PaymentsService {
         where: { id: { in: paymentDocs.map((pd) => pd.document_id) } },
         select: { id: true, commercial_operation_id: true },
       });
+      const operationIds = [...new Set(linkedDocs.map((doc) => doc.commercial_operation_id).filter(Boolean))] as string[];
+      const operations = operationIds.length
+        ? await this.prisma.commercial_operations.findMany({
+            where: { id: { in: operationIds } },
+            select: { id: true, currency_code: true, root_document: { select: { currency_code: true } } },
+          })
+        : [];
+      const operationById = new Map<string, (typeof operations)[number]>(operations.map((operation) => [operation.id, operation]));
+      const linkedDocById = new Map<string, (typeof linkedDocs)[number]>(linkedDocs.map((doc) => [doc.id, doc]));
       const applicationsByOperation = new Map<string, number>();
       for (const pd of paymentDocs) {
-        const operationId = linkedDocs.find((doc) => doc.id === pd.document_id)?.commercial_operation_id;
+        const operationId = linkedDocById.get(pd.document_id)?.commercial_operation_id;
         if (!operationId) continue;
+        const operation = operationById.get(operationId);
+        const operationCurrency = operation?.currency_code ?? operation?.root_document?.currency_code ?? payment.currency_code;
+        const amountInOperationCurrency = this.convertCurrencyAmount(
+          pd.amount_applied.toNumber(),
+          payment.currency_code,
+          operationCurrency,
+          this.paymentExchangeRate(payment),
+        );
         applicationsByOperation.set(
           operationId,
-          (applicationsByOperation.get(operationId) ?? 0) + pd.amount_applied.toNumber(),
+          (applicationsByOperation.get(operationId) ?? 0) + amountInOperationCurrency,
         );
       }
       for (const [operationId, newAmount] of applicationsByOperation) {
@@ -750,20 +801,42 @@ export class PaymentsService {
     const confirmed = await this.prisma.$transaction(async (tx) => {
       // Apply to documents
       for (const pd of paymentDocs) {
+        const doc = await tx.documents.findUnique({
+          where: { id: pd.document_id },
+          select: {
+            id: true,
+            total: true,
+            paid_amount: true,
+            descrip: true,
+            currency_code: true,
+            exchange_rate: true,
+            rate_type: true,
+            converted_total: true,
+            converted_paid_amount: true,
+            document_types: { select: { category: true } },
+          },
+        });
+        if (!doc) throw new NotFoundException(`Documento ${pd.document_id} no encontrado`);
+        const amountInDocumentCurrency = this.paymentAmountInDocumentCurrency(pd.amount_applied.toNumber(), payment, doc);
+        const documentExchangeRate = doc.exchange_rate == null ? null : Number(doc.exchange_rate);
+        const convertedPaidIncrement = doc.currency_code?.toUpperCase() === 'ARS'
+          ? amountInDocumentCurrency
+          : documentExchangeRate && documentExchangeRate > 0
+            ? Number((amountInDocumentCurrency * documentExchangeRate).toFixed(2))
+            : null;
         await tx.documents.update({
           where: { id: pd.document_id },
           data: {
-            paid_amount: { increment: pd.amount_applied.toNumber() },
+            paid_amount: { increment: amountInDocumentCurrency },
+            ...(doc.converted_paid_amount != null && convertedPaidIncrement != null
+              ? { converted_paid_amount: { increment: convertedPaidIncrement } }
+              : {}),
             updated_at: new Date(),
             updated_by: userId,
           },
         });
 
         // If document is a VALE, mark the hr_vale as PAID
-        const doc = await tx.documents.findUnique({
-          where: { id: pd.document_id },
-          include: { document_types: { select: { category: true } } },
-        });
         if (doc?.document_types?.category === 'VALE' && payment.party_id) {
           // Extract vale number from description "Vale #N"
           const match = doc.descrip?.match(/Vale #(\d+)/);
@@ -773,8 +846,8 @@ export class PaymentsService {
               where: { party_id: payment.party_id, number: valeNumber, deleted_at: null, OR: [{ party_type: 'EMPLOYEE' }, { party_type: 'PARTNER', type: { in: ['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'] } }] },
             });
             if (vale) {
-              await this.applyHrValePayment(tx, vale, doc, pd.amount_applied.toNumber(), payment, userId);
-              const fullyPaid = Number(doc.paid_amount) >= Number(doc.total) - 0.01;
+              await this.applyHrValePayment(tx, vale, doc, amountInDocumentCurrency, payment, userId);
+              const fullyPaid = Number(doc.paid_amount) + amountInDocumentCurrency >= Number(doc.total) - 0.01;
               await tx.hr_vales.update({
                 where: { id: vale.id },
                 data: {
@@ -1252,6 +1325,40 @@ export class PaymentsService {
     }));
     return [...paymentRows, ...partnerValePayments]
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  }
+
+  async findByDocument(documentId: string, userId?: string) {
+    const payments = await this.prisma.payments.findMany({
+      where: {
+        deleted_at: null,
+        status: { not: 'DRAFT' },
+        ...(userId ? { created_by: userId } : {}),
+        documents: { some: { document_id: documentId, deleted_at: null } },
+      },
+      orderBy: [{ date: 'desc' }, { number: 'desc' }],
+      take: 50,
+      select: {
+        id: true,
+        number: true,
+        type: true,
+        date: true,
+        payment_method: true,
+        amount: true,
+        currency_code: true,
+        status: true,
+        description: true,
+        reference: true,
+        documents: {
+          where: { document_id: documentId, deleted_at: null },
+          select: { amount_applied: true },
+        },
+      },
+    });
+
+    return payments.map(({ documents, ...payment }) => ({
+      ...payment,
+      amount_applied: documents[0]?.amount_applied ?? 0,
+    }));
   }
 
   async findOne(id: string) {
@@ -2621,10 +2728,38 @@ export class PaymentsService {
     });
 
     for (const pd of paymentDocs) {
+      const document = await this.prisma.documents.findUnique({
+        where: { id: pd.document_id },
+        select: {
+          id: true,
+          currency_code: true,
+          exchange_rate: true,
+          converted_paid_amount: true,
+        },
+      });
+      if (!document) continue;
+      const amountInDocumentCurrency = this.paymentAmountInDocumentCurrency(
+        pd.amount_applied.toNumber(),
+        payment,
+        document,
+      );
+      const documentExchangeRate = document.exchange_rate == null ? null : Number(document.exchange_rate);
+      const convertedPaidDecrement = document.currency_code?.toUpperCase() === 'ARS'
+        ? amountInDocumentCurrency
+        : documentExchangeRate && documentExchangeRate > 0
+          ? Number((amountInDocumentCurrency * documentExchangeRate).toFixed(2))
+          : null;
+      const safePaidDecrement = Math.min(Number(document.paid_amount ?? 0), amountInDocumentCurrency);
+      const safeConvertedPaidDecrement = document.converted_paid_amount == null || convertedPaidDecrement == null
+        ? null
+        : Math.min(Number(document.converted_paid_amount), convertedPaidDecrement);
       await this.prisma.documents.update({
         where: { id: pd.document_id },
         data: {
-          paid_amount: { decrement: pd.amount_applied.toNumber() },
+          paid_amount: { decrement: safePaidDecrement },
+          ...(safeConvertedPaidDecrement != null
+            ? { converted_paid_amount: { decrement: safeConvertedPaidDecrement } }
+            : {}),
           updated_at: new Date(),
           updated_by: userId,
         },
