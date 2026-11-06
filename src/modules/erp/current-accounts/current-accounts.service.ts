@@ -3,7 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCurrentAccountEntryDto } from './dto/create-current-account-entry.dto';
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
-import { recalculateCurrentAccountLedger } from './current-account-ledger';
+import { recalculateCurrentAccountLedger, removeDocumentAccountEffects } from './current-account-ledger';
 
 const STATUS_CANCELLED = 3;
 
@@ -312,7 +312,7 @@ export class CurrentAccountsService {
             document_types: { category: 'OPENING_BALANCE' },
             deleted_at: null,
           },
-          data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+          data: { deleted_at: now, deleted_by: userId, status: 3, updated_at: now, updated_by: userId },
         });
       }
       await tx.current_accounts.update({
@@ -368,53 +368,7 @@ export class CurrentAccountsService {
 
   async removeDocumentEffects(documentId: string, userId: string, tx?: any) {
     const prisma = tx ?? this.prisma;
-    const entries = await prisma.current_account_entries.findMany({
-      where: {
-        reference_id: documentId,
-        reference_type: {
-          in: [
-            'document',
-            'document_reversal',
-            'order_invoice_replacement',
-            'order_invoice_replacement_reversal',
-          ],
-        },
-        deleted_at: null,
-      },
-      orderBy: { created_at: 'asc' },
-    });
-
-    const entriesByAccount = new Map<string, typeof entries>();
-    for (const entry of entries) {
-      const accountEntries = entriesByAccount.get(entry.current_account_id) ?? [];
-      accountEntries.push(entry);
-      entriesByAccount.set(entry.current_account_id, accountEntries);
-    }
-
-    for (const [accountId, accountEntries] of entriesByAccount) {
-      const removedDelta = accountEntries.reduce(
-        (sum, entry) => sum + Number(entry.balance_after) - Number(entry.balance_before),
-        0,
-      );
-      const account = await prisma.current_accounts.findUnique({
-        where: { id: accountId },
-        select: { balance: true },
-      });
-      if (!account) continue;
-
-      const now = new Date();
-      await prisma.current_account_entries.updateMany({
-        where: { id: { in: accountEntries.map(entry => entry.id) } },
-        data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
-      });
-      await prisma.current_accounts.update({
-        where: { id: accountId },
-        data: { balance: Number(account.balance) - removedDelta, updated_at: now, updated_by: userId },
-      });
-      await recalculateCurrentAccountLedger(prisma, accountId);
-    }
-
-    return entries.length;
+    return removeDocumentAccountEffects(prisma, documentId, userId);
   }
 
   async findByParty(partyId: string) {

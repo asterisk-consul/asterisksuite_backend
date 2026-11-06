@@ -127,6 +127,13 @@ export class EmployeesService {
       },
     });
 
+    // El alta de RR. HH. también debe dejar el rol común disponible en Terceros.
+    await this.prisma.business_party_roles.upsert({
+      where: { party_id_role: { party_id: partyId, role: 'EMPLOYEE' } },
+      create: { party_id: partyId, role: 'EMPLOYEE', active: dto.is_active ?? true, created_by: userId },
+      update: { active: dto.is_active ?? true, updated_by: userId },
+    });
+
     // Bidireccional: actualizar users.employee_id en public
     if (finalUserId) {
       const publicPrisma = this.db.getDefaultClient();
@@ -246,7 +253,7 @@ export class EmployeesService {
       });
     }
 
-    return this.prisma.employees.update({
+    const updated = await this.prisma.employees.update({
       where: { id },
       data: {
         ...employeeData,
@@ -255,6 +262,16 @@ export class EmployeesService {
         updated_by: userId,
       },
     });
+
+    if (employee.party_id) {
+      await this.prisma.business_party_roles.upsert({
+        where: { party_id_role: { party_id: employee.party_id, role: 'EMPLOYEE' } },
+        create: { party_id: employee.party_id, role: 'EMPLOYEE', active: updated.is_active, created_by: userId },
+        update: { active: updated.is_active, updated_by: userId },
+      });
+    }
+
+    return updated;
   }
 
   /**

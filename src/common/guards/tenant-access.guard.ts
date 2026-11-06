@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-  ForbiddenException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException, Logger } from '@nestjs/common';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -40,9 +34,7 @@ export class TenantAccessGuard implements CanActivate {
       return true;
     }
 
-    const tenantHeader =
-      (req.headers['x-tenant'] as string) ??
-      (req.headers['x-subdomain'] as string);
+    const tenantHeader = (req.headers['x-tenant'] as string) ?? (req.headers['x-subdomain'] as string);
 
     if (!tenantHeader) {
       return true;
@@ -64,28 +56,53 @@ export class TenantAccessGuard implements CanActivate {
       throw new ForbiddenException('Empresa no encontrada');
     }
 
-    const membership =
-      await this.prisma.getDefaultClient().company_users.findUnique({
-        where: {
-          company_id_user_id: {
-            company_id: company.id,
-            user_id: userId,
-          },
+    const membership = await this.prisma.getDefaultClient().company_users.findUnique({
+      where: {
+        company_id_user_id: {
+          company_id: company.id,
+          user_id: userId,
         },
-      });
+      },
+    });
 
     if (!membership) {
-      this.logger.warn(
-        `User ${userId} denied access to tenant "${subdomain}" (company ${company.id})`,
-      );
-      throw new ForbiddenException(
-        'No tienes acceso a esta empresa',
-      );
+      this.logger.warn(`User ${userId} denied access to tenant "${subdomain}" (company ${company.id})`);
+      throw new ForbiddenException('No tienes acceso a esta empresa');
     }
 
     // Setear rol de empresa en request para que PermissionsGuard pueda usarlo
     // (OWNER bypass en PermissionsGuard)
     req['companyUserRole'] = membership.role;
+    req['tenantUserId'] = userId;
+
+    const requestPath = req.path.replace(/\/$/, '');
+    const isAuditReadRequest = req.method === 'GET'
+      && /^\/(?:api\/)?erp\/audit(?:\/|$)/.test(requestPath);
+
+    if (isAuditReadRequest) {
+      const publicClient = this.prisma.getDefaultClient();
+      const platformUser = await publicClient.users.findUnique({
+        where: { id: userId },
+        select: { role: true, active: true, deleted_at: true },
+      });
+
+      if (platformUser?.active && !platformUser.deleted_at) {
+        if (platformUser.role === 'PLATFORM_OWNER') {
+          req['platformAuditReadAuthorized'] = true;
+        } else if (platformUser.role === 'PLATFORM_ADMIN') {
+          const scope = await publicClient.platform_admin_company_scopes.findUnique({
+            where: {
+              user_id_company_id: {
+                user_id: userId,
+                company_id: company.id,
+              },
+            },
+            select: { user_id: true },
+          });
+          req['platformAuditReadAuthorized'] = Boolean(scope);
+        }
+      }
+    }
 
     return true;
   }

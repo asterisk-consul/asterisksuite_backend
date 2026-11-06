@@ -3,6 +3,7 @@ import type { Request as ExpressRequest } from 'express';
 import { HrService } from './hr.service';
 import { CreateHrValeDto } from './dto/create-hr-vale.dto';
 import { ConfirmHrValeDto } from './dto/confirm-hr-vale.dto';
+import { CreatePartnerInvestmentPlanDto } from './dto/create-partner-investment-plan.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
@@ -50,6 +51,22 @@ export class HrController {
   @Get('partners/:id/funds')
   getPartnerFunds(@Param('id') id: string, @Query('currency_code') currencyCode = 'ARS') {
     return this.service.getPartnerFunds(id, currencyCode.toUpperCase());
+  }
+
+  @RequirePermissions('vales.read')
+  @Get('partners/:id/investment-plans')
+  getPartnerInvestmentPlans(@Param('id') id: string) {
+    return this.service.getPartnerInvestmentPlans(id);
+  }
+
+  @RequirePermissions('vales.create')
+  @Post('partners/:id/investment-plans')
+  createPartnerInvestmentPlan(
+    @Param('id') id: string,
+    @Body() dto: CreatePartnerInvestmentPlanDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.service.createPartnerInvestmentPlan(id, dto, user.id);
   }
 
   @Patch('vales/:id/confirm')
@@ -102,8 +119,12 @@ export class HrController {
 
   @Get('commissions')
   @RequirePermissions('commissions.view')
-  getCommissionsReport(@Query('month') month: string, @Query('seller_id') sellerId?: string) {
-    return this.service.getCommissionsReport(month, sellerId);
+  getCommissionsReport(
+    @Query('month') month: string,
+    @Query('seller_id') sellerId?: string,
+    @Query('seller_type') sellerType?: 'EMPLOYEE' | 'PARTNER',
+  ) {
+    return this.service.getCommissionsReport(month, sellerId, sellerType);
   }
 
   @Get('commissions/documents')
@@ -130,7 +151,10 @@ export class HrController {
 
   @Post('commissions/vale')
   @RequirePermissions('commissions.settle')
-  generateCommissionVale(@Body() body: { seller_id: string; month: string }, @Request() req: any) {
-    return this.service.generateCommissionVale(body.seller_id, body.month, req.user.id);
+  generateCommissionVale(
+    @Body() body: { seller_id: string; seller_type?: 'EMPLOYEE' | 'PARTNER'; month: string; currency_code?: string },
+    @Request() req: any,
+  ) {
+    return this.service.generateCommissionVale(body.seller_id, body.month, req.user.id, body.seller_type, body.currency_code);
   }
 }

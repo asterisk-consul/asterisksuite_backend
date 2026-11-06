@@ -20,6 +20,7 @@ RUN pnpm run build
 FROM node:22-alpine
 
 RUN npm install -g pnpm@11.5.2
+RUN apk add --no-cache openssl
 
 WORKDIR /app
 

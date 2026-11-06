@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { PrismaService } from '@/prisma/prisma.service';
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 
@@ -370,12 +371,53 @@ export class BankMovementsService {
   // ANULACIONES
   // ═══════════════════════════════════════════
 
+  async reverseImportedAccountingEntry(movementId: string, userId: string | null | undefined, client?: PrismaLike) {
+    const transaction = this.resolve(client);
+    const entry = await transaction.bank_movement_accounting_entries.findUnique({
+      where: { bank_account_movement_id: movementId },
+      include: { lines: true, reversal: true },
+    });
+    if (!entry || entry.reversal) return;
+
+    const now = new Date();
+    const reversalId = randomUUID();
+    await transaction.bank_movement_accounting_entries.create({
+      data: {
+        id: reversalId,
+        reversal_of_entry_id: entry.id,
+        entry_date: now,
+        description: `Reversión: ${entry.description}`.slice(0, 255),
+        currency_code: entry.currency_code,
+        exchange_rate: entry.exchange_rate,
+        base_amount: entry.base_amount,
+        created_by: userId ?? null,
+        lines: {
+          create: entry.lines.map((line: any, index: number) => ({
+            line_number: index + 1,
+            account_id: line.account_id,
+            description: `Reversión: ${line.description}`.slice(0, 255),
+            debit: line.credit,
+            credit: line.debit,
+            currency_code: line.currency_code,
+            foreign_amount: line.foreign_amount,
+          })),
+        },
+      },
+    });
+    await transaction.bank_movement_accounting_entries.update({
+      where: { id: entry.id },
+      data: { reversed_at: now, reversed_by: userId ?? null },
+    });
+  }
+
   async cancelMovement(movementId: string, userId?: string | null, prisma?: PrismaLike) {
     const client = this.resolve(prisma);
     const movement = await client.bank_account_movements.findFirst({
       where: { id: movementId, deleted_at: null },
     });
     if (!movement) throw new NotFoundException('Movimiento bancario no encontrado');
+
+    await this.reverseImportedAccountingEntry(movementId, userId, client);
 
     await client.bank_account_movements.update({
       where: { id: movementId },
@@ -402,9 +444,13 @@ export class BankMovementsService {
     const now = new Date();
     const movements = await client.bank_account_movements.findMany({
       where: { bank_operation_id: operationId, deleted_at: null },
-      select: { amount: true },
+      select: { id: true, amount: true },
     });
     const removedDelta = movements.reduce((sum: number, m: any) => sum + Number(m.amount), 0);
+
+    for (const movement of movements) {
+      await this.reverseImportedAccountingEntry(movement.id, userId, client);
+    }
 
     await client.payment_bank_charges.updateMany({
       where: { bank_operation_id: operationId, deleted_at: null },

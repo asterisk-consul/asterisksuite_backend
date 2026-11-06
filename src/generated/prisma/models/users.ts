@@ -258,6 +258,9 @@ export type usersWhereInput = {
   companyUsers?: Prisma.Company_usersListRelationFilter
   tablePreferences?: Prisma.User_table_preferencesListRelationFilter
   mcpGrants?: Prisma.Mcp_oauth_grantsListRelationFilter
+  platformAdminAssignment?: Prisma.XOR<Prisma.Platform_admin_assignmentsNullableScalarRelationFilter, Prisma.platform_admin_assignmentsWhereInput> | null
+  platformAdminGrants?: Prisma.Platform_admin_assignmentsListRelationFilter
+  platformAdminUpdates?: Prisma.Platform_admin_assignmentsListRelationFilter
 }
 
 export type usersOrderByWithRelationInput = {
@@ -279,6 +282,9 @@ export type usersOrderByWithRelationInput = {
   companyUsers?: Prisma.company_usersOrderByRelationAggregateInput
   tablePreferences?: Prisma.user_table_preferencesOrderByRelationAggregateInput
   mcpGrants?: Prisma.mcp_oauth_grantsOrderByRelationAggregateInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsOrderByWithRelationInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsOrderByRelationAggregateInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsOrderByRelationAggregateInput
 }
 
 export type usersWhereUniqueInput = Prisma.AtLeast<{
@@ -303,6 +309,9 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   companyUsers?: Prisma.Company_usersListRelationFilter
   tablePreferences?: Prisma.User_table_preferencesListRelationFilter
   mcpGrants?: Prisma.Mcp_oauth_grantsListRelationFilter
+  platformAdminAssignment?: Prisma.XOR<Prisma.Platform_admin_assignmentsNullableScalarRelationFilter, Prisma.platform_admin_assignmentsWhereInput> | null
+  platformAdminGrants?: Prisma.Platform_admin_assignmentsListRelationFilter
+  platformAdminUpdates?: Prisma.Platform_admin_assignmentsListRelationFilter
 }, "id" | "email">
 
 export type usersOrderByWithAggregationInput = {
@@ -364,6 +373,9 @@ export type usersCreateInput = {
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
   mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersUncheckedCreateInput = {
@@ -385,6 +397,9 @@ export type usersUncheckedCreateInput = {
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersUpdateInput = {
@@ -406,6 +421,9 @@ export type usersUpdateInput = {
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
   mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUpdateManyWithoutUpdaterNestedInput
 }
 
 export type usersUncheckedUpdateInput = {
@@ -427,6 +445,9 @@ export type usersUncheckedUpdateInput = {
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutUpdaterNestedInput
 }
 
 export type usersCreateManyInput = {
@@ -536,6 +557,11 @@ export type usersMinOrderByAggregateInput = {
   deleted_by?: Prisma.SortOrder
 }
 
+export type UsersNullableScalarRelationFilter = {
+  is?: Prisma.usersWhereInput | null
+  isNot?: Prisma.usersWhereInput | null
+}
+
 export type usersCreateNestedOneWithoutRefreshTokensInput = {
   create?: Prisma.XOR<Prisma.usersCreateWithoutRefreshTokensInput, Prisma.usersUncheckedCreateWithoutRefreshTokensInput>
   connectOrCreate?: Prisma.usersCreateOrConnectWithoutRefreshTokensInput
@@ -566,6 +592,52 @@ export type usersUpdateOneRequiredWithoutCompanyUsersNestedInput = {
   upsert?: Prisma.usersUpsertWithoutCompanyUsersInput
   connect?: Prisma.usersWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutCompanyUsersInput, Prisma.usersUpdateWithoutCompanyUsersInput>, Prisma.usersUncheckedUpdateWithoutCompanyUsersInput>
+}
+
+export type usersCreateNestedOneWithoutPlatformAdminAssignmentInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminAssignmentInput, Prisma.usersUncheckedCreateWithoutPlatformAdminAssignmentInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPlatformAdminAssignmentInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersCreateNestedOneWithoutPlatformAdminGrantsInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminGrantsInput, Prisma.usersUncheckedCreateWithoutPlatformAdminGrantsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPlatformAdminGrantsInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersCreateNestedOneWithoutPlatformAdminUpdatesInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminUpdatesInput, Prisma.usersUncheckedCreateWithoutPlatformAdminUpdatesInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPlatformAdminUpdatesInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutPlatformAdminAssignmentNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminAssignmentInput, Prisma.usersUncheckedCreateWithoutPlatformAdminAssignmentInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPlatformAdminAssignmentInput
+  upsert?: Prisma.usersUpsertWithoutPlatformAdminAssignmentInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutPlatformAdminAssignmentInput, Prisma.usersUpdateWithoutPlatformAdminAssignmentInput>, Prisma.usersUncheckedUpdateWithoutPlatformAdminAssignmentInput>
+}
+
+export type usersUpdateOneWithoutPlatformAdminGrantsNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminGrantsInput, Prisma.usersUncheckedCreateWithoutPlatformAdminGrantsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPlatformAdminGrantsInput
+  upsert?: Prisma.usersUpsertWithoutPlatformAdminGrantsInput
+  disconnect?: Prisma.usersWhereInput | boolean
+  delete?: Prisma.usersWhereInput | boolean
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutPlatformAdminGrantsInput, Prisma.usersUpdateWithoutPlatformAdminGrantsInput>, Prisma.usersUncheckedUpdateWithoutPlatformAdminGrantsInput>
+}
+
+export type usersUpdateOneWithoutPlatformAdminUpdatesNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminUpdatesInput, Prisma.usersUncheckedCreateWithoutPlatformAdminUpdatesInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutPlatformAdminUpdatesInput
+  upsert?: Prisma.usersUpsertWithoutPlatformAdminUpdatesInput
+  disconnect?: Prisma.usersWhereInput | boolean
+  delete?: Prisma.usersWhereInput | boolean
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutPlatformAdminUpdatesInput, Prisma.usersUpdateWithoutPlatformAdminUpdatesInput>, Prisma.usersUncheckedUpdateWithoutPlatformAdminUpdatesInput>
 }
 
 export type usersCreateNestedOneWithoutTablePreferencesInput = {
@@ -614,6 +686,9 @@ export type usersCreateWithoutRefreshTokensInput = {
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
   mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersUncheckedCreateWithoutRefreshTokensInput = {
@@ -634,6 +709,9 @@ export type usersUncheckedCreateWithoutRefreshTokensInput = {
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersCreateOrConnectWithoutRefreshTokensInput = {
@@ -670,6 +748,9 @@ export type usersUpdateWithoutRefreshTokensInput = {
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
   mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUpdateManyWithoutUpdaterNestedInput
 }
 
 export type usersUncheckedUpdateWithoutRefreshTokensInput = {
@@ -690,6 +771,9 @@ export type usersUncheckedUpdateWithoutRefreshTokensInput = {
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutUpdaterNestedInput
 }
 
 export type usersCreateWithoutCompanyUsersInput = {
@@ -710,6 +794,9 @@ export type usersCreateWithoutCompanyUsersInput = {
   refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
   mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersUncheckedCreateWithoutCompanyUsersInput = {
@@ -730,6 +817,9 @@ export type usersUncheckedCreateWithoutCompanyUsersInput = {
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersCreateOrConnectWithoutCompanyUsersInput = {
@@ -766,6 +856,9 @@ export type usersUpdateWithoutCompanyUsersInput = {
   refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
   mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUpdateManyWithoutUpdaterNestedInput
 }
 
 export type usersUncheckedUpdateWithoutCompanyUsersInput = {
@@ -786,6 +879,333 @@ export type usersUncheckedUpdateWithoutCompanyUsersInput = {
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutUpdaterNestedInput
+}
+
+export type usersCreateWithoutPlatformAdminAssignmentInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutUpdaterInput
+}
+
+export type usersUncheckedCreateWithoutPlatformAdminAssignmentInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutUpdaterInput
+}
+
+export type usersCreateOrConnectWithoutPlatformAdminAssignmentInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminAssignmentInput, Prisma.usersUncheckedCreateWithoutPlatformAdminAssignmentInput>
+}
+
+export type usersCreateWithoutPlatformAdminGrantsInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsCreateNestedOneWithoutUserInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutUpdaterInput
+}
+
+export type usersUncheckedCreateWithoutPlatformAdminGrantsInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedCreateNestedOneWithoutUserInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutUpdaterInput
+}
+
+export type usersCreateOrConnectWithoutPlatformAdminGrantsInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminGrantsInput, Prisma.usersUncheckedCreateWithoutPlatformAdminGrantsInput>
+}
+
+export type usersCreateWithoutPlatformAdminUpdatesInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutGrantorInput
+}
+
+export type usersUncheckedCreateWithoutPlatformAdminUpdatesInput = {
+  id?: string
+  name: string
+  email: string
+  password_hash?: string | null
+  role?: $Enums.PlatformRole | null
+  active?: boolean | null
+  employee_id?: string | null
+  partner_id?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutGrantorInput
+}
+
+export type usersCreateOrConnectWithoutPlatformAdminUpdatesInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminUpdatesInput, Prisma.usersUncheckedCreateWithoutPlatformAdminUpdatesInput>
+}
+
+export type usersUpsertWithoutPlatformAdminAssignmentInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutPlatformAdminAssignmentInput, Prisma.usersUncheckedUpdateWithoutPlatformAdminAssignmentInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminAssignmentInput, Prisma.usersUncheckedCreateWithoutPlatformAdminAssignmentInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutPlatformAdminAssignmentInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutPlatformAdminAssignmentInput, Prisma.usersUncheckedUpdateWithoutPlatformAdminAssignmentInput>
+}
+
+export type usersUpdateWithoutPlatformAdminAssignmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUpdateManyWithoutUpdaterNestedInput
+}
+
+export type usersUncheckedUpdateWithoutPlatformAdminAssignmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutUpdaterNestedInput
+}
+
+export type usersUpsertWithoutPlatformAdminGrantsInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutPlatformAdminGrantsInput, Prisma.usersUncheckedUpdateWithoutPlatformAdminGrantsInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminGrantsInput, Prisma.usersUncheckedCreateWithoutPlatformAdminGrantsInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutPlatformAdminGrantsInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutPlatformAdminGrantsInput, Prisma.usersUncheckedUpdateWithoutPlatformAdminGrantsInput>
+}
+
+export type usersUpdateWithoutPlatformAdminGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUpdateOneWithoutUserNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUpdateManyWithoutUpdaterNestedInput
+}
+
+export type usersUncheckedUpdateWithoutPlatformAdminGrantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedUpdateOneWithoutUserNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutUpdaterNestedInput
+}
+
+export type usersUpsertWithoutPlatformAdminUpdatesInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutPlatformAdminUpdatesInput, Prisma.usersUncheckedUpdateWithoutPlatformAdminUpdatesInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutPlatformAdminUpdatesInput, Prisma.usersUncheckedCreateWithoutPlatformAdminUpdatesInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutPlatformAdminUpdatesInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutPlatformAdminUpdatesInput, Prisma.usersUncheckedUpdateWithoutPlatformAdminUpdatesInput>
+}
+
+export type usersUpdateWithoutPlatformAdminUpdatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUpdateManyWithoutGrantorNestedInput
+}
+
+export type usersUncheckedUpdateWithoutPlatformAdminUpdatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password_hash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableEnumPlatformRoleFieldUpdateOperationsInput | $Enums.PlatformRole | null
+  active?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  employee_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partner_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutGrantorNestedInput
 }
 
 export type usersCreateWithoutTablePreferencesInput = {
@@ -806,6 +1226,9 @@ export type usersCreateWithoutTablePreferencesInput = {
   refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
   mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersUncheckedCreateWithoutTablePreferencesInput = {
@@ -826,6 +1249,9 @@ export type usersUncheckedCreateWithoutTablePreferencesInput = {
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersCreateOrConnectWithoutTablePreferencesInput = {
@@ -862,6 +1288,9 @@ export type usersUpdateWithoutTablePreferencesInput = {
   refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
   mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUpdateManyWithoutUpdaterNestedInput
 }
 
 export type usersUncheckedUpdateWithoutTablePreferencesInput = {
@@ -882,6 +1311,9 @@ export type usersUncheckedUpdateWithoutTablePreferencesInput = {
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutUpdaterNestedInput
 }
 
 export type usersCreateWithoutMcpGrantsInput = {
@@ -902,6 +1334,9 @@ export type usersCreateWithoutMcpGrantsInput = {
   refreshTokens?: Prisma.refresh_tokensCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersUncheckedCreateWithoutMcpGrantsInput = {
@@ -922,6 +1357,9 @@ export type usersUncheckedCreateWithoutMcpGrantsInput = {
   refreshTokens?: Prisma.refresh_tokensUncheckedCreateNestedManyWithoutUsersInput
   companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutUserInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutUserInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedCreateNestedOneWithoutUserInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutGrantorInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedCreateNestedManyWithoutUpdaterInput
 }
 
 export type usersCreateOrConnectWithoutMcpGrantsInput = {
@@ -958,6 +1396,9 @@ export type usersUpdateWithoutMcpGrantsInput = {
   refreshTokens?: Prisma.refresh_tokensUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUpdateManyWithoutUpdaterNestedInput
 }
 
 export type usersUncheckedUpdateWithoutMcpGrantsInput = {
@@ -978,6 +1419,9 @@ export type usersUncheckedUpdateWithoutMcpGrantsInput = {
   refreshTokens?: Prisma.refresh_tokensUncheckedUpdateManyWithoutUsersNestedInput
   companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutUserNestedInput
   tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutUserNestedInput
+  platformAdminAssignment?: Prisma.platform_admin_assignmentsUncheckedUpdateOneWithoutUserNestedInput
+  platformAdminGrants?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutGrantorNestedInput
+  platformAdminUpdates?: Prisma.platform_admin_assignmentsUncheckedUpdateManyWithoutUpdaterNestedInput
 }
 
 
@@ -990,6 +1434,8 @@ export type UsersCountOutputType = {
   companyUsers: number
   tablePreferences: number
   mcpGrants: number
+  platformAdminGrants: number
+  platformAdminUpdates: number
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -997,6 +1443,8 @@ export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.
   companyUsers?: boolean | UsersCountOutputTypeCountCompanyUsersArgs
   tablePreferences?: boolean | UsersCountOutputTypeCountTablePreferencesArgs
   mcpGrants?: boolean | UsersCountOutputTypeCountMcpGrantsArgs
+  platformAdminGrants?: boolean | UsersCountOutputTypeCountPlatformAdminGrantsArgs
+  platformAdminUpdates?: boolean | UsersCountOutputTypeCountPlatformAdminUpdatesArgs
 }
 
 /**
@@ -1037,6 +1485,20 @@ export type UsersCountOutputTypeCountMcpGrantsArgs<ExtArgs extends runtime.Types
   where?: Prisma.mcp_oauth_grantsWhereInput
 }
 
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountPlatformAdminGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.platform_admin_assignmentsWhereInput
+}
+
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountPlatformAdminUpdatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.platform_admin_assignmentsWhereInput
+}
+
 
 export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1057,6 +1519,9 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   companyUsers?: boolean | Prisma.users$companyUsersArgs<ExtArgs>
   tablePreferences?: boolean | Prisma.users$tablePreferencesArgs<ExtArgs>
   mcpGrants?: boolean | Prisma.users$mcpGrantsArgs<ExtArgs>
+  platformAdminAssignment?: boolean | Prisma.users$platformAdminAssignmentArgs<ExtArgs>
+  platformAdminGrants?: boolean | Prisma.users$platformAdminGrantsArgs<ExtArgs>
+  platformAdminUpdates?: boolean | Prisma.users$platformAdminUpdatesArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
 
@@ -1117,6 +1582,9 @@ export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   companyUsers?: boolean | Prisma.users$companyUsersArgs<ExtArgs>
   tablePreferences?: boolean | Prisma.users$tablePreferencesArgs<ExtArgs>
   mcpGrants?: boolean | Prisma.users$mcpGrantsArgs<ExtArgs>
+  platformAdminAssignment?: boolean | Prisma.users$platformAdminAssignmentArgs<ExtArgs>
+  platformAdminGrants?: boolean | Prisma.users$platformAdminGrantsArgs<ExtArgs>
+  platformAdminUpdates?: boolean | Prisma.users$platformAdminUpdatesArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type usersIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1129,6 +1597,9 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     companyUsers: Prisma.$company_usersPayload<ExtArgs>[]
     tablePreferences: Prisma.$user_table_preferencesPayload<ExtArgs>[]
     mcpGrants: Prisma.$mcp_oauth_grantsPayload<ExtArgs>[]
+    platformAdminAssignment: Prisma.$platform_admin_assignmentsPayload<ExtArgs> | null
+    platformAdminGrants: Prisma.$platform_admin_assignmentsPayload<ExtArgs>[]
+    platformAdminUpdates: Prisma.$platform_admin_assignmentsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1543,6 +2014,9 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   companyUsers<T extends Prisma.users$companyUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$companyUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$company_usersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tablePreferences<T extends Prisma.users$tablePreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$tablePreferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$user_table_preferencesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   mcpGrants<T extends Prisma.users$mcpGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$mcpGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$mcp_oauth_grantsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  platformAdminAssignment<T extends Prisma.users$platformAdminAssignmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$platformAdminAssignmentArgs<ExtArgs>>): Prisma.Prisma__platform_admin_assignmentsClient<runtime.Types.Result.GetResult<Prisma.$platform_admin_assignmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  platformAdminGrants<T extends Prisma.users$platformAdminGrantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$platformAdminGrantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$platform_admin_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  platformAdminUpdates<T extends Prisma.users$platformAdminUpdatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$platformAdminUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$platform_admin_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2072,6 +2546,73 @@ export type users$mcpGrantsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.Mcp_oauth_grantsScalarFieldEnum | Prisma.Mcp_oauth_grantsScalarFieldEnum[]
+}
+
+/**
+ * users.platformAdminAssignment
+ */
+export type users$platformAdminAssignmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the platform_admin_assignments
+   */
+  select?: Prisma.platform_admin_assignmentsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the platform_admin_assignments
+   */
+  omit?: Prisma.platform_admin_assignmentsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.platform_admin_assignmentsInclude<ExtArgs> | null
+  where?: Prisma.platform_admin_assignmentsWhereInput
+}
+
+/**
+ * users.platformAdminGrants
+ */
+export type users$platformAdminGrantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the platform_admin_assignments
+   */
+  select?: Prisma.platform_admin_assignmentsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the platform_admin_assignments
+   */
+  omit?: Prisma.platform_admin_assignmentsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.platform_admin_assignmentsInclude<ExtArgs> | null
+  where?: Prisma.platform_admin_assignmentsWhereInput
+  orderBy?: Prisma.platform_admin_assignmentsOrderByWithRelationInput | Prisma.platform_admin_assignmentsOrderByWithRelationInput[]
+  cursor?: Prisma.platform_admin_assignmentsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Platform_admin_assignmentsScalarFieldEnum | Prisma.Platform_admin_assignmentsScalarFieldEnum[]
+}
+
+/**
+ * users.platformAdminUpdates
+ */
+export type users$platformAdminUpdatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the platform_admin_assignments
+   */
+  select?: Prisma.platform_admin_assignmentsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the platform_admin_assignments
+   */
+  omit?: Prisma.platform_admin_assignmentsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.platform_admin_assignmentsInclude<ExtArgs> | null
+  where?: Prisma.platform_admin_assignmentsWhereInput
+  orderBy?: Prisma.platform_admin_assignmentsOrderByWithRelationInput | Prisma.platform_admin_assignmentsOrderByWithRelationInput[]
+  cursor?: Prisma.platform_admin_assignmentsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Platform_admin_assignmentsScalarFieldEnum | Prisma.Platform_admin_assignmentsScalarFieldEnum[]
 }
 
 /**

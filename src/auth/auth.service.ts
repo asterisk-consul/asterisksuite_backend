@@ -310,6 +310,7 @@ export class AuthService {
       id: user.id,
       name: user.name,
       email: user.email,
+      role: user.role,
 
       companies: user.companyUsers.map((cu) => ({
         id: cu.company.id,

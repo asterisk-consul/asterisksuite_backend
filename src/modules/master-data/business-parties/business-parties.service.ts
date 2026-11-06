@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateBusinessPartyDto } from './dto/create-business-party.dto';
 import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
@@ -26,6 +26,14 @@ export class BusinessPartiesService {
     return this.db.getClientForCurrentContext();
   }
 
+  private validateSharePercentage(value?: string | null) {
+    if (value == null || value === '') return;
+    const percentage = Number(value);
+    if (!Number.isFinite(percentage) || percentage < 0 || percentage > 100) {
+      throw new BadRequestException('El porcentaje de participación debe estar entre 0% y 100%');
+    }
+  }
+
   // ✅ CREATE con relaciones + auto-creación de employee/partner
   async create(data: CreateBusinessPartyDto) {
     // Validar formato de documento
@@ -33,7 +41,17 @@ export class BusinessPartiesService {
     await assertPartyIdentityIsUnique(this.prisma, [data.tax_id]);
 
     const laborData = this.pickLaborFields(data);
-    const { locations, contacts, bank_accounts, position, department, hire_date, salary, currency_code, is_salesperson, default_commission_rate, commission_base, customer_enabled, ...partyData } = data;
+    const {
+      locations, contacts, bank_accounts, first_name, last_name,
+      position, department, hire_date, salary, currency_code, is_salesperson,
+      default_commission_rate, commission_base, customer_enabled,
+      partner_kind, share_percentage, capital_contributed,
+      ...partyData
+    } = data;
+
+    if (data.type === 'PARTNER' && (partner_kind ?? 'PARTNER') === 'PARTNER') {
+      this.validateSharePercentage(share_percentage);
+    }
 
     const party = await this.prisma.business_parties.create({
       data: {
@@ -82,8 +100,8 @@ export class BusinessPartiesService {
     // Auto-crear employee o partner si el tipo lo indica
     if (party.type === 'EMPLOYEE') {
       const nameParts = party.name.split(' ');
-      const firstName = nameParts[0] || party.name;
-      const lastName = nameParts.slice(1).join(' ') || '';
+      const firstName = first_name || nameParts[0] || party.name;
+      const lastName = last_name || nameParts.slice(1).join(' ') || '';
 
       const employee = await this.prisma.employees.create({
         data: {
@@ -93,7 +111,7 @@ export class BusinessPartiesService {
           document_type: party.document_type ?? undefined,
           document_number: party.tax_id,
           currency_code: 'USD',
-          is_active: true,
+          is_active: party.active,
           created_by: party.created_by,
         },
       });
@@ -107,17 +125,26 @@ export class BusinessPartiesService {
 
     if (party.type === 'PARTNER') {
       const nameParts = party.name.split(' ');
-      const firstName = nameParts[0] || party.name;
-      const lastName = nameParts.slice(1).join(' ') || '';
+      const firstName = first_name || nameParts[0] || party.name;
+      const lastName = last_name || nameParts.slice(1).join(' ') || '';
+
+      const partnerKind = partner_kind ?? 'PARTNER';
+      const isPartnerSalesperson = partnerKind === 'PARTNER' && (is_salesperson ?? false);
 
       await this.prisma.partners.create({
         data: {
           party_id: party.id,
           first_name: firstName,
           last_name: lastName,
+          partner_kind: partnerKind,
           document_type: party.document_type ?? undefined,
           document_number: party.tax_id,
-          is_active: true,
+          share_percentage: partnerKind === 'PARTNER' && share_percentage != null && share_percentage !== '' ? String(share_percentage) : null,
+          capital_contributed: partnerKind === 'PARTNER' && capital_contributed != null && capital_contributed !== '' ? String(capital_contributed) : null,
+          is_salesperson: isPartnerSalesperson,
+          default_commission_rate: isPartnerSalesperson && default_commission_rate != null ? String(default_commission_rate) : null,
+          commission_base: commission_base ?? 'INVOICED',
+          is_active: party.active,
           created_by: party.created_by,
         },
       });
@@ -125,14 +152,14 @@ export class BusinessPartiesService {
 
     await this.prisma.business_party_roles.upsert({
       where: { party_id_role: { party_id: party.id, role: party.type } },
-      create: { party_id: party.id, role: party.type, active: true, created_by: party.created_by },
-      update: { active: true, updated_by: party.updated_by },
+      create: { party_id: party.id, role: party.type, active: party.active, created_by: party.created_by },
+      update: { active: party.active, updated_by: party.updated_by },
     });
     if (party.type === 'EMPLOYEE' && customer_enabled) {
       await this.prisma.business_party_roles.upsert({
         where: { party_id_role: { party_id: party.id, role: 'CUSTOMER' } },
-        create: { party_id: party.id, role: 'CUSTOMER', active: true, created_by: party.created_by },
-        update: { active: true, updated_by: party.updated_by },
+        create: { party_id: party.id, role: 'CUSTOMER', active: party.active, created_by: party.created_by },
+        update: { active: party.active, updated_by: party.updated_by },
       });
     }
 
@@ -243,6 +270,25 @@ export class BusinessPartiesService {
       (party as any).employee = employee ?? null;
     }
 
+    if (party.type === 'PARTNER') {
+      const partner = await this.prisma.partners.findFirst({
+        where: { party_id: id, deleted_at: null },
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          partner_kind: true,
+          share_percentage: true,
+          capital_contributed: true,
+          is_salesperson: true,
+          default_commission_rate: true,
+          commission_base: true,
+          is_active: true,
+        },
+      });
+      (party as any).partner = partner ?? null;
+    }
+
     return party;
   }
 
@@ -255,7 +301,13 @@ export class BusinessPartiesService {
     validateDocumentNumber(data.document_type ?? current.document_type ?? undefined, data.tax_id ?? current.tax_id ?? undefined);
 
     const laborData = this.pickLaborFields(data);
-    const { locations, contacts, bank_accounts, position, department, hire_date, salary, currency_code, is_salesperson, default_commission_rate, commission_base, customer_enabled, ...partyData } = data;
+    const {
+      locations, contacts, bank_accounts, first_name, last_name,
+      position, department, hire_date, salary, currency_code, is_salesperson,
+      default_commission_rate, commission_base, customer_enabled,
+      partner_kind, share_percentage, capital_contributed,
+      ...partyData
+    } = data;
 
     const updated = await this.prisma.business_parties.update({
       where: { id },
@@ -320,6 +372,8 @@ export class BusinessPartiesService {
         });
       }
       const employeeData = this.buildEmployeeUpdate(laborData);
+      if (first_name !== undefined) employeeData.first_name = first_name;
+      if (last_name !== undefined) employeeData.last_name = last_name;
       if (Object.keys(employeeData).length > 0) {
         const employee = await this.prisma.employees.findFirst({
           where: { party_id: id, deleted_at: null },
@@ -330,11 +384,25 @@ export class BusinessPartiesService {
         }
       }
 
+      if (data.name !== undefined && first_name === undefined && last_name === undefined) {
+        const employee = await this.prisma.employees.findFirst({
+          where: { party_id: id, deleted_at: null },
+          select: { id: true },
+        });
+        if (employee) {
+          const nameParts = updated.name.split(' ');
+          await this.prisma.employees.update({
+            where: { id: employee.id },
+            data: { first_name: nameParts[0] ?? updated.name, last_name: nameParts.slice(1).join(' ') },
+          });
+        }
+      }
+
       if (customer_enabled !== undefined) {
         await this.prisma.business_party_roles.upsert({
           where: { party_id_role: { party_id: id, role: 'CUSTOMER' } },
-          create: { party_id: id, role: 'CUSTOMER', active: customer_enabled },
-          update: { active: customer_enabled },
+          create: { party_id: id, role: 'CUSTOMER', active: customer_enabled && updated.active },
+          update: { active: customer_enabled && updated.active },
         });
       }
     }
@@ -349,10 +417,65 @@ export class BusinessPartiesService {
       });
     }
 
+    if (updated.type === 'PARTNER') {
+      const currentPartner = await this.prisma.partners.findFirst({
+        where: { party_id: id, deleted_at: null },
+      });
+      const nextPartnerKind = partner_kind ?? currentPartner?.partner_kind ?? 'PARTNER';
+      if (nextPartnerKind === 'PARTNER') this.validateSharePercentage(share_percentage);
+
+      const nameParts = updated.name.split(' ');
+      const partnerData: Record<string, any> = {
+        first_name: first_name ?? currentPartner?.first_name ?? nameParts[0] ?? updated.name,
+        last_name: last_name ?? currentPartner?.last_name ?? nameParts.slice(1).join(' '),
+        is_active: updated.active,
+        ...(data.document_type !== undefined ? { document_type: data.document_type } : {}),
+        ...(data.tax_id !== undefined ? { document_number: data.tax_id } : {}),
+      };
+
+      if (partner_kind !== undefined || !currentPartner) partnerData.partner_kind = nextPartnerKind;
+      if (nextPartnerKind === 'INVESTOR') {
+        Object.assign(partnerData, {
+          partner_kind: 'INVESTOR',
+          share_percentage: null,
+          capital_contributed: null,
+          is_salesperson: false,
+          default_commission_rate: null,
+        });
+      } else {
+        if (share_percentage !== undefined) partnerData.share_percentage = share_percentage == null || share_percentage === '' ? null : String(share_percentage);
+        if (capital_contributed !== undefined) partnerData.capital_contributed = capital_contributed == null || capital_contributed === '' ? null : String(capital_contributed);
+        if (is_salesperson !== undefined) partnerData.is_salesperson = is_salesperson;
+        if (default_commission_rate !== undefined && (is_salesperson ?? currentPartner?.is_salesperson)) {
+          partnerData.default_commission_rate = default_commission_rate == null ? null : String(default_commission_rate);
+        }
+        if (commission_base !== undefined) partnerData.commission_base = commission_base;
+      }
+
+      if (currentPartner) {
+        await this.prisma.partners.update({ where: { id: currentPartner.id }, data: partnerData });
+      } else {
+        await this.prisma.partners.create({
+          data: {
+            ...partnerData,
+            party_id: id,
+            document_type: data.document_type ?? updated.document_type,
+            document_number: data.tax_id ?? updated.tax_id,
+            share_percentage: partnerData.share_percentage ?? null,
+            capital_contributed: partnerData.capital_contributed ?? null,
+            is_salesperson: partnerData.is_salesperson ?? false,
+            default_commission_rate: partnerData.default_commission_rate ?? null,
+            commission_base: partnerData.commission_base ?? 'INVOICED',
+            created_by: updated.created_by,
+          },
+        });
+      }
+    }
+
     await this.prisma.business_party_roles.upsert({
       where: { party_id_role: { party_id: id, role: updated.type } },
-      create: { party_id: id, role: updated.type, active: true },
-      update: { active: true },
+      create: { party_id: id, role: updated.type, active: updated.active },
+      update: { active: updated.active },
     });
 
     // Devolver findOne para incluir employee + user

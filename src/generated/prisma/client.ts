@@ -147,6 +147,11 @@ export type document_type_taxes = Prisma.document_type_taxesModel
  */
 export type documents = Prisma.documentsModel
 /**
+ * Model document_activity_events
+ * 
+ */
+export type document_activity_events = Prisma.document_activity_eventsModel
+/**
  * Model fiscal_authorizations
  * 
  */
@@ -296,6 +301,21 @@ export type hr_account_entries = Prisma.hr_account_entriesModel
  * 
  */
 export type hr_vales = Prisma.hr_valesModel
+/**
+ * Model hr_vale_partner_share_details
+ * 
+ */
+export type hr_vale_partner_share_details = Prisma.hr_vale_partner_share_detailsModel
+/**
+ * Model hr_partner_investment_plans
+ * 
+ */
+export type hr_partner_investment_plans = Prisma.hr_partner_investment_plansModel
+/**
+ * Model hr_partner_investment_installments
+ * 
+ */
+export type hr_partner_investment_installments = Prisma.hr_partner_investment_installmentsModel
 /**
  * Model hr_vale_commission_details
  * 
@@ -672,6 +692,31 @@ export type product_list_prices = Prisma.product_list_pricesModel
  */
 export type companies = Prisma.companiesModel
 /**
+ * Model platform_modules
+ * 
+ */
+export type platform_modules = Prisma.platform_modulesModel
+/**
+ * Model subscription_plans
+ * 
+ */
+export type subscription_plans = Prisma.subscription_plansModel
+/**
+ * Model subscription_plan_modules
+ * 
+ */
+export type subscription_plan_modules = Prisma.subscription_plan_modulesModel
+/**
+ * Model company_subscriptions
+ * 
+ */
+export type company_subscriptions = Prisma.company_subscriptionsModel
+/**
+ * Model company_module_overrides
+ * 
+ */
+export type company_module_overrides = Prisma.company_module_overridesModel
+/**
  * Model refresh_tokens
  * 
  */
@@ -692,10 +737,25 @@ export type users = Prisma.usersModel
  */
 export type company_users = Prisma.company_usersModel
 /**
+ * Model platform_admin_assignments
+ * 
+ */
+export type platform_admin_assignments = Prisma.platform_admin_assignmentsModel
+/**
+ * Model platform_admin_company_scopes
+ * 
+ */
+export type platform_admin_company_scopes = Prisma.platform_admin_company_scopesModel
+/**
  * Model company_tax_settings
  * 
  */
 export type company_tax_settings = Prisma.company_tax_settingsModel
+/**
+ * Model company_arca_settings
+ * 
+ */
+export type company_arca_settings = Prisma.company_arca_settingsModel
 /**
  * Model user_table_preferences
  * 
@@ -767,6 +827,11 @@ export type user_permission_overrides = Prisma.user_permission_overridesModel
  */
 export type sales_flow_settings = Prisma.sales_flow_settingsModel
 /**
+ * Model sales_partner_share_assignments
+ * 
+ */
+export type sales_partner_share_assignments = Prisma.sales_partner_share_assignmentsModel
+/**
  * Model commercial_operations
  * 
  */
@@ -827,6 +892,16 @@ export type bank_operations = Prisma.bank_operationsModel
  */
 export type bank_account_movements = Prisma.bank_account_movementsModel
 /**
+ * Model bank_movement_accounting_entries
+ * 
+ */
+export type bank_movement_accounting_entries = Prisma.bank_movement_accounting_entriesModel
+/**
+ * Model bank_movement_accounting_lines
+ * 
+ */
+export type bank_movement_accounting_lines = Prisma.bank_movement_accounting_linesModel
+/**
  * Model payment_bank_charges
  * 
  */
@@ -873,7 +948,7 @@ export type cash_box_transfers = Prisma.cash_box_transfersModel
 export type payments = Prisma.paymentsModel
 /**
  * Model payment_tenders
- *
+ * 
  */
 export type payment_tenders = Prisma.payment_tendersModel
 /**

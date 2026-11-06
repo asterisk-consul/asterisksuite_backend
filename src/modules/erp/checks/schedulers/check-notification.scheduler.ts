@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '@/prisma/prisma.service';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 
 @Injectable()
 export class CheckNotificationScheduler {
@@ -11,6 +12,7 @@ export class CheckNotificationScheduler {
   constructor(
     private db: PrismaService,
     private readonly whatsApp: WhatsAppNotificationsService,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   @Cron('0 9 * * *', { timeZone: 'America/Argentina/Buenos_Aires' })
@@ -57,6 +59,10 @@ export class CheckNotificationScheduler {
           if (!company.schema_name) continue;
           const tenantStartedAt = Date.now();
           try {
+            if (!(await this.platformModules.hasModuleOrLegacyAccess(company.id, 'TREASURY'))) {
+              tenantsSkipped += 1;
+              continue;
+            }
             const memberships = await publicClient.company_users.findMany({
               where: { company_id: company.id, user: { active: true, deleted_at: null } },
               select: { user_id: true, role: true },

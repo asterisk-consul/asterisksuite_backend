@@ -42,6 +42,7 @@ import { ListPricesModule } from './pricing/list-prices/list-prices.module';
 import { ManagementReportsModule } from './management-reports/management-reports.module';
 import { FinancialInvestmentsModule } from './financial-investments/financial-investments.module';
 import { WhatsAppReportsModule } from './whatsapp-reports/whatsapp-reports.module';
+import { ArcaModule } from './arca/arca.module';
 
 @Module({
   imports: [
@@ -84,6 +85,7 @@ import { WhatsAppReportsModule } from './whatsapp-reports/whatsapp-reports.modul
     ManagementReportsModule,
     FinancialInvestmentsModule,
     WhatsAppReportsModule,
+    ArcaModule,
   ],
   exports: [
     AccountsModule,
@@ -125,6 +127,7 @@ import { WhatsAppReportsModule } from './whatsapp-reports/whatsapp-reports.modul
     ManagementReportsModule,
     FinancialInvestmentsModule,
     WhatsAppReportsModule,
+    ArcaModule,
   ],
 })
 export class ErpModulesModule {}

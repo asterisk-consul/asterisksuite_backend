@@ -13,6 +13,30 @@ export interface CreateAssignmentNotificationInput {
   targetId: string;
 }
 
+export interface CreateIntakeActivityNotificationInput {
+  tx: PrismaTransactionClient;
+  companyId?: string;
+  recipientUserId?: string | null;
+  actorUserId: string;
+  title: string;
+  message: string;
+  targetPath: string;
+  targetId: string;
+}
+
+export interface CreateDocumentActivityInput {
+  tx: PrismaTransactionClient;
+  documentId: string;
+  auditorUserId?: string | null;
+  actorUserId?: string | null;
+  eventType: string;
+  message: string;
+  targetPath: string;
+  fromStatus?: number | null;
+  toStatus?: number | null;
+  notificationTitle?: string;
+}
+
 @Injectable()
 export class NotificationsService {
   constructor(private readonly db: PrismaService) {}
@@ -73,6 +97,67 @@ export class NotificationsService {
         target_id: input.targetId,
       },
     });
+  }
+
+  async createIntakeActivity(input: CreateIntakeActivityNotificationInput) {
+    const recipientUserId = input.recipientUserId;
+    if (!input.companyId || !recipientUserId || recipientUserId === input.actorUserId) return null;
+
+    const membership = await this.db.getDefaultClient().company_users.findUnique({
+      where: {
+        company_id_user_id: {
+          company_id: input.companyId,
+          user_id: recipientUserId,
+        },
+      },
+      select: { user_id: true },
+    });
+    // La persona que creó la captura puede haber perdido acceso a la empresa.
+    // En ese caso no bloqueamos el avance del comprobante por una notificación.
+    if (!membership) return null;
+
+    return input.tx.user_notifications.create({
+      data: {
+        recipient_user_id: recipientUserId,
+        actor_user_id: input.actorUserId,
+        type: 'INTAKE_UPDATE',
+        title: input.title,
+        message: input.message.slice(0, 500),
+        target_path: input.targetPath,
+        target_type: 'INTAKE_RECORD',
+        target_id: input.targetId,
+      },
+    });
+  }
+
+  async createDocumentActivity(input: CreateDocumentActivityInput) {
+    const event = await input.tx.document_activity_events.create({
+      data: {
+        document_id: input.documentId,
+        actor_user_id: input.actorUserId ?? null,
+        event_type: input.eventType,
+        message: input.message.slice(0, 500),
+        from_status: input.fromStatus ?? null,
+        to_status: input.toStatus ?? null,
+      },
+    });
+
+    if (input.auditorUserId && input.auditorUserId !== input.actorUserId && input.notificationTitle) {
+      await input.tx.user_notifications.create({
+        data: {
+          recipient_user_id: input.auditorUserId,
+          actor_user_id: input.actorUserId ?? null,
+          type: 'DOCUMENT_AUDIT',
+          title: input.notificationTitle,
+          message: input.message.slice(0, 500),
+          target_path: input.targetPath,
+          target_type: 'SALES_DOCUMENT',
+          target_id: input.documentId,
+        },
+      });
+    }
+
+    return event;
   }
 
   async listForUser(userId: string, requestedTake?: string) {

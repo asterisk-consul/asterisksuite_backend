@@ -18,6 +18,7 @@ import {
   InvalidScopeError,
 } from '@modelcontextprotocol/sdk/server/auth/errors.js';
 import { PrismaService } from '@/prisma/prisma.service';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 
 export const MCP_SCOPES = ['erp:read', 'intake:files.read', 'purchases:drafts.write'] as const;
 export type McpScope = (typeof MCP_SCOPES)[number];
@@ -47,6 +48,7 @@ export class McpOAuthProvider implements OAuthServerProvider, OAuthRegisteredCli
     private readonly db: PrismaService,
     private readonly jwt: JwtService,
     private readonly config: ConfigService,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   get clientsStore(): OAuthRegisteredClientsStore {
@@ -216,9 +218,22 @@ export class McpOAuthProvider implements OAuthServerProvider, OAuthRegisteredCli
     if (!user || !company || !membership) throw new AccessDeniedError('No tienes acceso a esa empresa');
     if (!client) throw new InvalidClientError('El cliente MCP ya no está registrado');
 
+    const enabledForCompany = await this.platformModules.hasModuleOrLegacyAccess(companyId, 'MCP');
+    if (!enabledForCompany) {
+      throw new AccessDeniedError('Las conexiones MCP no están incluidas en el plan de esta empresa.');
+    }
+
     const scopes = [...new Set((pending.requested_scopes as string[]).map(String))];
     if (!scopes.length || scopes.some((scope) => !(MCP_SCOPES as readonly string[]).includes(scope))) {
       throw new InvalidScopeError('La solicitud incluye permisos MCP no admitidos');
+    }
+    if (scopes.includes('purchases:drafts.write')
+      && !(await this.platformModules.hasModuleOrLegacyAccess(companyId, 'PURCHASES'))) {
+      throw new AccessDeniedError('El plan de esta empresa no incluye Compras para crear borradores por MCP.');
+    }
+    if (scopes.includes('intake:files.read')
+      && !(await this.platformModules.hasModuleOrLegacyAccess(companyId, 'PURCHASES'))) {
+      throw new AccessDeniedError('El plan de esta empresa no incluye Compras para consultar capturas de facturas por MCP.');
     }
 
     const activeGrants = await this.prisma.mcp_oauth_grants.count({

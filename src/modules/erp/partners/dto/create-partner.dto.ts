@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, IsString, IsUUID, MaxLength, ValidateNested, IsArray, IsNumber } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, IsUUID, MaxLength, ValidateNested, IsArray, IsNumber, IsIn, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateUserDto } from '../../employees/dto/create-user.dto';
 
@@ -98,6 +98,10 @@ export class CreatePartnerDto {
   document_number?: string;
 
   @IsOptional()
+  @IsIn(['PARTNER', 'INVESTOR'])
+  partner_kind?: 'PARTNER' | 'INVESTOR';
+
+  @IsOptional()
   @IsString()
   share_percentage?: string;
 
@@ -108,6 +112,21 @@ export class CreatePartnerDto {
   @IsOptional()
   @IsBoolean()
   is_active?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  is_salesperson?: boolean;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  @Max(100)
+  default_commission_rate?: number;
+
+  @IsOptional()
+  @IsIn(['INVOICED', 'PAID'])
+  commission_base?: 'INVOICED' | 'PAID';
 
   // ─── Business party fields (for auto-creation) ─
   @IsOptional()

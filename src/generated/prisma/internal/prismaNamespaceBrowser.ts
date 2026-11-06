@@ -72,6 +72,7 @@ export const ModelName = {
   document_types: 'document_types',
   document_type_taxes: 'document_type_taxes',
   documents: 'documents',
+  document_activity_events: 'document_activity_events',
   fiscal_authorizations: 'fiscal_authorizations',
   fiscal_authorization_settings: 'fiscal_authorization_settings',
   fiscal_authorization_alerts: 'fiscal_authorization_alerts',
@@ -102,6 +103,9 @@ export const ModelName = {
   hr_accounts: 'hr_accounts',
   hr_account_entries: 'hr_account_entries',
   hr_vales: 'hr_vales',
+  hr_vale_partner_share_details: 'hr_vale_partner_share_details',
+  hr_partner_investment_plans: 'hr_partner_investment_plans',
+  hr_partner_investment_installments: 'hr_partner_investment_installments',
   hr_vale_commission_details: 'hr_vale_commission_details',
   international_operations: 'international_operations',
   international_operation_quotes: 'international_operation_quotes',
@@ -177,11 +181,19 @@ export const ModelName = {
   price_lists: 'price_lists',
   product_list_prices: 'product_list_prices',
   companies: 'companies',
+  platform_modules: 'platform_modules',
+  subscription_plans: 'subscription_plans',
+  subscription_plan_modules: 'subscription_plan_modules',
+  company_subscriptions: 'company_subscriptions',
+  company_module_overrides: 'company_module_overrides',
   refresh_tokens: 'refresh_tokens',
   audit_logs_public: 'audit_logs_public',
   users: 'users',
   company_users: 'company_users',
+  platform_admin_assignments: 'platform_admin_assignments',
+  platform_admin_company_scopes: 'platform_admin_company_scopes',
   company_tax_settings: 'company_tax_settings',
+  company_arca_settings: 'company_arca_settings',
   user_table_preferences: 'user_table_preferences',
   company_whatsapp_report_settings: 'company_whatsapp_report_settings',
   company_whatsapp_report_runs: 'company_whatsapp_report_runs',
@@ -196,6 +208,7 @@ export const ModelName = {
   business_user_roles: 'business_user_roles',
   user_permission_overrides: 'user_permission_overrides',
   sales_flow_settings: 'sales_flow_settings',
+  sales_partner_share_assignments: 'sales_partner_share_assignments',
   commercial_operations: 'commercial_operations',
   tax_categories: 'tax_categories',
   tax_category_taxes: 'tax_category_taxes',
@@ -208,6 +221,8 @@ export const ModelName = {
   bank_account_user_roles: 'bank_account_user_roles',
   bank_operations: 'bank_operations',
   bank_account_movements: 'bank_account_movements',
+  bank_movement_accounting_entries: 'bank_movement_accounting_entries',
+  bank_movement_accounting_lines: 'bank_movement_accounting_lines',
   payment_bank_charges: 'payment_bank_charges',
   cash_boxes: 'cash_boxes',
   cash_box_sessions: 'cash_box_sessions',
@@ -552,6 +567,7 @@ export const Document_itemsScalarFieldEnum = {
   converted_price: 'converted_price',
   quantity_delivered: 'quantity_delivered',
   quantity_invoiced: 'quantity_invoiced',
+  item_instructions: 'item_instructions',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',
@@ -681,6 +697,7 @@ export const DocumentsScalarFieldEnum = {
   custom_fields: 'custom_fields',
   commercial_adjustments: 'commercial_adjustments',
   assigned_to: 'assigned_to',
+  auditor_user_id: 'auditor_user_id',
   validity_date: 'validity_date',
   delivery_date: 'delivery_date',
   created_at: 'created_at',
@@ -700,6 +717,20 @@ export const DocumentsScalarFieldEnum = {
 } as const
 
 export type DocumentsScalarFieldEnum = (typeof DocumentsScalarFieldEnum)[keyof typeof DocumentsScalarFieldEnum]
+
+
+export const Document_activity_eventsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  actor_user_id: 'actor_user_id',
+  event_type: 'event_type',
+  message: 'message',
+  from_status: 'from_status',
+  to_status: 'to_status',
+  created_at: 'created_at'
+} as const
+
+export type Document_activity_eventsScalarFieldEnum = (typeof Document_activity_eventsScalarFieldEnum)[keyof typeof Document_activity_eventsScalarFieldEnum]
 
 
 export const Fiscal_authorizationsScalarFieldEnum = {
@@ -789,6 +820,8 @@ export const Orden_venta_documentsScalarFieldEnum = {
   transport_provider: 'transport_provider',
   confirmed_delivery_date: 'confirmed_delivery_date',
   seller_id: 'seller_id',
+  seller_partner_id: 'seller_partner_id',
+  seller_type: 'seller_type',
   commission_rate: 'commission_rate',
   commission_base: 'commission_base',
   commission_settled_at: 'commission_settled_at',
@@ -803,7 +836,9 @@ export type Orden_venta_documentsScalarFieldEnum = (typeof Orden_venta_documents
 export const Sales_commission_assignmentsScalarFieldEnum = {
   id: 'id',
   document_id: 'document_id',
+  seller_type: 'seller_type',
   seller_id: 'seller_id',
+  partner_id: 'partner_id',
   participation_rate: 'participation_rate',
   commission_rate: 'commission_rate',
   commission_base: 'commission_base',
@@ -869,12 +904,16 @@ export const PartnersScalarFieldEnum = {
   id: 'id',
   party_id: 'party_id',
   user_id: 'user_id',
+  partner_kind: 'partner_kind',
   first_name: 'first_name',
   last_name: 'last_name',
   document_type: 'document_type',
   document_number: 'document_number',
   share_percentage: 'share_percentage',
   capital_contributed: 'capital_contributed',
+  default_commission_rate: 'default_commission_rate',
+  commission_base: 'commission_base',
+  is_salesperson: 'is_salesperson',
   is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -1344,11 +1383,56 @@ export const Hr_valesScalarFieldEnum = {
 export type Hr_valesScalarFieldEnum = (typeof Hr_valesScalarFieldEnum)[keyof typeof Hr_valesScalarFieldEnum]
 
 
+export const Hr_vale_partner_share_detailsScalarFieldEnum = {
+  id: 'id',
+  hr_vale_id: 'hr_vale_id',
+  document_id: 'document_id',
+  partner_id: 'partner_id',
+  base_amount: 'base_amount',
+  share_percentage: 'share_percentage',
+  share_amount: 'share_amount',
+  calculation_basis: 'calculation_basis',
+  date: 'date',
+  created_at: 'created_at'
+} as const
+
+export type Hr_vale_partner_share_detailsScalarFieldEnum = (typeof Hr_vale_partner_share_detailsScalarFieldEnum)[keyof typeof Hr_vale_partner_share_detailsScalarFieldEnum]
+
+
+export const Hr_partner_investment_plansScalarFieldEnum = {
+  id: 'id',
+  idempotency_key: 'idempotency_key',
+  partner_id: 'partner_id',
+  currency_code: 'currency_code',
+  total_amount: 'total_amount',
+  description: 'description',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Hr_partner_investment_plansScalarFieldEnum = (typeof Hr_partner_investment_plansScalarFieldEnum)[keyof typeof Hr_partner_investment_plansScalarFieldEnum]
+
+
+export const Hr_partner_investment_installmentsScalarFieldEnum = {
+  id: 'id',
+  plan_id: 'plan_id',
+  installment_number: 'installment_number',
+  amount: 'amount',
+  due_date: 'due_date',
+  vale_id: 'vale_id',
+  created_at: 'created_at'
+} as const
+
+export type Hr_partner_investment_installmentsScalarFieldEnum = (typeof Hr_partner_investment_installmentsScalarFieldEnum)[keyof typeof Hr_partner_investment_installmentsScalarFieldEnum]
+
+
 export const Hr_vale_commission_detailsScalarFieldEnum = {
   id: 'id',
   hr_vale_id: 'hr_vale_id',
   document_id: 'document_id',
   seller_id: 'seller_id',
+  seller_type: 'seller_type',
+  partner_id: 'partner_id',
   subtotal: 'subtotal',
   commission_rate: 'commission_rate',
   commission_amount: 'commission_amount',
@@ -2768,6 +2852,76 @@ export const CompaniesScalarFieldEnum = {
 export type CompaniesScalarFieldEnum = (typeof CompaniesScalarFieldEnum)[keyof typeof CompaniesScalarFieldEnum]
 
 
+export const Platform_modulesScalarFieldEnum = {
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  icon: 'icon',
+  sort_order: 'sort_order',
+  is_core: 'is_core',
+  active: 'active',
+  dependencies: 'dependencies',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Platform_modulesScalarFieldEnum = (typeof Platform_modulesScalarFieldEnum)[keyof typeof Platform_modulesScalarFieldEnum]
+
+
+export const Subscription_plansScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  is_legacy: 'is_legacy',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Subscription_plansScalarFieldEnum = (typeof Subscription_plansScalarFieldEnum)[keyof typeof Subscription_plansScalarFieldEnum]
+
+
+export const Subscription_plan_modulesScalarFieldEnum = {
+  plan_id: 'plan_id',
+  module_code: 'module_code',
+  enabled: 'enabled',
+  limits: 'limits'
+} as const
+
+export type Subscription_plan_modulesScalarFieldEnum = (typeof Subscription_plan_modulesScalarFieldEnum)[keyof typeof Subscription_plan_modulesScalarFieldEnum]
+
+
+export const Company_subscriptionsScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  plan_id: 'plan_id',
+  status: 'status',
+  starts_at: 'starts_at',
+  trial_ends_at: 'trial_ends_at',
+  renews_at: 'renews_at',
+  cancelled_at: 'cancelled_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_subscriptionsScalarFieldEnum = (typeof Company_subscriptionsScalarFieldEnum)[keyof typeof Company_subscriptionsScalarFieldEnum]
+
+
+export const Company_module_overridesScalarFieldEnum = {
+  id: 'id',
+  company_id: 'company_id',
+  module_code: 'module_code',
+  state: 'state',
+  reason: 'reason',
+  expires_at: 'expires_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_module_overridesScalarFieldEnum = (typeof Company_module_overridesScalarFieldEnum)[keyof typeof Company_module_overridesScalarFieldEnum]
+
+
 export const Refresh_tokensScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
@@ -2826,6 +2980,27 @@ export const Company_usersScalarFieldEnum = {
 export type Company_usersScalarFieldEnum = (typeof Company_usersScalarFieldEnum)[keyof typeof Company_usersScalarFieldEnum]
 
 
+export const Platform_admin_assignmentsScalarFieldEnum = {
+  user_id: 'user_id',
+  previous_role: 'previous_role',
+  granted_by: 'granted_by',
+  updated_by: 'updated_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Platform_admin_assignmentsScalarFieldEnum = (typeof Platform_admin_assignmentsScalarFieldEnum)[keyof typeof Platform_admin_assignmentsScalarFieldEnum]
+
+
+export const Platform_admin_company_scopesScalarFieldEnum = {
+  user_id: 'user_id',
+  company_id: 'company_id',
+  created_at: 'created_at'
+} as const
+
+export type Platform_admin_company_scopesScalarFieldEnum = (typeof Platform_admin_company_scopesScalarFieldEnum)[keyof typeof Platform_admin_company_scopesScalarFieldEnum]
+
+
 export const Company_tax_settingsScalarFieldEnum = {
   id: 'id',
   company_id: 'company_id',
@@ -2838,6 +3013,33 @@ export const Company_tax_settingsScalarFieldEnum = {
 } as const
 
 export type Company_tax_settingsScalarFieldEnum = (typeof Company_tax_settingsScalarFieldEnum)[keyof typeof Company_tax_settingsScalarFieldEnum]
+
+
+export const Company_arca_settingsScalarFieldEnum = {
+  company_id: 'company_id',
+  issuer_cuit: 'issuer_cuit',
+  environment: 'environment',
+  point_of_sale: 'point_of_sale',
+  credentials_ciphertext: 'credentials_ciphertext',
+  credentials_iv: 'credentials_iv',
+  credentials_auth_tag: 'credentials_auth_tag',
+  access_ticket_ciphertext: 'access_ticket_ciphertext',
+  access_ticket_iv: 'access_ticket_iv',
+  access_ticket_auth_tag: 'access_ticket_auth_tag',
+  access_ticket_expires_at: 'access_ticket_expires_at',
+  certificate_subject: 'certificate_subject',
+  certificate_serial: 'certificate_serial',
+  certificate_valid_to: 'certificate_valid_to',
+  available_point_sales: 'available_point_sales',
+  last_test_status: 'last_test_status',
+  last_test_message: 'last_test_message',
+  last_tested_at: 'last_tested_at',
+  configured_by: 'configured_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Company_arca_settingsScalarFieldEnum = (typeof Company_arca_settingsScalarFieldEnum)[keyof typeof Company_arca_settingsScalarFieldEnum]
 
 
 export const User_table_preferencesScalarFieldEnum = {
@@ -3027,6 +3229,8 @@ export const Sales_flow_settingsScalarFieldEnum = {
   require_payment_for_delivery: 'require_payment_for_delivery',
   delivery_payment_percentage: 'delivery_payment_percentage',
   require_invoice_for_delivery: 'require_invoice_for_delivery',
+  require_order_delivery_address: 'require_order_delivery_address',
+  warn_when_order_delivery_data_empty: 'warn_when_order_delivery_data_empty',
   auto_create_delivery_note: 'auto_create_delivery_note',
   allow_partial_delivery: 'allow_partial_delivery',
   reserve_stock_on_order_confirmation: 'reserve_stock_on_order_confirmation',
@@ -3035,6 +3239,9 @@ export const Sales_flow_settingsScalarFieldEnum = {
   prompt_order_assignee_on_confirmation: 'prompt_order_assignee_on_confirmation',
   require_order_assignee_on_confirmation: 'require_order_assignee_on_confirmation',
   default_order_assignee_id: 'default_order_assignee_id',
+  default_order_auditor_id: 'default_order_auditor_id',
+  default_commission_assignments: 'default_commission_assignments',
+  partner_share_basis: 'partner_share_basis',
   active_from: 'active_from',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -3043,6 +3250,22 @@ export const Sales_flow_settingsScalarFieldEnum = {
 } as const
 
 export type Sales_flow_settingsScalarFieldEnum = (typeof Sales_flow_settingsScalarFieldEnum)[keyof typeof Sales_flow_settingsScalarFieldEnum]
+
+
+export const Sales_partner_share_assignmentsScalarFieldEnum = {
+  id: 'id',
+  document_id: 'document_id',
+  partner_id: 'partner_id',
+  share_percentage: 'share_percentage',
+  calculation_basis: 'calculation_basis',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Sales_partner_share_assignmentsScalarFieldEnum = (typeof Sales_partner_share_assignmentsScalarFieldEnum)[keyof typeof Sales_partner_share_assignmentsScalarFieldEnum]
 
 
 export const Commercial_operationsScalarFieldEnum = {
@@ -3214,6 +3437,7 @@ export const Bank_accountsScalarFieldEnum = {
   alias: 'alias',
   account_number: 'account_number',
   currency_code: 'currency_code',
+  accounting_account_id: 'accounting_account_id',
   balance: 'balance',
   active: 'active',
   created_at: 'created_at',
@@ -3317,6 +3541,7 @@ export const Bank_account_movementsScalarFieldEnum = {
   reference: 'reference',
   reference_type: 'reference_type',
   reference_id: 'reference_id',
+  import_key: 'import_key',
   attachment_file_id: 'attachment_file_id',
   bank_concept_id: 'bank_concept_id',
   concept_code_snapshot: 'concept_code_snapshot',
@@ -3335,6 +3560,39 @@ export const Bank_account_movementsScalarFieldEnum = {
 } as const
 
 export type Bank_account_movementsScalarFieldEnum = (typeof Bank_account_movementsScalarFieldEnum)[keyof typeof Bank_account_movementsScalarFieldEnum]
+
+
+export const Bank_movement_accounting_entriesScalarFieldEnum = {
+  id: 'id',
+  bank_account_movement_id: 'bank_account_movement_id',
+  reversal_of_entry_id: 'reversal_of_entry_id',
+  entry_date: 'entry_date',
+  description: 'description',
+  currency_code: 'currency_code',
+  exchange_rate: 'exchange_rate',
+  base_amount: 'base_amount',
+  created_at: 'created_at',
+  created_by: 'created_by',
+  reversed_at: 'reversed_at',
+  reversed_by: 'reversed_by'
+} as const
+
+export type Bank_movement_accounting_entriesScalarFieldEnum = (typeof Bank_movement_accounting_entriesScalarFieldEnum)[keyof typeof Bank_movement_accounting_entriesScalarFieldEnum]
+
+
+export const Bank_movement_accounting_linesScalarFieldEnum = {
+  id: 'id',
+  entry_id: 'entry_id',
+  line_number: 'line_number',
+  account_id: 'account_id',
+  description: 'description',
+  debit: 'debit',
+  credit: 'credit',
+  currency_code: 'currency_code',
+  foreign_amount: 'foreign_amount'
+} as const
+
+export type Bank_movement_accounting_linesScalarFieldEnum = (typeof Bank_movement_accounting_linesScalarFieldEnum)[keyof typeof Bank_movement_accounting_linesScalarFieldEnum]
 
 
 export const Payment_bank_chargesScalarFieldEnum = {

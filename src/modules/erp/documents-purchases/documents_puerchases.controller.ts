@@ -58,6 +58,7 @@ export class DocumentsPurchasesController {
     @Query('order') order?: 'asc' | 'desc',
     @Query('excludeCancelled') excludeCancelled?: string,
     @Query('filters') filters?: string,
+    @Query('excludeOpeningBalances') excludeOpeningBalances?: string,
   ) {
     const companyRole = req['companyUserRole'] as string | undefined;
     const allowedCategories = await this.documentAccess.allowedCategories(user.id, companyRole, 'purchases', 'read');
@@ -82,6 +83,49 @@ export class DocumentsPurchasesController {
       order,
       excludeCancelled === 'true',
       filters,
+      excludeOpeningBalances === 'true',
+    );
+  }
+
+  @Get('reference-invoices')
+  async findInvoiceReferences(
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+    @Query('search') search?: string,
+  ) {
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'purchases',
+      'INVOICE',
+      'read',
+    );
+    return this.service.findInvoiceReferences(
+      page !== undefined ? Number(page) : 1,
+      pageSize !== undefined ? Number(pageSize) : 50,
+      search,
+      req['companyUserRole'] === 'USER' ? user.id : undefined,
+    );
+  }
+
+  @Get('reference-invoices/:id')
+  async findInvoiceReference(
+    @Param('id') id: string,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'purchases',
+      'INVOICE',
+      'read',
+    );
+    return this.service.findInvoiceReference(
+      id,
+      req['companyUserRole'] === 'USER' ? user.id : undefined,
     );
   }
 
@@ -145,13 +189,21 @@ export class DocumentsPurchasesController {
 
   @Delete(':id')
   async remove(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    const role = req['companyUserRole'] as string | undefined;
     await this.documentAccess.assertDocument(
       user.id,
-      req['companyUserRole'] as string | undefined,
+      role,
       'purchases',
       id,
       'delete',
     );
+    const document = await this.service.getRemovalContext(id);
+    if (
+      document.status === 2
+      && ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(document.document_types?.category ?? '')
+    ) {
+      await this.documentAccess.assertDocument(user.id, role, 'purchases', id, 'cancel');
+    }
     return this.service.remove(id, user.id);
   }
 }

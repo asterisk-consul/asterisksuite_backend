@@ -102,6 +102,18 @@ export class DocumentsSalesController {
     return this.service.getCompletedTripsPending();
   }
 
+  @Get('salespeople')
+  async getSalespeople(@CurrentUser() user: AuthUser, @Req() req: Request) {
+    const companyRole = req['companyUserRole'] as string | undefined;
+    const canAccess = await Promise.all((['read', 'create', 'update'] as const).map(action =>
+      this.documentAccess.can(user.id, companyRole, 'sales', 'ORDER', action),
+    ));
+    if (!canAccess.some(Boolean)) {
+      throw new ForbiddenException('No tenés permiso para consultar vendedores del circuito de ventas');
+    }
+    return this.service.listSalespeople();
+  }
+
   @Post()
   async create(@Body() dto: CreateDocumentDto, @CurrentUser() user: AuthUser, @Req() req: Request) {
     await this.documentAccess.assertDocumentType(
@@ -161,6 +173,8 @@ export class DocumentsSalesController {
     @Query('excludeCancelled') excludeCancelled?: string,
     @Query('filters') filters?: string,
     @Query('deliveryStatus') deliveryStatus?: string,
+    @Query('excludeOpeningBalances') excludeOpeningBalances?: string,
+    @Query('seller_id') sellerId?: string,
   ) {
     const validDeliveryStatuses = ['PENDING', 'ELIGIBLE', 'DRAFT_CREATED'];
     if (deliveryStatus && !validDeliveryStatuses.includes(deliveryStatus)) {
@@ -196,6 +210,8 @@ export class DocumentsSalesController {
       excludeCancelled === 'true',
       filters,
       effectiveDeliveryStatus,
+      excludeOpeningBalances === 'true',
+      sellerId,
     );
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
     if (Array.isArray(documents)) {
@@ -219,6 +235,48 @@ export class DocumentsSalesController {
     return this.service.findPending(partyId);
   }
 
+  @Get('reference-invoices')
+  async findInvoiceReferences(
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+    @Query('page') page?: string,
+    @Query('pageSize') pageSize?: string,
+    @Query('search') search?: string,
+  ) {
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      'INVOICE',
+      'read',
+    );
+    return this.service.findInvoiceReferences(
+      page !== undefined ? Number(page) : 1,
+      pageSize !== undefined ? Number(pageSize) : 50,
+      search,
+      req['companyUserRole'] === 'USER' ? user.id : undefined,
+    );
+  }
+
+  @Get('reference-invoices/:id')
+  async findInvoiceReference(
+    @Param('id') id: string,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
+    await this.documentAccess.assertCategory(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      'INVOICE',
+      'read',
+    );
+    return this.service.findInvoiceReference(
+      id,
+      req['companyUserRole'] === 'USER' ? user.id : undefined,
+    );
+  }
+
   @Get(':id/stock-availability')
   async getStockAvailability(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
     await this.documentAccess.assertDocument(
@@ -229,6 +287,22 @@ export class DocumentsSalesController {
       'read',
     );
     return this.service.getSalesOrderAvailability(id);
+  }
+
+  @Get(':id/activity')
+  async getDocumentActivity(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    await this.documentAccess.assertDocument(
+      user.id,
+      req['companyUserRole'] as string | undefined,
+      'sales',
+      id,
+      'read',
+    );
+    return this.service.listDocumentActivity(
+      id,
+      user.id,
+      req['companyUserRole'] as string | undefined,
+    );
   }
 
   @Get(':id')
@@ -255,13 +329,13 @@ export class DocumentsSalesController {
     if (visibleDocument?.amounts_visible === false) {
       throw new ForbiddenException('No tenés permiso para editar importes de esta orden en su estado actual');
     }
-    return this.service.update(id, dto);
+    return this.service.update(id, dto, user.id);
   }
 
   @Patch(':id/confirm')
   async confirm(
     @Param('id') id: string,
-    @Body() body: { assigned_to?: string | null },
+    @Body() body: { assigned_to?: string | null; confirm_empty_delivery_data?: boolean } | undefined,
     @CurrentUser() user: AuthUser,
     @Req() req: Request,
   ) {
@@ -272,7 +346,7 @@ export class DocumentsSalesController {
       id,
       'confirm',
     );
-    return this.service.confirm(id, user.id, body?.assigned_to);
+    return this.service.confirm(id, user.id, body?.assigned_to, body?.confirm_empty_delivery_data === true);
   }
 
   @Patch(':id/cancel')
@@ -348,13 +422,21 @@ export class DocumentsSalesController {
 
   @Delete(':id')
   async remove(@Param('id') id: string, @CurrentUser() user: AuthUser, @Req() req: Request) {
+    const role = req['companyUserRole'] as string | undefined;
     await this.documentAccess.assertDocument(
       user.id,
-      req['companyUserRole'] as string | undefined,
+      role,
       'sales',
       id,
       'delete',
     );
+    const document = await this.service.findOne(id);
+    if (
+      document.status === 2
+      && ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(document.document_types?.category ?? '')
+    ) {
+      await this.documentAccess.assertDocument(user.id, role, 'sales', id, 'cancel');
+    }
     return this.service.remove(id, user.id);
   }
 }

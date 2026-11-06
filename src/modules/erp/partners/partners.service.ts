@@ -18,13 +18,23 @@ export class PartnersService {
     return this.db.getClientForCurrentContext();
   }
 
+  private validateSharePercentage(value?: string | null) {
+    if (value == null || value === '') return;
+    const percentage = Number(value);
+    if (!Number.isFinite(percentage) || percentage < 0 || percentage > 100) {
+      throw new BadRequestException('El porcentaje de participación debe estar entre 0% y 100%');
+    }
+  }
+
   async create(dto: CreatePartnerDto, userId: string) {
+    const partnerKind = dto.partner_kind ?? 'PARTNER';
     if (dto.user_id && dto.create_user) {
       throw new BadRequestException('No se puede enviar user_id y create_user al mismo tiempo');
     }
 
     // Validar formato de documento
     validateDocumentNumber(dto.document_type, dto.document_number);
+    if (partnerKind === 'PARTNER') this.validateSharePercentage(dto.share_percentage);
 
     await assertPartyIdentityIsUnique(this.prisma, [dto.document_number, dto.tax_id], { partyId: dto.party_id });
 
@@ -110,15 +120,26 @@ export class PartnersService {
       data: {
         party_id: partyId,
         user_id: finalUserId,
+        partner_kind: partnerKind,
         first_name: dto.first_name,
         last_name: dto.last_name,
         document_type: dto.document_type,
         document_number: dto.document_number,
-        share_percentage: dto.share_percentage,
-        capital_contributed: dto.capital_contributed,
+        share_percentage: partnerKind === 'PARTNER' ? dto.share_percentage : null,
+        capital_contributed: partnerKind === 'PARTNER' ? dto.capital_contributed : null,
+        is_salesperson: partnerKind === 'PARTNER' && (dto.is_salesperson ?? false),
+        default_commission_rate: partnerKind === 'PARTNER' && dto.default_commission_rate != null ? String(dto.default_commission_rate) : null,
+        commission_base: dto.commission_base ?? 'INVOICED',
         is_active: dto.is_active ?? true,
         created_by: userId,
       },
+    });
+
+    // Mantener la clasificación común alineada cuando el alta se inicia desde RR. HH.
+    await this.prisma.business_party_roles.upsert({
+      where: { party_id_role: { party_id: partyId, role: 'PARTNER' } },
+      create: { party_id: partyId, role: 'PARTNER', active: dto.is_active ?? true, created_by: userId },
+      update: { active: dto.is_active ?? true, updated_by: userId },
     });
 
     // Bidireccional: actualizar users.partner_id en public
@@ -184,6 +205,9 @@ export class PartnersService {
 
   async update(id: string, dto: UpdatePartnerDto, userId: string) {
     const partner = await this.findOne(id);
+    const partnerKind = dto.partner_kind ?? partner.partner_kind ?? 'PARTNER';
+
+    if (partnerKind === 'PARTNER' && dto.share_percentage !== undefined) this.validateSharePercentage(dto.share_percentage);
 
     if (dto.document_type !== undefined || dto.document_number !== undefined) {
       validateDocumentNumber(dto.document_type ?? partner.document_type ?? undefined, dto.document_number ?? partner.document_number ?? undefined);
@@ -196,6 +220,14 @@ export class PartnersService {
 
     // Extraer campos de business_party del DTO
     const { locations, contacts, bank_accounts, business_name, email, tax_id, vat_condition, exemption_rate, ...partnerData } = dto;
+    const normalizedPartnerData: Record<string, any> = { ...partnerData };
+    if (partnerKind === 'INVESTOR') {
+      normalizedPartnerData.partner_kind = 'INVESTOR';
+      normalizedPartnerData.share_percentage = null;
+      normalizedPartnerData.capital_contributed = null;
+      normalizedPartnerData.is_salesperson = false;
+      normalizedPartnerData.default_commission_rate = null;
+    }
 
     // Actualizar business_party si hay campos relacionados
     if (partner.party_id && (business_name || email || tax_id || vat_condition || exemption_rate !== undefined || locations || contacts || bank_accounts)) {
@@ -223,13 +255,39 @@ export class PartnersService {
       });
     }
 
-    return this.prisma.partners.update({
-      where: { id },
-      data: {
-        ...partnerData,
-        updated_at: new Date(),
-        updated_by: userId,
-      },
+    return this.prisma.$transaction(async (tx) => {
+      const updated = await tx.partners.update({
+        where: { id },
+        data: {
+          ...normalizedPartnerData,
+          updated_at: new Date(),
+          updated_by: userId,
+        },
+      });
+
+      if (partner.party_id) {
+        await tx.business_party_roles.upsert({
+          where: { party_id_role: { party_id: partner.party_id, role: 'PARTNER' } },
+          create: { party_id: partner.party_id, role: 'PARTNER', active: updated.is_active, created_by: userId },
+          update: { active: updated.is_active, updated_by: userId },
+        });
+      }
+
+      if (dto.is_salesperson === false || dto.is_active === false || partnerKind === 'INVESTOR') {
+        const settings = await tx.sales_flow_settings.findUnique({ where: { settings_key: 'default' } });
+        const assignments = Array.isArray(settings?.default_commission_assignments)
+          ? settings.default_commission_assignments as Array<{ seller_type: string; seller_id: string }>
+          : [];
+        const retained = assignments.filter((assignment) => !(assignment.seller_type === 'PARTNER' && assignment.seller_id === id));
+        if (settings && retained.length !== assignments.length) {
+          await tx.sales_flow_settings.update({
+            where: { settings_key: 'default' },
+            data: { default_commission_assignments: retained as any, updated_by: userId, active_from: new Date() },
+          });
+        }
+      }
+
+      return updated;
     });
   }
 

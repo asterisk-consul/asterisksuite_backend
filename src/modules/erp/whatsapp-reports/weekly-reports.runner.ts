@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { ManagementReportsService } from '../management-reports/management-reports.service';
 import { OpenWaClient } from './openwa.client';
 import { createWhatsAppReportCaption } from './whatsapp-report-messages';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 
 export const WHATSAPP_REPORTS_TIME_ZONE = 'America/Argentina/Buenos_Aires';
 const SETTINGS_BATCH_SIZE = 25;
@@ -19,6 +20,7 @@ export class WeeklyWhatsAppReportsRunner {
     private readonly db: PrismaService,
     private readonly reports: ManagementReportsService,
     private readonly openWa: OpenWaClient,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   async run(options: WeeklyRunOptions = {}) {
@@ -47,6 +49,10 @@ export class WeeklyWhatsAppReportsRunner {
       if (!settings.length) break;
 
       for (const setting of settings) {
+        if (!(await this.platformModules.hasModuleOrLegacyAccess(setting.company_id, 'WHATSAPP'))) {
+          skippedReports += 1;
+          continue;
+        }
         const selectedCompanyIds = readCompanyIds(setting.selected_company_ids, setting.company_id);
         const reportTasks: Array<{ kind: ReportKind; enabled: boolean; groupId: string | null }> = [
           { kind: 'consolidated', enabled: setting.consolidated_enabled, groupId: setting.consolidated_group_id },

@@ -96,6 +96,7 @@ export type DocumentsMinAggregateOutputType = {
   converted_taxable_base: runtime.Decimal | null
   converted_paid_amount: runtime.Decimal | null
   assigned_to: string | null
+  auditor_user_id: string | null
   validity_date: Date | null
   delivery_date: Date | null
   created_at: Date | null
@@ -144,6 +145,7 @@ export type DocumentsMaxAggregateOutputType = {
   converted_taxable_base: runtime.Decimal | null
   converted_paid_amount: runtime.Decimal | null
   assigned_to: string | null
+  auditor_user_id: string | null
   validity_date: Date | null
   delivery_date: Date | null
   created_at: Date | null
@@ -194,6 +196,7 @@ export type DocumentsCountAggregateOutputType = {
   custom_fields: number
   commercial_adjustments: number
   assigned_to: number
+  auditor_user_id: number
   validity_date: number
   delivery_date: number
   created_at: number
@@ -284,6 +287,7 @@ export type DocumentsMinAggregateInputType = {
   converted_taxable_base?: true
   converted_paid_amount?: true
   assigned_to?: true
+  auditor_user_id?: true
   validity_date?: true
   delivery_date?: true
   created_at?: true
@@ -332,6 +336,7 @@ export type DocumentsMaxAggregateInputType = {
   converted_taxable_base?: true
   converted_paid_amount?: true
   assigned_to?: true
+  auditor_user_id?: true
   validity_date?: true
   delivery_date?: true
   created_at?: true
@@ -382,6 +387,7 @@ export type DocumentsCountAggregateInputType = {
   custom_fields?: true
   commercial_adjustments?: true
   assigned_to?: true
+  auditor_user_id?: true
   validity_date?: true
   delivery_date?: true
   created_at?: true
@@ -519,6 +525,7 @@ export type DocumentsGroupByOutputType = {
   custom_fields: runtime.JsonValue | null
   commercial_adjustments: runtime.JsonValue | null
   assigned_to: string | null
+  auditor_user_id: string | null
   validity_date: Date | null
   delivery_date: Date | null
   created_at: Date | null
@@ -592,6 +599,7 @@ export type documentsWhereInput = {
   custom_fields?: Prisma.JsonNullableFilter<"documents">
   commercial_adjustments?: Prisma.JsonNullableFilter<"documents">
   assigned_to?: Prisma.UuidNullableFilter<"documents"> | string | null
+  auditor_user_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -626,6 +634,8 @@ export type documentsWhereInput = {
   orden_compra_doc?: Prisma.XOR<Prisma.Orden_compra_documentsNullableScalarRelationFilter, Prisma.orden_compra_documentsWhereInput> | null
   hr_vale_commission_details?: Prisma.Hr_vale_commission_detailsListRelationFilter
   sales_commission_assignments?: Prisma.Sales_commission_assignmentsListRelationFilter
+  sales_partner_share_assignments?: Prisma.Sales_partner_share_assignmentsListRelationFilter
+  hr_vale_partner_share_details?: Prisma.Hr_vale_partner_share_detailsListRelationFilter
   international_operation_docs?: Prisma.International_operation_documentsListRelationFilter
   international_operation_quotes?: Prisma.International_operation_quotesListRelationFilter
   converted_international_quote?: Prisma.XOR<Prisma.International_operation_quotesNullableScalarRelationFilter, Prisma.international_operation_quotesWhereInput> | null
@@ -633,6 +643,7 @@ export type documentsWhereInput = {
   maintenance_services?: Prisma.Maintenance_servicesListRelationFilter
   purchase_tires?: Prisma.TiresListRelationFilter
   fiscal_authorization?: Prisma.XOR<Prisma.Fiscal_authorizationsNullableScalarRelationFilter, Prisma.fiscal_authorizationsWhereInput> | null
+  activity_events?: Prisma.Document_activity_eventsListRelationFilter
 }
 
 export type documentsOrderByWithRelationInput = {
@@ -667,6 +678,7 @@ export type documentsOrderByWithRelationInput = {
   custom_fields?: Prisma.SortOrderInput | Prisma.SortOrder
   commercial_adjustments?: Prisma.SortOrderInput | Prisma.SortOrder
   assigned_to?: Prisma.SortOrderInput | Prisma.SortOrder
+  auditor_user_id?: Prisma.SortOrderInput | Prisma.SortOrder
   validity_date?: Prisma.SortOrderInput | Prisma.SortOrder
   delivery_date?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -701,6 +713,8 @@ export type documentsOrderByWithRelationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsOrderByWithRelationInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsOrderByRelationAggregateInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsOrderByRelationAggregateInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsOrderByRelationAggregateInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsOrderByRelationAggregateInput
   international_operation_docs?: Prisma.international_operation_documentsOrderByRelationAggregateInput
   international_operation_quotes?: Prisma.international_operation_quotesOrderByRelationAggregateInput
   converted_international_quote?: Prisma.international_operation_quotesOrderByWithRelationInput
@@ -708,6 +722,7 @@ export type documentsOrderByWithRelationInput = {
   maintenance_services?: Prisma.maintenance_servicesOrderByRelationAggregateInput
   purchase_tires?: Prisma.tiresOrderByRelationAggregateInput
   fiscal_authorization?: Prisma.fiscal_authorizationsOrderByWithRelationInput
+  activity_events?: Prisma.document_activity_eventsOrderByRelationAggregateInput
 }
 
 export type documentsWhereUniqueInput = Prisma.AtLeast<{
@@ -746,6 +761,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   custom_fields?: Prisma.JsonNullableFilter<"documents">
   commercial_adjustments?: Prisma.JsonNullableFilter<"documents">
   assigned_to?: Prisma.UuidNullableFilter<"documents"> | string | null
+  auditor_user_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -780,6 +796,8 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   orden_compra_doc?: Prisma.XOR<Prisma.Orden_compra_documentsNullableScalarRelationFilter, Prisma.orden_compra_documentsWhereInput> | null
   hr_vale_commission_details?: Prisma.Hr_vale_commission_detailsListRelationFilter
   sales_commission_assignments?: Prisma.Sales_commission_assignmentsListRelationFilter
+  sales_partner_share_assignments?: Prisma.Sales_partner_share_assignmentsListRelationFilter
+  hr_vale_partner_share_details?: Prisma.Hr_vale_partner_share_detailsListRelationFilter
   international_operation_docs?: Prisma.International_operation_documentsListRelationFilter
   international_operation_quotes?: Prisma.International_operation_quotesListRelationFilter
   converted_international_quote?: Prisma.XOR<Prisma.International_operation_quotesNullableScalarRelationFilter, Prisma.international_operation_quotesWhereInput> | null
@@ -787,6 +805,7 @@ export type documentsWhereUniqueInput = Prisma.AtLeast<{
   maintenance_services?: Prisma.Maintenance_servicesListRelationFilter
   purchase_tires?: Prisma.TiresListRelationFilter
   fiscal_authorization?: Prisma.XOR<Prisma.Fiscal_authorizationsNullableScalarRelationFilter, Prisma.fiscal_authorizationsWhereInput> | null
+  activity_events?: Prisma.Document_activity_eventsListRelationFilter
 }, "id" | "document_type_id_document_sequence_id_number">
 
 export type documentsOrderByWithAggregationInput = {
@@ -821,6 +840,7 @@ export type documentsOrderByWithAggregationInput = {
   custom_fields?: Prisma.SortOrderInput | Prisma.SortOrder
   commercial_adjustments?: Prisma.SortOrderInput | Prisma.SortOrder
   assigned_to?: Prisma.SortOrderInput | Prisma.SortOrder
+  auditor_user_id?: Prisma.SortOrderInput | Prisma.SortOrder
   validity_date?: Prisma.SortOrderInput | Prisma.SortOrder
   delivery_date?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -879,6 +899,7 @@ export type documentsScalarWhereWithAggregatesInput = {
   custom_fields?: Prisma.JsonNullableWithAggregatesFilter<"documents">
   commercial_adjustments?: Prisma.JsonNullableWithAggregatesFilter<"documents">
   assigned_to?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
+  auditor_user_id?: Prisma.UuidNullableWithAggregatesFilter<"documents"> | string | null
   validity_date?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
   created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"documents"> | Date | string | null
@@ -923,6 +944,7 @@ export type documentsCreateInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -955,6 +977,8 @@ export type documentsCreateInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -962,6 +986,7 @@ export type documentsCreateInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateInput = {
@@ -996,6 +1021,7 @@ export type documentsUncheckedCreateInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -1023,12 +1049,15 @@ export type documentsUncheckedCreateInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUpdateInput = {
@@ -1057,6 +1086,7 @@ export type documentsUpdateInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1089,6 +1119,8 @@ export type documentsUpdateInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -1096,6 +1128,7 @@ export type documentsUpdateInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateInput = {
@@ -1130,6 +1163,7 @@ export type documentsUncheckedUpdateInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1157,12 +1191,15 @@ export type documentsUncheckedUpdateInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateManyInput = {
@@ -1197,6 +1234,7 @@ export type documentsCreateManyInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -1241,6 +1279,7 @@ export type documentsUpdateManyMutationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1289,6 +1328,7 @@ export type documentsUncheckedUpdateManyInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1365,6 +1405,7 @@ export type documentsCountOrderByAggregateInput = {
   custom_fields?: Prisma.SortOrder
   commercial_adjustments?: Prisma.SortOrder
   assigned_to?: Prisma.SortOrder
+  auditor_user_id?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -1433,6 +1474,7 @@ export type documentsMaxOrderByAggregateInput = {
   converted_taxable_base?: Prisma.SortOrder
   converted_paid_amount?: Prisma.SortOrder
   assigned_to?: Prisma.SortOrder
+  auditor_user_id?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -1481,6 +1523,7 @@ export type documentsMinOrderByAggregateInput = {
   converted_taxable_base?: Prisma.SortOrder
   converted_paid_amount?: Prisma.SortOrder
   assigned_to?: Prisma.SortOrder
+  auditor_user_id?: Prisma.SortOrder
   validity_date?: Prisma.SortOrder
   delivery_date?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
@@ -1689,6 +1732,20 @@ export type documentsUncheckedUpdateManyWithoutParent_documentNestedInput = {
   deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
 }
 
+export type documentsCreateNestedOneWithoutActivity_eventsInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutActivity_eventsInput, Prisma.documentsUncheckedCreateWithoutActivity_eventsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutActivity_eventsInput
+  connect?: Prisma.documentsWhereUniqueInput
+}
+
+export type documentsUpdateOneRequiredWithoutActivity_eventsNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutActivity_eventsInput, Prisma.documentsUncheckedCreateWithoutActivity_eventsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutActivity_eventsInput
+  upsert?: Prisma.documentsUpsertWithoutActivity_eventsInput
+  connect?: Prisma.documentsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutActivity_eventsInput, Prisma.documentsUpdateWithoutActivity_eventsInput>, Prisma.documentsUncheckedUpdateWithoutActivity_eventsInput>
+}
+
 export type documentsCreateNestedManyWithoutFiscal_authorizationInput = {
   create?: Prisma.XOR<Prisma.documentsCreateWithoutFiscal_authorizationInput, Prisma.documentsUncheckedCreateWithoutFiscal_authorizationInput> | Prisma.documentsCreateWithoutFiscal_authorizationInput[] | Prisma.documentsUncheckedCreateWithoutFiscal_authorizationInput[]
   connectOrCreate?: Prisma.documentsCreateOrConnectWithoutFiscal_authorizationInput | Prisma.documentsCreateOrConnectWithoutFiscal_authorizationInput[]
@@ -1799,6 +1856,20 @@ export type documentsUpdateOneRequiredWithoutWithholding_allocationsNestedInput 
   upsert?: Prisma.documentsUpsertWithoutWithholding_allocationsInput
   connect?: Prisma.documentsWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutWithholding_allocationsInput, Prisma.documentsUpdateWithoutWithholding_allocationsInput>, Prisma.documentsUncheckedUpdateWithoutWithholding_allocationsInput>
+}
+
+export type documentsCreateNestedOneWithoutHr_vale_partner_share_detailsInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutHr_vale_partner_share_detailsInput, Prisma.documentsUncheckedCreateWithoutHr_vale_partner_share_detailsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutHr_vale_partner_share_detailsInput
+  connect?: Prisma.documentsWhereUniqueInput
+}
+
+export type documentsUpdateOneRequiredWithoutHr_vale_partner_share_detailsNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutHr_vale_partner_share_detailsInput, Prisma.documentsUncheckedCreateWithoutHr_vale_partner_share_detailsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutHr_vale_partner_share_detailsInput
+  upsert?: Prisma.documentsUpsertWithoutHr_vale_partner_share_detailsInput
+  connect?: Prisma.documentsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutHr_vale_partner_share_detailsInput, Prisma.documentsUpdateWithoutHr_vale_partner_share_detailsInput>, Prisma.documentsUncheckedUpdateWithoutHr_vale_partner_share_detailsInput>
 }
 
 export type documentsCreateNestedOneWithoutHr_vale_commission_detailsInput = {
@@ -1991,6 +2062,20 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesNestedInput = {
   deleteMany?: Prisma.documentsScalarWhereInput | Prisma.documentsScalarWhereInput[]
 }
 
+export type documentsCreateNestedOneWithoutSales_partner_share_assignmentsInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutSales_partner_share_assignmentsInput, Prisma.documentsUncheckedCreateWithoutSales_partner_share_assignmentsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutSales_partner_share_assignmentsInput
+  connect?: Prisma.documentsWhereUniqueInput
+}
+
+export type documentsUpdateOneRequiredWithoutSales_partner_share_assignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.documentsCreateWithoutSales_partner_share_assignmentsInput, Prisma.documentsUncheckedCreateWithoutSales_partner_share_assignmentsInput>
+  connectOrCreate?: Prisma.documentsCreateOrConnectWithoutSales_partner_share_assignmentsInput
+  upsert?: Prisma.documentsUpsertWithoutSales_partner_share_assignmentsInput
+  connect?: Prisma.documentsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.documentsUpdateToOneWithWhereWithoutSales_partner_share_assignmentsInput, Prisma.documentsUpdateWithoutSales_partner_share_assignmentsInput>, Prisma.documentsUncheckedUpdateWithoutSales_partner_share_assignmentsInput>
+}
+
 export type documentsCreateNestedOneWithoutRooted_commercial_operationInput = {
   create?: Prisma.XOR<Prisma.documentsCreateWithoutRooted_commercial_operationInput, Prisma.documentsUncheckedCreateWithoutRooted_commercial_operationInput>
   connectOrCreate?: Prisma.documentsCreateOrConnectWithoutRooted_commercial_operationInput
@@ -2129,6 +2214,7 @@ export type documentsCreateWithoutDocument_sequencesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2160,6 +2246,8 @@ export type documentsCreateWithoutDocument_sequencesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -2167,6 +2255,7 @@ export type documentsCreateWithoutDocument_sequencesInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutDocument_sequencesInput = {
@@ -2200,6 +2289,7 @@ export type documentsUncheckedCreateWithoutDocument_sequencesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2227,12 +2317,15 @@ export type documentsUncheckedCreateWithoutDocument_sequencesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutDocument_sequencesInput = {
@@ -2296,6 +2389,7 @@ export type documentsScalarWhereInput = {
   custom_fields?: Prisma.JsonNullableFilter<"documents">
   commercial_adjustments?: Prisma.JsonNullableFilter<"documents">
   assigned_to?: Prisma.UuidNullableFilter<"documents"> | string | null
+  auditor_user_id?: Prisma.UuidNullableFilter<"documents"> | string | null
   validity_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   delivery_date?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
   created_at?: Prisma.DateTimeNullableFilter<"documents"> | Date | string | null
@@ -2340,6 +2434,7 @@ export type documentsCreateWithoutDocument_itemsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2371,6 +2466,8 @@ export type documentsCreateWithoutDocument_itemsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -2378,6 +2475,7 @@ export type documentsCreateWithoutDocument_itemsInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutDocument_itemsInput = {
@@ -2412,6 +2510,7 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2438,12 +2537,15 @@ export type documentsUncheckedCreateWithoutDocument_itemsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutDocument_itemsInput = {
@@ -2488,6 +2590,7 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2519,6 +2622,8 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -2526,6 +2631,7 @@ export type documentsUpdateWithoutDocument_itemsInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
@@ -2560,6 +2666,7 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2586,12 +2693,15 @@ export type documentsUncheckedUpdateWithoutDocument_itemsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutDocument_taxesInput = {
@@ -2620,6 +2730,7 @@ export type documentsCreateWithoutDocument_taxesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2651,6 +2762,8 @@ export type documentsCreateWithoutDocument_taxesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -2658,6 +2771,7 @@ export type documentsCreateWithoutDocument_taxesInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutDocument_taxesInput = {
@@ -2692,6 +2806,7 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2718,12 +2833,15 @@ export type documentsUncheckedCreateWithoutDocument_taxesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutDocument_taxesInput = {
@@ -2768,6 +2886,7 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2799,6 +2918,8 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -2806,6 +2927,7 @@ export type documentsUpdateWithoutDocument_taxesInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
@@ -2840,6 +2962,7 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2866,12 +2989,15 @@ export type documentsUncheckedUpdateWithoutDocument_taxesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutDocument_typesInput = {
@@ -2900,6 +3026,7 @@ export type documentsCreateWithoutDocument_typesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2931,6 +3058,8 @@ export type documentsCreateWithoutDocument_typesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -2938,6 +3067,7 @@ export type documentsCreateWithoutDocument_typesInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutDocument_typesInput = {
@@ -2971,6 +3101,7 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -2998,12 +3129,15 @@ export type documentsUncheckedCreateWithoutDocument_typesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutDocument_typesInput = {
@@ -3058,6 +3192,7 @@ export type documentsCreateWithoutChild_documentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3089,6 +3224,8 @@ export type documentsCreateWithoutChild_documentsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -3096,6 +3233,7 @@ export type documentsCreateWithoutChild_documentsInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutChild_documentsInput = {
@@ -3130,6 +3268,7 @@ export type documentsUncheckedCreateWithoutChild_documentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3156,12 +3295,15 @@ export type documentsUncheckedCreateWithoutChild_documentsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutChild_documentsInput = {
@@ -3195,6 +3337,7 @@ export type documentsCreateWithoutParent_documentInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3226,6 +3369,8 @@ export type documentsCreateWithoutParent_documentInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -3233,6 +3378,7 @@ export type documentsCreateWithoutParent_documentInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutParent_documentInput = {
@@ -3266,6 +3412,7 @@ export type documentsUncheckedCreateWithoutParent_documentInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3293,12 +3440,15 @@ export type documentsUncheckedCreateWithoutParent_documentInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutParent_documentInput = {
@@ -3348,6 +3498,7 @@ export type documentsUpdateWithoutChild_documentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3379,6 +3530,8 @@ export type documentsUpdateWithoutChild_documentsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -3386,6 +3539,7 @@ export type documentsUpdateWithoutChild_documentsInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutChild_documentsInput = {
@@ -3420,6 +3574,7 @@ export type documentsUncheckedUpdateWithoutChild_documentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3446,12 +3601,15 @@ export type documentsUncheckedUpdateWithoutChild_documentsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUpsertWithWhereUniqueWithoutParent_documentInput = {
@@ -3470,7 +3628,7 @@ export type documentsUpdateManyWithWhereWithoutParent_documentInput = {
   data: Prisma.XOR<Prisma.documentsUpdateManyMutationInput, Prisma.documentsUncheckedUpdateManyWithoutParent_documentInput>
 }
 
-export type documentsCreateWithoutFiscal_authorizationInput = {
+export type documentsCreateWithoutActivity_eventsInput = {
   id?: string
   fiscal_jurisdiction_id?: string | null
   number: number
@@ -3496,6 +3654,7 @@ export type documentsCreateWithoutFiscal_authorizationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3528,12 +3687,311 @@ export type documentsCreateWithoutFiscal_authorizationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
+  fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+}
+
+export type documentsUncheckedCreateWithoutActivity_eventsInput = {
+  id?: string
+  document_type_id: string
+  document_sequence_id?: string | null
+  party_id?: string | null
+  parent_document_id?: string | null
+  commercial_operation_id?: string | null
+  warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
+  auditor_user_id?: string | null
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  dispatch_order_id?: string | null
+  fiscal_authorization_id?: string | null
+  fiscal_authorization_type?: string | null
+  fiscal_authorization_code?: string | null
+  fiscal_authorization_expires_at?: Date | string | null
+  fiscal_authorization_range_from?: number | null
+  fiscal_authorization_range_to?: number | null
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUncheckedCreateNestedOneWithoutRoot_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
+  converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
+  withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+}
+
+export type documentsCreateOrConnectWithoutActivity_eventsInput = {
+  where: Prisma.documentsWhereUniqueInput
+  create: Prisma.XOR<Prisma.documentsCreateWithoutActivity_eventsInput, Prisma.documentsUncheckedCreateWithoutActivity_eventsInput>
+}
+
+export type documentsUpsertWithoutActivity_eventsInput = {
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutActivity_eventsInput, Prisma.documentsUncheckedUpdateWithoutActivity_eventsInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutActivity_eventsInput, Prisma.documentsUncheckedCreateWithoutActivity_eventsInput>
+  where?: Prisma.documentsWhereInput
+}
+
+export type documentsUpdateToOneWithWhereWithoutActivity_eventsInput = {
+  where?: Prisma.documentsWhereInput
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutActivity_eventsInput, Prisma.documentsUncheckedUpdateWithoutActivity_eventsInput>
+}
+
+export type documentsUpdateWithoutActivity_eventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_authorization_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_expires_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fiscal_authorization_range_from?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fiscal_authorization_range_to?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  document_sequences?: Prisma.document_sequencesUpdateOneWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  warehouse?: Prisma.warehousesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
+  parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
+  child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  commercial_operation?: Prisma.commercial_operationsUpdateOneWithoutDocumentsNestedInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUpdateOneWithoutRoot_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
+  international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
+  converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
+  withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
+  fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+}
+
+export type documentsUncheckedUpdateWithoutActivity_eventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commercial_operation_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_expires_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fiscal_authorization_range_from?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fiscal_authorization_range_to?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUncheckedUpdateOneWithoutRoot_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
+  converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
+  withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+}
+
+export type documentsCreateWithoutFiscal_authorizationInput = {
+  id?: string
+  fiscal_jurisdiction_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
+  auditor_user_id?: string | null
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  fiscal_authorization_type?: string | null
+  fiscal_authorization_code?: string | null
+  fiscal_authorization_expires_at?: Date | string | null
+  fiscal_authorization_range_from?: number | null
+  fiscal_authorization_range_to?: number | null
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  document_sequences?: Prisma.document_sequencesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  warehouse?: Prisma.warehousesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
+  parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
+  child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  commercial_operation?: Prisma.commercial_operationsCreateNestedOneWithoutDocumentsInput
+  rooted_commercial_operation?: Prisma.commercial_operationsCreateNestedOneWithoutRoot_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
+  international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
+  converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
+  withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutFiscal_authorizationInput = {
@@ -3568,6 +4026,7 @@ export type documentsUncheckedCreateWithoutFiscal_authorizationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3594,12 +4053,15 @@ export type documentsUncheckedCreateWithoutFiscal_authorizationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutFiscal_authorizationInput = {
@@ -3654,6 +4116,7 @@ export type documentsCreateWithoutPresupuesto_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3685,6 +4148,8 @@ export type documentsCreateWithoutPresupuesto_docInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -3692,6 +4157,7 @@ export type documentsCreateWithoutPresupuesto_docInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutPresupuesto_docInput = {
@@ -3726,6 +4192,7 @@ export type documentsUncheckedCreateWithoutPresupuesto_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3752,12 +4219,15 @@ export type documentsUncheckedCreateWithoutPresupuesto_docInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutPresupuesto_docInput = {
@@ -3802,6 +4272,7 @@ export type documentsUpdateWithoutPresupuesto_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3833,6 +4304,8 @@ export type documentsUpdateWithoutPresupuesto_docInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -3840,6 +4313,7 @@ export type documentsUpdateWithoutPresupuesto_docInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutPresupuesto_docInput = {
@@ -3874,6 +4348,7 @@ export type documentsUncheckedUpdateWithoutPresupuesto_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3900,12 +4375,15 @@ export type documentsUncheckedUpdateWithoutPresupuesto_docInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutOrden_venta_docInput = {
@@ -3934,6 +4412,7 @@ export type documentsCreateWithoutOrden_venta_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -3965,6 +4444,8 @@ export type documentsCreateWithoutOrden_venta_docInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -3972,6 +4453,7 @@ export type documentsCreateWithoutOrden_venta_docInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutOrden_venta_docInput = {
@@ -4006,6 +4488,7 @@ export type documentsUncheckedCreateWithoutOrden_venta_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4032,12 +4515,15 @@ export type documentsUncheckedCreateWithoutOrden_venta_docInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutOrden_venta_docInput = {
@@ -4082,6 +4568,7 @@ export type documentsUpdateWithoutOrden_venta_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4113,6 +4600,8 @@ export type documentsUpdateWithoutOrden_venta_docInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -4120,6 +4609,7 @@ export type documentsUpdateWithoutOrden_venta_docInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutOrden_venta_docInput = {
@@ -4154,6 +4644,7 @@ export type documentsUncheckedUpdateWithoutOrden_venta_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4180,12 +4671,15 @@ export type documentsUncheckedUpdateWithoutOrden_venta_docInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutSales_commission_assignmentsInput = {
@@ -4214,6 +4708,7 @@ export type documentsCreateWithoutSales_commission_assignmentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4245,6 +4740,8 @@ export type documentsCreateWithoutSales_commission_assignmentsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -4252,6 +4749,7 @@ export type documentsCreateWithoutSales_commission_assignmentsInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutSales_commission_assignmentsInput = {
@@ -4286,6 +4784,7 @@ export type documentsUncheckedCreateWithoutSales_commission_assignmentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4312,12 +4811,15 @@ export type documentsUncheckedCreateWithoutSales_commission_assignmentsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutSales_commission_assignmentsInput = {
@@ -4362,6 +4864,7 @@ export type documentsUpdateWithoutSales_commission_assignmentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4393,6 +4896,8 @@ export type documentsUpdateWithoutSales_commission_assignmentsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -4400,6 +4905,7 @@ export type documentsUpdateWithoutSales_commission_assignmentsInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutSales_commission_assignmentsInput = {
@@ -4434,6 +4940,7 @@ export type documentsUncheckedUpdateWithoutSales_commission_assignmentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4460,12 +4967,15 @@ export type documentsUncheckedUpdateWithoutSales_commission_assignmentsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutOrden_compra_docInput = {
@@ -4494,6 +5004,7 @@ export type documentsCreateWithoutOrden_compra_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4525,6 +5036,8 @@ export type documentsCreateWithoutOrden_compra_docInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -4532,6 +5045,7 @@ export type documentsCreateWithoutOrden_compra_docInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutOrden_compra_docInput = {
@@ -4566,6 +5080,7 @@ export type documentsUncheckedCreateWithoutOrden_compra_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4592,12 +5107,15 @@ export type documentsUncheckedCreateWithoutOrden_compra_docInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutOrden_compra_docInput = {
@@ -4642,6 +5160,7 @@ export type documentsUpdateWithoutOrden_compra_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4673,6 +5192,8 @@ export type documentsUpdateWithoutOrden_compra_docInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -4680,6 +5201,7 @@ export type documentsUpdateWithoutOrden_compra_docInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutOrden_compra_docInput = {
@@ -4714,6 +5236,7 @@ export type documentsUncheckedUpdateWithoutOrden_compra_docInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4740,12 +5263,15 @@ export type documentsUncheckedUpdateWithoutOrden_compra_docInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutWithholding_allocationsInput = {
@@ -4774,6 +5300,7 @@ export type documentsCreateWithoutWithholding_allocationsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4806,12 +5333,15 @@ export type documentsCreateWithoutWithholding_allocationsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutWithholding_allocationsInput = {
@@ -4846,6 +5376,7 @@ export type documentsUncheckedCreateWithoutWithholding_allocationsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -4873,11 +5404,14 @@ export type documentsUncheckedCreateWithoutWithholding_allocationsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutWithholding_allocationsInput = {
@@ -4922,6 +5456,7 @@ export type documentsUpdateWithoutWithholding_allocationsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -4954,12 +5489,15 @@ export type documentsUpdateWithoutWithholding_allocationsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutWithholding_allocationsInput = {
@@ -4994,6 +5532,7 @@ export type documentsUncheckedUpdateWithoutWithholding_allocationsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5021,11 +5560,310 @@ export type documentsUncheckedUpdateWithoutWithholding_allocationsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
+}
+
+export type documentsCreateWithoutHr_vale_partner_share_detailsInput = {
+  id?: string
+  fiscal_jurisdiction_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
+  auditor_user_id?: string | null
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  fiscal_authorization_type?: string | null
+  fiscal_authorization_code?: string | null
+  fiscal_authorization_expires_at?: Date | string | null
+  fiscal_authorization_range_from?: number | null
+  fiscal_authorization_range_to?: number | null
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  document_sequences?: Prisma.document_sequencesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  warehouse?: Prisma.warehousesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
+  parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
+  child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  commercial_operation?: Prisma.commercial_operationsCreateNestedOneWithoutDocumentsInput
+  rooted_commercial_operation?: Prisma.commercial_operationsCreateNestedOneWithoutRoot_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
+  international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
+  converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
+  withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
+  fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
+}
+
+export type documentsUncheckedCreateWithoutHr_vale_partner_share_detailsInput = {
+  id?: string
+  document_type_id: string
+  document_sequence_id?: string | null
+  party_id?: string | null
+  parent_document_id?: string | null
+  commercial_operation_id?: string | null
+  warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
+  auditor_user_id?: string | null
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  dispatch_order_id?: string | null
+  fiscal_authorization_id?: string | null
+  fiscal_authorization_type?: string | null
+  fiscal_authorization_code?: string | null
+  fiscal_authorization_expires_at?: Date | string | null
+  fiscal_authorization_range_from?: number | null
+  fiscal_authorization_range_to?: number | null
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUncheckedCreateNestedOneWithoutRoot_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
+  converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
+  withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
+}
+
+export type documentsCreateOrConnectWithoutHr_vale_partner_share_detailsInput = {
+  where: Prisma.documentsWhereUniqueInput
+  create: Prisma.XOR<Prisma.documentsCreateWithoutHr_vale_partner_share_detailsInput, Prisma.documentsUncheckedCreateWithoutHr_vale_partner_share_detailsInput>
+}
+
+export type documentsUpsertWithoutHr_vale_partner_share_detailsInput = {
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutHr_vale_partner_share_detailsInput, Prisma.documentsUncheckedUpdateWithoutHr_vale_partner_share_detailsInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutHr_vale_partner_share_detailsInput, Prisma.documentsUncheckedCreateWithoutHr_vale_partner_share_detailsInput>
+  where?: Prisma.documentsWhereInput
+}
+
+export type documentsUpdateToOneWithWhereWithoutHr_vale_partner_share_detailsInput = {
+  where?: Prisma.documentsWhereInput
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutHr_vale_partner_share_detailsInput, Prisma.documentsUncheckedUpdateWithoutHr_vale_partner_share_detailsInput>
+}
+
+export type documentsUpdateWithoutHr_vale_partner_share_detailsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_authorization_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_expires_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fiscal_authorization_range_from?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fiscal_authorization_range_to?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  document_sequences?: Prisma.document_sequencesUpdateOneWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  warehouse?: Prisma.warehousesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
+  parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
+  child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  commercial_operation?: Prisma.commercial_operationsUpdateOneWithoutDocumentsNestedInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUpdateOneWithoutRoot_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
+  international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
+  converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
+  withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
+  fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
+}
+
+export type documentsUncheckedUpdateWithoutHr_vale_partner_share_detailsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commercial_operation_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_expires_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fiscal_authorization_range_from?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fiscal_authorization_range_to?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUncheckedUpdateOneWithoutRoot_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
+  converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
+  withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutHr_vale_commission_detailsInput = {
@@ -5054,6 +5892,7 @@ export type documentsCreateWithoutHr_vale_commission_detailsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5085,6 +5924,8 @@ export type documentsCreateWithoutHr_vale_commission_detailsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -5092,6 +5933,7 @@ export type documentsCreateWithoutHr_vale_commission_detailsInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutHr_vale_commission_detailsInput = {
@@ -5126,6 +5968,7 @@ export type documentsUncheckedCreateWithoutHr_vale_commission_detailsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5152,12 +5995,15 @@ export type documentsUncheckedCreateWithoutHr_vale_commission_detailsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutHr_vale_commission_detailsInput = {
@@ -5202,6 +6048,7 @@ export type documentsUpdateWithoutHr_vale_commission_detailsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5233,6 +6080,8 @@ export type documentsUpdateWithoutHr_vale_commission_detailsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -5240,6 +6089,7 @@ export type documentsUpdateWithoutHr_vale_commission_detailsInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutHr_vale_commission_detailsInput = {
@@ -5274,6 +6124,7 @@ export type documentsUncheckedUpdateWithoutHr_vale_commission_detailsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5300,12 +6151,15 @@ export type documentsUncheckedUpdateWithoutHr_vale_commission_detailsInput = {
   orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutInternational_operation_quotesInput = {
@@ -5334,6 +6188,7 @@ export type documentsCreateWithoutInternational_operation_quotesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5366,12 +6221,15 @@ export type documentsCreateWithoutInternational_operation_quotesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutInternational_operation_quotesInput = {
@@ -5406,6 +6264,7 @@ export type documentsUncheckedCreateWithoutInternational_operation_quotesInput =
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5433,11 +6292,14 @@ export type documentsUncheckedCreateWithoutInternational_operation_quotesInput =
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutInternational_operation_quotesInput = {
@@ -5471,6 +6333,7 @@ export type documentsCreateWithoutConverted_international_quoteInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5503,12 +6366,15 @@ export type documentsCreateWithoutConverted_international_quoteInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutConverted_international_quoteInput = {
@@ -5543,6 +6409,7 @@ export type documentsUncheckedCreateWithoutConverted_international_quoteInput = 
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5570,11 +6437,14 @@ export type documentsUncheckedCreateWithoutConverted_international_quoteInput = 
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutConverted_international_quoteInput = {
@@ -5619,6 +6489,7 @@ export type documentsUpdateWithoutInternational_operation_quotesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5651,12 +6522,15 @@ export type documentsUpdateWithoutInternational_operation_quotesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutInternational_operation_quotesInput = {
@@ -5691,6 +6565,7 @@ export type documentsUncheckedUpdateWithoutInternational_operation_quotesInput =
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5718,11 +6593,14 @@ export type documentsUncheckedUpdateWithoutInternational_operation_quotesInput =
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUpsertWithoutConverted_international_quoteInput = {
@@ -5762,6 +6640,7 @@ export type documentsUpdateWithoutConverted_international_quoteInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5794,12 +6673,15 @@ export type documentsUpdateWithoutConverted_international_quoteInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutConverted_international_quoteInput = {
@@ -5834,6 +6716,7 @@ export type documentsUncheckedUpdateWithoutConverted_international_quoteInput = 
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -5861,11 +6744,14 @@ export type documentsUncheckedUpdateWithoutConverted_international_quoteInput = 
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutInternational_operation_docsInput = {
@@ -5894,6 +6780,7 @@ export type documentsCreateWithoutInternational_operation_docsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5926,12 +6813,15 @@ export type documentsCreateWithoutInternational_operation_docsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutInternational_operation_docsInput = {
@@ -5966,6 +6856,7 @@ export type documentsUncheckedCreateWithoutInternational_operation_docsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -5993,11 +6884,14 @@ export type documentsUncheckedCreateWithoutInternational_operation_docsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutInternational_operation_docsInput = {
@@ -6042,6 +6936,7 @@ export type documentsUpdateWithoutInternational_operation_docsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6074,12 +6969,15 @@ export type documentsUpdateWithoutInternational_operation_docsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutInternational_operation_docsInput = {
@@ -6114,6 +7012,7 @@ export type documentsUncheckedUpdateWithoutInternational_operation_docsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6141,11 +7040,14 @@ export type documentsUncheckedUpdateWithoutInternational_operation_docsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutSource_dispatch_ordersInput = {
@@ -6174,6 +7076,7 @@ export type documentsCreateWithoutSource_dispatch_ordersInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6205,6 +7108,8 @@ export type documentsCreateWithoutSource_dispatch_ordersInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -6212,6 +7117,7 @@ export type documentsCreateWithoutSource_dispatch_ordersInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutSource_dispatch_ordersInput = {
@@ -6246,6 +7152,7 @@ export type documentsUncheckedCreateWithoutSource_dispatch_ordersInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6272,12 +7179,15 @@ export type documentsUncheckedCreateWithoutSource_dispatch_ordersInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutSource_dispatch_ordersInput = {
@@ -6311,6 +7221,7 @@ export type documentsCreateWithoutDispatch_orderInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6342,6 +7253,8 @@ export type documentsCreateWithoutDispatch_orderInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -6349,6 +7262,7 @@ export type documentsCreateWithoutDispatch_orderInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutDispatch_orderInput = {
@@ -6383,6 +7297,7 @@ export type documentsUncheckedCreateWithoutDispatch_orderInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6409,12 +7324,15 @@ export type documentsUncheckedCreateWithoutDispatch_orderInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutDispatch_orderInput = {
@@ -6464,6 +7382,7 @@ export type documentsUpdateWithoutSource_dispatch_ordersInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6495,6 +7414,8 @@ export type documentsUpdateWithoutSource_dispatch_ordersInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -6502,6 +7423,7 @@ export type documentsUpdateWithoutSource_dispatch_ordersInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutSource_dispatch_ordersInput = {
@@ -6536,6 +7458,7 @@ export type documentsUncheckedUpdateWithoutSource_dispatch_ordersInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6562,12 +7485,15 @@ export type documentsUncheckedUpdateWithoutSource_dispatch_ordersInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUpsertWithWhereUniqueWithoutDispatch_orderInput = {
@@ -6612,6 +7538,7 @@ export type documentsCreateWithoutMaintenance_servicesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6644,12 +7571,15 @@ export type documentsCreateWithoutMaintenance_servicesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutMaintenance_servicesInput = {
@@ -6684,6 +7614,7 @@ export type documentsUncheckedCreateWithoutMaintenance_servicesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6711,11 +7642,14 @@ export type documentsUncheckedCreateWithoutMaintenance_servicesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutMaintenance_servicesInput = {
@@ -6760,6 +7694,7 @@ export type documentsUpdateWithoutMaintenance_servicesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6792,12 +7727,15 @@ export type documentsUpdateWithoutMaintenance_servicesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutMaintenance_servicesInput = {
@@ -6832,6 +7770,7 @@ export type documentsUncheckedUpdateWithoutMaintenance_servicesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -6859,11 +7798,14 @@ export type documentsUncheckedUpdateWithoutMaintenance_servicesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutPurchase_tiresInput = {
@@ -6892,6 +7834,7 @@ export type documentsCreateWithoutPurchase_tiresInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6924,12 +7867,15 @@ export type documentsCreateWithoutPurchase_tiresInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutPurchase_tiresInput = {
@@ -6964,6 +7910,7 @@ export type documentsUncheckedCreateWithoutPurchase_tiresInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -6991,11 +7938,14 @@ export type documentsUncheckedCreateWithoutPurchase_tiresInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutPurchase_tiresInput = {
@@ -7040,6 +7990,7 @@ export type documentsUpdateWithoutPurchase_tiresInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7072,12 +8023,15 @@ export type documentsUpdateWithoutPurchase_tiresInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutPurchase_tiresInput = {
@@ -7112,6 +8066,7 @@ export type documentsUncheckedUpdateWithoutPurchase_tiresInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7139,11 +8094,14 @@ export type documentsUncheckedUpdateWithoutPurchase_tiresInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutBusiness_partiesInput = {
@@ -7172,6 +8130,7 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -7203,6 +8162,8 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -7210,6 +8171,7 @@ export type documentsCreateWithoutBusiness_partiesInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
@@ -7243,6 +8205,7 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -7270,12 +8233,15 @@ export type documentsUncheckedCreateWithoutBusiness_partiesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutBusiness_partiesInput = {
@@ -7304,6 +8270,302 @@ export type documentsUpdateManyWithWhereWithoutBusiness_partiesInput = {
   data: Prisma.XOR<Prisma.documentsUpdateManyMutationInput, Prisma.documentsUncheckedUpdateManyWithoutBusiness_partiesInput>
 }
 
+export type documentsCreateWithoutSales_partner_share_assignmentsInput = {
+  id?: string
+  fiscal_jurisdiction_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
+  auditor_user_id?: string | null
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  fiscal_authorization_type?: string | null
+  fiscal_authorization_code?: string | null
+  fiscal_authorization_expires_at?: Date | string | null
+  fiscal_authorization_range_from?: number | null
+  fiscal_authorization_range_to?: number | null
+  document_items?: Prisma.document_itemsCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesCreateNestedManyWithoutDocumentsInput
+  document_types: Prisma.document_typesCreateNestedOneWithoutDocumentsInput
+  document_sequences?: Prisma.document_sequencesCreateNestedOneWithoutDocumentsInput
+  business_parties?: Prisma.business_partiesCreateNestedOneWithoutDocumentsInput
+  warehouse?: Prisma.warehousesCreateNestedOneWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsCreateNestedManyWithoutDocumentInput
+  parent_document?: Prisma.documentsCreateNestedOneWithoutChild_documentsInput
+  child_documents?: Prisma.documentsCreateNestedManyWithoutParent_documentInput
+  commercial_operation?: Prisma.commercial_operationsCreateNestedOneWithoutDocumentsInput
+  rooted_commercial_operation?: Prisma.commercial_operationsCreateNestedOneWithoutRoot_documentInput
+  dispatch_order?: Prisma.dispatch_ordersCreateNestedOneWithoutDocumentsInput
+  source_dispatch_orders?: Prisma.dispatch_ordersCreateNestedManyWithoutSource_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
+  international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
+  converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
+  withholding_allocations?: Prisma.withholding_allocationsCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
+  fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
+}
+
+export type documentsUncheckedCreateWithoutSales_partner_share_assignmentsInput = {
+  id?: string
+  document_type_id: string
+  document_sequence_id?: string | null
+  party_id?: string | null
+  parent_document_id?: string | null
+  commercial_operation_id?: string | null
+  warehouse_id?: string | null
+  fiscal_jurisdiction_id?: string | null
+  number: number
+  date: Date | string
+  status?: number
+  subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: string | null
+  ref?: string | null
+  currency_code?: string | null
+  exchange_rate?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: $Enums.CurrencyRateType | null
+  taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: string | null
+  auditor_user_id?: string | null
+  validity_date?: Date | string | null
+  delivery_date?: Date | string | null
+  created_at?: Date | string | null
+  updated_at?: Date | string | null
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  source?: string
+  dispatch_order_id?: string | null
+  fiscal_authorization_id?: string | null
+  fiscal_authorization_type?: string | null
+  fiscal_authorization_code?: string | null
+  fiscal_authorization_expires_at?: Date | string | null
+  fiscal_authorization_range_from?: number | null
+  fiscal_authorization_range_to?: number | null
+  document_items?: Prisma.document_itemsUncheckedCreateNestedManyWithoutDocumentsInput
+  document_taxes?: Prisma.document_taxesUncheckedCreateNestedManyWithoutDocumentsInput
+  payment_documents?: Prisma.payment_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  child_documents?: Prisma.documentsUncheckedCreateNestedManyWithoutParent_documentInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUncheckedCreateNestedOneWithoutRoot_documentInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedCreateNestedManyWithoutSource_documentInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
+  international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
+  converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
+  withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
+  purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
+}
+
+export type documentsCreateOrConnectWithoutSales_partner_share_assignmentsInput = {
+  where: Prisma.documentsWhereUniqueInput
+  create: Prisma.XOR<Prisma.documentsCreateWithoutSales_partner_share_assignmentsInput, Prisma.documentsUncheckedCreateWithoutSales_partner_share_assignmentsInput>
+}
+
+export type documentsUpsertWithoutSales_partner_share_assignmentsInput = {
+  update: Prisma.XOR<Prisma.documentsUpdateWithoutSales_partner_share_assignmentsInput, Prisma.documentsUncheckedUpdateWithoutSales_partner_share_assignmentsInput>
+  create: Prisma.XOR<Prisma.documentsCreateWithoutSales_partner_share_assignmentsInput, Prisma.documentsUncheckedCreateWithoutSales_partner_share_assignmentsInput>
+  where?: Prisma.documentsWhereInput
+}
+
+export type documentsUpdateToOneWithWhereWithoutSales_partner_share_assignmentsInput = {
+  where?: Prisma.documentsWhereInput
+  data: Prisma.XOR<Prisma.documentsUpdateWithoutSales_partner_share_assignmentsInput, Prisma.documentsUncheckedUpdateWithoutSales_partner_share_assignmentsInput>
+}
+
+export type documentsUpdateWithoutSales_partner_share_assignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  fiscal_authorization_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_expires_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fiscal_authorization_range_from?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fiscal_authorization_range_to?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  document_items?: Prisma.document_itemsUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUpdateManyWithoutDocumentsNestedInput
+  document_types?: Prisma.document_typesUpdateOneRequiredWithoutDocumentsNestedInput
+  document_sequences?: Prisma.document_sequencesUpdateOneWithoutDocumentsNestedInput
+  business_parties?: Prisma.business_partiesUpdateOneWithoutDocumentsNestedInput
+  warehouse?: Prisma.warehousesUpdateOneWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUpdateManyWithoutDocumentNestedInput
+  parent_document?: Prisma.documentsUpdateOneWithoutChild_documentsNestedInput
+  child_documents?: Prisma.documentsUpdateManyWithoutParent_documentNestedInput
+  commercial_operation?: Prisma.commercial_operationsUpdateOneWithoutDocumentsNestedInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUpdateOneWithoutRoot_documentNestedInput
+  dispatch_order?: Prisma.dispatch_ordersUpdateOneWithoutDocumentsNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
+  international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
+  converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
+  withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
+  fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
+}
+
+export type documentsUncheckedUpdateWithoutSales_partner_share_assignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_type_id?: Prisma.StringFieldUpdateOperationsInput | string
+  document_sequence_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  party_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parent_document_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commercial_operation_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warehouse_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_jurisdiction_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  number?: Prisma.IntFieldUpdateOperationsInput | number
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.IntFieldUpdateOperationsInput | number
+  subtotal?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  exempt_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total_taxes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  total?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  paid_amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  descrip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ref?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  exchange_rate?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  rate_type?: Prisma.NullableEnumCurrencyRateTypeFieldUpdateOperationsInput | $Enums.CurrencyRateType | null
+  taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_subtotal?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_exempt_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total_taxes?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_total?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_taxable_base?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  converted_paid_amount?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  dispatch_order_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fiscal_authorization_expires_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  fiscal_authorization_range_from?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  fiscal_authorization_range_to?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  document_items?: Prisma.document_itemsUncheckedUpdateManyWithoutDocumentsNestedInput
+  document_taxes?: Prisma.document_taxesUncheckedUpdateManyWithoutDocumentsNestedInput
+  payment_documents?: Prisma.payment_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  child_documents?: Prisma.documentsUncheckedUpdateManyWithoutParent_documentNestedInput
+  rooted_commercial_operation?: Prisma.commercial_operationsUncheckedUpdateOneWithoutRoot_documentNestedInput
+  source_dispatch_orders?: Prisma.dispatch_ordersUncheckedUpdateManyWithoutSource_documentNestedInput
+  presupuesto_doc?: Prisma.presupuesto_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_venta_doc?: Prisma.orden_venta_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
+  hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
+  international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
+  international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
+  converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
+  withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
+  maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
+  purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
+}
+
 export type documentsCreateWithoutRooted_commercial_operationInput = {
   id?: string
   fiscal_jurisdiction_id?: string | null
@@ -7330,6 +8592,7 @@ export type documentsCreateWithoutRooted_commercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -7361,6 +8624,8 @@ export type documentsCreateWithoutRooted_commercial_operationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -7368,6 +8633,7 @@ export type documentsCreateWithoutRooted_commercial_operationInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutRooted_commercial_operationInput = {
@@ -7402,6 +8668,7 @@ export type documentsUncheckedCreateWithoutRooted_commercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -7428,12 +8695,15 @@ export type documentsUncheckedCreateWithoutRooted_commercial_operationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutRooted_commercial_operationInput = {
@@ -7467,6 +8737,7 @@ export type documentsCreateWithoutCommercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -7498,6 +8769,8 @@ export type documentsCreateWithoutCommercial_operationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -7505,6 +8778,7 @@ export type documentsCreateWithoutCommercial_operationInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutCommercial_operationInput = {
@@ -7538,6 +8812,7 @@ export type documentsUncheckedCreateWithoutCommercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -7565,12 +8840,15 @@ export type documentsUncheckedCreateWithoutCommercial_operationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutCommercial_operationInput = {
@@ -7620,6 +8898,7 @@ export type documentsUpdateWithoutRooted_commercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7651,6 +8930,8 @@ export type documentsUpdateWithoutRooted_commercial_operationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -7658,6 +8939,7 @@ export type documentsUpdateWithoutRooted_commercial_operationInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutRooted_commercial_operationInput = {
@@ -7692,6 +8974,7 @@ export type documentsUncheckedUpdateWithoutRooted_commercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7718,12 +9001,15 @@ export type documentsUncheckedUpdateWithoutRooted_commercial_operationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUpsertWithWhereUniqueWithoutCommercial_operationInput = {
@@ -7768,6 +9054,7 @@ export type documentsCreateWithoutPayment_documentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -7799,6 +9086,8 @@ export type documentsCreateWithoutPayment_documentsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -7806,6 +9095,7 @@ export type documentsCreateWithoutPayment_documentsInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutPayment_documentsInput = {
@@ -7840,6 +9130,7 @@ export type documentsUncheckedCreateWithoutPayment_documentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -7866,12 +9157,15 @@ export type documentsUncheckedCreateWithoutPayment_documentsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutPayment_documentsInput = {
@@ -7916,6 +9210,7 @@ export type documentsUpdateWithoutPayment_documentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7947,6 +9242,8 @@ export type documentsUpdateWithoutPayment_documentsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -7954,6 +9251,7 @@ export type documentsUpdateWithoutPayment_documentsInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
@@ -7988,6 +9286,7 @@ export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8014,12 +9313,15 @@ export type documentsUncheckedUpdateWithoutPayment_documentsInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsCreateWithoutWarehouseInput = {
@@ -8048,6 +9350,7 @@ export type documentsCreateWithoutWarehouseInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -8079,6 +9382,8 @@ export type documentsCreateWithoutWarehouseInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesCreateNestedOneWithoutConverted_documentInput
@@ -8086,6 +9391,7 @@ export type documentsCreateWithoutWarehouseInput = {
   maintenance_services?: Prisma.maintenance_servicesCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresCreateNestedManyWithoutPurchase_documentInput
   fiscal_authorization?: Prisma.fiscal_authorizationsCreateNestedOneWithoutDocumentsInput
+  activity_events?: Prisma.document_activity_eventsCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsUncheckedCreateWithoutWarehouseInput = {
@@ -8119,6 +9425,7 @@ export type documentsUncheckedCreateWithoutWarehouseInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -8146,12 +9453,15 @@ export type documentsUncheckedCreateWithoutWarehouseInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedCreateNestedOneWithoutDocumentInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedCreateNestedManyWithoutDocumentInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedCreateNestedManyWithoutDocumentInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedCreateNestedManyWithoutDocumentInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedCreateNestedManyWithoutDocumentInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedCreateNestedOneWithoutConverted_documentInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedCreateNestedManyWithoutDocumentInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedCreateNestedManyWithoutDocumentInput
   purchase_tires?: Prisma.tiresUncheckedCreateNestedManyWithoutPurchase_documentInput
+  activity_events?: Prisma.document_activity_eventsUncheckedCreateNestedManyWithoutDocumentInput
 }
 
 export type documentsCreateOrConnectWithoutWarehouseInput = {
@@ -8211,6 +9521,7 @@ export type documentsCreateManyDocument_sequencesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -8255,6 +9566,7 @@ export type documentsUpdateWithoutDocument_sequencesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8286,6 +9598,8 @@ export type documentsUpdateWithoutDocument_sequencesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -8293,6 +9607,7 @@ export type documentsUpdateWithoutDocument_sequencesInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutDocument_sequencesInput = {
@@ -8326,6 +9641,7 @@ export type documentsUncheckedUpdateWithoutDocument_sequencesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8353,12 +9669,15 @@ export type documentsUncheckedUpdateWithoutDocument_sequencesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutDocument_sequencesInput = {
@@ -8392,6 +9711,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_sequencesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8441,6 +9761,7 @@ export type documentsCreateManyDocument_typesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -8485,6 +9806,7 @@ export type documentsUpdateWithoutDocument_typesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8516,6 +9838,8 @@ export type documentsUpdateWithoutDocument_typesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -8523,6 +9847,7 @@ export type documentsUpdateWithoutDocument_typesInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutDocument_typesInput = {
@@ -8556,6 +9881,7 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8583,12 +9909,15 @@ export type documentsUncheckedUpdateWithoutDocument_typesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
@@ -8622,6 +9951,7 @@ export type documentsUncheckedUpdateManyWithoutDocument_typesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8671,6 +10001,7 @@ export type documentsCreateManyParent_documentInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -8715,6 +10046,7 @@ export type documentsUpdateWithoutParent_documentInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8746,6 +10078,8 @@ export type documentsUpdateWithoutParent_documentInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -8753,6 +10087,7 @@ export type documentsUpdateWithoutParent_documentInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutParent_documentInput = {
@@ -8786,6 +10121,7 @@ export type documentsUncheckedUpdateWithoutParent_documentInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8813,12 +10149,15 @@ export type documentsUncheckedUpdateWithoutParent_documentInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutParent_documentInput = {
@@ -8852,6 +10191,7 @@ export type documentsUncheckedUpdateManyWithoutParent_documentInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8902,6 +10242,7 @@ export type documentsCreateManyFiscal_authorizationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -8945,6 +10286,7 @@ export type documentsUpdateWithoutFiscal_authorizationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8977,12 +10319,15 @@ export type documentsUpdateWithoutFiscal_authorizationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutFiscal_authorizationInput = {
@@ -9017,6 +10362,7 @@ export type documentsUncheckedUpdateWithoutFiscal_authorizationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9043,12 +10389,15 @@ export type documentsUncheckedUpdateWithoutFiscal_authorizationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutFiscal_authorizationInput = {
@@ -9083,6 +10432,7 @@ export type documentsUncheckedUpdateManyWithoutFiscal_authorizationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9132,6 +10482,7 @@ export type documentsCreateManyDispatch_orderInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -9175,6 +10526,7 @@ export type documentsUpdateWithoutDispatch_orderInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9206,6 +10558,8 @@ export type documentsUpdateWithoutDispatch_orderInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -9213,6 +10567,7 @@ export type documentsUpdateWithoutDispatch_orderInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutDispatch_orderInput = {
@@ -9247,6 +10602,7 @@ export type documentsUncheckedUpdateWithoutDispatch_orderInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9273,12 +10629,15 @@ export type documentsUncheckedUpdateWithoutDispatch_orderInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutDispatch_orderInput = {
@@ -9313,6 +10672,7 @@ export type documentsUncheckedUpdateManyWithoutDispatch_orderInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9361,6 +10721,7 @@ export type documentsCreateManyBusiness_partiesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -9405,6 +10766,7 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9436,6 +10798,8 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -9443,6 +10807,7 @@ export type documentsUpdateWithoutBusiness_partiesInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
@@ -9476,6 +10841,7 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9503,12 +10869,15 @@ export type documentsUncheckedUpdateWithoutBusiness_partiesInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
@@ -9542,6 +10911,7 @@ export type documentsUncheckedUpdateManyWithoutBusiness_partiesInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9591,6 +10961,7 @@ export type documentsCreateManyCommercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -9635,6 +11006,7 @@ export type documentsUpdateWithoutCommercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9666,6 +11038,8 @@ export type documentsUpdateWithoutCommercial_operationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -9673,6 +11047,7 @@ export type documentsUpdateWithoutCommercial_operationInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutCommercial_operationInput = {
@@ -9706,6 +11081,7 @@ export type documentsUncheckedUpdateWithoutCommercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9733,12 +11109,15 @@ export type documentsUncheckedUpdateWithoutCommercial_operationInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutCommercial_operationInput = {
@@ -9772,6 +11151,7 @@ export type documentsUncheckedUpdateManyWithoutCommercial_operationInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9821,6 +11201,7 @@ export type documentsCreateManyWarehouseInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: string | null
+  auditor_user_id?: string | null
   validity_date?: Date | string | null
   delivery_date?: Date | string | null
   created_at?: Date | string | null
@@ -9865,6 +11246,7 @@ export type documentsUpdateWithoutWarehouseInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9896,6 +11278,8 @@ export type documentsUpdateWithoutWarehouseInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUpdateOneWithoutConverted_documentNestedInput
@@ -9903,6 +11287,7 @@ export type documentsUpdateWithoutWarehouseInput = {
   maintenance_services?: Prisma.maintenance_servicesUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUpdateManyWithoutPurchase_documentNestedInput
   fiscal_authorization?: Prisma.fiscal_authorizationsUpdateOneWithoutDocumentsNestedInput
+  activity_events?: Prisma.document_activity_eventsUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateWithoutWarehouseInput = {
@@ -9936,6 +11321,7 @@ export type documentsUncheckedUpdateWithoutWarehouseInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -9963,12 +11349,15 @@ export type documentsUncheckedUpdateWithoutWarehouseInput = {
   orden_compra_doc?: Prisma.orden_compra_documentsUncheckedUpdateOneWithoutDocumentNestedInput
   hr_vale_commission_details?: Prisma.hr_vale_commission_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   sales_commission_assignments?: Prisma.sales_commission_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsUncheckedUpdateManyWithoutDocumentNestedInput
+  hr_vale_partner_share_details?: Prisma.hr_vale_partner_share_detailsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_docs?: Prisma.international_operation_documentsUncheckedUpdateManyWithoutDocumentNestedInput
   international_operation_quotes?: Prisma.international_operation_quotesUncheckedUpdateManyWithoutDocumentNestedInput
   converted_international_quote?: Prisma.international_operation_quotesUncheckedUpdateOneWithoutConverted_documentNestedInput
   withholding_allocations?: Prisma.withholding_allocationsUncheckedUpdateManyWithoutDocumentNestedInput
   maintenance_services?: Prisma.maintenance_servicesUncheckedUpdateManyWithoutDocumentNestedInput
   purchase_tires?: Prisma.tiresUncheckedUpdateManyWithoutPurchase_documentNestedInput
+  activity_events?: Prisma.document_activity_eventsUncheckedUpdateManyWithoutDocumentNestedInput
 }
 
 export type documentsUncheckedUpdateManyWithoutWarehouseInput = {
@@ -10002,6 +11391,7 @@ export type documentsUncheckedUpdateManyWithoutWarehouseInput = {
   custom_fields?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   commercial_adjustments?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   assigned_to?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  auditor_user_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   validity_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   delivery_date?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10033,11 +11423,14 @@ export type DocumentsCountOutputType = {
   source_dispatch_orders: number
   hr_vale_commission_details: number
   sales_commission_assignments: number
+  sales_partner_share_assignments: number
+  hr_vale_partner_share_details: number
   international_operation_docs: number
   international_operation_quotes: number
   withholding_allocations: number
   maintenance_services: number
   purchase_tires: number
+  activity_events: number
 }
 
 export type DocumentsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -10048,11 +11441,14 @@ export type DocumentsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensi
   source_dispatch_orders?: boolean | DocumentsCountOutputTypeCountSource_dispatch_ordersArgs
   hr_vale_commission_details?: boolean | DocumentsCountOutputTypeCountHr_vale_commission_detailsArgs
   sales_commission_assignments?: boolean | DocumentsCountOutputTypeCountSales_commission_assignmentsArgs
+  sales_partner_share_assignments?: boolean | DocumentsCountOutputTypeCountSales_partner_share_assignmentsArgs
+  hr_vale_partner_share_details?: boolean | DocumentsCountOutputTypeCountHr_vale_partner_share_detailsArgs
   international_operation_docs?: boolean | DocumentsCountOutputTypeCountInternational_operation_docsArgs
   international_operation_quotes?: boolean | DocumentsCountOutputTypeCountInternational_operation_quotesArgs
   withholding_allocations?: boolean | DocumentsCountOutputTypeCountWithholding_allocationsArgs
   maintenance_services?: boolean | DocumentsCountOutputTypeCountMaintenance_servicesArgs
   purchase_tires?: boolean | DocumentsCountOutputTypeCountPurchase_tiresArgs
+  activity_events?: boolean | DocumentsCountOutputTypeCountActivity_eventsArgs
 }
 
 /**
@@ -10117,6 +11513,20 @@ export type DocumentsCountOutputTypeCountSales_commission_assignmentsArgs<ExtArg
 /**
  * DocumentsCountOutputType without action
  */
+export type DocumentsCountOutputTypeCountSales_partner_share_assignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.sales_partner_share_assignmentsWhereInput
+}
+
+/**
+ * DocumentsCountOutputType without action
+ */
+export type DocumentsCountOutputTypeCountHr_vale_partner_share_detailsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.hr_vale_partner_share_detailsWhereInput
+}
+
+/**
+ * DocumentsCountOutputType without action
+ */
 export type DocumentsCountOutputTypeCountInternational_operation_docsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.international_operation_documentsWhereInput
 }
@@ -10147,6 +11557,13 @@ export type DocumentsCountOutputTypeCountMaintenance_servicesArgs<ExtArgs extend
  */
 export type DocumentsCountOutputTypeCountPurchase_tiresArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.tiresWhereInput
+}
+
+/**
+ * DocumentsCountOutputType without action
+ */
+export type DocumentsCountOutputTypeCountActivity_eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.document_activity_eventsWhereInput
 }
 
 
@@ -10182,6 +11599,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   custom_fields?: boolean
   commercial_adjustments?: boolean
   assigned_to?: boolean
+  auditor_user_id?: boolean
   validity_date?: boolean
   delivery_date?: boolean
   created_at?: boolean
@@ -10216,6 +11634,8 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   orden_compra_doc?: boolean | Prisma.documents$orden_compra_docArgs<ExtArgs>
   hr_vale_commission_details?: boolean | Prisma.documents$hr_vale_commission_detailsArgs<ExtArgs>
   sales_commission_assignments?: boolean | Prisma.documents$sales_commission_assignmentsArgs<ExtArgs>
+  sales_partner_share_assignments?: boolean | Prisma.documents$sales_partner_share_assignmentsArgs<ExtArgs>
+  hr_vale_partner_share_details?: boolean | Prisma.documents$hr_vale_partner_share_detailsArgs<ExtArgs>
   international_operation_docs?: boolean | Prisma.documents$international_operation_docsArgs<ExtArgs>
   international_operation_quotes?: boolean | Prisma.documents$international_operation_quotesArgs<ExtArgs>
   converted_international_quote?: boolean | Prisma.documents$converted_international_quoteArgs<ExtArgs>
@@ -10223,6 +11643,7 @@ export type documentsSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   maintenance_services?: boolean | Prisma.documents$maintenance_servicesArgs<ExtArgs>
   purchase_tires?: boolean | Prisma.documents$purchase_tiresArgs<ExtArgs>
   fiscal_authorization?: boolean | Prisma.documents$fiscal_authorizationArgs<ExtArgs>
+  activity_events?: boolean | Prisma.documents$activity_eventsArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["documents"]>
 
@@ -10258,6 +11679,7 @@ export type documentsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   custom_fields?: boolean
   commercial_adjustments?: boolean
   assigned_to?: boolean
+  auditor_user_id?: boolean
   validity_date?: boolean
   delivery_date?: boolean
   created_at?: boolean
@@ -10316,6 +11738,7 @@ export type documentsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   custom_fields?: boolean
   commercial_adjustments?: boolean
   assigned_to?: boolean
+  auditor_user_id?: boolean
   validity_date?: boolean
   delivery_date?: boolean
   created_at?: boolean
@@ -10374,6 +11797,7 @@ export type documentsSelectScalar = {
   custom_fields?: boolean
   commercial_adjustments?: boolean
   assigned_to?: boolean
+  auditor_user_id?: boolean
   validity_date?: boolean
   delivery_date?: boolean
   created_at?: boolean
@@ -10392,7 +11816,7 @@ export type documentsSelectScalar = {
   fiscal_authorization_range_to?: boolean
 }
 
-export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "document_sequence_id" | "party_id" | "parent_document_id" | "commercial_operation_id" | "warehouse_id" | "fiscal_jurisdiction_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "commercial_adjustments" | "assigned_to" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source" | "dispatch_order_id" | "fiscal_authorization_id" | "fiscal_authorization_type" | "fiscal_authorization_code" | "fiscal_authorization_expires_at" | "fiscal_authorization_range_from" | "fiscal_authorization_range_to", ExtArgs["result"]["documents"]>
+export type documentsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_type_id" | "document_sequence_id" | "party_id" | "parent_document_id" | "commercial_operation_id" | "warehouse_id" | "fiscal_jurisdiction_id" | "number" | "date" | "status" | "subtotal" | "exempt_amount" | "total_taxes" | "total" | "paid_amount" | "descrip" | "ref" | "currency_code" | "exchange_rate" | "rate_type" | "taxable_base" | "converted_subtotal" | "converted_exempt_amount" | "converted_total_taxes" | "converted_total" | "converted_taxable_base" | "converted_paid_amount" | "custom_fields" | "commercial_adjustments" | "assigned_to" | "auditor_user_id" | "validity_date" | "delivery_date" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by" | "source" | "dispatch_order_id" | "fiscal_authorization_id" | "fiscal_authorization_type" | "fiscal_authorization_code" | "fiscal_authorization_expires_at" | "fiscal_authorization_range_from" | "fiscal_authorization_range_to", ExtArgs["result"]["documents"]>
 export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_items?: boolean | Prisma.documents$document_itemsArgs<ExtArgs>
   document_taxes?: boolean | Prisma.documents$document_taxesArgs<ExtArgs>
@@ -10412,6 +11836,8 @@ export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   orden_compra_doc?: boolean | Prisma.documents$orden_compra_docArgs<ExtArgs>
   hr_vale_commission_details?: boolean | Prisma.documents$hr_vale_commission_detailsArgs<ExtArgs>
   sales_commission_assignments?: boolean | Prisma.documents$sales_commission_assignmentsArgs<ExtArgs>
+  sales_partner_share_assignments?: boolean | Prisma.documents$sales_partner_share_assignmentsArgs<ExtArgs>
+  hr_vale_partner_share_details?: boolean | Prisma.documents$hr_vale_partner_share_detailsArgs<ExtArgs>
   international_operation_docs?: boolean | Prisma.documents$international_operation_docsArgs<ExtArgs>
   international_operation_quotes?: boolean | Prisma.documents$international_operation_quotesArgs<ExtArgs>
   converted_international_quote?: boolean | Prisma.documents$converted_international_quoteArgs<ExtArgs>
@@ -10419,6 +11845,7 @@ export type documentsInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   maintenance_services?: boolean | Prisma.documents$maintenance_servicesArgs<ExtArgs>
   purchase_tires?: boolean | Prisma.documents$purchase_tiresArgs<ExtArgs>
   fiscal_authorization?: boolean | Prisma.documents$fiscal_authorizationArgs<ExtArgs>
+  activity_events?: boolean | Prisma.documents$activity_eventsArgs<ExtArgs>
   _count?: boolean | Prisma.DocumentsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type documentsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -10463,6 +11890,8 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     orden_compra_doc: Prisma.$orden_compra_documentsPayload<ExtArgs> | null
     hr_vale_commission_details: Prisma.$hr_vale_commission_detailsPayload<ExtArgs>[]
     sales_commission_assignments: Prisma.$sales_commission_assignmentsPayload<ExtArgs>[]
+    sales_partner_share_assignments: Prisma.$sales_partner_share_assignmentsPayload<ExtArgs>[]
+    hr_vale_partner_share_details: Prisma.$hr_vale_partner_share_detailsPayload<ExtArgs>[]
     international_operation_docs: Prisma.$international_operation_documentsPayload<ExtArgs>[]
     international_operation_quotes: Prisma.$international_operation_quotesPayload<ExtArgs>[]
     converted_international_quote: Prisma.$international_operation_quotesPayload<ExtArgs> | null
@@ -10470,6 +11899,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     maintenance_services: Prisma.$maintenance_servicesPayload<ExtArgs>[]
     purchase_tires: Prisma.$tiresPayload<ExtArgs>[]
     fiscal_authorization: Prisma.$fiscal_authorizationsPayload<ExtArgs> | null
+    activity_events: Prisma.$document_activity_eventsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -10503,6 +11933,7 @@ export type $documentsPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     custom_fields: runtime.JsonValue | null
     commercial_adjustments: runtime.JsonValue | null
     assigned_to: string | null
+    auditor_user_id: string | null
     validity_date: Date | null
     delivery_date: Date | null
     created_at: Date | null
@@ -10931,6 +12362,8 @@ export interface Prisma__documentsClient<T, Null = never, ExtArgs extends runtim
   orden_compra_doc<T extends Prisma.documents$orden_compra_docArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$orden_compra_docArgs<ExtArgs>>): Prisma.Prisma__orden_compra_documentsClient<runtime.Types.Result.GetResult<Prisma.$orden_compra_documentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   hr_vale_commission_details<T extends Prisma.documents$hr_vale_commission_detailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$hr_vale_commission_detailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$hr_vale_commission_detailsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sales_commission_assignments<T extends Prisma.documents$sales_commission_assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$sales_commission_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$sales_commission_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sales_partner_share_assignments<T extends Prisma.documents$sales_partner_share_assignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$sales_partner_share_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$sales_partner_share_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hr_vale_partner_share_details<T extends Prisma.documents$hr_vale_partner_share_detailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$hr_vale_partner_share_detailsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$hr_vale_partner_share_detailsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   international_operation_docs<T extends Prisma.documents$international_operation_docsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$international_operation_docsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$international_operation_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   international_operation_quotes<T extends Prisma.documents$international_operation_quotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$international_operation_quotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$international_operation_quotesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   converted_international_quote<T extends Prisma.documents$converted_international_quoteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$converted_international_quoteArgs<ExtArgs>>): Prisma.Prisma__international_operation_quotesClient<runtime.Types.Result.GetResult<Prisma.$international_operation_quotesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -10938,6 +12371,7 @@ export interface Prisma__documentsClient<T, Null = never, ExtArgs extends runtim
   maintenance_services<T extends Prisma.documents$maintenance_servicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$maintenance_servicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$maintenance_servicesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   purchase_tires<T extends Prisma.documents$purchase_tiresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$purchase_tiresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tiresPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   fiscal_authorization<T extends Prisma.documents$fiscal_authorizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$fiscal_authorizationArgs<ExtArgs>>): Prisma.Prisma__fiscal_authorizationsClient<runtime.Types.Result.GetResult<Prisma.$fiscal_authorizationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  activity_events<T extends Prisma.documents$activity_eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.documents$activity_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$document_activity_eventsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10998,6 +12432,7 @@ export interface documentsFieldRefs {
   readonly custom_fields: Prisma.FieldRef<"documents", 'Json'>
   readonly commercial_adjustments: Prisma.FieldRef<"documents", 'Json'>
   readonly assigned_to: Prisma.FieldRef<"documents", 'String'>
+  readonly auditor_user_id: Prisma.FieldRef<"documents", 'String'>
   readonly validity_date: Prisma.FieldRef<"documents", 'DateTime'>
   readonly delivery_date: Prisma.FieldRef<"documents", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"documents", 'DateTime'>
@@ -11773,6 +13208,54 @@ export type documents$sales_commission_assignmentsArgs<ExtArgs extends runtime.T
 }
 
 /**
+ * documents.sales_partner_share_assignments
+ */
+export type documents$sales_partner_share_assignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the sales_partner_share_assignments
+   */
+  select?: Prisma.sales_partner_share_assignmentsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the sales_partner_share_assignments
+   */
+  omit?: Prisma.sales_partner_share_assignmentsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.sales_partner_share_assignmentsInclude<ExtArgs> | null
+  where?: Prisma.sales_partner_share_assignmentsWhereInput
+  orderBy?: Prisma.sales_partner_share_assignmentsOrderByWithRelationInput | Prisma.sales_partner_share_assignmentsOrderByWithRelationInput[]
+  cursor?: Prisma.sales_partner_share_assignmentsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Sales_partner_share_assignmentsScalarFieldEnum | Prisma.Sales_partner_share_assignmentsScalarFieldEnum[]
+}
+
+/**
+ * documents.hr_vale_partner_share_details
+ */
+export type documents$hr_vale_partner_share_detailsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the hr_vale_partner_share_details
+   */
+  select?: Prisma.hr_vale_partner_share_detailsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the hr_vale_partner_share_details
+   */
+  omit?: Prisma.hr_vale_partner_share_detailsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.hr_vale_partner_share_detailsInclude<ExtArgs> | null
+  where?: Prisma.hr_vale_partner_share_detailsWhereInput
+  orderBy?: Prisma.hr_vale_partner_share_detailsOrderByWithRelationInput | Prisma.hr_vale_partner_share_detailsOrderByWithRelationInput[]
+  cursor?: Prisma.hr_vale_partner_share_detailsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Hr_vale_partner_share_detailsScalarFieldEnum | Prisma.Hr_vale_partner_share_detailsScalarFieldEnum[]
+}
+
+/**
  * documents.international_operation_docs
  */
 export type documents$international_operation_docsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -11928,6 +13411,30 @@ export type documents$fiscal_authorizationArgs<ExtArgs extends runtime.Types.Ext
    */
   include?: Prisma.fiscal_authorizationsInclude<ExtArgs> | null
   where?: Prisma.fiscal_authorizationsWhereInput
+}
+
+/**
+ * documents.activity_events
+ */
+export type documents$activity_eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the document_activity_events
+   */
+  select?: Prisma.document_activity_eventsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the document_activity_events
+   */
+  omit?: Prisma.document_activity_eventsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.document_activity_eventsInclude<ExtArgs> | null
+  where?: Prisma.document_activity_eventsWhereInput
+  orderBy?: Prisma.document_activity_eventsOrderByWithRelationInput | Prisma.document_activity_eventsOrderByWithRelationInput[]
+  cursor?: Prisma.document_activity_eventsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Document_activity_eventsScalarFieldEnum | Prisma.Document_activity_eventsScalarFieldEnum[]
 }
 
 /**

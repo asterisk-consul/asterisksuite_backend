@@ -1,9 +1,13 @@
 import { Type } from 'class-transformer';
-import { ArrayMinSize, IsArray, IsIn, IsNumber, IsUUID, Max, Min, ValidateNested } from 'class-validator';
+import { ArrayMinSize, IsArray, IsIn, IsNumber, IsOptional, IsUUID, Max, Min, ValidateNested } from 'class-validator';
 
 export class CommissionAssignmentDto {
   @IsUUID()
   seller_id!: string;
+
+  @IsOptional()
+  @IsIn(['EMPLOYEE', 'PARTNER'])
+  seller_type?: 'EMPLOYEE' | 'PARTNER';
 
   @Type(() => Number)
   @IsNumber()

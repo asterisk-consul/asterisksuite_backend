@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.js"
 
 /**
  * Model payment_tenders
- *
+ * 
  */
 export type payment_tendersModel = runtime.Types.Result.DefaultSelection<Prisma.$payment_tendersPayload>
 

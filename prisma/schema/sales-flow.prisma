@@ -6,6 +6,8 @@ model sales_flow_settings {
   require_payment_for_delivery           Boolean  @default(false)
   delivery_payment_percentage            Decimal  @default(100) @db.Decimal(5, 2)
   require_invoice_for_delivery           Boolean  @default(false)
+  require_order_delivery_address         Boolean  @default(false)
+  warn_when_order_delivery_data_empty    Boolean  @default(true)
   auto_create_delivery_note              Boolean  @default(false)
   allow_partial_delivery                 Boolean  @default(true)
   reserve_stock_on_order_confirmation    Boolean  @default(true)
@@ -14,12 +16,36 @@ model sales_flow_settings {
   prompt_order_assignee_on_confirmation  Boolean  @default(true)
   require_order_assignee_on_confirmation Boolean  @default(false)
   default_order_assignee_id              String?  @db.Uuid
+  default_order_auditor_id               String?  @db.Uuid
+  default_commission_assignments         Json     @default("[]")
+  partner_share_basis                    String   @default("ORDER") @db.VarChar(20)
   active_from                            DateTime @default(now()) @db.Timestamp(6)
   created_at                             DateTime @default(now()) @db.Timestamp(6)
   updated_at                             DateTime @updatedAt @db.Timestamp(6)
   created_by                             String?  @db.Uuid
   updated_by                             String?  @db.Uuid
 
+  @@schema("tenant")
+}
+
+model sales_partner_share_assignments {
+  id                 String   @id @default(uuid()) @db.Uuid
+  document_id        String   @db.Uuid
+  partner_id         String   @db.Uuid
+  share_percentage   Decimal  @db.Decimal(5, 2)
+  calculation_basis  String   @default("ORDER") @db.VarChar(20)
+  active             Boolean  @default(true)
+  created_at         DateTime @default(now()) @db.Timestamp(6)
+  updated_at         DateTime? @updatedAt @db.Timestamp(6)
+  created_by         String?  @db.Uuid
+  updated_by         String?  @db.Uuid
+
+  document documents @relation(fields: [document_id], references: [id], onDelete: Cascade)
+  partner  partners  @relation(fields: [partner_id], references: [id], onDelete: NoAction)
+
+  @@unique([document_id, partner_id])
+  @@index([partner_id, active])
+  @@index([document_id, active])
   @@schema("tenant")
 }
 

@@ -3,6 +3,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { ManagementReportsService } from '../management-reports/management-reports.service';
 import { OpenWaClient } from './openwa.client';
 import { WeeklyWhatsAppReportsRunner } from './weekly-reports.runner';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 
 function readOptions() {
   const args = process.argv.slice(2);
@@ -23,7 +24,7 @@ async function main() {
   const db = new PrismaService();
   try {
     const reports = new ManagementReportsService(db);
-    const runner = new WeeklyWhatsAppReportsRunner(db, reports, new OpenWaClient());
+    const runner = new WeeklyWhatsAppReportsRunner(db, reports, new OpenWaClient(), new PlatformModulesService(db));
     await runner.run(readOptions());
   } finally {
     await db.onModuleDestroy();

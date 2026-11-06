@@ -13,11 +13,15 @@ import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
+import { HrService } from '@/modules/erp/hr/hr.service';
 
 @Controller('trash')
 @UseGuards(JwtAuthGuard)
 export class TrashController {
-  constructor(private readonly trashService: TrashService) {}
+  constructor(
+    private readonly trashService: TrashService,
+    private readonly hrService: HrService,
+  ) {}
 
   @RequirePermissions('trash.read')
   // 🗑️ VER TODA LA PAPELERA
@@ -52,9 +56,21 @@ export class TrashController {
   @Delete('hard/:table')
   hardDeleteMany(
     @Param('table') table: string,
-    @Body() body: { ids: string[] },
+    @Body() body: { ids: string[]; confirmAccidentalDocuments?: boolean },
   ) {
-    return this.trashService.hardDeleteMany(table, body.ids);
+    return this.trashService.hardDeleteMany(table, body.ids, body.confirmAccidentalDocuments);
+  }
+
+  @RequirePermissions('trash.delete')
+  @Patch('documents/:id/reconcile-vale')
+  reconcileTrashedValeDocument(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.hrService.reconcileTrashedCancelledValeDocument(id, user.id);
+  }
+
+  @RequirePermissions('trash.read')
+  @Get('documents/:id/vale-treasury')
+  getTrashedValeTreasuryImpacts(@Param('id') id: string) {
+    return this.trashService.getTrashedValeTreasuryImpacts(id);
   }
 
   @RequirePermissions('trash.delete')

@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '@/prisma/prisma.module';
+import { AccessControlModule } from '@/access-control/access-control.module';
 import { FiscalAuthorizationsController } from './fiscal-authorizations.controller';
 import { FiscalAuthorizationsService } from './fiscal-authorizations.service';
 import { FiscalAuthorizationsScheduler } from './fiscal-authorizations.scheduler';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, AccessControlModule],
   controllers: [FiscalAuthorizationsController],
   providers: [FiscalAuthorizationsService, FiscalAuthorizationsScheduler],
   exports: [FiscalAuthorizationsService],

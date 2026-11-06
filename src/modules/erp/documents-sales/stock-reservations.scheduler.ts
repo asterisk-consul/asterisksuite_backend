@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { PrismaService } from '@/prisma/prisma.service';
 import { StockReservationsService } from './stock-reservations.service';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 
 @Injectable()
 export class StockReservationsScheduler {
@@ -11,6 +12,7 @@ export class StockReservationsScheduler {
   constructor(
     private readonly db: PrismaService,
     private readonly reservations: StockReservationsService,
+    private readonly platformModules: PlatformModulesService,
   ) {}
 
   // Respaldo para tenants sin actividad. La limpieza habitual ocurre al consultar o usar stock.
@@ -59,6 +61,9 @@ export class StockReservationsScheduler {
           if (!company.schema_name) continue;
           const tenantStartedAt = Date.now();
           try {
+            if (!(await this.platformModules.hasEveryModuleOrLegacyAccess(company.id, ['SALES', 'INVENTORY']))) {
+              continue;
+            }
             const released = await this.db.withTemporaryTenantClient(company.schema_name, (client) =>
               this.reservations.releaseExpiredForClient(client),
             );
