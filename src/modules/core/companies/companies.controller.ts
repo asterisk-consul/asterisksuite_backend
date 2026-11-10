@@ -120,9 +120,4 @@ export class CompaniesController {
     return this.companiesService.removeUser(companyId, userIdToRemove, userId);
   }
 
-  @RequirePermissions('companies.delete')
-  @Delete(':id')
-  deactivate() {
-    return this.companiesService.deactivate();
-  }
 }

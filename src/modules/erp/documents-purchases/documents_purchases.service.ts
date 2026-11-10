@@ -31,7 +31,7 @@ import { FiscalValidationService } from '@/common/services/fiscal-validation.ser
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
 import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
-import { assertCanTrashConfirmedOrphanNote } from '../documents/utils/orphan-note-trash';
+import { assertCanTrashCancelledNote } from '../documents/utils/orphan-note-trash';
 import {
   receiveInternationalRemitoFromTransit,
   registerInternationalPurchaseInTransit,
@@ -1334,6 +1334,7 @@ export class DocumentsPurchasesService {
         },
 
         child_documents: {
+          where: { deleted_at: null },
           select: {
             id: true,
             number: true,
@@ -2014,8 +2015,9 @@ export class DocumentsPurchasesService {
 
       if (activePayments.length > 0) {
         const paymentList = activePayments.map(({ payment }) => `#${payment.number} (${payment.status})`).join(', ');
+        const target = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(doc.document_types?.category ?? '') ? 'la nota' : 'el documento';
         throw new BadRequestException(
-          `No se puede anular la factura porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`,
+          `No se puede anular ${target} porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`,
         );
       }
 
@@ -2114,17 +2116,27 @@ export class DocumentsPurchasesService {
       if (!doc) throw new NotFoundException('Documento no encontrado');
 
       const category = doc.document_types?.category;
-      const isNote = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(category ?? '');
-      const canTrashOrphanNote = isNote && [STATUS_CONFIRMED, STATUS_CANCELLED].includes(doc.status);
-
-      if (canTrashOrphanNote) {
-        await assertCanTrashConfirmedOrphanNote(tx, doc);
-        if (doc.status !== STATUS_CANCELLED) {
-          await tx.documents.update({ where: { id }, data: { status: STATUS_CANCELLED, updated_at: new Date(), updated_by: userId } });
+      if (category === 'INVOICE') {
+        const childDocument = await tx.documents.findFirst({
+          where: { parent_document_id: id },
+          select: { id: true, number: true, document_types: { select: { category: true } } },
+        });
+        if (childDocument) {
+          throw new BadRequestException(
+            'No se puede enviar la factura a la papelera mientras conserve comprobantes relacionados, incluso si ya están en la papelera. Eliminá cada comprobante hijo por separado si las validaciones lo permiten; la cadena no se borra en cascada.',
+          );
         }
+      }
+      const isNote = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(category ?? '');
+      const canTrashCancelledNote = isNote && doc.status === STATUS_CANCELLED;
+
+      if (canTrashCancelledNote) {
+        await assertCanTrashCancelledNote(tx, doc);
         await this.currentAccountsService.removeDocumentEffects(id, userId, tx);
+      } else if (isNote && doc.status !== STATUS_DRAFT) {
+        throw new BadRequestException('Primero anulá la NC/ND desde su detalle. Después podrás enviarla a la papelera si cumple las condiciones de seguridad.');
       } else if (![STATUS_DRAFT, getCancelledDocumentStatus(category ?? '', doc.document_types?.direction ?? -1)].includes(doc.status)) {
-        throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados. Las NC/ND confirmadas deben estar sin factura, pagos ni otros movimientos asociados.');
+        throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados.');
       }
 
       return tx.documents.update({

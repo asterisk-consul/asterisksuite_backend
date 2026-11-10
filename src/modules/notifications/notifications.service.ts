@@ -37,6 +37,18 @@ export interface CreateDocumentActivityInput {
   notificationTitle?: string;
 }
 
+export interface CreateTaskActivityNotificationInput {
+  tx: PrismaTransactionClient;
+  companyId?: string;
+  recipientUserIds: string[];
+  actorUserId: string;
+  type: 'TASK_ASSIGNED' | 'TASK_MEMBER_ADDED' | 'TASK_COMMENTED' | 'TASK_MENTIONED';
+  title: string;
+  message: string;
+  targetPath: string;
+  taskId: string;
+}
+
 @Injectable()
 export class NotificationsService {
   constructor(private readonly db: PrismaService) {}
@@ -158,6 +170,40 @@ export class NotificationsService {
     }
 
     return event;
+  }
+
+  async createTaskActivity(input: CreateTaskActivityNotificationInput) {
+    if (!input.companyId || !input.recipientUserIds.length) return 0;
+    const recipientIds = [...new Set(input.recipientUserIds)]
+      .filter(id => id !== input.actorUserId)
+      .slice(0, 60);
+    if (!recipientIds.length) return 0;
+
+    const members = await this.db.getDefaultClient().company_users.findMany({
+      where: {
+        company_id: input.companyId,
+        user_id: { in: recipientIds },
+        user: { active: true, deleted_at: null },
+      },
+      select: { user_id: true },
+      take: recipientIds.length,
+    });
+    const activeIds = members.map(member => member.user_id);
+    if (!activeIds.length) return 0;
+
+    const result = await input.tx.user_notifications.createMany({
+      data: activeIds.map(recipientUserId => ({
+        recipient_user_id: recipientUserId,
+        actor_user_id: input.actorUserId,
+        type: input.type,
+        title: input.title.slice(0, 160),
+        message: input.message.slice(0, 500),
+        target_path: input.targetPath.slice(0, 500),
+        target_type: 'TASK',
+        target_id: input.taskId,
+      })),
+    });
+    return result.count;
   }
 
   async listForUser(userId: string, requestedTake?: string) {

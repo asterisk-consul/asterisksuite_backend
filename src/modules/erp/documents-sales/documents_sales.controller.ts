@@ -335,18 +335,34 @@ export class DocumentsSalesController {
   @Patch(':id/confirm')
   async confirm(
     @Param('id') id: string,
-    @Body() body: { assigned_to?: string | null; confirm_empty_delivery_data?: boolean } | undefined,
+    @Body() body: {
+      assigned_to?: string | null
+      confirm_empty_delivery_data?: boolean
+      update_sale_prices_from_invoice?: boolean
+    } | undefined,
     @CurrentUser() user: AuthUser,
     @Req() req: Request,
   ) {
+    const companyRole = req['companyUserRole'] as string | undefined;
     await this.documentAccess.assertDocument(
       user.id,
-      req['companyUserRole'] as string | undefined,
+      companyRole,
       'sales',
       id,
       'confirm',
     );
-    return this.service.confirm(id, user.id, body?.assigned_to, body?.confirm_empty_delivery_data === true);
+    if (body?.update_sale_prices_from_invoice === true
+      && !['OWNER', 'ADMIN'].includes(companyRole ?? '')
+      && !(await this.permissionContextBuilder.build(user.id)).can('product-prices.update')) {
+      throw new ForbiddenException('No tenés permiso para actualizar los precios generales de los productos');
+    }
+    return this.service.confirm(
+      id,
+      user.id,
+      body?.assigned_to,
+      body?.confirm_empty_delivery_data === true,
+      body?.update_sale_prices_from_invoice === true,
+    );
   }
 
   @Patch(':id/cancel')
@@ -430,13 +446,6 @@ export class DocumentsSalesController {
       id,
       'delete',
     );
-    const document = await this.service.findOne(id);
-    if (
-      document.status === 2
-      && ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(document.document_types?.category ?? '')
-    ) {
-      await this.documentAccess.assertDocument(user.id, role, 'sales', id, 'cancel');
-    }
     return this.service.remove(id, user.id);
   }
 }

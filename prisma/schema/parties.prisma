@@ -40,6 +40,8 @@ model business_parties {
   maintenance_services_as_supplier maintenance_services[]
   tires_as_supplier                tires[]
   roles                            business_party_roles[]
+  task_boards                      task_boards[]
+  tasks                            tasks[]
 
   @@index([tax_id], map: "idx_business_parties_tax_id")
   @@schema("tenant")

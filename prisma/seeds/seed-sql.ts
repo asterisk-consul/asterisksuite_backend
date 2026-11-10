@@ -45,6 +45,11 @@ export const RBAC_PERMISSIONS = [
   { code: 'commercial_adjustment_concepts.create', description: 'Crear conceptos comerciales reutilizables' },
   { code: 'commercial_adjustment_concepts.update', description: 'Editar conceptos comerciales reutilizables' },
   { code: 'management_reports.read', description: 'Ver y exportar reportes gerenciales y consolidados' },
+  { code: 'tasks.read', description: 'Ver tableros y tareas de la empresa' },
+  { code: 'tasks.create', description: 'Crear tableros y tareas' },
+  { code: 'tasks.update', description: 'Editar tareas y moverlas entre columnas' },
+  { code: 'tasks.delete', description: 'Eliminar tareas' },
+  { code: 'tasks.comment', description: 'Comentar en tareas' },
 
   // ─── ERP - Currencies ─────────────────────────────────────
   { code: 'currencies.read', description: 'Ver monedas' },
@@ -558,6 +563,10 @@ export const RBAC_ROLES = [
       'international_operations.read',
       'international_operations.create',
       'international_operations.update',
+      'tasks.read',
+      'tasks.create',
+      'tasks.update',
+      'tasks.comment',
     ],
   },
   {
@@ -779,22 +788,22 @@ ON CONFLICT (code) DO UPDATE SET
   affects_payment = EXCLUDED.affects_payment;
 
 -- Órdenes
-INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
+INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, accepts_commercial_adjustments, active)
 VALUES
-  (gen_random_uuid(), 'OV', 'Orden de Venta', 1, 'ORDER', null, null, false, false, false, false, false, false, true),
-  (gen_random_uuid(), 'OC', 'Orden de Compra', -1, 'ORDER', null, null, false, false, false, false, false, false, true)
+  (gen_random_uuid(), 'OV', 'Orden de Venta', 1, 'ORDER', null, null, false, false, false, false, false, false, true, true),
+  (gen_random_uuid(), 'OC', 'Orden de Compra', -1, 'ORDER', null, null, false, false, false, false, false, false, false, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
-  affects_payment = EXCLUDED.affects_payment;
+  affects_payment = EXCLUDED.affects_payment, accepts_commercial_adjustments = EXCLUDED.accepts_commercial_adjustments;
 
 -- Presupuestos
-INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)
+INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, accepts_commercial_adjustments, active)
 VALUES
-  (gen_random_uuid(), 'PRES', 'Presupuesto', 1, 'QUOTE', null, null, false, false, false, false, false, false, true),
-  (gen_random_uuid(), 'PRE-C', 'Presupuesto de Compra', -1, 'QUOTE', null, null, false, false, false, false, false, false, true)
+  (gen_random_uuid(), 'PRES', 'Presupuesto', 1, 'QUOTE', null, null, false, false, false, false, false, false, true, true),
+  (gen_random_uuid(), 'PRE-C', 'Presupuesto de Compra', -1, 'QUOTE', null, null, false, false, false, false, false, false, false, true)
 ON CONFLICT (code) DO UPDATE SET
   description = EXCLUDED.description, direction = EXCLUDED.direction, category = EXCLUDED.category,
-  affects_payment = EXCLUDED.affects_payment;
+  affects_payment = EXCLUDED.affects_payment, accepts_commercial_adjustments = EXCLUDED.accepts_commercial_adjustments;
 
 -- Recibos
 INSERT INTO tenant.document_types (id, code, description, direction, category, letter_type, afip_code, requires_cae, is_electronic, affects_stock, affects_accounting, affects_tax_book, affects_payment, active)

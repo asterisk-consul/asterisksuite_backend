@@ -33,7 +33,7 @@ import { StockReservationsService } from './stock-reservations.service';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import { getCancelledDocumentStatus, getStatusLabel } from '../documents/types/document-statuses';
-import { assertCanTrashConfirmedOrphanNote } from '../documents/utils/orphan-note-trash';
+import { assertCanTrashCancelledNote } from '../documents/utils/orphan-note-trash';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -1969,6 +1969,7 @@ export class DocumentsSalesService {
         },
 
         child_documents: {
+          where: { deleted_at: null },
           select: {
             id: true,
             number: true,
@@ -2452,7 +2453,82 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string, userId: string, assignedTo?: string | null, confirmEmptyDeliveryData = false) {
+  private async updateGeneralSalePricesFromInvoice(tx: any, doc: any, userId: string) {
+    const currency = await tx.currencies.findFirst({
+      where: { code: doc.currency_code, deleted_at: null },
+      select: { id: true },
+    });
+    if (!currency) throw new BadRequestException('No se encontró la moneda de la factura para actualizar los precios');
+
+    for (const item of doc.document_items ?? []) {
+      if (!item.product_id) continue;
+      const price = Number(item.unit_price);
+      if (!Number.isFinite(price) || price <= 0) continue;
+
+      if (item.variant_id) {
+        const existing = await tx.product_variant_prices.findFirst({
+          where: {
+            variant_id: item.variant_id,
+            currency_id: currency.id,
+            price_list: null,
+            active: true,
+            deleted_at: null,
+          },
+          orderBy: [{ updated_at: 'desc' }, { created_at: 'desc' }],
+        });
+        if (existing) {
+          if (Math.abs(Number(existing.price) - price) > 0.000001) {
+            await tx.product_variant_prices.update({ where: { id: existing.id }, data: { price, active: true } });
+          }
+        } else {
+          await tx.product_variant_prices.create({
+            data: { variant_id: item.variant_id, currency_id: currency.id, price, active: true },
+          });
+        }
+        continue;
+      }
+
+      const existing = await tx.product_price.findUnique({
+        where: { product_id_currency_id: { product_id: item.product_id, currency_id: currency.id } },
+      });
+      if (existing) {
+        const currentSalePrice = Number(existing.sale_price ?? existing.price);
+        if (Math.abs(Number(existing.price) - price) > 0.000001
+          || Math.abs(currentSalePrice - price) > 0.000001
+          || !existing.active
+          || existing.deleted_at) {
+          await tx.product_price.update({
+            where: { id: existing.id },
+            data: {
+              price,
+              ...(existing.sale_price !== null ? { sale_price: price } : {}),
+              active: true,
+              deleted_at: null,
+              deleted_by: null,
+              updated_by: userId,
+            },
+          });
+        }
+      } else {
+        await tx.product_price.create({
+          data: {
+            product_id: item.product_id,
+            currency_id: currency.id,
+            price,
+            created_by: userId,
+          },
+        });
+      }
+    }
+  }
+
+  async confirm(
+    id: string,
+    userId: string,
+    assignedTo?: string | null,
+    confirmEmptyDeliveryData = false,
+    updateSalePricesFromInvoice = false,
+  ) {
     const companyId = getCurrentCompanyId();
     let previousOrderAssignee: string | null = null;
     if (assignedTo) {
@@ -2468,6 +2544,10 @@ export class DocumentsSalesService {
       const doc = await this.findOne(id);
 
       const category = doc.document_types?.category;
+      if (updateSalePricesFromInvoice
+        && (category !== 'INVOICE' || Number(doc.document_types?.direction) !== 1)) {
+        throw new BadRequestException('La actualización del precio general solo está disponible al confirmar facturas de venta');
+      }
       if (category === 'ORDER') previousOrderAssignee = doc.assigned_to ?? null;
 
       if (category === 'ORDER') {
@@ -2727,6 +2807,10 @@ export class DocumentsSalesService {
         );
       }
 
+      if (updateSalePricesFromInvoice) {
+        await this.updateGeneralSalePricesFromInvoice(tx, doc, userId);
+      }
+
       return tx.documents.findUnique({
         where: { id },
         include: {
@@ -2838,8 +2922,9 @@ export class DocumentsSalesService {
 
       if (activePayments.length > 0) {
         const paymentList = activePayments.map(({ payment }) => `#${payment.number} (${payment.status})`).join(', ');
+        const target = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(category ?? '') ? 'la nota' : 'el documento';
         throw new BadRequestException(
-          `No se puede anular la factura porque tiene ${activePayments.length} pago${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos pagos.`,
+          `No se puede anular ${target} porque tiene ${activePayments.length} cobro${activePayments.length === 1 ? '' : 's'} activo${activePayments.length === 1 ? '' : 's'} asociado${activePayments.length === 1 ? '' : 's'}: ${paymentList}. Primero anulá esos cobros.`,
         );
       }
 
@@ -2954,18 +3039,27 @@ export class DocumentsSalesService {
       if (!doc) throw new NotFoundException('Documento no encontrado');
 
       const category = doc.document_types?.category;
-      const isNote = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(category ?? '');
-      const canTrashOrphanNote = isNote && [STATUS_CONFIRMED, STATUS_CANCELLED].includes(doc.status);
-
-      if (canTrashOrphanNote) {
-        await assertCanTrashConfirmedOrphanNote(tx, doc);
-        if (doc.status !== STATUS_CANCELLED) {
-          await tx.documents.update({ where: { id }, data: { status: STATUS_CANCELLED, updated_at: new Date(), updated_by: userId } });
-          await this.recordStatusChange(tx, doc, STATUS_CANCELLED, userId);
+      if (category === 'INVOICE') {
+        const childDocument = await tx.documents.findFirst({
+          where: { parent_document_id: id },
+          select: { id: true, number: true, document_types: { select: { category: true } } },
+        });
+        if (childDocument) {
+          throw new BadRequestException(
+            'No se puede enviar la factura a la papelera mientras conserve comprobantes relacionados, incluso si ya están en la papelera. Eliminá cada comprobante hijo por separado si las validaciones lo permiten; la cadena no se borra en cascada.',
+          );
         }
+      }
+      const isNote = ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(category ?? '');
+      const canTrashCancelledNote = isNote && doc.status === STATUS_CANCELLED;
+
+      if (canTrashCancelledNote) {
+        await assertCanTrashCancelledNote(tx, doc);
         await this.currentAccountsService.removeDocumentEffects(id, userId, tx);
+      } else if (isNote && doc.status !== STATUS_DRAFT) {
+        throw new BadRequestException('Primero anulá la NC/ND desde su detalle. Después podrás enviarla a la papelera si cumple las condiciones de seguridad.');
       } else if (![STATUS_DRAFT, getCancelledDocumentStatus(category ?? '', doc.document_types?.direction ?? 1)].includes(doc.status)) {
-        throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados. Las NC/ND confirmadas deben estar sin factura, pagos ni otros movimientos asociados.');
+        throw new BadRequestException('Solo se pueden enviar a la papelera documentos en borrador o anulados.');
       }
 
       return tx.documents.update({

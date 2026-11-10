@@ -491,7 +491,8 @@ async function main() {
         description: docType.description,
         direction: docType.direction,
         category: docType.category,
-        accepts_commercial_adjustments: docType.category === 'INVOICE',
+        accepts_commercial_adjustments: docType.category === 'INVOICE'
+          || (docType.direction === 1 && ['QUOTE', 'ORDER'].includes(docType.category)),
         letter_type: docType.letter_type,
         afip_code: docType.afip_code,
         requires_cae: docType.requires_cae,
@@ -506,7 +507,8 @@ async function main() {
         description: docType.description,
         direction: docType.direction,
         category: docType.category,
-        accepts_commercial_adjustments: docType.category === 'INVOICE',
+        accepts_commercial_adjustments: docType.category === 'INVOICE'
+          || (docType.direction === 1 && ['QUOTE', 'ORDER'].includes(docType.category)),
         letter_type: docType.letter_type,
         afip_code: docType.afip_code,
         requires_cae: docType.requires_cae,

@@ -1,4 +1,4 @@
-import { ArrayMaxSize, ArrayUnique, IsArray, IsBoolean, IsInt, IsString, IsUUID, Matches, Max, Min, ValidateIf } from 'class-validator';
+import { ArrayMaxSize, ArrayUnique, IsArray, IsBoolean, IsInt, IsOptional, IsString, IsUUID, Matches, Max, Min, ValidateIf } from 'class-validator';
 
 export class UpdateWhatsAppContactDto {
   @ValidateIf(value => value.opted_in || Boolean(value.phone_e164?.trim()))
@@ -18,6 +18,10 @@ export class UpdateWhatsAppNotificationSettingsDto {
 
   @IsBoolean()
   assignments_enabled!: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  tasks_enabled?: boolean;
 
   @IsBoolean()
   customer_balances_enabled!: boolean;

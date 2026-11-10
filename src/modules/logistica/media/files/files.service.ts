@@ -32,6 +32,7 @@ const ENTITY_CONFIG: Record<string, { maxImages: number; maxWidth: number; subfo
   cash_box_movement: { maxImages: 5, maxWidth: 1600, subfolder: 'cash-box-movements' },
   cash_box_transfer: { maxImages: 10, maxWidth: 1600, subfolder: 'cash-box-transfers' },
   intake: { maxImages: 10, maxWidth: 1600, subfolder: 'intake' },
+  task: { maxImages: 10, maxWidth: 1600, subfolder: 'tasks' },
 };
 
 type FileLibraryAssociation = {
@@ -582,7 +583,7 @@ export class FilesService {
   }
 
   getFilePath(fileUuid: string, variant: string = 'full'): string | null {
-    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'cash-box-movements', 'cash-box-transfers', 'intake'];
+    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'cash-box-movements', 'cash-box-transfers', 'intake', 'tasks'];
     for (const root of this.getStorageRoots()) {
       for (const subfolder of subfolders) {
         const filePath = path.join(root, subfolder, `${fileUuid}_${variant}.webp`);
@@ -766,6 +767,22 @@ export class FilesService {
         mime_type: storedFile?.mime_type || physical?.mimeType || 'application/octet-stream',
       };
     });
+  }
+
+  async assertTaskAttachmentTarget(taskId: string) {
+    const task = await this.prisma.tasks.findFirst({ where: { id: taskId, deleted_at: null }, select: { id: true } });
+    if (!task) throw new BadRequestException('La tarea no existe o ya fue eliminada');
+  }
+
+  async assertTaskAttachment(photoId: string) {
+    const photo = await this.prisma.entity_photos.findFirst({ where: { id: photoId, entity_type: 'task', deleted_at: null }, select: { entity_id: true } });
+    if (!photo) throw new BadRequestException('El adjunto de tarea no existe');
+    await this.assertTaskAttachmentTarget(photo.entity_id);
+    return photo;
+  }
+
+  isTaskAttachmentFile(fileId: string) {
+    return this.prisma.entity_photos.findFirst({ where: { file_id: fileId, entity_type: 'task', deleted_at: null }, select: { id: true } }).then(Boolean);
   }
 
   async deletePhoto(photoId: string, userId?: string) {

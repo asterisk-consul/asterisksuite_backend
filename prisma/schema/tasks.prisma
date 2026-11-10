@@ -1,0 +1,170 @@
+model task_boards {
+  id          String               @id @default(uuid()) @db.Uuid
+  name        String               @db.VarChar(120)
+  description String?              @db.VarChar(500)
+  party_id    String?              @db.Uuid
+  is_default  Boolean              @default(false)
+  active      Boolean              @default(true)
+  created_at  DateTime             @default(now()) @db.Timestamp(6)
+  updated_at  DateTime             @updatedAt @db.Timestamp(6)
+  deleted_at  DateTime?            @db.Timestamp(6)
+  created_by  String?              @db.Uuid
+  updated_by  String?              @db.Uuid
+  columns     task_board_columns[]
+  tasks       tasks[]
+  party       business_parties?    @relation(fields: [party_id], references: [id], onDelete: SetNull)
+
+  @@index([active, deleted_at])
+  @@index([party_id, active, deleted_at])
+  @@schema("tenant")
+}
+
+model task_board_columns {
+  id         String    @id @default(uuid()) @db.Uuid
+  board_id   String    @db.Uuid
+  name       String    @db.VarChar(80)
+  position   Int       @default(0)
+  color      String?   @db.VarChar(20)
+  is_closed  Boolean   @default(false)
+  created_at DateTime  @default(now()) @db.Timestamp(6)
+  updated_at DateTime  @updatedAt @db.Timestamp(6)
+  deleted_at DateTime? @db.Timestamp(6)
+  created_by String?   @db.Uuid
+  updated_by String?   @db.Uuid
+  board      task_boards @relation(fields: [board_id], references: [id], onDelete: Cascade)
+  tasks      tasks[]
+  preferences task_board_column_preferences[]
+
+  @@index([board_id, position])
+  @@schema("tenant")
+}
+
+model tasks {
+  id             String             @id @default(uuid()) @db.Uuid
+  board_id       String             @db.Uuid
+  column_id      String             @db.Uuid
+  party_id       String?            @db.Uuid
+  title          String             @db.VarChar(200)
+  description    String?            @db.Text
+  priority       TaskPriority       @default(NORMAL)
+  assigned_to    String?            @db.Uuid
+  start_at       DateTime?           @db.Timestamp(6)
+  due_at         DateTime?          @db.Timestamp(6)
+  position       Int                @default(0)
+  completed_at   DateTime?          @db.Timestamp(6)
+  created_at     DateTime           @default(now()) @db.Timestamp(6)
+  updated_at     DateTime           @updatedAt @db.Timestamp(6)
+  deleted_at     DateTime?          @db.Timestamp(6)
+  created_by     String?            @db.Uuid
+  updated_by     String?            @db.Uuid
+  board          task_boards        @relation(fields: [board_id], references: [id], onDelete: Cascade)
+  column         task_board_columns @relation(fields: [column_id], references: [id], onDelete: Restrict)
+  party          business_parties?  @relation(fields: [party_id], references: [id], onDelete: SetNull)
+  comments       task_comments[]
+  labels         task_label_assignments[]
+  checklists     task_checklists[]
+  members        task_members[]
+
+  @@index([board_id, column_id, position])
+  @@index([party_id, due_at])
+  @@index([assigned_to, due_at])
+  @@index([deleted_at, updated_at])
+  @@schema("tenant")
+}
+
+model task_members {
+  task_id    String   @db.Uuid
+  user_id    String   @db.Uuid
+  role       String   @default("COLLABORATOR") @db.VarChar(20)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  created_by String?  @db.Uuid
+  task       tasks    @relation(fields: [task_id], references: [id], onDelete: Cascade)
+
+  @@id([task_id, user_id])
+  @@index([user_id, task_id])
+  @@schema("tenant")
+}
+
+model task_labels {
+  id         String                  @id @default(uuid()) @db.Uuid
+  name       String                  @unique @db.VarChar(50)
+  color      String                  @default("primary") @db.VarChar(20)
+  active     Boolean                 @default(true)
+  created_at DateTime                @default(now()) @db.Timestamp(6)
+  updated_at DateTime                @updatedAt @db.Timestamp(6)
+  created_by String?                 @db.Uuid
+  tasks      task_label_assignments[]
+
+  @@index([active, name])
+  @@schema("tenant")
+}
+
+model task_label_assignments {
+  task_id  String      @db.Uuid
+  label_id String      @db.Uuid
+  task     tasks       @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  label    task_labels @relation(fields: [label_id], references: [id], onDelete: Cascade)
+
+  @@id([task_id, label_id])
+  @@index([label_id, task_id])
+  @@schema("tenant")
+}
+
+model task_comments {
+  id         String   @id @default(uuid()) @db.Uuid
+  task_id    String   @db.Uuid
+  content    String   @db.VarChar(5000)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  created_by String   @db.Uuid
+  task       tasks    @relation(fields: [task_id], references: [id], onDelete: Cascade)
+
+  @@index([task_id, created_at])
+  @@schema("tenant")
+}
+
+model task_checklists {
+  id         String                @id @default(uuid()) @db.Uuid
+  task_id    String                @db.Uuid
+  title      String                @db.VarChar(120)
+  position   Int                   @default(0)
+  created_at DateTime              @default(now()) @db.Timestamp(6)
+  updated_at DateTime              @updatedAt @db.Timestamp(6)
+  created_by String?               @db.Uuid
+  task       tasks                 @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  items      task_checklist_items[]
+
+  @@index([task_id, position])
+  @@schema("tenant")
+}
+
+model task_checklist_items {
+  id           String          @id @default(uuid()) @db.Uuid
+  checklist_id String          @db.Uuid
+  content      String          @db.VarChar(500)
+  completed    Boolean         @default(false)
+  position     Int             @default(0)
+  assigned_to  String?         @db.Uuid
+  due_at       DateTime?       @db.Timestamp(6)
+  created_at   DateTime        @default(now()) @db.Timestamp(6)
+  updated_at   DateTime        @updatedAt @db.Timestamp(6)
+  created_by   String?         @db.Uuid
+  updated_by   String?         @db.Uuid
+  checklist    task_checklists @relation(fields: [checklist_id], references: [id], onDelete: Cascade)
+
+  @@index([checklist_id, position])
+  @@index([assigned_to, due_at])
+  @@schema("tenant")
+}
+
+model task_board_column_preferences {
+  column_id  String            @db.Uuid
+  user_id    String            @db.Uuid
+  is_pinned  Boolean           @default(false)
+  is_watching Boolean          @default(false)
+  updated_at DateTime          @updatedAt @db.Timestamp(6)
+  column     task_board_columns @relation(fields: [column_id], references: [id], onDelete: Cascade)
+
+  @@id([column_id, user_id])
+  @@index([user_id, is_pinned])
+  @@schema("tenant")
+}

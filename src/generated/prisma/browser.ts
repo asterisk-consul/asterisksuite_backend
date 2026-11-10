@@ -815,6 +815,56 @@ export type sales_partner_share_assignments = Prisma.sales_partner_share_assignm
  */
 export type commercial_operations = Prisma.commercial_operationsModel
 /**
+ * Model task_boards
+ * 
+ */
+export type task_boards = Prisma.task_boardsModel
+/**
+ * Model task_board_columns
+ * 
+ */
+export type task_board_columns = Prisma.task_board_columnsModel
+/**
+ * Model tasks
+ * 
+ */
+export type tasks = Prisma.tasksModel
+/**
+ * Model task_members
+ * 
+ */
+export type task_members = Prisma.task_membersModel
+/**
+ * Model task_labels
+ * 
+ */
+export type task_labels = Prisma.task_labelsModel
+/**
+ * Model task_label_assignments
+ * 
+ */
+export type task_label_assignments = Prisma.task_label_assignmentsModel
+/**
+ * Model task_comments
+ * 
+ */
+export type task_comments = Prisma.task_commentsModel
+/**
+ * Model task_checklists
+ * 
+ */
+export type task_checklists = Prisma.task_checklistsModel
+/**
+ * Model task_checklist_items
+ * 
+ */
+export type task_checklist_items = Prisma.task_checklist_itemsModel
+/**
+ * Model task_board_column_preferences
+ * 
+ */
+export type task_board_column_preferences = Prisma.task_board_column_preferencesModel
+/**
  * Model tax_categories
  * 
  */

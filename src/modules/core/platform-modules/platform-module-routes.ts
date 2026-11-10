@@ -6,6 +6,10 @@ export type PlatformModuleRoute = {
 // Las reglas más específicas deben ubicarse antes que las generales.
 export const PLATFORM_MODULE_ROUTES: PlatformModuleRoute[] = [
   {
+    moduleCode: 'CRM',
+    patterns: [/^\/api\/erp\/tasks(?:\/|$)/],
+  },
+  {
     moduleCode: 'MAINTENANCE',
     patterns: [/^\/api\/logistica\/maintenance(?:\/|$)/],
   },

@@ -8,6 +8,7 @@ const DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES = new Set([
   'order_invoice_replacement',
   'order_invoice_replacement_reversal',
 ]);
+const NOTE_CATEGORIES = new Set(['CREDIT_NOTE', 'DEBIT_NOTE']);
 
 const TRASH_DISPLAY_CONFIG: Record<string, { fields: string[]; primary: string[]; secondary?: string[] }> = {
   users: { fields: ['name', 'email'], primary: ['name'], secondary: ['email'] },
@@ -750,14 +751,17 @@ export class TrashService {
           || document.fiscal_authorization_type
           || document.fiscal_authorization_code
           || document.fiscal_authorization_expires_at
-          || document.fiscal_authorization_range_from !== null
-          || document.fiscal_authorization_range_to !== null,
+          || (document.fiscal_authorization_range_from !== null && document.fiscal_authorization_range_from !== undefined)
+          || (document.fiscal_authorization_range_to !== null && document.fiscal_authorization_range_to !== undefined),
         );
         const canPurgeManualTrashedDocument = isManualTrashedDocument
           && !hasFiscalAuthorization
           && documentAccountEntries.every((entry) => entry.deleted_at !== null
             && !entry.payment_id
             && DOCUMENT_ACCOUNT_ENTRY_REFERENCE_TYPES.has(entry.reference_type ?? ''));
+        const canPurgeLinkedManualNote = canPurgeManualTrashedDocument
+          && NOTE_CATEGORIES.has(category ?? '')
+          && (document.status === 0 || document.status === cancelledStatus);
         let reason: string | null = null;
 
         if (!isSafelyRemovedOpeningBalance && !isManualTrashedDocument && document.status !== cancelledStatus) {
@@ -801,13 +805,13 @@ export class TrashService {
           || document.fiscal_authorization_type
           || document.fiscal_authorization_code
           || document.fiscal_authorization_expires_at
-          || document.fiscal_authorization_range_from !== null
-          || document.fiscal_authorization_range_to !== null
+          || (document.fiscal_authorization_range_from !== null && document.fiscal_authorization_range_from !== undefined)
+          || (document.fiscal_authorization_range_to !== null && document.fiscal_authorization_range_to !== undefined)
         ) {
           reason = 'tiene configuración o datos fiscales/contables que deben conservarse';
         } else if (Number(document.paid_amount) > 0 || document._count.payment_documents > 0) {
           reason = 'tiene pagos o cobros asociados';
-        } else if (document.parent_document_id || document._count.child_documents > 0) {
+        } else if ((document.parent_document_id && !canPurgeLinkedManualNote) || document._count.child_documents > 0) {
           reason = 'forma parte de una cadena de documentos';
         } else if (document.commercial_operation_id || document.rooted_commercial_operation) {
           reason = 'está vinculado a una operación comercial';

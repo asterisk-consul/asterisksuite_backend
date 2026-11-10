@@ -8,6 +8,7 @@ import { PlatformModulesService } from '@/modules/core/platform-modules/platform
 export interface SaveWhatsAppNotificationSettingsInput {
   enabled: boolean;
   assignments_enabled: boolean;
+  tasks_enabled?: boolean;
   customer_balances_enabled: boolean;
   customer_balance_recipient_ids: string[];
   supplier_balances_enabled: boolean;
@@ -54,6 +55,7 @@ const ROUTES: Record<string, NotificationRoute> = {
 const DEFAULT_SETTINGS: SaveWhatsAppNotificationSettingsInput = {
   enabled: false,
   assignments_enabled: true,
+  tasks_enabled: false,
   customer_balances_enabled: false,
   customer_balance_recipient_ids: [],
   supplier_balances_enabled: false,
@@ -219,7 +221,7 @@ export class WhatsAppNotificationsService {
 
     await this.publicDb().$executeRaw`
       INSERT INTO public.company_whatsapp_notification_settings (
-        company_id, enabled, assignments_enabled,
+        company_id, enabled, assignments_enabled, tasks_enabled,
         customer_balances_enabled, customer_balance_recipient_ids,
         supplier_balances_enabled, supplier_balance_recipient_ids,
         checks_enabled, check_recipient_ids,
@@ -228,6 +230,7 @@ export class WhatsAppNotificationsService {
         ${companyId}::uuid,
         ${settings.enabled},
         ${settings.assignments_enabled},
+        ${settings.tasks_enabled},
         ${settings.customer_balances_enabled},
         ${JSON.stringify(settings.customer_balance_recipient_ids)}::jsonb,
         ${settings.supplier_balances_enabled},
@@ -243,6 +246,7 @@ export class WhatsAppNotificationsService {
       ON CONFLICT (company_id) DO UPDATE SET
         enabled = EXCLUDED.enabled,
         assignments_enabled = EXCLUDED.assignments_enabled,
+        tasks_enabled = EXCLUDED.tasks_enabled,
         customer_balances_enabled = EXCLUDED.customer_balances_enabled,
         customer_balance_recipient_ids = EXCLUDED.customer_balance_recipient_ids,
         supplier_balances_enabled = EXCLUDED.supplier_balances_enabled,
@@ -315,6 +319,56 @@ export class WhatsAppNotificationsService {
       targetPath: targetUrl,
     });
     if (queued) this.logger.log('Aviso de OV lista para entrega encolado para WhatsApp.');
+    return queued;
+  }
+
+  async enqueueTaskActivity(input: {
+    companyId: string;
+    recipientUserIds: string[];
+    eventType: 'TASK_ASSIGNED' | 'TASK_MEMBER_ADDED' | 'TASK_COMMENTED' | 'TASK_MENTIONED';
+    taskId: string;
+    boardId: string;
+    taskTitle: string;
+    actorUserId: string;
+    detail?: string;
+  }) {
+    if (!this.isDeliveryEnabled()) return 0;
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(input.companyId, 'WHATSAPP'))) return 0;
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(input.companyId, 'CRM'))) return 0;
+    const settings = await this.findCompanySettings(input.companyId);
+    if (!settings?.enabled || !settings.tasks_enabled) return 0;
+
+    const recipientIds = [...new Set(input.recipientUserIds)]
+      .filter(id => id !== input.actorUserId)
+      .slice(0, 60);
+    const contacts = await this.findOptedInContacts(input.companyId, recipientIds);
+    if (!contacts.size) return 0;
+    const targetPath = await this.companyDocumentUrl(input.companyId, `/erp/tasks?board_id=${encodeURIComponent(input.boardId)}&task_id=${encodeURIComponent(input.taskId)}`);
+    const title = input.eventType === 'TASK_ASSIGNED'
+      ? 'Te asignaron una tarea'
+      : input.eventType === 'TASK_MEMBER_ADDED'
+        ? 'Te sumaron a una tarea'
+        : input.eventType === 'TASK_MENTIONED'
+          ? 'Te mencionaron en una tarea'
+          : 'Nuevo comentario en una tarea';
+    const detail = input.detail?.trim();
+    const message = [
+      `Tarea: ${input.taskTitle}`,
+      detail ? `- ${detail.slice(0, 220)}` : null,
+      'Ingresá al enlace para revisar la tarea.',
+    ].filter(Boolean).join('\n');
+    let queued = 0;
+    for (const [recipientUserId, contact] of contacts) {
+      const inserted = await this.enqueueForRecipient(input.companyId, recipientUserId, contact.phone_e164, {
+        companyId: input.companyId,
+        eventType: input.eventType,
+        deduplicationKey: `task:${input.eventType}:${input.taskId}:${recipientUserId}:${Date.now()}`,
+        title,
+        message,
+        targetPath,
+      });
+      if (inserted) queued += 1;
+    }
     return queued;
   }
 
@@ -513,6 +567,7 @@ export class WhatsAppNotificationsService {
               AND c.phone_e164 = q.recipient_phone
           )
           OR (q.event_type IN ('OV_ASSIGNED', 'OV_READY_FOR_DELIVERY') AND s.assignments_enabled = false)
+          OR (q.event_type IN ('TASK_ASSIGNED', 'TASK_MEMBER_ADDED', 'TASK_COMMENTED', 'TASK_MENTIONED') AND s.tasks_enabled = false)
           OR (q.event_type = 'CUSTOMER_BALANCE_OLD' AND (s.customer_balances_enabled = false OR NOT (s.customer_balance_recipient_ids @> to_jsonb(q.recipient_user_id::text))))
           OR (q.event_type = 'SUPPLIER_BALANCE_OLD' AND (s.supplier_balances_enabled = false OR NOT (s.supplier_balance_recipient_ids @> to_jsonb(q.recipient_user_id::text))))
           OR (q.event_type IN ('CHECK_DUE', 'CHECK_OVERDUE') AND (s.checks_enabled = false OR NOT (s.check_recipient_ids @> to_jsonb(q.recipient_user_id::text))))
@@ -529,7 +584,7 @@ export class WhatsAppNotificationsService {
     `;
 
     const candidates = await publicDb.$queryRaw<any[]>`
-      SELECT q.id, q.company_id, q.recipient_user_id, q.recipient_phone,
+      SELECT q.id, q.company_id, q.recipient_user_id, q.recipient_phone, q.event_type,
              COALESCE(s.min_interval_seconds, 15) AS min_interval_seconds,
              COALESCE(s.batch_window_seconds, 20) AS batch_window_seconds
       FROM public.whatsapp_notification_outbox q
@@ -551,6 +606,17 @@ export class WhatsAppNotificationsService {
         SET status = 'CANCELLED', locked_at = NULL,
             last_error = 'La empresa ya no tiene habilitado el módulo WhatsApp.', updated_at = NOW()
         WHERE company_id = ${candidate.company_id}::uuid AND status = 'PENDING'
+      `;
+      return true;
+    }
+    if (String(candidate.event_type).startsWith('TASK_') && !(await this.platformModules.hasModuleOrLegacyAccess(candidate.company_id, 'CRM'))) {
+      await publicDb.$executeRaw`
+        UPDATE public.whatsapp_notification_outbox
+        SET status = 'CANCELLED', locked_at = NULL,
+            last_error = 'La empresa ya no tiene habilitado el módulo CRM y tareas.', updated_at = NOW()
+        WHERE company_id = ${candidate.company_id}::uuid
+          AND event_type IN ('TASK_ASSIGNED', 'TASK_MEMBER_ADDED', 'TASK_COMMENTED', 'TASK_MENTIONED')
+          AND status = 'PENDING'
       `;
       return true;
     }
@@ -747,7 +813,7 @@ export class WhatsAppNotificationsService {
       'supplier_balance_recipient_ids',
       'check_recipient_ids',
     ];
-    const normalized: any = { ...input };
+    const normalized: any = { ...input, tasks_enabled: input.tasks_enabled === true };
     for (const field of recipientFields) {
       const value = input[field];
       if (!Array.isArray(value)) throw new BadRequestException('La lista de destinatarios no es válida.');
@@ -763,6 +829,7 @@ export class WhatsAppNotificationsService {
     return {
       enabled: Boolean(row.enabled),
       assignments_enabled: Boolean(row.assignments_enabled),
+      tasks_enabled: Boolean(row.tasks_enabled),
       customer_balances_enabled: Boolean(row.customer_balances_enabled),
       customer_balance_recipient_ids: this.jsonIds(row.customer_balance_recipient_ids),
       supplier_balances_enabled: Boolean(row.supplier_balances_enabled),

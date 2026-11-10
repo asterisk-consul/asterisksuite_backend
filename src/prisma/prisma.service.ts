@@ -137,6 +137,37 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
   }
 
   /**
+   * Cierra y retira de la caché el cliente de un tenant que va a eliminarse.
+   * Así el pool local deja de conservar conexiones a una base que ya no existe.
+   */
+  public async closeTenantClient(tenantDb: string): Promise<void> {
+    const client = this.tenantClientCache.get(tenantDb);
+    const pool = this.tenantPoolCache.get(tenantDb);
+    this.tenantClientCache.delete(tenantDb);
+    this.tenantPoolCache.delete(tenantDb);
+    this.tenantLastUsed.delete(tenantDb);
+
+    if (!client && !pool) return;
+
+    let disconnectError: unknown;
+    try {
+      if (client) await (client as unknown as PrismaClient).$disconnect();
+    } catch (error) {
+      disconnectError = error;
+    }
+
+    try {
+      if (pool) await pool.end();
+    } catch (error) {
+      if (!disconnectError) disconnectError = error;
+    }
+
+    if (disconnectError) {
+      throw disconnectError;
+    }
+  }
+
+  /**
    * Ejecuta trabajo de background con un cliente que no queda en la caché web.
    * Evita que un scheduler que recorre todas las empresas mantenga un cliente
    * Prisma pesado por cada tenant hasta que venza el TTL.

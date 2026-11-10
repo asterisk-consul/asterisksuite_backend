@@ -177,6 +177,11 @@ export class PlatformPlansService {
     return { company, owner: { id: owner.id, name: owner.name, email: owner.email }, plan };
   }
 
+  async deleteCompany(userId: string, companyId: string, confirmSubdomain: string) {
+    await this.assertPlatformOwner(userId);
+    return this.companies.deletePermanently(companyId, confirmSubdomain, userId);
+  }
+
   async metrics(userId: string) {
     await this.assertPlatformOwner(userId);
     const prisma = this.db.getDefaultClient();

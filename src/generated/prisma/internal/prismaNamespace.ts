@@ -543,6 +543,16 @@ export const ModelName = {
   sales_flow_settings: 'sales_flow_settings',
   sales_partner_share_assignments: 'sales_partner_share_assignments',
   commercial_operations: 'commercial_operations',
+  task_boards: 'task_boards',
+  task_board_columns: 'task_board_columns',
+  tasks: 'tasks',
+  task_members: 'task_members',
+  task_labels: 'task_labels',
+  task_label_assignments: 'task_label_assignments',
+  task_comments: 'task_comments',
+  task_checklists: 'task_checklists',
+  task_checklist_items: 'task_checklist_items',
+  task_board_column_preferences: 'task_board_column_preferences',
   tax_categories: 'tax_categories',
   tax_category_taxes: 'tax_category_taxes',
   product_taxes: 'product_taxes',
@@ -603,7 +613,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "commercial_adjustment_concepts" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "document_activity_events" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_partner_share_details" | "hr_partner_investment_plans" | "hr_partner_investment_installments" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "user_notification_alert_dismissals" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "platform_modules" | "subscription_plans" | "subscription_plan_modules" | "company_subscriptions" | "company_module_overrides" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "platform_admin_assignments" | "platform_admin_company_scopes" | "company_tax_settings" | "company_arca_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "mcp_oauth_clients" | "mcp_oauth_pending_authorizations" | "mcp_oauth_grants" | "mcp_oauth_codes" | "mcp_oauth_refresh_tokens" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "sales_partner_share_assignments" | "commercial_operations" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "bank_movement_accounting_entries" | "bank_movement_accounting_lines" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_tenders" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies" | "user_whatsapp_contacts" | "company_whatsapp_notification_settings" | "whatsapp_notification_outbox" | "whatsapp_notification_dispatch_state"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "commercial_adjustment_concepts" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "document_activity_events" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_partner_share_details" | "hr_partner_investment_plans" | "hr_partner_investment_installments" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "user_notification_alert_dismissals" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "platform_modules" | "subscription_plans" | "subscription_plan_modules" | "company_subscriptions" | "company_module_overrides" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "platform_admin_assignments" | "platform_admin_company_scopes" | "company_tax_settings" | "company_arca_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "mcp_oauth_clients" | "mcp_oauth_pending_authorizations" | "mcp_oauth_grants" | "mcp_oauth_codes" | "mcp_oauth_refresh_tokens" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "sales_partner_share_assignments" | "commercial_operations" | "task_boards" | "task_board_columns" | "tasks" | "task_members" | "task_labels" | "task_label_assignments" | "task_comments" | "task_checklists" | "task_checklist_items" | "task_board_column_preferences" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "bank_movement_accounting_entries" | "bank_movement_accounting_lines" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_tenders" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies" | "user_whatsapp_contacts" | "company_whatsapp_notification_settings" | "whatsapp_notification_outbox" | "whatsapp_notification_dispatch_state"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -12373,6 +12383,746 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    task_boards: {
+      payload: Prisma.$task_boardsPayload<ExtArgs>
+      fields: Prisma.task_boardsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_boardsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_boardsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>
+        }
+        findFirst: {
+          args: Prisma.task_boardsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_boardsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>
+        }
+        findMany: {
+          args: Prisma.task_boardsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>[]
+        }
+        create: {
+          args: Prisma.task_boardsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>
+        }
+        createMany: {
+          args: Prisma.task_boardsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_boardsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>[]
+        }
+        delete: {
+          args: Prisma.task_boardsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>
+        }
+        update: {
+          args: Prisma.task_boardsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_boardsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_boardsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_boardsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_boardsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_boardsPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_boardsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_boards>
+        }
+        groupBy: {
+          args: Prisma.task_boardsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_boardsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_boardsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_boardsCountAggregateOutputType> | number
+        }
+      }
+    }
+    task_board_columns: {
+      payload: Prisma.$task_board_columnsPayload<ExtArgs>
+      fields: Prisma.task_board_columnsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_board_columnsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_board_columnsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>
+        }
+        findFirst: {
+          args: Prisma.task_board_columnsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_board_columnsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>
+        }
+        findMany: {
+          args: Prisma.task_board_columnsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>[]
+        }
+        create: {
+          args: Prisma.task_board_columnsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>
+        }
+        createMany: {
+          args: Prisma.task_board_columnsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_board_columnsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>[]
+        }
+        delete: {
+          args: Prisma.task_board_columnsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>
+        }
+        update: {
+          args: Prisma.task_board_columnsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_board_columnsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_board_columnsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_board_columnsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_board_columnsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_columnsPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_board_columnsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_board_columns>
+        }
+        groupBy: {
+          args: Prisma.task_board_columnsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_board_columnsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_board_columnsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_board_columnsCountAggregateOutputType> | number
+        }
+      }
+    }
+    tasks: {
+      payload: Prisma.$tasksPayload<ExtArgs>
+      fields: Prisma.tasksFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.tasksFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.tasksFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>
+        }
+        findFirst: {
+          args: Prisma.tasksFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.tasksFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>
+        }
+        findMany: {
+          args: Prisma.tasksFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>[]
+        }
+        create: {
+          args: Prisma.tasksCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>
+        }
+        createMany: {
+          args: Prisma.tasksCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.tasksCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>[]
+        }
+        delete: {
+          args: Prisma.tasksDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>
+        }
+        update: {
+          args: Prisma.tasksUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>
+        }
+        deleteMany: {
+          args: Prisma.tasksDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.tasksUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.tasksUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>[]
+        }
+        upsert: {
+          args: Prisma.tasksUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tasksPayload>
+        }
+        aggregate: {
+          args: Prisma.TasksAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTasks>
+        }
+        groupBy: {
+          args: Prisma.tasksGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TasksGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.tasksCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TasksCountAggregateOutputType> | number
+        }
+      }
+    }
+    task_members: {
+      payload: Prisma.$task_membersPayload<ExtArgs>
+      fields: Prisma.task_membersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_membersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_membersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>
+        }
+        findFirst: {
+          args: Prisma.task_membersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_membersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>
+        }
+        findMany: {
+          args: Prisma.task_membersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>[]
+        }
+        create: {
+          args: Prisma.task_membersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>
+        }
+        createMany: {
+          args: Prisma.task_membersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_membersCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>[]
+        }
+        delete: {
+          args: Prisma.task_membersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>
+        }
+        update: {
+          args: Prisma.task_membersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_membersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_membersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_membersUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_membersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_membersPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_membersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_members>
+        }
+        groupBy: {
+          args: Prisma.task_membersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_membersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_membersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_membersCountAggregateOutputType> | number
+        }
+      }
+    }
+    task_labels: {
+      payload: Prisma.$task_labelsPayload<ExtArgs>
+      fields: Prisma.task_labelsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_labelsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_labelsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>
+        }
+        findFirst: {
+          args: Prisma.task_labelsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_labelsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>
+        }
+        findMany: {
+          args: Prisma.task_labelsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>[]
+        }
+        create: {
+          args: Prisma.task_labelsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>
+        }
+        createMany: {
+          args: Prisma.task_labelsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_labelsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>[]
+        }
+        delete: {
+          args: Prisma.task_labelsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>
+        }
+        update: {
+          args: Prisma.task_labelsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_labelsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_labelsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_labelsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_labelsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_labelsPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_labelsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_labels>
+        }
+        groupBy: {
+          args: Prisma.task_labelsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_labelsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_labelsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_labelsCountAggregateOutputType> | number
+        }
+      }
+    }
+    task_label_assignments: {
+      payload: Prisma.$task_label_assignmentsPayload<ExtArgs>
+      fields: Prisma.task_label_assignmentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_label_assignmentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_label_assignmentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>
+        }
+        findFirst: {
+          args: Prisma.task_label_assignmentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_label_assignmentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>
+        }
+        findMany: {
+          args: Prisma.task_label_assignmentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>[]
+        }
+        create: {
+          args: Prisma.task_label_assignmentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>
+        }
+        createMany: {
+          args: Prisma.task_label_assignmentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_label_assignmentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>[]
+        }
+        delete: {
+          args: Prisma.task_label_assignmentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>
+        }
+        update: {
+          args: Prisma.task_label_assignmentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_label_assignmentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_label_assignmentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_label_assignmentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_label_assignmentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_label_assignmentsPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_label_assignmentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_label_assignments>
+        }
+        groupBy: {
+          args: Prisma.task_label_assignmentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_label_assignmentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_label_assignmentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_label_assignmentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    task_comments: {
+      payload: Prisma.$task_commentsPayload<ExtArgs>
+      fields: Prisma.task_commentsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_commentsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_commentsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>
+        }
+        findFirst: {
+          args: Prisma.task_commentsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_commentsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>
+        }
+        findMany: {
+          args: Prisma.task_commentsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>[]
+        }
+        create: {
+          args: Prisma.task_commentsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>
+        }
+        createMany: {
+          args: Prisma.task_commentsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_commentsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>[]
+        }
+        delete: {
+          args: Prisma.task_commentsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>
+        }
+        update: {
+          args: Prisma.task_commentsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_commentsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_commentsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_commentsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_commentsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_commentsPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_commentsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_comments>
+        }
+        groupBy: {
+          args: Prisma.task_commentsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_commentsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_commentsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_commentsCountAggregateOutputType> | number
+        }
+      }
+    }
+    task_checklists: {
+      payload: Prisma.$task_checklistsPayload<ExtArgs>
+      fields: Prisma.task_checklistsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_checklistsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_checklistsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>
+        }
+        findFirst: {
+          args: Prisma.task_checklistsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_checklistsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>
+        }
+        findMany: {
+          args: Prisma.task_checklistsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>[]
+        }
+        create: {
+          args: Prisma.task_checklistsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>
+        }
+        createMany: {
+          args: Prisma.task_checklistsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_checklistsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>[]
+        }
+        delete: {
+          args: Prisma.task_checklistsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>
+        }
+        update: {
+          args: Prisma.task_checklistsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_checklistsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_checklistsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_checklistsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_checklistsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklistsPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_checklistsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_checklists>
+        }
+        groupBy: {
+          args: Prisma.task_checklistsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_checklistsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_checklistsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_checklistsCountAggregateOutputType> | number
+        }
+      }
+    }
+    task_checklist_items: {
+      payload: Prisma.$task_checklist_itemsPayload<ExtArgs>
+      fields: Prisma.task_checklist_itemsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_checklist_itemsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_checklist_itemsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>
+        }
+        findFirst: {
+          args: Prisma.task_checklist_itemsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_checklist_itemsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>
+        }
+        findMany: {
+          args: Prisma.task_checklist_itemsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>[]
+        }
+        create: {
+          args: Prisma.task_checklist_itemsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>
+        }
+        createMany: {
+          args: Prisma.task_checklist_itemsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_checklist_itemsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>[]
+        }
+        delete: {
+          args: Prisma.task_checklist_itemsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>
+        }
+        update: {
+          args: Prisma.task_checklist_itemsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_checklist_itemsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_checklist_itemsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_checklist_itemsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_checklist_itemsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_checklist_itemsPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_checklist_itemsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_checklist_items>
+        }
+        groupBy: {
+          args: Prisma.task_checklist_itemsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_checklist_itemsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_checklist_itemsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_checklist_itemsCountAggregateOutputType> | number
+        }
+      }
+    }
+    task_board_column_preferences: {
+      payload: Prisma.$task_board_column_preferencesPayload<ExtArgs>
+      fields: Prisma.task_board_column_preferencesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_board_column_preferencesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_board_column_preferencesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>
+        }
+        findFirst: {
+          args: Prisma.task_board_column_preferencesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_board_column_preferencesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>
+        }
+        findMany: {
+          args: Prisma.task_board_column_preferencesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>[]
+        }
+        create: {
+          args: Prisma.task_board_column_preferencesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>
+        }
+        createMany: {
+          args: Prisma.task_board_column_preferencesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_board_column_preferencesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>[]
+        }
+        delete: {
+          args: Prisma.task_board_column_preferencesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>
+        }
+        update: {
+          args: Prisma.task_board_column_preferencesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_board_column_preferencesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_board_column_preferencesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_board_column_preferencesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_board_column_preferencesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_board_column_preferencesPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_board_column_preferencesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_board_column_preferences>
+        }
+        groupBy: {
+          args: Prisma.task_board_column_preferencesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_board_column_preferencesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_board_column_preferencesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_board_column_preferencesCountAggregateOutputType> | number
+        }
+      }
+    }
     tax_categories: {
       payload: Prisma.$tax_categoriesPayload<ExtArgs>
       fields: Prisma.tax_categoriesFieldRefs
@@ -18764,6 +19514,147 @@ export const Commercial_operationsScalarFieldEnum = {
 export type Commercial_operationsScalarFieldEnum = (typeof Commercial_operationsScalarFieldEnum)[keyof typeof Commercial_operationsScalarFieldEnum]
 
 
+export const Task_boardsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  party_id: 'party_id',
+  is_default: 'is_default',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Task_boardsScalarFieldEnum = (typeof Task_boardsScalarFieldEnum)[keyof typeof Task_boardsScalarFieldEnum]
+
+
+export const Task_board_columnsScalarFieldEnum = {
+  id: 'id',
+  board_id: 'board_id',
+  name: 'name',
+  position: 'position',
+  color: 'color',
+  is_closed: 'is_closed',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Task_board_columnsScalarFieldEnum = (typeof Task_board_columnsScalarFieldEnum)[keyof typeof Task_board_columnsScalarFieldEnum]
+
+
+export const TasksScalarFieldEnum = {
+  id: 'id',
+  board_id: 'board_id',
+  column_id: 'column_id',
+  party_id: 'party_id',
+  title: 'title',
+  description: 'description',
+  priority: 'priority',
+  assigned_to: 'assigned_to',
+  start_at: 'start_at',
+  due_at: 'due_at',
+  position: 'position',
+  completed_at: 'completed_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type TasksScalarFieldEnum = (typeof TasksScalarFieldEnum)[keyof typeof TasksScalarFieldEnum]
+
+
+export const Task_membersScalarFieldEnum = {
+  task_id: 'task_id',
+  user_id: 'user_id',
+  role: 'role',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_membersScalarFieldEnum = (typeof Task_membersScalarFieldEnum)[keyof typeof Task_membersScalarFieldEnum]
+
+
+export const Task_labelsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  color: 'color',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_labelsScalarFieldEnum = (typeof Task_labelsScalarFieldEnum)[keyof typeof Task_labelsScalarFieldEnum]
+
+
+export const Task_label_assignmentsScalarFieldEnum = {
+  task_id: 'task_id',
+  label_id: 'label_id'
+} as const
+
+export type Task_label_assignmentsScalarFieldEnum = (typeof Task_label_assignmentsScalarFieldEnum)[keyof typeof Task_label_assignmentsScalarFieldEnum]
+
+
+export const Task_commentsScalarFieldEnum = {
+  id: 'id',
+  task_id: 'task_id',
+  content: 'content',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_commentsScalarFieldEnum = (typeof Task_commentsScalarFieldEnum)[keyof typeof Task_commentsScalarFieldEnum]
+
+
+export const Task_checklistsScalarFieldEnum = {
+  id: 'id',
+  task_id: 'task_id',
+  title: 'title',
+  position: 'position',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_checklistsScalarFieldEnum = (typeof Task_checklistsScalarFieldEnum)[keyof typeof Task_checklistsScalarFieldEnum]
+
+
+export const Task_checklist_itemsScalarFieldEnum = {
+  id: 'id',
+  checklist_id: 'checklist_id',
+  content: 'content',
+  completed: 'completed',
+  position: 'position',
+  assigned_to: 'assigned_to',
+  due_at: 'due_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Task_checklist_itemsScalarFieldEnum = (typeof Task_checklist_itemsScalarFieldEnum)[keyof typeof Task_checklist_itemsScalarFieldEnum]
+
+
+export const Task_board_column_preferencesScalarFieldEnum = {
+  column_id: 'column_id',
+  user_id: 'user_id',
+  is_pinned: 'is_pinned',
+  is_watching: 'is_watching',
+  updated_at: 'updated_at'
+} as const
+
+export type Task_board_column_preferencesScalarFieldEnum = (typeof Task_board_column_preferencesScalarFieldEnum)[keyof typeof Task_board_column_preferencesScalarFieldEnum]
+
+
 export const Tax_categoriesScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -19764,6 +20655,8 @@ export const Company_whatsapp_notification_settingsScalarFieldEnum = {
   company_id: 'company_id',
   enabled: 'enabled',
   assignments_enabled: 'assignments_enabled',
+  tasks_enabled: 'tasks_enabled',
+  in_app_tasks_enabled: 'in_app_tasks_enabled',
   customer_balances_enabled: 'customer_balances_enabled',
   customer_balance_recipient_ids: 'customer_balance_recipient_ids',
   supplier_balances_enabled: 'supplier_balances_enabled',
@@ -20716,6 +21609,20 @@ export type ListEnumPermissionEffectFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'TaskPriority'
+ */
+export type EnumTaskPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskPriority'>
+    
+
+
+/**
+ * Reference to a field of type 'TaskPriority[]'
+ */
+export type ListEnumTaskPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskPriority[]'>
+    
+
+
+/**
  * Reference to a field of type 'BankChargeRuleTrigger'
  */
 export type EnumBankChargeRuleTriggerFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BankChargeRuleTrigger'>
@@ -21262,6 +22169,16 @@ export type GlobalOmitConfig = {
   sales_flow_settings?: Prisma.sales_flow_settingsOmit
   sales_partner_share_assignments?: Prisma.sales_partner_share_assignmentsOmit
   commercial_operations?: Prisma.commercial_operationsOmit
+  task_boards?: Prisma.task_boardsOmit
+  task_board_columns?: Prisma.task_board_columnsOmit
+  tasks?: Prisma.tasksOmit
+  task_members?: Prisma.task_membersOmit
+  task_labels?: Prisma.task_labelsOmit
+  task_label_assignments?: Prisma.task_label_assignmentsOmit
+  task_comments?: Prisma.task_commentsOmit
+  task_checklists?: Prisma.task_checklistsOmit
+  task_checklist_items?: Prisma.task_checklist_itemsOmit
+  task_board_column_preferences?: Prisma.task_board_column_preferencesOmit
   tax_categories?: Prisma.tax_categoriesOmit
   tax_category_taxes?: Prisma.tax_category_taxesOmit
   product_taxes?: Prisma.product_taxesOmit

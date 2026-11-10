@@ -9,6 +9,7 @@ import {
   SetPlatformPlanModulesDto,
   UpdatePlatformPlanDto,
 } from './dto/platform-plans.dto';
+import { DeletePlatformCompanyDto } from './dto/delete-platform-company.dto';
 import { SkipPlatformModuleCheck } from './platform-module.decorators';
 import { PlatformPlansService } from './platform-plans.service';
 
@@ -64,6 +65,15 @@ export class PlatformPlansController {
   @Post('companies')
   createCompany(@CurrentUser('id') userId: string, @Body() dto: CreatePlatformCompanyDto) {
     return this.plans.createCompany(userId, dto);
+  }
+
+  @Delete('companies/:companyId')
+  deleteCompany(
+    @CurrentUser('id') userId: string,
+    @Param('companyId') companyId: string,
+    @Body() dto: DeletePlatformCompanyDto,
+  ) {
+    return this.plans.deleteCompany(userId, companyId, dto.confirmSubdomain);
   }
 
   @Get('metrics')

@@ -1,5 +1,13 @@
 import { execSync } from 'child_process';
-import { Injectable, NotFoundException, ForbiddenException, ConflictException, BadRequestException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  ConflictException,
+  BadRequestException,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
@@ -211,7 +219,7 @@ export class CompaniesService {
     },
   ) {
     const subdomain = createCompanyDto.subdomain?.toLowerCase().trim();
-    if (!subdomain || !/^[a-z0-9](?:[a-z0-9-]{1,48}[a-z0-9])$/.test(subdomain)) {
+    if (!subdomain || !/^[a-z0-9](?:[a-z0-9_-]{1,48}[a-z0-9])$/.test(subdomain)) {
       throw new BadRequestException('El subdominio debe tener entre 3 y 50 caracteres, en minúsculas, números o guiones.');
     }
     const tenantDb = `${subdomain}_db`;
@@ -658,7 +666,95 @@ export class CompaniesService {
     });
   }
 
-  deactivate() {
-    throw new Error('No existe isActive en el modelo companies');
+  async deletePermanently(companyId: string, confirmSubdomain: string, requestUserId: string) {
+    const actor = await this.prisma.users.findUnique({
+      where: { id: requestUserId },
+      select: { role: true, active: true, deleted_at: true },
+    });
+    if (!actor?.active || actor.deleted_at || actor.role !== 'PLATFORM_OWNER') {
+      throw new ForbiddenException('Sólo el propietario de la plataforma puede eliminar empresas');
+    }
+
+    const company = await this.prisma.companies.findUnique({ where: { id: companyId } });
+    if (!company) throw new NotFoundException('Empresa no encontrada');
+
+    const subdomain = company.subdomain?.trim().toLowerCase();
+    if (!subdomain || !/^[a-z0-9](?:[a-z0-9-]{1,48}[a-z0-9])$/.test(subdomain)) {
+      throw new BadRequestException('La empresa no tiene un subdominio válido para resolver su base de datos.');
+    }
+    if (confirmSubdomain?.trim().toLowerCase() !== subdomain) {
+      throw new BadRequestException('La confirmación debe coincidir con el subdominio de la empresa.');
+    }
+
+    // TenantMiddleware resuelve la base usando exactamente el subdominio + _db.
+    const tenantDb = `${subdomain}_db`;
+    if (!/^[a-z0-9][a-z0-9_-]{0,62}$/.test(tenantDb)) {
+      throw new BadRequestException('No se pudo resolver un nombre de base de datos válido.');
+    }
+
+    const previousDeletedAt = company.deleted_at;
+    const previousDeletedBy = company.deleted_by;
+    if (!previousDeletedAt) {
+      await this.prisma.companies.update({
+        where: { id: companyId },
+        data: { deleted_at: new Date(), deleted_by: requestUserId },
+      });
+    }
+
+    let databaseDropped = false;
+    try {
+      // Marca primero la empresa como no disponible y cierra el pool local.
+      // Los guards y TenantMiddleware ya rechazan nuevos accesos antes del DROP.
+      await this.db.closeTenantClient(tenantDb);
+      const adminPool = new Pool({
+        connectionString: process.env.DATABASE_URL_PUBLIC,
+        max: 1,
+        connectionTimeoutMillis: 5_000,
+      });
+      try {
+        const { rows } = await adminPool.query('SELECT 1 FROM pg_database WHERE datname = $1', [tenantDb]);
+        if (rows.length) {
+          await adminPool.query(
+            'SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = $1 AND pid <> pg_backend_pid()',
+            [tenantDb],
+          );
+          // tenantDb fue construido desde un subdominio validado, no desde SQL libre.
+          await adminPool.query(`DROP DATABASE "${tenantDb}"`);
+        }
+        databaseDropped = true;
+      } finally {
+        await adminPool.end();
+      }
+    } catch (error) {
+      if (!databaseDropped) {
+        try {
+          await this.prisma.companies.update({
+            where: { id: companyId },
+            data: { deleted_at: previousDeletedAt, deleted_by: previousDeletedBy },
+          });
+        } catch (rollbackError) {
+          this.logger.error(`No se pudo restaurar el estado de la empresa ${companyId}: ${String(rollbackError)}`);
+        }
+        this.logger.error(`No se pudo eliminar la base tenant ${tenantDb}: ${String(error)}`);
+        throw new InternalServerErrorException('No se pudo eliminar la base de datos de la empresa. No se quitó su registro ni sus usuarios; podés volver a intentarlo.');
+      }
+
+      this.logger.error(`La base ${tenantDb} se eliminó, pero no se pudo cerrar completamente el pool: ${String(error)}`);
+      throw new InternalServerErrorException('La base de datos ya se eliminó, pero falta completar el registro central. Volvé a intentar la baja para finalizarla.');
+    }
+
+    try {
+      await this.prisma.$transaction(async (tx) => {
+        // Este modelo legado no declara una relación Prisma con companies.
+        await tx.company_tax_settings.deleteMany({ where: { company_id: companyId } });
+        // Las demás membresías y configuraciones relacionadas se eliminan por CASCADE.
+        await tx.companies.delete({ where: { id: companyId } });
+      });
+    } catch (error) {
+      this.logger.error(`La base ${tenantDb} se eliminó, pero no se pudo borrar la empresa ${companyId}: ${String(error)}`);
+      throw new InternalServerErrorException('La base de datos ya se eliminó, pero falta completar el registro central. Volvé a intentar la baja para finalizarla.');
+    }
+
+    return { success: true, companyId, subdomain, tenantDatabaseRemoved: true };
   }
 }

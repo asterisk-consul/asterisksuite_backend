@@ -197,13 +197,6 @@ export class DocumentsPurchasesController {
       id,
       'delete',
     );
-    const document = await this.service.getRemovalContext(id);
-    if (
-      document.status === 2
-      && ['CREDIT_NOTE', 'DEBIT_NOTE'].includes(document.document_types?.category ?? '')
-    ) {
-      await this.documentAccess.assertDocument(user.id, role, 'purchases', id, 'cancel');
-    }
     return this.service.remove(id, user.id);
   }
 }

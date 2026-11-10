@@ -15,6 +15,8 @@ model company_whatsapp_notification_settings {
   company_id                     String   @id @db.Uuid
   enabled                        Boolean  @default(false)
   assignments_enabled            Boolean  @default(true)
+  tasks_enabled                  Boolean  @default(false)
+  in_app_tasks_enabled           Boolean  @default(true)
   customer_balances_enabled      Boolean  @default(false)
   customer_balance_recipient_ids Json     @default("[]")
   supplier_balances_enabled      Boolean  @default(false)

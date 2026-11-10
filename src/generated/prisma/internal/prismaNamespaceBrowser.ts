@@ -210,6 +210,16 @@ export const ModelName = {
   sales_flow_settings: 'sales_flow_settings',
   sales_partner_share_assignments: 'sales_partner_share_assignments',
   commercial_operations: 'commercial_operations',
+  task_boards: 'task_boards',
+  task_board_columns: 'task_board_columns',
+  tasks: 'tasks',
+  task_members: 'task_members',
+  task_labels: 'task_labels',
+  task_label_assignments: 'task_label_assignments',
+  task_comments: 'task_comments',
+  task_checklists: 'task_checklists',
+  task_checklist_items: 'task_checklist_items',
+  task_board_column_preferences: 'task_board_column_preferences',
   tax_categories: 'tax_categories',
   tax_category_taxes: 'tax_category_taxes',
   product_taxes: 'product_taxes',
@@ -3295,6 +3305,147 @@ export const Commercial_operationsScalarFieldEnum = {
 export type Commercial_operationsScalarFieldEnum = (typeof Commercial_operationsScalarFieldEnum)[keyof typeof Commercial_operationsScalarFieldEnum]
 
 
+export const Task_boardsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  party_id: 'party_id',
+  is_default: 'is_default',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Task_boardsScalarFieldEnum = (typeof Task_boardsScalarFieldEnum)[keyof typeof Task_boardsScalarFieldEnum]
+
+
+export const Task_board_columnsScalarFieldEnum = {
+  id: 'id',
+  board_id: 'board_id',
+  name: 'name',
+  position: 'position',
+  color: 'color',
+  is_closed: 'is_closed',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Task_board_columnsScalarFieldEnum = (typeof Task_board_columnsScalarFieldEnum)[keyof typeof Task_board_columnsScalarFieldEnum]
+
+
+export const TasksScalarFieldEnum = {
+  id: 'id',
+  board_id: 'board_id',
+  column_id: 'column_id',
+  party_id: 'party_id',
+  title: 'title',
+  description: 'description',
+  priority: 'priority',
+  assigned_to: 'assigned_to',
+  start_at: 'start_at',
+  due_at: 'due_at',
+  position: 'position',
+  completed_at: 'completed_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type TasksScalarFieldEnum = (typeof TasksScalarFieldEnum)[keyof typeof TasksScalarFieldEnum]
+
+
+export const Task_membersScalarFieldEnum = {
+  task_id: 'task_id',
+  user_id: 'user_id',
+  role: 'role',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_membersScalarFieldEnum = (typeof Task_membersScalarFieldEnum)[keyof typeof Task_membersScalarFieldEnum]
+
+
+export const Task_labelsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  color: 'color',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_labelsScalarFieldEnum = (typeof Task_labelsScalarFieldEnum)[keyof typeof Task_labelsScalarFieldEnum]
+
+
+export const Task_label_assignmentsScalarFieldEnum = {
+  task_id: 'task_id',
+  label_id: 'label_id'
+} as const
+
+export type Task_label_assignmentsScalarFieldEnum = (typeof Task_label_assignmentsScalarFieldEnum)[keyof typeof Task_label_assignmentsScalarFieldEnum]
+
+
+export const Task_commentsScalarFieldEnum = {
+  id: 'id',
+  task_id: 'task_id',
+  content: 'content',
+  created_at: 'created_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_commentsScalarFieldEnum = (typeof Task_commentsScalarFieldEnum)[keyof typeof Task_commentsScalarFieldEnum]
+
+
+export const Task_checklistsScalarFieldEnum = {
+  id: 'id',
+  task_id: 'task_id',
+  title: 'title',
+  position: 'position',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_checklistsScalarFieldEnum = (typeof Task_checklistsScalarFieldEnum)[keyof typeof Task_checklistsScalarFieldEnum]
+
+
+export const Task_checklist_itemsScalarFieldEnum = {
+  id: 'id',
+  checklist_id: 'checklist_id',
+  content: 'content',
+  completed: 'completed',
+  position: 'position',
+  assigned_to: 'assigned_to',
+  due_at: 'due_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Task_checklist_itemsScalarFieldEnum = (typeof Task_checklist_itemsScalarFieldEnum)[keyof typeof Task_checklist_itemsScalarFieldEnum]
+
+
+export const Task_board_column_preferencesScalarFieldEnum = {
+  column_id: 'column_id',
+  user_id: 'user_id',
+  is_pinned: 'is_pinned',
+  is_watching: 'is_watching',
+  updated_at: 'updated_at'
+} as const
+
+export type Task_board_column_preferencesScalarFieldEnum = (typeof Task_board_column_preferencesScalarFieldEnum)[keyof typeof Task_board_column_preferencesScalarFieldEnum]
+
+
 export const Tax_categoriesScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -4295,6 +4446,8 @@ export const Company_whatsapp_notification_settingsScalarFieldEnum = {
   company_id: 'company_id',
   enabled: 'enabled',
   assignments_enabled: 'assignments_enabled',
+  tasks_enabled: 'tasks_enabled',
+  in_app_tasks_enabled: 'in_app_tasks_enabled',
   customer_balances_enabled: 'customer_balances_enabled',
   customer_balance_recipient_ids: 'customer_balance_recipient_ids',
   supplier_balances_enabled: 'supplier_balances_enabled',

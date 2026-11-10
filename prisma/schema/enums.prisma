@@ -36,6 +36,15 @@ enum ProductType {
   @@schema("tenant")
 }
 
+enum TaskPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+
+  @@schema("tenant")
+}
+
 enum UsageType {
   SALE
   PURCHASE
