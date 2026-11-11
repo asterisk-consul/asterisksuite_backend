@@ -12,7 +12,11 @@ import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledg
 import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
 import { CreditCardsService } from '../credit-cards/credit-cards.service';
-import { getSalesCreditNoteTotalsByInvoice, getSalesCreditNoteTotalsByOperation } from '../documents/utils/credit-note-balance';
+import {
+  getPurchaseCreditNoteTotalsByInvoice,
+  getSalesCreditNoteTotalsByInvoice,
+  getSalesCreditNoteTotalsByOperation,
+} from '../documents/utils/credit-note-balance';
 
 @Injectable()
 export class PaymentsService {
@@ -807,9 +811,9 @@ export class PaymentsService {
       }
     }
 
-    // Determine current account entry type:
-    // ADVANCE without docs → NO current account entry (pendiente de factura)
-    // Otherwise → PAYMENT/COLLECTION/EXPENSE (como siempre)
+    // Un anticipo se registra en la cuenta corriente al confirmarse, aunque
+    // todavía no tenga documentos asociados. Al aplicarlo, esa disponibilidad
+    // se reclasifica para evitar duplicar el efecto sobre el saldo.
     const isAdvanceNoDocs = payment.payment_mode === 'ADVANCE' && paymentDocs.length === 0;
     const isDirectObligationPayment = paymentObligations.length > 0 && paymentDocs.length === 0;
 
@@ -910,10 +914,15 @@ export class PaymentsService {
         await this.processLinkedChecks(payment, userId, tx);
       }
 
-      // Update current account — NOT for advance without documents
-      // (the advance impacts CC only when applied to an invoice)
-      if (payment.party_id && !isAdvanceNoDocs && !isDirectObligationPayment) {
-        await this.createCurrentAccountEntry(payment, userId, tx, payment.type);
+      // Los anticipos sin comprobantes generan crédito disponible en cuenta
+      // corriente desde la confirmación. Los pagos normales conservan el flujo
+      // de siempre y los pagos directos de obligaciones no crean CC.
+      if (payment.party_id && !isDirectObligationPayment) {
+        if (isAdvanceNoDocs) {
+          await this.syncAdvanceCurrentAccountEntry(tx, payment, userId, payment.amount.toNumber());
+        } else {
+          await this.createCurrentAccountEntry(payment, userId, tx, payment.type);
+        }
       }
 
       if (payment.payment_method === 'PAYROLL_DEDUCTION') {
@@ -1432,7 +1441,15 @@ export class PaymentsService {
                 date: true,
                 currency_code: true,
                 business_parties: { select: { id: true, name: true } },
-                document_types: { select: { id: true, code: true, description: true, category: true } },
+                document_types: {
+                  select: {
+                    id: true,
+                    code: true,
+                    description: true,
+                    category: true,
+                    system_modules: { select: { code: true } },
+                  },
+                },
               },
             },
           },
@@ -2621,6 +2638,88 @@ export class PaymentsService {
     );
   }
 
+  /**
+   * Mantiene en cuenta corriente el saldo todavía disponible de un anticipo.
+   * Las aplicaciones se publican como pago/cobro asociado al comprobante; por
+   * eso el movimiento ADVANCE se reduce en el mismo importe y no duplica saldo.
+   */
+  private async syncAdvanceCurrentAccountEntry(
+    tx: any,
+    payment: any,
+    userId: string,
+    targetAvailableAmount: number,
+  ) {
+    if (!payment.party_id) return;
+
+    const targetAmount = Math.max(0, Math.round((Number(targetAvailableAmount) + Number.EPSILON) * 100) / 100);
+    const existing = await tx.current_account_entries.findFirst({
+      where: { payment_id: payment.id, reference_type: 'payment_advance', deleted_at: null },
+      orderBy: { created_at: 'asc' },
+      select: {
+        id: true,
+        current_account_id: true,
+        amount: true,
+        converted_amount: true,
+        balance_before: true,
+        balance_after: true,
+      },
+    });
+
+    if (!existing) {
+      if (targetAmount <= 0.01) return;
+      await this.currentAccountsService.addEntry(
+        {
+          party_id: payment.party_id,
+          party_type: payment.party_type ?? (payment.type === 'COLLECTION' ? 'CUSTOMER' : 'SUPPLIER'),
+          currency_code: payment.currency_code,
+          type: 'ADVANCE',
+          amount: targetAmount,
+          exchange_rate: payment.exchange_rate == null ? undefined : Number(payment.exchange_rate),
+          rate_type: payment.rate_type ?? undefined,
+          description: `Anticipo #${payment.number} · saldo disponible`,
+          reference_type: 'payment_advance',
+          reference_id: payment.id,
+          payment_id: payment.id,
+          date: payment.date instanceof Date ? payment.date.toISOString().split('T')[0] : payment.date,
+        },
+        userId,
+        tx,
+      );
+      return;
+    }
+
+    const currentAmount = Number(existing.amount);
+    if (Math.abs(currentAmount - targetAmount) <= 0.005) return;
+
+    await tx.$queryRaw`SELECT id FROM tenant.current_accounts WHERE id = ${existing.current_account_id}::uuid FOR UPDATE`;
+
+    const oldDelta = Number(existing.balance_after) - Number(existing.balance_before);
+    const convertedAmount = existing.converted_amount == null || currentAmount <= 0
+      ? null
+      : Math.round((targetAmount * Number(existing.converted_amount) / currentAmount + Number.EPSILON) * 100) / 100;
+    const nextDelta = targetAmount <= 0.01
+      ? 0
+      : -Math.abs(convertedAmount ?? targetAmount);
+    const now = new Date();
+
+    await tx.current_account_entries.update({
+      where: { id: existing.id },
+      data: {
+        amount: targetAmount,
+        converted_amount: convertedAmount,
+        balance_after: Number(existing.balance_before) + nextDelta,
+        ...(targetAmount <= 0.01 ? { deleted_at: now, deleted_by: userId } : {}),
+        updated_at: now,
+        updated_by: userId,
+      },
+    });
+    await tx.current_accounts.update({
+      where: { id: existing.current_account_id },
+      data: { balance: { increment: nextDelta - oldDelta }, updated_at: now, updated_by: userId },
+    });
+    await recalculateCurrentAccountLedger(tx, existing.current_account_id);
+  }
+
   private async createPayrollDeductionEntry(payment: any, userId: string, tx: any) {
     if (!payment.party_id || payment.type !== 'COLLECTION') {
       throw new BadRequestException('El descuento de haberes requiere un empleado y un cobro');
@@ -3200,32 +3299,104 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
 
   async applyAdvance(paymentId: string, dto: { document_id: string; amount: number }, userId: string) {
-    const payment = await this.findOne(paymentId);
-
-    if (payment.status !== 'CONFIRMED' && payment.status !== 'PAID') {
-      throw new BadRequestException('Solo se pueden aplicar anticipos a pagos confirmados o pagados');
-    }
-    if (payment.payment_mode !== 'ADVANCE') {
-      throw new BadRequestException('Este pago no es un anticipo');
-    }
-
-    // Validar documento (fuera de transacción — solo lectura)
-    const document = await this.prisma.documents.findUnique({
-      where: { id: dto.document_id },
-      include: { document_type: true },
-    });
-    if (!document) {
-      throw new NotFoundException('Documento no encontrado');
-    }
-    if (document.deleted_at) {
-      throw new NotFoundException('Documento eliminado');
-    }
-    if (document.party_id !== payment.party_id) {
-      throw new BadRequestException('El documento no pertenece al mismo tercero del pago');
-    }
-    // Cross-currency is now allowed: advance in USD can be applied to invoice in ARS
-
     return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.payments WHERE id = ${paymentId}::uuid FOR UPDATE`;
+      const payment = await tx.payments.findUnique({ where: { id: paymentId } });
+      if (!payment || payment.deleted_at) throw new NotFoundException('Pago no encontrado');
+      if (payment.status !== 'CONFIRMED' && payment.status !== 'PAID') {
+        throw new BadRequestException('Solo se pueden aplicar anticipos a pagos confirmados o pagados');
+      }
+      if (payment.payment_mode !== 'ADVANCE') {
+        throw new BadRequestException('Este pago no es un anticipo');
+      }
+
+      await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${dto.document_id}::uuid FOR UPDATE`;
+      const document = await tx.documents.findUnique({
+        where: { id: dto.document_id },
+        include: {
+          document_types: { select: { category: true, direction: true, affects_payment: true } },
+          commercial_operation: {
+            select: {
+              id: true,
+              payment_document_basis: true,
+              ordered_total: true,
+              paid_total: true,
+            },
+          },
+        },
+      });
+      if (!document || document.deleted_at) throw new NotFoundException('Documento no encontrado');
+      if (document.party_id !== payment.party_id) {
+        throw new BadRequestException('El documento no pertenece al mismo tercero del pago');
+      }
+
+      const category = document.document_types?.category;
+      const direction = Number(document.document_types?.direction);
+      const isEligibleStatus = category === 'ORDER'
+        ? [2, 5].includes(Number(document.status))
+        : Number(document.status) === 2;
+      if (!isEligibleStatus) {
+        throw new BadRequestException('Solo se pueden aplicar anticipos a documentos confirmados');
+      }
+      let operation = document.commercial_operation;
+      if (payment.type === 'COLLECTION') {
+        if (direction !== 1 || !['ORDER', 'INVOICE'].includes(category ?? '')) {
+          throw new BadRequestException('El anticipo de cobro debe aplicarse a una OV o factura de venta');
+        }
+        const basis = operation?.payment_document_basis;
+        if (basis && ((category === 'ORDER' && !['ORDER', 'BOTH'].includes(basis))
+          || (category === 'INVOICE' && basis !== 'INVOICE'))) {
+          throw new BadRequestException('El documento no corresponde a la base de pagos configurada para el circuito de ventas');
+        }
+        if (!operation && !document.document_types?.affects_payment) {
+          throw new BadRequestException('El documento no está configurado para afectar pagos');
+        }
+      } else if (payment.type === 'PAYMENT') {
+        if (direction !== -1 || category !== 'INVOICE' || !document.document_types?.affects_payment) {
+          throw new BadRequestException('El anticipo de pago debe aplicarse a una factura de compra que afecte pagos');
+        }
+      } else {
+        throw new BadRequestException('El tipo de anticipo no permite aplicar facturas');
+      }
+
+      if (payment.type === 'COLLECTION' && operation?.id) {
+        await tx.$queryRaw`SELECT id FROM tenant.commercial_operations WHERE id = ${operation.id}::uuid FOR UPDATE`;
+        operation = await this.commercialFlow.refresh(operation.id, tx) ?? operation;
+      }
+      const isOrder = category === 'ORDER' && Boolean(operation);
+      const operationCredits = isOrder
+        ? await getSalesCreditNoteTotalsByOperation(tx, [operation!.id])
+        : new Map<string, number>();
+      const invoiceCredits = category === 'INVOICE'
+        ? payment.type === 'COLLECTION'
+          ? await getSalesCreditNoteTotalsByInvoice(tx, [document.id])
+          : await getPurchaseCreditNoteTotalsByInvoice(tx, [document.id])
+        : new Map<string, number>();
+      const total = isOrder
+        ? Number(operation!.ordered_total)
+        : Number(document.total);
+      const paid = isOrder
+        ? Number(operation!.paid_total)
+        : Number(document.paid_amount);
+      const credited = isOrder
+        ? operationCredits.get(operation!.id) ?? 0
+        : invoiceCredits.get(document.id) ?? 0;
+      const documentPending = Math.max(0, total - paid - credited);
+      if (documentPending <= 0.01) throw new BadRequestException('El documento ya está saldado');
+
+      const paymentCurrency = payment.currency_code?.toUpperCase();
+      const documentCurrency = (document.currency_code ?? payment.currency_code)?.toUpperCase();
+      if (paymentCurrency !== documentCurrency) {
+        const isSupportedCurrencyPair = ['ARS', 'USD'].includes(paymentCurrency ?? '')
+          && ['ARS', 'USD'].includes(documentCurrency ?? '');
+        if (!isSupportedCurrencyPair) {
+          throw new BadRequestException(`No hay una conversión configurada entre ${documentCurrency} y ${paymentCurrency}`);
+        }
+        if (!this.paymentExchangeRate(payment, document)) {
+          throw new BadRequestException('Falta una cotización válida en el anticipo o en la factura para aplicar entre monedas');
+        }
+      }
+
       // Validar saldo disponible DENTRO de la transacción (evita race condition)
       const applied = await tx.payment_documents.aggregate({
         _sum: { amount_applied: true },
@@ -3234,21 +3405,32 @@ export class PaymentsService {
       const totalApplied = applied._sum.amount_applied?.toNumber() ?? 0;
       const available = payment.amount.toNumber() - totalApplied;
 
-      if (dto.amount > available) {
+      const rawRequestedAmount = Number(dto.amount);
+      if (!Number.isFinite(rawRequestedAmount) || rawRequestedAmount <= 0) {
+        throw new BadRequestException('El importe a aplicar debe ser mayor a cero');
+      }
+      const requestedAmount = Number(rawRequestedAmount.toFixed(2));
+      if (requestedAmount <= 0) throw new BadRequestException('El importe a aplicar debe ser mayor a cero');
+      if (requestedAmount > available + 0.001) {
         throw new BadRequestException(
-          `El monto solicitado (${dto.amount}) excede el saldo disponible (${available}) del anticipo`,
+          `El monto solicitado (${requestedAmount}) excede el saldo disponible (${available}) del anticipo`,
         );
       }
 
-      const docPending = document.total.toNumber() - document.paid_amount.toNumber();
-      if (docPending <= 0) {
-        throw new BadRequestException('El documento ya está saldado');
-      }
-      if (dto.amount > docPending) {
+      const pendingInPaymentCurrency = this.documentAmountInPaymentCurrency(documentPending, document, payment);
+      if (requestedAmount > pendingInPaymentCurrency + 0.001) {
         throw new BadRequestException(
-          `El monto (${dto.amount}) excede el saldo pendiente (${docPending}) del documento`,
+          `El monto (${requestedAmount}) excede el saldo pendiente (${pendingInPaymentCurrency} ${payment.currency_code}) del documento`,
         );
       }
+      const amountInDocumentCurrency = this.paymentAmountInDocumentCurrency(requestedAmount, payment, document);
+      if (amountInDocumentCurrency > documentPending + 0.001) {
+        throw new BadRequestException('El importe convertido supera el saldo pendiente del documento');
+      }
+
+      // Compatibilidad con anticipos anteriores: si todavía no tienen el
+      // movimiento de saldo disponible, se registra solo la parte no aplicada.
+      await this.syncAdvanceCurrentAccountEntry(tx, payment, userId, available);
 
       // Verificar si ya existe un link para este pago-documento (upsert)
       const existingLink = await tx.payment_documents.findUnique({
@@ -3259,7 +3441,7 @@ export class PaymentsService {
         await tx.payment_documents.update({
           where: { id: existingLink.id },
           data: {
-            amount_applied: { increment: dto.amount },
+            amount_applied: { increment: requestedAmount },
             updated_at: new Date(),
             updated_by: userId,
           },
@@ -3270,7 +3452,7 @@ export class PaymentsService {
           data: {
             payment_id: paymentId,
             document_id: dto.document_id,
-            amount_applied: dto.amount,
+            amount_applied: requestedAmount,
             created_by: userId,
           },
         });
@@ -3280,7 +3462,12 @@ export class PaymentsService {
       await tx.documents.update({
         where: { id: dto.document_id },
         data: {
-          paid_amount: { increment: dto.amount },
+          paid_amount: { increment: amountInDocumentCurrency },
+          ...(document.converted_paid_amount != null && document.currency_code?.toUpperCase() === 'ARS'
+            ? { converted_paid_amount: { increment: amountInDocumentCurrency } }
+            : document.converted_paid_amount != null && document.exchange_rate != null
+              ? { converted_paid_amount: { increment: Number((amountInDocumentCurrency * Number(document.exchange_rate)).toFixed(2)) } }
+              : {}),
           updated_at: new Date(),
           updated_by: userId,
         },
@@ -3291,20 +3478,30 @@ export class PaymentsService {
         await this.currentAccountsService.addEntry(
           {
             party_id: payment.party_id,
-            party_type: payment.party_type ?? 'SUPPLIER',
+            party_type: payment.party_type ?? (payment.type === 'COLLECTION' ? 'CUSTOMER' : 'SUPPLIER'),
             currency_code: payment.currency_code,
-            type: 'PAYMENT',
-            amount: dto.amount,
-            exchange_rate: payment.exchange_rate ? Number(payment.exchange_rate) : undefined,
-            rate_type: payment.rate_type ?? undefined,
-            description: `Anticipo #${payment.number} aplicado a factura`,
-            reference_type: 'payment',
-            reference_id: paymentId,
+            type: payment.type,
+            amount: requestedAmount,
+            exchange_rate: this.paymentExchangeRate(payment, document) ?? undefined,
+            rate_type: payment.rate_type ?? document.rate_type ?? undefined,
+            description: `Anticipo #${payment.number} aplicado a ${category === 'ORDER' ? 'orden de venta' : 'factura'}`,
+            reference_type: 'payment_advance_application',
+            reference_id: document.id,
             payment_id: paymentId,
             date: new Date().toISOString(),
           },
           userId,
+          tx,
         );
+      }
+
+      // La imputación ya genera su movimiento de cobro/pago. Reducimos en la
+      // misma proporción el crédito disponible del anticipo para no duplicar
+      // el efecto sobre la cuenta corriente.
+      await this.syncAdvanceCurrentAccountEntry(tx, payment, userId, available - requestedAmount);
+
+      if (payment.type === 'COLLECTION' && document.commercial_operation?.id) {
+        await this.commercialFlow.refresh(document.commercial_operation.id, tx);
       }
 
       // Retornar pago actualizado
@@ -3327,25 +3524,63 @@ export class PaymentsService {
   // ═══════════════════════════════════════════
 
   async removeAdvanceApplication(paymentId: string, documentId: string, userId: string) {
-    const payment = await this.findOne(paymentId);
-
-    if (payment.status !== 'CONFIRMED' && payment.status !== 'PAID') {
-      throw new BadRequestException('Solo se pueden modificar aplicaciones de pagos confirmados o pagados');
-    }
-
-    const link = await this.prisma.payment_documents.findFirst({
-      where: { payment_id: paymentId, document_id: documentId, deleted_at: null },
-    });
-    if (!link) {
-      throw new NotFoundException('No existe aplicación de este anticipo a este documento');
-    }
-
     return this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.payments WHERE id = ${paymentId}::uuid FOR UPDATE`;
+      const payment = await tx.payments.findUnique({ where: { id: paymentId } });
+      if (!payment || payment.deleted_at) throw new NotFoundException('Pago no encontrado');
+      if (payment.status !== 'CONFIRMED' && payment.status !== 'PAID') {
+        throw new BadRequestException('Solo se pueden modificar aplicaciones de pagos confirmados o pagados');
+      }
+      if (payment.payment_mode !== 'ADVANCE') {
+        throw new BadRequestException('Este pago no es un anticipo');
+      }
+      await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${documentId}::uuid FOR UPDATE`;
+      const link = await tx.payment_documents.findFirst({
+        where: { payment_id: paymentId, document_id: documentId, deleted_at: null },
+      });
+      if (!link) throw new NotFoundException('No existe aplicación de este anticipo a este documento');
+      const linkedDocumentsCount = await tx.payment_documents.count({
+        where: { payment_id: paymentId, deleted_at: null },
+      });
+      const document = await tx.documents.findUnique({
+        where: { id: documentId },
+        select: {
+          id: true,
+          paid_amount: true,
+          converted_paid_amount: true,
+          currency_code: true,
+          exchange_rate: true,
+          commercial_operation_id: true,
+        },
+      });
+      if (!document) throw new NotFoundException('Documento no encontrado');
+      if (payment.type === 'COLLECTION' && document.commercial_operation_id) {
+        await tx.$queryRaw`SELECT id FROM tenant.commercial_operations WHERE id = ${document.commercial_operation_id}::uuid FOR UPDATE`;
+      }
+      const amountInDocumentCurrency = this.paymentAmountInDocumentCurrency(
+        link.amount_applied.toNumber(),
+        payment,
+        document,
+      );
+      const documentExchangeRate = document.exchange_rate == null ? null : Number(document.exchange_rate);
+      const convertedPaidDecrement = document.currency_code?.toUpperCase() === 'ARS'
+        ? amountInDocumentCurrency
+        : documentExchangeRate && documentExchangeRate > 0
+          ? Number((amountInDocumentCurrency * documentExchangeRate).toFixed(2))
+          : null;
+      const safePaidDecrement = Math.min(Number(document.paid_amount ?? 0), amountInDocumentCurrency);
+      const safeConvertedPaidDecrement = document.converted_paid_amount == null || convertedPaidDecrement == null
+        ? null
+        : Math.min(Number(document.converted_paid_amount), convertedPaidDecrement);
+
       // Decrementar paid_amount del documento
       await tx.documents.update({
         where: { id: documentId },
         data: {
-          paid_amount: { decrement: link.amount_applied.toNumber() },
+          paid_amount: { decrement: safePaidDecrement },
+          ...(safeConvertedPaidDecrement != null
+            ? { converted_paid_amount: { decrement: safeConvertedPaidDecrement } }
+            : {}),
           updated_at: new Date(),
           updated_by: userId,
         },
@@ -3355,6 +3590,68 @@ export class PaymentsService {
       await tx.payment_documents.delete({
         where: { id: link.id },
       });
+
+      let applicationEntries = await tx.current_account_entries.findMany({
+        where: {
+          payment_id: paymentId,
+          reference_type: 'payment_advance_application',
+          reference_id: documentId,
+          deleted_at: null,
+        },
+      });
+      if (!applicationEntries.length && linkedDocumentsCount === 1) {
+        // Compatibilidad con anticipos aplicados antes de registrar cada
+        // imputación en una entrada de cuenta corriente identificable.
+        applicationEntries = await tx.current_account_entries.findMany({
+          where: { payment_id: paymentId, reference_type: 'payment', deleted_at: null },
+        });
+      } else if (!applicationEntries.length && linkedDocumentsCount > 1) {
+        const legacyEntries = await tx.current_account_entries.count({
+          where: { payment_id: paymentId, reference_type: 'payment', deleted_at: null },
+        });
+        if (legacyEntries > 0) {
+          throw new BadRequestException('No se puede identificar con seguridad el movimiento de cuenta corriente de esta aplicación antigua');
+        }
+      }
+
+      const entriesByAccount = new Map<string, typeof applicationEntries>();
+      for (const entry of applicationEntries) {
+        const rows = entriesByAccount.get(entry.current_account_id) ?? [];
+        rows.push(entry);
+        entriesByAccount.set(entry.current_account_id, rows);
+      }
+      for (const [accountId, entries] of entriesByAccount) {
+        const removedDelta = entries.reduce(
+          (sum, entry) => sum + Number(entry.balance_after) - Number(entry.balance_before),
+          0,
+        );
+        const now = new Date();
+        await tx.current_account_entries.updateMany({
+          where: { id: { in: entries.map(entry => entry.id) } },
+          data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+        });
+        await tx.current_accounts.update({
+          where: { id: accountId },
+          data: { balance: { decrement: removedDelta }, updated_at: now, updated_by: userId },
+        });
+        await recalculateCurrentAccountLedger(tx, accountId);
+      }
+
+      if (payment.party_id) {
+        const appliedAfterRemoval = await tx.payment_documents.aggregate({
+          _sum: { amount_applied: true },
+          where: { payment_id: paymentId, deleted_at: null },
+        });
+        const availableAfterRemoval = Math.max(
+          0,
+          payment.amount.toNumber() - (appliedAfterRemoval._sum.amount_applied?.toNumber() ?? 0),
+        );
+        await this.syncAdvanceCurrentAccountEntry(tx, payment, userId, availableAfterRemoval);
+      }
+
+      if (payment.type === 'COLLECTION' && document.commercial_operation_id) {
+        await this.commercialFlow.refresh(document.commercial_operation_id, tx);
+      }
 
       // Retornar pago actualizado
       return tx.payments.findUnique({

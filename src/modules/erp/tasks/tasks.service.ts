@@ -501,6 +501,94 @@ export class TasksService {
     return { success: true };
   }
 
+  async convertChecklistItemToTask(itemId: string, user: AuthUser) {
+    const tenant = this.tenant;
+    const context = this.context();
+    const source = await tenant.task_checklist_items.findFirst({
+      where: { id: itemId },
+      select: {
+        assigned_to: true,
+        checklist: {
+          select: {
+            task: {
+              select: {
+                board_id: true, column_id: true, party_id: true, deleted_at: true,
+                board: { select: { active: true, deleted_at: true } },
+                column: { select: { is_closed: true, deleted_at: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!source || source.checklist.task.deleted_at || source.checklist.task.board.deleted_at || !source.checklist.task.board.active || source.checklist.task.column.deleted_at) {
+      throw new NotFoundException('El elemento o su tablero ya no están disponibles');
+    }
+    await this.validateMember(source.assigned_to);
+
+    const inAppEnabled = await this.getInAppTasksNotificationsEnabled(context.companyId!);
+    const created = await tenant.$transaction(async tx => {
+      const item = await tx.task_checklist_items.findFirst({
+        where: { id: itemId },
+        select: {
+          id: true, content: true, assigned_to: true, due_at: true,
+          checklist: {
+            select: {
+              task: {
+                select: {
+                  board_id: true, column_id: true, party_id: true, deleted_at: true,
+                  board: { select: { active: true, deleted_at: true } },
+                  column: { select: { is_closed: true, deleted_at: true } },
+                },
+              },
+            },
+          },
+        },
+      });
+      if (!item || item.checklist.task.deleted_at || item.checklist.task.board.deleted_at || !item.checklist.task.board.active || item.checklist.task.column.deleted_at) {
+        throw new NotFoundException('El elemento o su tablero ya no están disponibles');
+      }
+
+      const parent = item.checklist.task;
+      const maxPosition = await tx.tasks.aggregate({
+        where: { column_id: parent.column_id, deleted_at: null },
+        _max: { position: true },
+      });
+      const task = await tx.tasks.create({
+        data: {
+          board_id: parent.board_id,
+          column_id: parent.column_id,
+          party_id: parent.party_id,
+          title: item.content,
+          assigned_to: item.assigned_to,
+          due_at: item.due_at,
+          position: (maxPosition._max.position ?? -1) + 1,
+          completed_at: parent.column.is_closed ? new Date() : null,
+          created_by: user.id,
+        },
+        select: { id: true, board_id: true, title: true, assigned_to: true },
+      });
+      await tx.task_checklist_items.delete({ where: { id: item.id } });
+
+      if (inAppEnabled && task.assigned_to) {
+        await this.notifications.createTaskActivity({
+          tx, companyId: context.companyId, recipientUserIds: [task.assigned_to], actorUserId: user.id,
+          type: 'TASK_ASSIGNED', title: 'Te asignaron una tarea', message: task.title,
+          targetPath: this.taskPath(task.board_id, task.id), taskId: task.id,
+        });
+      }
+      return task;
+    });
+
+    if (created.assigned_to) {
+      await this.enqueueTaskWhatsApp({
+        companyId: context.companyId!, recipientUserIds: [created.assigned_to], eventType: 'TASK_ASSIGNED',
+        taskId: created.id, boardId: created.board_id, taskTitle: created.title, actorUserId: user.id,
+      });
+    }
+    return { id: created.id };
+  }
+
   async createTask(boardId: string, dto: CreateTaskDto, user: AuthUser) {
     const tenant = this.tenant;
     const context = this.context();

@@ -382,13 +382,15 @@ export class SalesCommercialFlowService {
       select: {
         amount_applied: true,
         payment: { select: { currency_code: true, exchange_rate: true } },
+        document: { select: { currency_code: true, exchange_rate: true } },
       },
     });
     const operationCurrency = operation.currency_code ?? operation.root_document?.currency_code ?? 'ARS';
     const paidTotal = applications.reduce((sum: number, item: any) => {
       const amount = Number(item.amount_applied);
       const paymentCurrency = item.payment?.currency_code ?? operationCurrency;
-      const rate = item.payment?.exchange_rate == null ? null : Number(item.payment.exchange_rate);
+      const rateValue = item.payment?.exchange_rate ?? item.document?.exchange_rate;
+      const rate = rateValue == null ? null : Number(rateValue);
       return sum + this.convertPaymentAmount(amount, paymentCurrency, operationCurrency, rate);
     }, 0);
     const orderedTotal = Number(operation.ordered_total);

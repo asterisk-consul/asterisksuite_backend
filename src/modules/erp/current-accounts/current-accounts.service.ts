@@ -533,7 +533,7 @@ export class CurrentAccountsService {
   private resolveIsDebit(type: string, partyType: string): boolean {
     if (type === 'OPENING_BALANCE') return false
     if (partyType === 'CUSTOMER') {
-      return ['CREDIT_NOTE', 'PAYMENT', 'COLLECTION', 'WITHHOLDING'].includes(type);
+      return ['CREDIT_NOTE', 'PAYMENT', 'COLLECTION', 'ADVANCE', 'WITHHOLDING'].includes(type);
     }
     return ['CREDIT_NOTE', 'PAYMENT', 'ADVANCE', 'WITHHOLDING'].includes(type);
   }

@@ -63,6 +63,12 @@ export class TasksController {
     return this.service.deleteChecklistItem(itemId);
   }
 
+  @Post('checklist-items/:itemId/convert-to-task')
+  @RequirePermissions('tasks.create', 'tasks.update')
+  convertChecklistItemToTask(@Param('itemId', ParseUUIDPipe) itemId: string, @CurrentUser() user: AuthUser) {
+    return this.service.convertChecklistItemToTask(itemId, user);
+  }
+
   @Get('boards')
   @RequirePermissions('tasks.read')
   getBoards() {
