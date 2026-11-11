@@ -338,7 +338,6 @@ export class DocumentsSalesController {
     @Body() body: {
       assigned_to?: string | null
       confirm_empty_delivery_data?: boolean
-      update_sale_prices_from_invoice?: boolean
     } | undefined,
     @CurrentUser() user: AuthUser,
     @Req() req: Request,
@@ -351,17 +350,14 @@ export class DocumentsSalesController {
       id,
       'confirm',
     );
-    if (body?.update_sale_prices_from_invoice === true
-      && !['OWNER', 'ADMIN'].includes(companyRole ?? '')
-      && !(await this.permissionContextBuilder.build(user.id)).can('product-prices.update')) {
-      throw new ForbiddenException('No tenés permiso para actualizar los precios generales de los productos');
-    }
+    const canUpdateProductPrices = ['OWNER', 'ADMIN'].includes(companyRole ?? '')
+      || (await this.permissionContextBuilder.build(user.id)).can('product-prices.update');
     return this.service.confirm(
       id,
       user.id,
       body?.assigned_to,
       body?.confirm_empty_delivery_data === true,
-      body?.update_sale_prices_from_invoice === true,
+      canUpdateProductPrices,
     );
   }
 

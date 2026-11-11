@@ -11,10 +11,11 @@ import { ProductPriceService } from './product-pricing.service';
 import { ProductsService } from '../../../master-data/products/products.service';
 import { PricingEngineService } from '../pricing-engine.service';
 import { ProductPartyPricingController } from '../product-party-pricing/product-party-pricing.controller';
+import { ProductPriceUpdateSettingsController } from '../product-party-pricing/product-price-update-settings.controller';
 import { ProductPartyPricingService } from '../product-party-pricing/product-party-pricing.service';
 @Module({
   imports: [PrismaModule, ExchangeModule, AuditModule],
-  controllers: [ProductPricingController, ProductPriceController, ProductPartyPricingController],
+  controllers: [ProductPricingController, ProductPriceController, ProductPartyPricingController, ProductPriceUpdateSettingsController],
   providers: [
     ProductPricingFacadeService,
     ProductPriceService,

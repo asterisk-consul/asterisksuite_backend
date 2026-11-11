@@ -33,6 +33,10 @@ export const RBAC_PERMISSIONS = [
   { code: 'products.create', description: 'Crear productos' },
   { code: 'products.update', description: 'Editar productos' },
   { code: 'products.delete', description: 'Eliminar productos' },
+  { code: 'product-prices.read', description: 'Ver precios generales y acordados' },
+  { code: 'product-prices.create', description: 'Crear precios generales y acordados' },
+  { code: 'product-prices.update', description: 'Actualizar precios generales y acordados' },
+  { code: 'product-prices.delete', description: 'Eliminar precios generales y acordados' },
 
   // ─── ERP - Documents ──────────────────────────────────────
   { code: 'documents.read', description: 'Ver documentos' },
@@ -508,6 +512,7 @@ export const RBAC_ROLES = [
       'products.read',
       'products.create',
       'products.update',
+      'product-prices.read',
       'documents.read',
       'documents.create',
       'documents.update',

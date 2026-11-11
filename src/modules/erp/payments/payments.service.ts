@@ -12,6 +12,7 @@ import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledg
 import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
 import { CreditCardsService } from '../credit-cards/credit-cards.service';
+import { getSalesCreditNoteTotalsByInvoice, getSalesCreditNoteTotalsByOperation } from '../documents/utils/credit-note-balance';
 
 @Injectable()
 export class PaymentsService {
@@ -667,6 +668,10 @@ export class PaymentsService {
     const paymentDocs = await this.prisma.payment_documents.findMany({
       where: { payment_id: id, deleted_at: null },
     });
+    const documentCredits = await getSalesCreditNoteTotalsByInvoice(
+      this.prisma,
+      paymentDocs.map((document: any) => document.document_id),
+    );
     const confirmationRate = await this.resolveUsdArsPaymentRate(
       payment.currency_code,
       paymentDocs.map((document: any) => document.document_id),
@@ -700,12 +705,17 @@ export class PaymentsService {
       for (const pd of paymentDocs) {
         const document = await this.prisma.documents.findUnique({
           where: { id: pd.document_id },
-          include: { document_types: { select: { category: true } } },
+          include: { document_types: { select: { category: true, direction: true } } },
         });
         if (!document) {
           throw new NotFoundException(`Documento ${pd.document_id} no encontrado`);
         }
-        const pending = document.total.toNumber() - document.paid_amount.toNumber();
+        if (document.document_types?.category === 'CREDIT_NOTE' && document.document_types?.direction === 1) {
+          throw new BadRequestException(`La nota de crédito ${document.number} ya reduce el saldo de la factura y no puede recibir un cobro`);
+        }
+        const pending = document.total.toNumber()
+          - document.paid_amount.toNumber()
+          - (documentCredits.get(document.id) ?? 0);
         if (pending <= 0) {
           throw new BadRequestException(`El documento ${document.number} ya está saldado`);
         }
@@ -753,9 +763,14 @@ export class PaymentsService {
           (applicationsByOperation.get(operationId) ?? 0) + amountInOperationCurrency,
         );
       }
+      const operationCredits = await getSalesCreditNoteTotalsByOperation(this.prisma, operationIds);
       for (const [operationId, newAmount] of applicationsByOperation) {
         const operation = await this.commercialFlow.refresh(operationId);
-        if (operation && Number(operation.paid_total) + newAmount > Number(operation.ordered_total) + 0.01) {
+        if (operation
+          && Number(operation.paid_total)
+            + (operationCredits.get(operationId) ?? 0)
+            + newAmount
+            > Number(operation.ordered_total) + 0.01) {
           throw new BadRequestException('El monto aplicado excede el saldo pendiente de la operación comercial');
         }
       }

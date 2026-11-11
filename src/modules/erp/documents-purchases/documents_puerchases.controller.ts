@@ -3,7 +3,6 @@ import type { Request } from 'express';
 import { DocumentsPurchasesService } from './documents_purchases.service';
 import { CreateDocumentDto } from '../documents/dto/create-document.dto';
 import { UpdateDocumentDto } from '../documents/dto/update-document.dto';
-import { ConfirmPurchaseDto } from './dto/confirm-purchase.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
@@ -163,7 +162,6 @@ export class DocumentsPurchasesController {
     @Param('id') id: string,
     @CurrentUser() user: AuthUser,
     @Req() req: Request,
-    @Query() query?: ConfirmPurchaseDto,
   ) {
     await this.documentAccess.assertDocument(
       user.id,
@@ -172,7 +170,7 @@ export class DocumentsPurchasesController {
       id,
       'confirm',
     );
-    return this.service.confirm(id, user.id, query);
+    return this.service.confirm(id, user.id);
   }
 
   @Patch(':id/cancel')

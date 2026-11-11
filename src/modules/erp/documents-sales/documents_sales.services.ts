@@ -34,6 +34,10 @@ import { NotificationsService } from '@/modules/notifications/notifications.serv
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import { getCancelledDocumentStatus, getStatusLabel } from '../documents/types/document-statuses';
 import { assertCanTrashCancelledNote } from '../documents/utils/orphan-note-trash';
+import {
+  getSalesCreditNoteTotalsByInvoice,
+  getSalesCreditNoteTotalsByOperation,
+} from '../documents/utils/credit-note-balance';
 
 import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 
@@ -136,6 +140,7 @@ export class DocumentsSalesService {
           number: true,
           date: true,
           total: true,
+          paid_amount: true,
           party_id: true,
           currency_code: true,
           ref: true,
@@ -183,10 +188,12 @@ export class DocumentsSalesService {
         number: true,
         date: true,
         total: true,
+        paid_amount: true,
         party_id: true,
         currency_code: true,
         ref: true,
         descrip: true,
+        commercial_adjustments: true,
         document_types: { select: { code: true } },
         business_parties: {
           select: {
@@ -211,14 +218,45 @@ export class DocumentsSalesService {
             quantity: true,
             quantity_invoiced: true,
             unit_price: true,
+            original_unit_price: true,
+            discount_percentage: true,
             products: { select: { name: true } },
             product_variants: { select: { name: true } },
+          },
+        },
+        commercial_operation: {
+          select: {
+            payment_document_basis: true,
+            ordered_total: true,
+            paid_total: true,
+            id: true,
           },
         },
       },
     });
     if (!invoice) throw new NotFoundException('Factura confirmada no encontrada');
-    return invoice;
+    const directCredits = await getSalesCreditNoteTotalsByInvoice(this.prisma, [invoice.id]);
+    const operationCredits = invoice.commercial_operation
+      ? await getSalesCreditNoteTotalsByOperation(this.prisma, [invoice.commercial_operation.id])
+      : new Map<string, number>();
+    const creditedAmount = directCredits.get(invoice.id) ?? 0;
+    const invoicePending = Math.max(0, Number(invoice.total) - Number(invoice.paid_amount) - creditedAmount);
+    const operation = invoice.commercial_operation;
+    const usesOperationBalance = operation && operation.payment_document_basis !== 'INVOICE';
+    const operationPending = usesOperationBalance
+      ? Math.max(
+          0,
+          Number(operation.ordered_total)
+            - Number(operation.paid_total)
+            - (operationCredits.get(operation.id) ?? 0),
+        )
+      : invoicePending;
+
+    return {
+      ...invoice,
+      credited_amount: creditedAmount,
+      pending_amount: usesOperationBalance ? Math.min(invoicePending, operationPending) : invoicePending,
+    };
   }
 
   private carryCommercialAdjustments(source: any, targetType: any, targetItems: ItemInput[]) {
@@ -1834,6 +1872,32 @@ export class DocumentsSalesService {
       }));
     }
 
+    const invoiceIds = documents
+      .filter((document) => document.document_types?.category === 'INVOICE' && document.document_types?.direction === 1)
+      .map((document) => document.id);
+    const operationIds = documents
+      .filter((document) => document.document_types?.category === 'ORDER' && document.document_types?.direction === 1)
+      .map((document) => document.commercial_operation?.id)
+      .filter(Boolean);
+    const [invoiceCredits, operationCredits] = await Promise.all([
+      getSalesCreditNoteTotalsByInvoice(this.prisma, invoiceIds),
+      getSalesCreditNoteTotalsByOperation(this.prisma, operationIds),
+    ]);
+    documents = documents.map((document) => ({
+      ...document,
+      ...(document.document_types?.category === 'INVOICE' && document.document_types?.direction === 1
+        ? { credited_amount: invoiceCredits.get(document.id) ?? 0 }
+        : {}),
+      ...(document.document_types?.category === 'ORDER' && document.commercial_operation
+        ? {
+            commercial_operation: {
+              ...document.commercial_operation,
+              credited_total: operationCredits.get(document.commercial_operation.id) ?? 0,
+            },
+          }
+        : {}),
+    }));
+
     if (!paginationEnabled) return documents;
     return {
       items: documents,
@@ -1854,6 +1918,7 @@ export class DocumentsSalesService {
       where: {
         document_types: {
           direction: 1,
+          category: { not: 'CREDIT_NOTE' },
         },
         OR: [{ document_types: { direction: 1, affects_payment: true } }, { commercial_operation_id: { not: null } }],
         status: { in: [2, 5] },
@@ -1875,6 +1940,12 @@ export class DocumentsSalesService {
       orderBy: { date: 'asc' },
     });
 
+    const invoiceCredits = await getSalesCreditNoteTotalsByInvoice(this.prisma, docs.map((doc: any) => doc.id));
+    const operationIds = docs
+      .map((doc: any) => doc.commercial_operation?.id)
+      .filter((id: string | undefined): id is string => Boolean(id));
+    const operationCredits = await getSalesCreditNoteTotalsByOperation(this.prisma, operationIds);
+
     return docs
       .filter((d) => d.status === STATUS_CONFIRMED || (d.document_types?.category === 'ORDER' && d.status === 5))
       .filter((d) => {
@@ -1892,13 +1963,17 @@ export class DocumentsSalesService {
         const usesOperationBalance = operation && operation.payment_document_basis !== 'INVOICE';
         const total = usesOperationBalance ? Number(operation.ordered_total) : Number(d.total);
         const paid = usesOperationBalance ? Number(operation.paid_total) : Number(d.paid_amount);
-        const pending = total - paid;
+        const credited = usesOperationBalance
+          ? operationCredits.get(operation.id) ?? 0
+          : invoiceCredits.get(d.id) ?? 0;
+        const pending = Math.max(0, total - paid - credited);
         return {
           id: d.id,
           number: d.number,
           date: d.date,
           total,
           paid_amount: paid,
+          credited_amount: credited,
           pending_amount: pending,
           currency_code: d.currency_code,
           exchange_rate: d.exchange_rate ? Number(d.exchange_rate) : null,
@@ -1924,7 +1999,7 @@ export class DocumentsSalesService {
       throw new BadRequestException('ID inválido');
     }
 
-    const doc = await this.prisma.documents.findFirst({
+    const doc: any = await this.prisma.documents.findFirst({
       where: { id, deleted_at: null },
 
       include: {
@@ -2020,6 +2095,18 @@ export class DocumentsSalesService {
       throw new NotFoundException('Documento no encontrado');
     }
 
+    if (doc.document_types?.category === 'INVOICE' && doc.document_types?.direction === 1) {
+      const invoiceCredits = await getSalesCreditNoteTotalsByInvoice(this.prisma, [doc.id]);
+      doc.credited_amount = invoiceCredits.get(doc.id) ?? 0;
+    }
+    if (doc.commercial_operation_id) {
+      const operationCredits = await getSalesCreditNoteTotalsByOperation(this.prisma, [doc.commercial_operation_id]);
+      doc.commercial_operation = {
+        ...doc.commercial_operation,
+        credited_total: operationCredits.get(doc.commercial_operation_id) ?? 0,
+      };
+    }
+
     // Las vistas de una OV necesitan su extensión. El remito de venta muestra
     // los datos de entrega de la OV de origen, que no se duplican en el remito.
     // Consultar condicionalmente evita acoplar documentos no relacionados con
@@ -2090,6 +2177,7 @@ export class DocumentsSalesService {
         'tax_amount',
         'total',
         'paid_amount',
+        'credited_amount',
         'pending_amount',
         'converted_subtotal',
         'converted_tax_amount',
@@ -2130,6 +2218,7 @@ export class DocumentsSalesService {
         'paid_total',
         'pending_invoice_total',
         'pending_payment_total',
+        'credited_total',
       ]),
       orden_venta_doc: hide(document.orden_venta_doc, [
         'commission_rate',
@@ -2453,13 +2542,17 @@ export class DocumentsSalesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  private async updateGeneralSalePricesFromInvoice(tx: any, doc: any, userId: string) {
+  private async updateGeneralSalePricesFromInvoice(tx: any, doc: any, userId: string): Promise<number> {
+    if (doc.document_types?.category !== 'INVOICE' || Number(doc.document_types?.direction) !== 1) {
+      return 0;
+    }
     const currency = await tx.currencies.findFirst({
       where: { code: doc.currency_code, deleted_at: null },
       select: { id: true },
     });
     if (!currency) throw new BadRequestException('No se encontró la moneda de la factura para actualizar los precios');
 
+    const updatedProducts = new Set<string>();
     for (const item of doc.document_items ?? []) {
       if (!item.product_id) continue;
       const price = Number(item.unit_price);
@@ -2479,11 +2572,13 @@ export class DocumentsSalesService {
         if (existing) {
           if (Math.abs(Number(existing.price) - price) > 0.000001) {
             await tx.product_variant_prices.update({ where: { id: existing.id }, data: { price, active: true } });
+            updatedProducts.add(`variant:${item.variant_id}`);
           }
         } else {
           await tx.product_variant_prices.create({
             data: { variant_id: item.variant_id, currency_id: currency.id, price, active: true },
           });
+          updatedProducts.add(`variant:${item.variant_id}`);
         }
         continue;
       }
@@ -2508,6 +2603,7 @@ export class DocumentsSalesService {
               updated_by: userId,
             },
           });
+          updatedProducts.add(`product:${item.product_id}`);
         }
       } else {
         await tx.product_price.create({
@@ -2518,8 +2614,10 @@ export class DocumentsSalesService {
             created_by: userId,
           },
         });
+        updatedProducts.add(`product:${item.product_id}`);
       }
     }
+    return updatedProducts.size;
   }
 
   async confirm(
@@ -2527,10 +2625,11 @@ export class DocumentsSalesService {
     userId: string,
     assignedTo?: string | null,
     confirmEmptyDeliveryData = false,
-    updateSalePricesFromInvoice = false,
+    canUpdateGeneralPrices = false,
   ) {
     const companyId = getCurrentCompanyId();
     let previousOrderAssignee: string | null = null;
+    let priceUpdateSummary: any = null;
     if (assignedTo) {
       const membership = companyId
         ? await this.db.getDefaultClient().company_users.findUnique({
@@ -2544,10 +2643,13 @@ export class DocumentsSalesService {
       const doc = await this.findOne(id);
 
       const category = doc.document_types?.category;
-      if (updateSalePricesFromInvoice
-        && (category !== 'INVOICE' || Number(doc.document_types?.direction) !== 1)) {
-        throw new BadRequestException('La actualización del precio general solo está disponible al confirmar facturas de venta');
-      }
+      const priceSettings = category === 'INVOICE'
+        ? await tx.sales_flow_settings.upsert({
+            where: { settings_key: 'default' },
+            update: {},
+            create: { settings_key: 'default' },
+          })
+        : null;
       if (category === 'ORDER') previousOrderAssignee = doc.assigned_to ?? null;
 
       if (category === 'ORDER') {
@@ -2807,8 +2909,23 @@ export class DocumentsSalesService {
         );
       }
 
-      if (updateSalePricesFromInvoice) {
-        await this.updateGeneralSalePricesFromInvoice(tx, doc, userId);
+      if (category === 'INVOICE' && priceSettings) {
+        const globalPriceEnabled = priceSettings.update_sales_global_prices;
+        const globalUpdatedProducts = globalPriceEnabled && canUpdateGeneralPrices
+          ? await this.updateGeneralSalePricesFromInvoice(tx, doc, userId)
+          : 0;
+        priceUpdateSummary = {
+          party: {
+            enabled: priceSettings.update_sales_party_prices,
+            name: doc.business_parties?.name ?? null,
+            updated_products: 0,
+          },
+          global: {
+            enabled: globalPriceEnabled,
+            updated_products: globalUpdatedProducts,
+            ...(globalPriceEnabled && !canUpdateGeneralPrices ? { skipped_reason: 'PERMISSION' } : {}),
+          },
+        };
       }
 
       return tx.documents.findUnique({
@@ -2852,12 +2969,18 @@ export class DocumentsSalesService {
 
     // La actualización de precios acordados es complementaria: un problema en
     // su historial no debe revertir una factura que ya pasó todas las validaciones.
-    try {
-      await this.prisma.$transaction((tx) =>
-        this.productPartyPricing.captureDocumentPrices(tx, confirmed, 'SALE', userId),
-      );
-    } catch (error) {
-      this.logger.warn(`No se pudo actualizar el precio por cliente al confirmar ${id}: ${String(error)}`);
+    if (confirmed?.document_types?.category === 'INVOICE'
+      && priceUpdateSummary?.party.enabled
+      && confirmed.party_id) {
+      try {
+        const updatedProductIds = await this.prisma.$transaction((tx) =>
+          this.productPartyPricing.captureDocumentPrices(tx, confirmed, 'SALE', userId),
+        );
+        priceUpdateSummary.party.updated_products = updatedProductIds.length;
+      } catch (error) {
+        priceUpdateSummary.party.failed = true;
+        this.logger.warn(`No se pudo actualizar el precio por cliente al confirmar ${id}: ${String(error)}`);
+      }
     }
 
     if (confirmed?.commercial_operation_id) {
@@ -2892,7 +3015,7 @@ export class DocumentsSalesService {
       }
     }
 
-    return confirmed;
+    return priceUpdateSummary ? { ...confirmed, price_update_summary: priceUpdateSummary } : confirmed;
   }
 
   // ─────────────────────────────────────────────

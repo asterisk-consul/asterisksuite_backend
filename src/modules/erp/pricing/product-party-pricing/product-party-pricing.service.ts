@@ -5,12 +5,47 @@ import * as XLSX from 'xlsx';
 
 type OperationType = 'SALE' | 'PURCHASE';
 
+export interface ProductPriceUpdateSettings {
+  update_sales_party_prices: boolean;
+  update_sales_global_prices: boolean;
+  update_purchases_party_prices: boolean;
+  update_purchases_global_costs: boolean;
+}
+
 @Injectable()
 export class ProductPartyPricingService {
   constructor(private readonly db: PrismaService) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
+  }
+
+  async getPriceUpdateSettings(): Promise<ProductPriceUpdateSettings> {
+    const settings = await this.prisma.sales_flow_settings.upsert({
+      where: { settings_key: 'default' },
+      update: {},
+      create: { settings_key: 'default' },
+    });
+    return {
+      update_sales_party_prices: settings.update_sales_party_prices,
+      update_sales_global_prices: settings.update_sales_global_prices,
+      update_purchases_party_prices: settings.update_purchases_party_prices,
+      update_purchases_global_costs: settings.update_purchases_global_costs,
+    };
+  }
+
+  async updatePriceUpdateSettings(dto: ProductPriceUpdateSettings, userId: string) {
+    const settings = await this.prisma.sales_flow_settings.upsert({
+      where: { settings_key: 'default' },
+      update: { ...dto, updated_by: userId },
+      create: { settings_key: 'default', ...dto, created_by: userId, updated_by: userId },
+    });
+    return {
+      update_sales_party_prices: settings.update_sales_party_prices,
+      update_sales_global_prices: settings.update_sales_global_prices,
+      update_purchases_party_prices: settings.update_purchases_party_prices,
+      update_purchases_global_costs: settings.update_purchases_global_costs,
+    };
   }
 
   async findByParty(partyId: string, operationType?: OperationType) {
@@ -224,8 +259,18 @@ export class ProductPartyPricingService {
     doc: any,
     operationType: OperationType,
     userId?: string,
-  ) {
-    if (!doc.party_id) return;
+  ): Promise<string[]> {
+    // Este registro se captura solo desde facturas. La validación vive también
+    // aquí para que una nota de crédito/débito nunca actualice precios acordados
+    // aunque otro flujo invoque el helper por error.
+    const expectedDirection = operationType === 'SALE' ? 1 : -1;
+    if (
+      doc.document_types?.category !== 'INVOICE' ||
+      Number(doc.document_types?.direction) !== expectedDirection
+    ) {
+      return [];
+    }
+    if (!doc.party_id) return [];
     const currencyCode = doc.currency_code ?? 'ARS';
     const currency = await tx.currencies.findFirst({
       where: { code: currencyCode, deleted_at: null },
@@ -233,8 +278,10 @@ export class ProductPartyPricingService {
     });
     if (!currency) throw new BadRequestException(`Moneda ${currencyCode} no encontrada`);
 
+    const updatedProductIds = new Set<string>();
     for (const item of doc.document_items ?? []) {
       if (!item.product_id) continue;
+      const changeResult = { changed: false };
       await this.upsertWithHistory(
         tx,
         {
@@ -248,8 +295,11 @@ export class ProductPartyPricingService {
         doc.id,
         item.id,
         userId,
+        changeResult,
       );
+      if (changeResult.changed) updatedProductIds.add(item.product_id);
     }
+    return [...updatedProductIds];
   }
 
   private async upsertWithHistory(
@@ -259,6 +309,7 @@ export class ProductPartyPricingService {
     sourceId: string | null,
     documentItemId: string | null,
     userId?: string,
+    changeResult?: { changed: boolean },
   ) {
     const key = {
       product_id: dto.product_id,
@@ -271,6 +322,11 @@ export class ProductPartyPricingService {
     });
     const previous = existing ? Number(existing.price) : null;
     const next = Number(dto.price);
+    const changed = previous === null
+      || Math.abs(previous - next) > 0.000001
+      || !existing?.active
+      || Boolean(existing?.deleted_at);
+    if (changeResult) changeResult.changed = changed;
 
     const current = existing
       ? await tx.product_party_prices.update({

@@ -883,7 +883,7 @@ export class InternationalOperationsService {
       if (quote.converted_document_id) {
         const existing = await tx.documents.findFirst({ where: { id: quote.converted_document_id, deleted_at: null } });
         if (!existing || existing.document_type_id !== dto.document_type_id || existing.status === 3) throw new BadRequestException('El presupuesto ya tiene un comprobante generado; abrilo para gestionarlo');
-        const document = dto.confirm && existing.status === 0 ? await this.purchases.confirm(existing.id, userId, undefined, tx) : existing;
+        const document = dto.confirm && existing.status === 0 ? await this.purchases.confirm(existing.id, userId, tx) : existing;
         return { document, existing: true };
       }
       const sibling = await tx.international_operation_quotes.findFirst({ where: { operation_id: operationId, container_id: dto.container_id, expense_type: dto.expense_type, custom_expense_description: custom, deleted_at: null, id: { not: quoteId }, converted_document_id: { not: null } }, select: { id: true } });
@@ -913,7 +913,7 @@ export class InternationalOperationsService {
       if (type.category === 'ORDER') await tx.orden_compra_documents.update({ where: { document_id: created.id }, data: { international_operation_id: operationId } });
       await tx.international_operation_quotes.updateMany({ where: { operation_id: operationId, container_id: dto.container_id, expense_type: dto.expense_type, custom_expense_description: custom, deleted_at: null, id: { not: quoteId }, status: { in: ['PENDING', 'ACCEPTED'] } }, data: { status: 'REJECTED' } });
       await tx.international_operation_quotes.update({ where: { id: quoteId }, data: { status: 'ACCEPTED', converted_document_id: created.id, container_id: dto.container_id, expense_type: dto.expense_type, custom_expense_description: custom, exchange_rate: rate, updated_by: userId } });
-      const document = dto.confirm ? await this.purchases.confirm(created.id, userId, undefined, tx) : created;
+      const document = dto.confirm ? await this.purchases.confirm(created.id, userId, tx) : created;
       return { document, existing: false };
     }, { timeout: 30_000 });
   }

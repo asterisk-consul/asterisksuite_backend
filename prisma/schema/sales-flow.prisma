@@ -18,6 +18,10 @@ model sales_flow_settings {
   default_order_assignee_id              String?  @db.Uuid
   default_order_auditor_id               String?  @db.Uuid
   default_commission_assignments         Json     @default("[]")
+  update_sales_party_prices               Boolean  @default(true)
+  update_sales_global_prices              Boolean  @default(false)
+  update_purchases_party_prices           Boolean  @default(true)
+  update_purchases_global_costs            Boolean  @default(true)
   partner_share_basis                    String   @default("ORDER") @db.VarChar(20)
   active_from                            DateTime @default(now()) @db.Timestamp(6)
   created_at                             DateTime @default(now()) @db.Timestamp(6)

@@ -32,6 +32,7 @@ import { ProductPartyPricingService } from '../pricing/product-party-pricing/pro
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
 import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
 import { assertCanTrashCancelledNote } from '../documents/utils/orphan-note-trash';
+import { getPurchaseCreditNoteTotalsByInvoice } from '../documents/utils/credit-note-balance';
 import {
   receiveInternationalRemitoFromTransit,
   registerInternationalPurchaseInTransit,
@@ -154,10 +155,12 @@ export class DocumentsPurchasesService {
         number: true,
         date: true,
         total: true,
+        paid_amount: true,
         party_id: true,
         currency_code: true,
         ref: true,
         descrip: true,
+        commercial_adjustments: true,
         document_types: { select: { code: true } },
         business_parties: {
           select: {
@@ -182,6 +185,8 @@ export class DocumentsPurchasesService {
             quantity: true,
             quantity_invoiced: true,
             unit_price: true,
+            original_unit_price: true,
+            discount_percentage: true,
             products: { select: { name: true } },
             product_variants: { select: { name: true } },
           },
@@ -189,7 +194,16 @@ export class DocumentsPurchasesService {
       },
     });
     if (!invoice) throw new NotFoundException('Factura confirmada no encontrada');
-    return invoice;
+    const creditsByInvoice = await getPurchaseCreditNoteTotalsByInvoice(this.prisma, [invoice.id]);
+    const creditedAmount = creditsByInvoice.get(invoice.id) ?? 0;
+    const pendingAmount = Math.max(0, Number(invoice.total) - Number(invoice.paid_amount) - creditedAmount);
+
+    return {
+      ...invoice,
+      paid_amount: Number(invoice.paid_amount),
+      credited_amount: creditedAmount,
+      pending_amount: pendingAmount,
+    };
   }
 
   // ─────────────────────────────────────────────
@@ -1237,7 +1251,19 @@ export class DocumentsPurchasesService {
       paginationEnabled ? this.prisma.documents.count({ where }) : Promise.resolve(0),
     ]);
 
-    let documents: any[] = rawDocuments;
+    const invoiceIds = rawDocuments
+      .filter((document: any) => document.document_types?.category === 'INVOICE' && Number(document.document_types?.direction) === -1)
+      .map((document: any) => document.id);
+    const creditTotals = await getPurchaseCreditNoteTotalsByInvoice(this.prisma, invoiceIds);
+    let documents: any[] = rawDocuments.map((document: any) => {
+      if (document.document_types?.category !== 'INVOICE' || Number(document.document_types?.direction) !== -1) return document;
+      const creditedAmount = creditTotals.get(document.id) ?? 0;
+      return {
+        ...document,
+        credited_amount: creditedAmount,
+        pending_amount: Math.max(0, Number(document.total) - Number(document.paid_amount) - creditedAmount),
+      };
+    });
 
     if (includeCreator) {
       const creatorIds = [...new Set(documents.map((document) => document.created_by).filter(Boolean))] as string[];
@@ -1363,6 +1389,12 @@ export class DocumentsPurchasesService {
       throw new NotFoundException('Documento no encontrado');
     }
 
+    if (doc.document_types?.category === 'INVOICE' && Number(doc.document_types?.direction) === -1) {
+      const creditTotals = await getPurchaseCreditNoteTotalsByInvoice(this.prisma, [doc.id]);
+      doc.credited_amount = creditTotals.get(doc.id) ?? 0;
+      doc.pending_amount = Math.max(0, Number(doc.total) - Number(doc.paid_amount) - doc.credited_amount);
+    }
+
     return doc;
   }
 
@@ -1391,17 +1423,26 @@ export class DocumentsPurchasesService {
       orderBy: { date: 'asc' },
     });
 
+    const invoiceIds = docs
+      .filter((document: any) => document.document_types?.category === 'INVOICE' && Number(document.document_types?.direction) === -1)
+      .map((document: any) => document.id);
+    const creditTotals = await getPurchaseCreditNoteTotalsByInvoice(this.prisma, invoiceIds);
+
     return docs
       .map((d) => {
         const total = Number(d.total);
         const paid = Number(d.paid_amount);
-        const pending = total - paid;
+        const credited = d.document_types?.category === 'INVOICE'
+          ? creditTotals.get(d.id) ?? 0
+          : 0;
+        const pending = Math.max(0, total - paid - credited);
         return {
           id: d.id,
           number: d.number,
           date: d.date,
           total,
           paid_amount: paid,
+          credited_amount: credited,
           pending_amount: pending,
           currency_code: d.currency_code,
           exchange_rate: d.exchange_rate ? Number(d.exchange_rate) : null,
@@ -1712,7 +1753,8 @@ export class DocumentsPurchasesService {
   // ─────────────────────────────────────────────
   // CONFIRM
   // ─────────────────────────────────────────────
-  async confirm(id: string, userId: string, _options?: { updateProductPrices?: boolean | string }, transactionClient?: any) {
+  async confirm(id: string, userId: string, transactionClient?: any) {
+    let priceUpdateSummary: any = null;
     const confirmDocument = async (tx: any) => {
       await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${id}::uuid FOR UPDATE`;
       const doc = await this.findOne(id, tx);
@@ -1722,6 +1764,13 @@ export class DocumentsPurchasesService {
       }
 
       const category = doc.document_types?.category;
+      const priceSettings = category === 'INVOICE'
+        ? await tx.sales_flow_settings.upsert({
+            where: { settings_key: 'default' },
+            update: {},
+            create: { settings_key: 'default' },
+          })
+        : null;
 
       const fiscalAuthorizationSnapshot =
         category === 'REMITO' ? await this.fiscalAuthorizations.resolveForDocument(doc, tx) : null;
@@ -1829,18 +1878,40 @@ export class DocumentsPurchasesService {
         );
       }
 
-      // Toda compra confirmada actualiza el costo unitario. El precio de venta
-      // se administra por separado y nunca debe sobrescribirse con una compra.
-      if (category === 'INVOICE') {
-        await this.syncProductCostsFromPurchase(tx, doc, userId);
+      // Las opciones de la empresa controlan por separado el precio del proveedor
+      // y el costo global; una compra nunca sobrescribe el precio de venta.
+      if (category === 'INVOICE' && priceSettings) {
+        const costUpdates = priceSettings.update_purchases_party_prices || priceSettings.update_purchases_global_costs
+          ? await this.syncProductCostsFromPurchase(
+              tx,
+              doc,
+              userId,
+              priceSettings.update_purchases_party_prices,
+              priceSettings.update_purchases_global_costs,
+            )
+          : { supplier_product_ids: [], global_product_ids: [] };
+        const partyProductIds = priceSettings.update_purchases_party_prices
+          ? await this.productPartyPricing.captureDocumentPrices(tx, doc, 'PURCHASE', userId)
+          : [];
+        priceUpdateSummary = {
+          party: {
+            enabled: priceSettings.update_purchases_party_prices,
+            name: doc.business_parties?.name ?? null,
+            updated_products: [...new Set([...costUpdates.supplier_product_ids, ...partyProductIds])].length,
+          },
+          global: {
+            enabled: priceSettings.update_purchases_global_costs,
+            updated_products: costUpdates.global_product_ids.length,
+          },
+        };
       }
-
-      // Siempre conserva el precio negociado con este proveedor.
-      await this.productPartyPricing.captureDocumentPrices(tx, doc, 'PURCHASE', userId);
 
       return tx.documents.findUnique({ where: { id } });
     };
-    return transactionClient ? confirmDocument(transactionClient) : this.prisma.$transaction(confirmDocument);
+    const confirmed = transactionClient
+      ? await confirmDocument(transactionClient)
+      : await this.prisma.$transaction(confirmDocument);
+    return priceUpdateSummary ? { ...confirmed, price_update_summary: priceUpdateSummary } : confirmed;
   }
 
   /**
@@ -1848,7 +1919,18 @@ export class DocumentsPurchasesService {
    * Con variantes actualiza product_variant_costs; sin variantes, current_cost.
    * El factor convierte el precio de la unidad de compra a la unidad de stock.
    */
-  private async syncProductCostsFromPurchase(tx: any, doc: any, userId?: string) {
+  private async syncProductCostsFromPurchase(
+    tx: any,
+    doc: any,
+    userId: string | undefined,
+    updateSupplierPrices: boolean,
+    updateGlobalCosts: boolean,
+  ) {
+    const supplierProductIds = new Set<string>();
+    const globalProductIds = new Set<string>();
+    if (doc.document_types?.category !== 'INVOICE' || Number(doc.document_types?.direction) !== -1) {
+      return { supplier_product_ids: [], global_product_ids: [] };
+    }
     const currencies = await tx.currencies.findMany({
       where: { deleted_at: null },
       select: { id: true, code: true },
@@ -1862,7 +1944,7 @@ export class DocumentsPurchasesService {
 
       const product = await tx.products.findUnique({
         where: { id: item.product_id },
-        select: { id: true, product_type: true, price_enabled: true, current_cost: true },
+        select: { id: true, product_type: true, price_enabled: true, current_cost: true, current_cost_currency_id: true },
       });
 
       if (!product) {
@@ -1878,9 +1960,8 @@ export class DocumentsPurchasesService {
       const itemPrice = Number(item.unit_price) / conversionFactor;
 
       // Mantiene sincronizada la ficha comercial del proveedor con la última
-      // compra confirmada. El precio del proveedor conserva la unidad de compra;
-      // current_cost queda normalizado a la unidad de stock para BOM/ingeniería.
-      if (doc.party_id) {
+      // compra confirmada cuando la actualización por proveedor está habilitada.
+      if (updateSupplierPrices && doc.party_id) {
         const supplierLink = await tx.product_suppliers.findUnique({
           where: {
             product_id_supplier_id: {
@@ -1890,18 +1971,25 @@ export class DocumentsPurchasesService {
           },
         });
 
-        if (supplierLink) {
+        const supplierPrice = Number(item.unit_price);
+        const supplierChanged = !supplierLink
+          || Number(supplierLink.purchase_price) !== supplierPrice
+          || supplierLink.currency_id !== currencyId
+          || !supplierLink.active
+          || Boolean(supplierLink.deleted_at);
+        if (supplierLink && supplierChanged) {
           await tx.product_suppliers.update({
             where: { id: supplierLink.id },
             data: {
-              purchase_price: Number(item.unit_price),
+              purchase_price: supplierPrice,
               currency_id: currencyId,
               active: true,
               deleted_at: null,
               updated_by: userId ?? null,
             },
           });
-        } else {
+          supplierProductIds.add(item.product_id);
+        } else if (!supplierLink) {
           const supplierCount = await tx.product_suppliers.count({
             where: { product_id: item.product_id, deleted_at: null, active: true },
           });
@@ -1909,15 +1997,18 @@ export class DocumentsPurchasesService {
             data: {
               product_id: item.product_id,
               supplier_id: doc.party_id,
-              purchase_price: Number(item.unit_price),
+              purchase_price: supplierPrice,
               currency_id: currencyId,
               is_primary: supplierCount === 0,
               active: true,
               created_by: userId ?? null,
             },
           });
+          supplierProductIds.add(item.product_id);
         }
       }
+
+      if (!updateGlobalCosts) continue;
 
       let variantId = item.variant_id;
 
@@ -1946,15 +2037,18 @@ export class DocumentsPurchasesService {
               source: 'PURCHASE',
             },
           });
+          globalProductIds.add(item.product_id);
         } else if (Number(existingCost.cost) !== itemPrice) {
           await tx.product_variant_costs.update({
             where: { id: existingCost.id },
             data: { cost: itemPrice, source: 'PURCHASE', updated_at: new Date() },
           });
+          globalProductIds.add(item.product_id);
         }
       } else {
         const currentCost = product.current_cost ? Number(product.current_cost) : null;
-        if (currentCost === null || currentCost !== itemPrice) {
+        const sameCurrency = product.current_cost_currency_id === currencyId;
+        if (currentCost === null || currentCost !== itemPrice || !sameCurrency) {
           await tx.products.update({
             where: { id: item.product_id },
             data: {
@@ -1981,9 +2075,14 @@ export class DocumentsPurchasesService {
               created_by: userId ?? null,
             },
           });
+          globalProductIds.add(item.product_id);
         }
       }
     }
+    return {
+      supplier_product_ids: [...supplierProductIds],
+      global_product_ids: [...globalProductIds],
+    };
   }
 
   // ─────────────────────────────────────────────
