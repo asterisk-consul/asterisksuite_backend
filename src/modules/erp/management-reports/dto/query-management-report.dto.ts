@@ -1,7 +1,9 @@
+import { Type } from 'class-transformer';
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export enum ManagementReportBasis {
   SALES_ORDER = 'SALES_ORDER',
+  QUOTE = 'QUOTE',
   INVOICE = 'INVOICE',
   COLLECTION = 'COLLECTION',
 }
@@ -46,6 +48,13 @@ export class QueryManagementReportDto {
   @IsOptional()
   payment_state: ManagementPaymentState = ManagementPaymentState.ALL;
 
+  @Type(() => Number)
+  @IsInt()
+  @Min(0)
+  @Max(8)
+  @IsOptional()
+  document_status?: number;
+
   @IsString()
   @IsOptional()
   party_id?: string;
@@ -74,6 +83,7 @@ export class QueryManagementReportDto {
   @IsOptional()
   delivery_state: ManagementProgressState = ManagementProgressState.ALL;
 
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(5000)

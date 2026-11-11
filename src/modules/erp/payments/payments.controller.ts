@@ -116,6 +116,12 @@ export class PaymentsController {
     return this.paymentsService.reverse(id, user.id, dto.check_action);
   }
 
+  @Post(':id/reopen-as-draft')
+  @RequirePermissions('payments.update')
+  reopenAsDraft(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.paymentsService.reopenAsDraft(id, user.id);
+  }
+
   @Delete(':id')
   @RequirePermissions('payments.delete')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {

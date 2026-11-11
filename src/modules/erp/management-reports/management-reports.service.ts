@@ -6,6 +6,7 @@ import pdfMake from 'pdfmake';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { parseLocalDateTime } from '@/common/utils/dates';
+import { getCategoryStatuses, getStatusLabel } from '../documents/types/document-statuses';
 import {
   ManagementPaymentState,
   ManagementProgressState,
@@ -95,19 +96,16 @@ type ReportRow = {
   paid_amount: number;
   pending_amount: number;
   payment_state: ManagementPaymentState;
+  status?: number;
+  status_label?: string;
   invoicing_state: ManagementProgressState;
   delivery_state: ManagementProgressState;
   /** Solo aplica a Cobros: medio con el que se registró el cobro. */
   payment_method?: string | null;
   /** Solo aplica a Cobros: cuentas y cajas donde ingresó el dinero. */
   payment_destinations: PaymentDestinationRow[];
-  product_lines: Array<{
-    product_id: string;
-    product_name: string;
-    sku: string | null;
-    quantity: number;
-    converted_revenue: number | null;
-  }>;
+  /** Dato interno para calcular unidades por vendedor; nunca se expone en rows. */
+  product_quantity: number;
 };
 
 @Injectable()
@@ -164,7 +162,7 @@ export class ManagementReportsService {
     }
     const queryInput = dto.query ?? {};
     const allowedValues: Record<string, string[]> = {
-      basis: ['SALES_ORDER', 'INVOICE', 'COLLECTION'],
+      basis: ['SALES_ORDER', 'QUOTE', 'INVOICE', 'COLLECTION'],
       group_by: ['DAY', 'MONTH', 'PARTY', 'SELLER', 'CURRENCY'],
       payment_state: ['ALL', 'UNPAID', 'PARTIAL', 'PAID'],
       invoicing_state: ['ALL', 'NONE', 'PARTIAL', 'COMPLETE'],
@@ -190,12 +188,16 @@ export class ManagementReportsService {
     if (queryInput.rows_limit !== undefined && (!Number.isInteger(queryInput.rows_limit) || Number(queryInput.rows_limit) < 1 || Number(queryInput.rows_limit) > 5000)) {
       throw new BadRequestException('El límite de filas debe estar entre 1 y 5000');
     }
+    if (queryInput.document_status !== undefined && (!Number.isInteger(Number(queryInput.document_status)) || Number(queryInput.document_status) < 0 || Number(queryInput.document_status) > 8)) {
+      throw new BadRequestException('El estado del documento no es válido');
+    }
     const allowedQueryKeys = [
       'basis', 'date_from', 'date_to', 'group_by', 'payment_state', 'currency_code', 'party_id', 'seller_id',
       'product_id', 'point_of_sale_id', 'invoicing_state', 'delivery_state',
-      'rows_limit',
+      'document_status', 'rows_limit',
     ];
     const query = Object.fromEntries(Object.entries(queryInput).filter(([key]) => allowedQueryKeys.includes(key)));
+    if (query.document_status !== undefined) query.document_status = Number(query.document_status);
     const prisma = this.prisma;
     const existing = await prisma.dashboard_configs.findUnique({
       where: { user_id_dashboard_key: { user_id: userId, dashboard_key: this.reportTemplatesKey } },
@@ -1147,6 +1149,19 @@ export class ManagementReportsService {
   }
 
   async getReport(query: QueryManagementReportDto) {
+    if (query.document_status !== undefined) {
+      const categoryByBasis: Partial<Record<ManagementReportBasis, string>> = {
+        [ManagementReportBasis.SALES_ORDER]: 'ORDER',
+        [ManagementReportBasis.QUOTE]: 'QUOTE',
+        [ManagementReportBasis.INVOICE]: 'INVOICE',
+      };
+      const category = categoryByBasis[query.basis];
+      const statusOptions = category ? getCategoryStatuses(category) : [];
+      if (!statusOptions.some((status) => status.value === query.document_status)) {
+        throw new BadRequestException('El estado no corresponde al tipo de documento seleccionado');
+      }
+    }
+
     const rows = query.basis === ManagementReportBasis.COLLECTION
       ? await this.getCollections(query)
       : await this.getDocuments(query);
@@ -1193,17 +1208,25 @@ export class ManagementReportsService {
       },
       grouped,
       grouped_by_currency: groupedByCurrency,
-      commercial_performance: query.basis === ManagementReportBasis.COLLECTION
+      commercial_performance: query.basis === ManagementReportBasis.COLLECTION || query.basis === ManagementReportBasis.QUOTE
         ? null
-        : this.buildCommercialPerformance(filtered),
-      rows: filtered.sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, query.rows_limit ?? 200),
+        : this.buildSellerPerformance(filtered),
+      rows: filtered
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .slice(0, query.rows_limit ?? 200)
+        .map(({ product_quantity, ...row }) => {
+          void product_quantity;
+          return row;
+        }),
     };
   }
 
   private async getDocuments(query: QueryManagementReportDto): Promise<ReportRow[]> {
     const categories = query.basis === ManagementReportBasis.SALES_ORDER
       ? ['ORDER']
-      : ['INVOICE', 'CREDIT_NOTE', 'DEBIT_NOTE'];
+      : query.basis === ManagementReportBasis.QUOTE
+        ? ['QUOTE']
+        : ['INVOICE', 'CREDIT_NOTE', 'DEBIT_NOTE'];
     const documents = await this.prisma.documents.findMany({
       where: {
         deleted_at: null,
@@ -1211,7 +1234,7 @@ export class ManagementReportsService {
           gte: parseLocalDateTime(query.date_from),
           lte: parseLocalDateTime(`${query.date_to}T23:59:59.999`),
         },
-        status: { gte: 2, not: 3 },
+        ...(query.document_status !== undefined ? { status: query.document_status } : {}),
         ...(query.party_id ? { party_id: query.party_id } : {}),
         ...(query.currency_code ? { currency_code: query.currency_code } : {}),
         ...(query.point_of_sale_id ? { document_sequence_id: query.point_of_sale_id } : {}),
@@ -1245,9 +1268,6 @@ export class ManagementReportsService {
             quantity: true,
             quantity_invoiced: true,
             quantity_delivered: true,
-            price: true,
-            converted_price: true,
-            products: { select: { name: true, sku: true } },
           },
         },
       },
@@ -1271,6 +1291,8 @@ export class ManagementReportsService {
         id: doc.id,
         date: doc.date,
         label: `${doc.document_types.description} #${doc.number}`,
+        status: doc.status,
+        status_label: getStatusLabel(doc.document_types.category, doc.status),
         party_id: doc.party_id,
         party_name: doc.business_parties?.name ?? 'Sin tercero',
         seller_id: saleData?.seller_id ?? null,
@@ -1291,17 +1313,10 @@ export class ManagementReportsService {
         delivery_state: this.progressState(totalQuantity, deliveredQuantity),
         payment_method: null,
         payment_destinations: [],
-        product_lines: doc.document_items
-          .filter((item) => item.product_id && (!query.product_id || item.product_id === query.product_id))
-          .map((item) => ({
-            product_id: item.product_id!,
-            product_name: item.products?.name ?? 'Producto sin nombre',
-            sku: item.products?.sku ?? null,
-            quantity: Number(item.quantity) * sign,
-            converted_revenue: item.converted_price != null
-              ? Number(item.converted_price) * sign
-              : currencyCode === 'ARS' ? Number(item.price) * sign : null,
-          })),
+        product_quantity: doc.document_items.reduce((sum, item) => {
+          if (!item.product_id || (query.product_id && item.product_id !== query.product_id)) return sum;
+          return sum + Number(item.quantity) * sign;
+        }, 0),
       };
     });
   }
@@ -1370,7 +1385,7 @@ export class ManagementReportsService {
         delivery_state: ManagementProgressState.ALL,
         payment_method: payment.payment_method,
         payment_destinations: destinations,
-        product_lines: [],
+        product_quantity: 0,
       };
     });
   }
@@ -1389,11 +1404,7 @@ export class ManagementReportsService {
     return destinations;
   }
 
-  private buildCommercialPerformance(rows: ReportRow[]) {
-    const products = new Map<string, {
-      product_id: string; name: string; sku: string | null; quantity: number;
-      revenue: number; document_ids: Set<string>; missing_exchange_rate_count: number;
-    }>();
+  private buildSellerPerformance(rows: ReportRow[]) {
     const sellers = new Map<string, {
       seller_id: string | null; name: string; revenue: number; paid: number;
       quantity: number; document_count: number;
@@ -1414,35 +1425,12 @@ export class ManagementReportsService {
         : row.currency_code === 'ARS' ? 1 : 0;
       seller.revenue += row.converted_amount ?? 0;
       seller.paid += row.paid_amount * conversionRatio;
-      seller.quantity += row.product_lines.reduce((sum, line) => sum + line.quantity, 0);
+      seller.quantity += row.product_quantity;
       seller.document_count += 1;
       sellers.set(sellerKey, seller);
-
-      for (const line of row.product_lines) {
-        const product = products.get(line.product_id) ?? {
-          product_id: line.product_id,
-          name: line.product_name,
-          sku: line.sku,
-          quantity: 0,
-          revenue: 0,
-          document_ids: new Set<string>(),
-          missing_exchange_rate_count: 0,
-        };
-        product.quantity += line.quantity;
-        if (line.converted_revenue == null) product.missing_exchange_rate_count += 1;
-        else product.revenue += line.converted_revenue;
-        product.document_ids.add(row.id);
-        products.set(line.product_id, product);
-      }
     }
 
-    const productRows = Array.from(products.values()).map(({ document_ids, ...product }) => ({
-      ...product,
-      document_count: document_ids.size,
-    }));
     return {
-      products_by_quantity: [...productRows].sort((a, b) => b.quantity - a.quantity).slice(0, 10),
-      products_by_revenue: [...productRows].sort((a, b) => b.revenue - a.revenue).slice(0, 10),
       sellers: Array.from(sellers.values()).sort((a, b) => b.revenue - a.revenue).slice(0, 10),
     };
   }

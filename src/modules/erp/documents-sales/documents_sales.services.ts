@@ -1696,6 +1696,29 @@ export class DocumentsSalesService {
     }
     const tableFilters = parseServerTableFilters(rawFilters);
     for (const filter of tableFilters) {
+      if (filter.column === 'seller' && isOrderList) {
+        const value = String(filter.value ?? '');
+        if (value === '__NO_SELLER__') {
+          and.push({
+            OR: [
+              { orden_venta_doc: { is: null } },
+              { orden_venta_doc: { is: { seller_id: null, seller_partner_id: null } } },
+            ],
+          });
+        } else {
+          const sellerMatch = /^(EMPLOYEE|PARTNER):([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.exec(value);
+          if (!sellerMatch) throw new BadRequestException('El filtro de vendedor no es válido');
+          const [, sellerType, sellerId] = sellerMatch;
+          and.push({
+            orden_venta_doc: {
+              is: sellerType.toUpperCase() === 'PARTNER'
+                ? { seller_partner_id: sellerId }
+                : { seller_id: sellerId },
+            },
+          });
+        }
+        continue;
+      }
       if (filter.column === 'client') {
         const condition = stringFilter(filter.value, filter.operator);
         if (condition) and.push({ business_parties: { name: condition } });

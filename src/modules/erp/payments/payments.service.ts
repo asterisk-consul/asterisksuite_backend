@@ -1134,6 +1134,139 @@ export class PaymentsService {
     return reversed;
   }
 
+  async reopenAsDraft(id: string, userId: string) {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM tenant.payments WHERE id = ${id}::uuid FOR UPDATE`;
+      const payment = await tx.payments.findFirst({
+        where: { id, deleted_at: null },
+        include: {
+          documents: {
+            where: { deleted_at: null },
+            select: { document_id: true },
+          },
+          withholdings: {
+            where: { deleted_at: null },
+            select: { id: true, status: true, certificate_number: true, remittance_id: true },
+          },
+        },
+      });
+      if (!payment) throw new NotFoundException('Pago o cobro no encontrado');
+      if (payment.status !== 'CANCELLED') {
+        throw new BadRequestException('Solo se pueden recuperar como borrador pagos o cobros anulados');
+      }
+      if (!['PAYMENT', 'COLLECTION'].includes(payment.type)) {
+        throw new BadRequestException('Esta acción solo está disponible para pagos y cobros');
+      }
+      if (!['CASH', 'BANK_TRANSFER'].includes(payment.payment_method)) {
+        throw new BadRequestException('Solo se pueden recuperar pagos o cobros en efectivo o transferencia bancaria');
+      }
+
+      const withholdingIds = payment.withholdings.map((withholding) => withholding.id);
+      const protectedWithholding = payment.withholdings.some((withholding) =>
+        withholding.certificate_number
+        || withholding.remittance_id
+        || !['CALCULATED', 'CANCELLED'].includes(withholding.status),
+      );
+      const activeTaxApplications = withholdingIds.length
+        ? await tx.withholding_tax_applications.count({
+            where: { withholding_id: { in: withholdingIds }, status: 'APPLIED', reversed_at: null },
+          })
+        : 0;
+      if (protectedWithholding || activeTaxApplications > 0) {
+        throw new BadRequestException(
+          'No se puede recuperar el pago porque tiene retenciones con certificado, remesa o imputación fiscal activa. Regularizá esa trazabilidad antes.',
+        );
+      }
+
+      const documentIds = [...new Set(payment.documents.map((document) => document.document_id))].sort();
+      for (const documentId of documentIds) {
+        await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${documentId}::uuid FOR UPDATE`;
+      }
+
+      const now = new Date();
+      await tx.payments.update({
+        where: { id },
+        data: {
+          status: 'DRAFT',
+          confirmed_at: null,
+          confirmed_by: null,
+          payment_date: null,
+          updated_at: now,
+          updated_by: userId,
+        },
+      });
+      await tx.withholdings.updateMany({
+        where: { payment_id: id, deleted_at: null, status: 'CANCELLED' },
+        data: { status: 'CALCULATED', updated_at: now, updated_by: userId },
+      });
+
+      // Reconstruye el saldo por las aplicaciones que siguen confirmadas o pagadas.
+      // La reversión queda como historial y no vuelve a descontarse al abrir el borrador.
+      for (const documentId of documentIds) {
+        const document = await tx.documents.findFirst({
+          where: { id: documentId, deleted_at: null },
+          select: { id: true, currency_code: true, exchange_rate: true },
+        });
+        if (!document) {
+          throw new BadRequestException('No se puede recuperar el pago porque uno de sus comprobantes fue eliminado');
+        }
+
+        let paidAmount = 0;
+        let cursorId: string | undefined;
+        const batchSize = 250;
+        while (true) {
+          const allocations = await tx.payment_documents.findMany({
+            where: {
+              document_id: documentId,
+              deleted_at: null,
+              payment_id: { not: id },
+              payment: {
+                is: { deleted_at: null, status: { in: ['CONFIRMED', 'PAID'] } },
+              },
+            },
+            orderBy: { id: 'asc' },
+            take: batchSize,
+            ...(cursorId ? { cursor: { id: cursorId }, skip: 1 } : {}),
+            select: {
+              id: true,
+              amount_applied: true,
+              payment: { select: { currency_code: true, exchange_rate: true } },
+            },
+          });
+          for (const allocation of allocations) {
+            paidAmount += this.paymentAmountInDocumentCurrency(
+              allocation.amount_applied.toNumber(),
+              allocation.payment,
+              document,
+            );
+          }
+          if (allocations.length < batchSize) break;
+          cursorId = allocations[allocations.length - 1].id;
+        }
+
+        paidAmount = Number(paidAmount.toFixed(2));
+        const documentExchangeRate = document.exchange_rate == null ? null : Number(document.exchange_rate);
+        const convertedPaidAmount = document.currency_code?.toUpperCase() === 'ARS'
+          ? paidAmount
+          : documentExchangeRate && documentExchangeRate > 0
+            ? Number((paidAmount * documentExchangeRate).toFixed(2))
+            : null;
+        await tx.documents.update({
+          where: { id: documentId },
+          data: {
+            paid_amount: paidAmount,
+            converted_paid_amount: convertedPaidAmount,
+            updated_at: now,
+            updated_by: userId,
+          },
+        });
+      }
+    });
+
+    await this.refreshPaymentOperations(id);
+    return this.findOne(id);
+  }
+
   // ═══════════════════════════════════════════
   // FIND ALL / ONE
   // ═══════════════════════════════════════════

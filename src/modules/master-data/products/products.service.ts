@@ -286,6 +286,20 @@ export class ProductsService {
           include: { currencies: true },
         },
         product_taxes: { include: { taxes: true } },
+        product_categories: {
+          where: { deleted_at: null },
+          select: {
+            category_id: true,
+            categories: { select: { id: true, name: true, parent_id: true, deleted_at: true } },
+          },
+        },
+        product_tags: {
+          where: { deleted_at: null },
+          select: {
+            tag_id: true,
+            tags: { select: { id: true, name: true, deleted_at: true } },
+          },
+        },
         product_variants: {
           select: { id: true, name: true, sku: true, active: true },
           where: { deleted_at: null, active: true },
