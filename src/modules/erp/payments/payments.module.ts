@@ -7,9 +7,10 @@ import { DocumentsSalesModule } from '../documents-sales/documents_sales.module'
 import { AccessControlModule } from '@/access-control/access-control.module';
 import { BankMovementsModule } from '../bank-movements/bank-movements.module';
 import { CreditCardsModule } from '../credit-cards/credit-cards.module';
+import { IntercompanyTreasuryModule } from '../intercompany-treasury/intercompany-treasury.module';
 
 @Module({
-  imports: [CurrenciesModule, CurrentAccountsModule, DocumentsSalesModule, AccessControlModule, BankMovementsModule, CreditCardsModule],
+  imports: [CurrenciesModule, CurrentAccountsModule, DocumentsSalesModule, AccessControlModule, BankMovementsModule, CreditCardsModule, IntercompanyTreasuryModule],
   controllers: [PaymentsController],
   providers: [PaymentsService],
   exports: [PaymentsService],

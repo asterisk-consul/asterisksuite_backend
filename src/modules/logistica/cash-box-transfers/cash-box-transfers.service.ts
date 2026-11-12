@@ -3,18 +3,24 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCashBoxTransferDto } from './dto/create-cash-box-transfer.dto';
 import { BankMovementsService } from '@/modules/erp/bank-movements/bank-movements.service';
 import { requestContext } from '@/common/context/request-context';
+import { CashBoxesService } from '../cash-boxes/cash-boxes.service';
 
 @Injectable()
 export class CashBoxTransfersService {
   constructor(
     private db: PrismaService,
     private bankMovements: BankMovementsService,
+    private cashBoxes: CashBoxesService,
   ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
   }
 
-  private async resolveDestinationCompany(companyId: string | undefined, userId: string) {
+  private async resolveDestinationCompany(
+    companyId: string | undefined,
+    userId: string,
+    permissionCode = 'cash_box_transfers.create',
+  ) {
     const sourceCompanyId = requestContext.getStore()?.companyId;
     if (!companyId || companyId === sourceCompanyId) return null;
 
@@ -29,17 +35,17 @@ export class CashBoxTransfersService {
     const tenantDb = membership.company.schema_name || (membership.company.subdomain ? `${membership.company.subdomain}_db` : null);
     if (!tenantDb) throw new BadRequestException('La empresa destino no tiene un tenant configurado');
     const client = this.db.getTenantClient(tenantDb);
-    await this.assertTargetPermission(client, userId, membership.role);
+    await this.assertTargetPermission(client, userId, membership.role, permissionCode);
     return { company: membership.company, client, role: membership.role };
   }
 
-  private async assertTargetPermission(client: any, userId: string, companyRole: string) {
+  private async assertTargetPermission(client: any, userId: string, companyRole: string, permissionCode: string) {
     if (companyRole === 'OWNER') return;
     const override = await client.user_permission_overrides.findFirst({
-      where: { user_id: userId, permission: { code: 'cash_box_transfers.create', active: true, deleted_at: null } },
+      where: { user_id: userId, permission: { code: permissionCode, active: true, deleted_at: null } },
       select: { effect: true },
     });
-    if (override?.effect === 'DENY') throw new ForbiddenException('No tienes permiso para transferir hacia la empresa destino');
+    if (override?.effect === 'DENY') throw new ForbiddenException('No tienes permiso para operar transferencias en la empresa destino');
     if (override?.effect === 'ALLOW') return;
     const rolePermission = await client.business_user_roles.findFirst({
       where: {
@@ -47,12 +53,20 @@ export class CashBoxTransfersService {
         role: {
           active: true,
           deleted_at: null,
-          permissions: { some: { permission: { code: 'cash_box_transfers.create', active: true, deleted_at: null } } },
+          permissions: { some: { permission: { code: permissionCode, active: true, deleted_at: null } } },
         },
       },
       select: { user_id: true },
     });
-    if (!rolePermission) throw new ForbiddenException('No tienes permiso para transferir hacia la empresa destino');
+    if (!rolePermission) throw new ForbiddenException('No tienes permiso para operar transferencias en la empresa destino');
+  }
+
+  private async assertTargetFundAccess(client: any, type: string, id: string, userId: string, companyRole: string) {
+    if (companyRole !== 'USER') return;
+    const role = type === 'cash_box'
+      ? await client.cash_box_user_roles.findUnique({ where: { cash_box_id_user_id: { cash_box_id: id, user_id: userId } } })
+      : await client.bank_account_user_roles.findUnique({ where: { bank_account_id_user_id: { bank_account_id: id, user_id: userId } } });
+    if (!role) throw new ForbiddenException('No tienes acceso al fondo destino');
   }
 
   private async assertSourceAccess(sourceType: string, sourceId: string, userId: string) {
@@ -283,13 +297,20 @@ export class CashBoxTransfersService {
     }
   }
 
-  private async ensureReceivedTransfer(destinationClient: any, transfer: any, destSessionId: string | null, userId: string) {
+  private async ensureReceivedTransfer(
+    destinationClient: any,
+    transfer: any,
+    destSessionId: string | null,
+    userId: string,
+    status: 'completed' | 'reversing' | 'reversed' = 'completed',
+    executionError: string | null = null,
+  ) {
     return destinationClient.cash_box_transfers.upsert({
       where: { id: transfer.id },
       update: {
-        status: 'completed',
+        status,
         record_side: 'destination',
-        execution_error: null,
+        execution_error: executionError,
         updated_at: new Date(),
         updated_by: userId,
       },
@@ -314,7 +335,8 @@ export class CashBoxTransfersService {
         description: transfer.description,
         reference: transfer.reference,
         transfer_type: transfer.transfer_type,
-        status: 'completed',
+        status,
+        execution_error: executionError,
         record_side: 'destination',
         created_at: transfer.created_at,
         created_by: transfer.created_by,
@@ -348,6 +370,99 @@ export class CashBoxTransfersService {
     return client.$transaction(async (tx: any) => {
       await this.updateCashBoxBalance(cashBoxId, currencyCode, amount, tx);
       return this.createMovement(cashBoxId, sessionId, 'TRANSFER', amount, currencyCode, description, userId, balanceBefore, tx, referenceType, transfer.id);
+    });
+  }
+
+  private async removeOriginalTransferMovement(
+    client: any,
+    transferId: string,
+    fundType: 'cash_box' | 'bank_account',
+    fundId: string,
+    side: 'source' | 'destination',
+    userId: string,
+  ) {
+    const referenceType = `intercompany_transfer_${side}`;
+    const movementModel = fundType === 'cash_box' ? client.cash_box_movements : client.bank_account_movements;
+    const movement = await movementModel.findFirst({
+      where: { reference_type: referenceType, reference_id: transferId, deleted_at: null },
+    });
+    if (!movement) {
+      const alreadyRemoved = await movementModel.findFirst({
+        where: { reference_type: referenceType, reference_id: transferId, deleted_at: { not: null } },
+        select: { id: true },
+      });
+      if (alreadyRemoved) return;
+      throw new NotFoundException(`No se encontró el movimiento original de ${side === 'source' ? 'origen' : 'destino'}`);
+    }
+
+    if (fundType === 'bank_account') {
+      await client.$transaction(async (tx: any) => {
+        await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${fundId}::uuid FOR UPDATE`;
+        const current = await tx.bank_account_movements.findFirst({ where: { id: movement.id, deleted_at: null } });
+        if (!current) return;
+        const account = await tx.bank_accounts.findUnique({ where: { id: fundId }, select: { balance: true } });
+        if (!account) throw new NotFoundException('Cuenta bancaria de la transferencia no encontrada');
+        const delta = Number((Number(current.balance_after) - Number(current.balance_before)).toFixed(2));
+        if (Number(account.balance) - delta < -0.01) {
+          throw new BadRequestException('El fondo destino ya no tiene saldo suficiente. Reponé el importe y volvé a intentar.');
+        }
+        await this.bankMovements.cancelMovement(current.id, userId, tx);
+      });
+      return;
+    }
+
+    await client.$transaction(async (tx: any) => {
+      await tx.$queryRaw`SELECT id FROM tenant.cash_boxes WHERE id = ${fundId}::uuid FOR UPDATE`;
+      await tx.$queryRaw`SELECT id FROM tenant.cash_box_balances WHERE cash_box_id = ${fundId}::uuid AND currency_code = ${movement.currency_code} FOR UPDATE`;
+      const current = await tx.cash_box_movements.findFirst({ where: { id: movement.id, deleted_at: null } });
+      if (!current) return;
+      const delta = Number((Number(current.balance_after) - Number(current.balance_before)).toFixed(2));
+      const balance = await tx.cash_box_balances.findUnique({
+        where: { cash_box_id_currency_code: { cash_box_id: fundId, currency_code: current.currency_code } },
+      });
+      const balanceAfterRemoval = Number((Number(balance?.balance ?? 0) - delta).toFixed(2));
+      if (balanceAfterRemoval < -0.01) {
+        throw new BadRequestException('El fondo destino ya no tiene saldo suficiente. Reponé el importe y volvé a intentar.');
+      }
+
+      await tx.cash_box_movements.update({
+        where: { id: current.id },
+        data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId },
+      });
+      if (balance) {
+        await tx.cash_box_balances.update({
+          where: { id: balance.id },
+          data: { balance: balanceAfterRemoval, updated_at: new Date(), updated_by: userId },
+        });
+      } else if (balanceAfterRemoval > 0) {
+        await tx.cash_box_balances.create({
+          data: { cash_box_id: fundId, currency_code: current.currency_code, balance: balanceAfterRemoval, created_by: userId },
+        });
+      }
+
+      await this.cashBoxes.recalculate(fundId, tx);
+      if (current.session_id) {
+        const sessionMovements = await tx.cash_box_movements.findMany({
+          where: { session_id: current.session_id, deleted_at: null },
+          select: { balance_before: true, balance_after: true },
+        });
+        const sessionTotals = sessionMovements.reduce((totals: { income: number; expenses: number }, row: any) => {
+          const movementDelta = Number((Number(row.balance_after) - Number(row.balance_before)).toFixed(2));
+          if (movementDelta >= 0) totals.income += movementDelta;
+          else totals.expenses += Math.abs(movementDelta);
+          return totals;
+        }, { income: 0, expenses: 0 });
+        await tx.cash_box_sessions.update({
+          where: { id: current.session_id },
+          data: {
+            total_income: sessionTotals.income,
+            total_expenses: sessionTotals.expenses,
+            movement_count: sessionMovements.length,
+            updated_at: new Date(),
+            updated_by: userId,
+          },
+        });
+      }
     });
   }
 
@@ -491,16 +606,147 @@ export class CashBoxTransfersService {
     });
   }
 
+  async reverse(id: string, userId: string) {
+    const transfer = await this.findOne(id);
+    if (transfer.record_side === 'destination') {
+      throw new BadRequestException('La anulación debe iniciarse desde la empresa de origen');
+    }
+    await this.assertSourceAccess(transfer.source_type, transfer.source_id, userId);
+    if (transfer.status === 'reversed') return transfer;
+    if (transfer.status !== 'completed' && !(transfer.status === 'reversing' && transfer.execution_error)) {
+      throw new BadRequestException('Solo se pueden anular transferencias completadas');
+    }
+
+    const target = await this.resolveDestinationCompany(
+      transfer.dest_company_id ?? undefined,
+      userId,
+      'cash_box_transfers.cancel',
+    );
+    const destinationClient = target?.client ?? this.prisma;
+    if (target) {
+      await this.assertTargetFundAccess(destinationClient, transfer.dest_type, transfer.dest_id, userId, target.role);
+    } else {
+      await this.assertSourceAccess(transfer.dest_type, transfer.dest_id, userId);
+    }
+
+    const destinationFund: any = transfer.dest_type === 'cash_box'
+      ? await destinationClient.cash_boxes.findFirst({
+          where: { id: transfer.dest_id, deleted_at: null },
+          select: { currency_code: true, current_session_id: true },
+        })
+      : await destinationClient.bank_accounts.findFirst({
+          where: { id: transfer.dest_id, deleted_at: null },
+          select: { currency_code: true },
+        });
+    if (!destinationFund) throw new NotFoundException('No se encontró el fondo que recibió la transferencia');
+    const destinationSessionId = transfer.dest_type === 'cash_box' ? destinationFund.current_session_id ?? null : null;
+
+    // Tomar la transferencia para evitar dos reversas simultáneas. Si falló una ejecución
+    // anterior, solo se permite reintentar desde ese estado; los movimientos son idempotentes.
+    const claimWhere = transfer.status === 'completed'
+      ? { id, status: 'completed' }
+      : { id, status: 'reversing', execution_error: transfer.execution_error };
+    const claim = await this.prisma.cash_box_transfers.updateMany({
+      where: claimWhere,
+      data: { status: 'reversing', execution_error: null, updated_at: new Date(), updated_by: userId },
+    });
+    if (claim.count !== 1) throw new BadRequestException('La transferencia ya está siendo procesada o cambió de estado');
+
+    try {
+      if (target) {
+        await this.ensureReceivedTransfer(
+          destinationClient,
+          transfer,
+          destinationSessionId,
+          userId,
+          'reversing',
+        );
+      }
+
+      await this.removeOriginalTransferMovement(
+        this.prisma,
+        transfer.id,
+        transfer.source_type,
+        transfer.source_id,
+        'source',
+        userId,
+      );
+      await this.removeOriginalTransferMovement(
+        destinationClient,
+        transfer.id,
+        transfer.dest_type,
+        transfer.dest_id,
+        'destination',
+        userId,
+      );
+
+      if (target) {
+        await this.ensureReceivedTransfer(
+          destinationClient,
+          transfer,
+          destinationSessionId,
+          userId,
+          'reversed',
+        );
+      }
+
+      return await this.prisma.cash_box_transfers.update({
+        where: { id },
+        data: { status: 'reversed', execution_error: null, updated_at: new Date(), updated_by: userId },
+      });
+    } catch (error: any) {
+      const message = String(error?.message ?? error).slice(0, 500);
+      await this.prisma.cash_box_transfers.update({
+        where: { id },
+        data: { status: 'reversing', execution_error: message, updated_at: new Date(), updated_by: userId },
+      });
+      if (target) {
+        try {
+          await this.ensureReceivedTransfer(
+            destinationClient,
+            transfer,
+            destinationSessionId,
+            userId,
+            'reversing',
+            message,
+          );
+        } catch {
+          // Keep the source-side failure visible; a retry will synchronize both tenant records.
+        }
+      }
+      throw error;
+    }
+  }
+
   async remove(id: string, userId: string) {
     const transfer = await this.findOne(id);
-    if (transfer.status === 'completed') {
-      throw new BadRequestException('No se puede eliminar una transferencia completada');
+    if (['completed', 'reversing'].includes(transfer.status)) {
+      throw new BadRequestException('No se puede eliminar una transferencia completada o con anulación en curso');
+    }
+
+    if (transfer.status === 'reversed' && transfer.record_side === 'destination') {
+      throw new BadRequestException('El registro anulado debe eliminarse desde la empresa de origen');
+    }
+
+    const target = transfer.status === 'reversed'
+      ? await this.resolveDestinationCompany(
+          transfer.dest_company_id ?? undefined,
+          userId,
+          'cash_box_transfers.delete',
+        )
+      : null;
+    const now = new Date();
+    if (target) {
+      await target.client.cash_box_transfers.updateMany({
+        where: { id, record_side: 'destination', status: 'reversed', deleted_at: null },
+        data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+      });
     }
 
     return this.prisma.cash_box_transfers.update({
       where: { id },
       data: {
-        deleted_at: new Date(),
+        deleted_at: now,
         deleted_by: userId,
       },
     });

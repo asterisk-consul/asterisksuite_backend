@@ -12,17 +12,41 @@ import {
   ExportConsolidatedManagementReportDto,
 } from './dto/consolidated-management-report.dto';
 import { SaveReportTemplateDto } from './dto/save-report-template.dto';
+import {
+  FinancialResultsDetailDto,
+  FinancialResultsDocumentItemsDto,
+  FinancialResultsSummaryDto,
+} from './dto/financial-results-report.dto';
+import { FinancialResultsReportService } from './financial-results-report.service';
 
 @UseGuards(JwtAuthGuard)
 @AllowCompanyAdmins()
 @RequirePermissions('management_reports.read')
 @Controller('erp/reports/management')
 export class ManagementReportsController {
-  constructor(private readonly service: ManagementReportsService) {}
+  constructor(
+    private readonly service: ManagementReportsService,
+    private readonly financialResults: FinancialResultsReportService,
+  ) {}
 
   @Get()
   getReport(@Query() query: QueryManagementReportDto) {
     return this.service.getReport(query);
+  }
+
+  @Post('financial-results')
+  getFinancialResults(@Body() dto: FinancialResultsSummaryDto, @CurrentUser() user: AuthUser) {
+    return this.financialResults.getSummary(dto, user.id);
+  }
+
+  @Post('financial-results/detail')
+  getFinancialResultsDetail(@Body() dto: FinancialResultsDetailDto, @CurrentUser() user: AuthUser) {
+    return this.financialResults.getDetail(dto, user.id);
+  }
+
+  @Post('financial-results/document-items')
+  getFinancialResultsDocumentItems(@Body() dto: FinancialResultsDocumentItemsDto, @CurrentUser() user: AuthUser) {
+    return this.financialResults.getDocumentItems(dto, user.id);
   }
 
   @Get('metadata')

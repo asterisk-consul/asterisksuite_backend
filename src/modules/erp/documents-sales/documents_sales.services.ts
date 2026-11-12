@@ -381,11 +381,32 @@ export class DocumentsSalesService {
     }
   }
 
+  private normalizeDeliveryPhones(phones?: unknown, legacyPhone?: unknown): string[] {
+    const source = Array.isArray(phones)
+      ? phones
+      : typeof legacyPhone === 'string' && legacyPhone.trim()
+        ? [legacyPhone]
+        : [];
+    const normalized = source
+      .map((phone) => typeof phone === 'string' ? phone.trim() : '')
+      .filter(Boolean);
+
+    if (normalized.length > 10) {
+      throw new BadRequestException('Podés cargar hasta 10 teléfonos de entrega.');
+    }
+    if (normalized.some((phone) => phone.length > 30)) {
+      throw new BadRequestException('Cada teléfono de entrega admite hasta 30 caracteres.');
+    }
+
+    return normalized;
+  }
+
   private hasOrderDeliveryInformation(delivery: any): boolean {
     return [
       delivery?.delivery_address,
       delivery?.delivery_contact,
       delivery?.delivery_phone,
+      ...(Array.isArray(delivery?.delivery_phones) ? delivery.delivery_phones : []),
       delivery?.delivery_time,
       delivery?.delivery_instructions,
       delivery?.transport_provider,
@@ -551,6 +572,10 @@ export class DocumentsSalesService {
     if (!docType) {
       throw new NotFoundException('Tipo de documento no encontrado');
     }
+
+    const orderDeliveryPhones = docType.category === 'ORDER'
+      ? this.normalizeDeliveryPhones(dto.delivery_phones, dto.delivery_phone)
+      : [];
 
     if (docType.category === 'ORDER' && Number(docType.direction) === 1) {
       await this.validateRequiredOrderDeliveryAddress(dto.delivery_address);
@@ -911,7 +936,8 @@ export class DocumentsSalesService {
             priority: dto.priority ?? null,
             delivery_address: dto.delivery_address ?? null,
             delivery_contact: dto.delivery_contact ?? null,
-            delivery_phone: dto.delivery_phone ?? null,
+            delivery_phone: orderDeliveryPhones[0] ?? null,
+            delivery_phones: orderDeliveryPhones,
             delivery_time: dto.delivery_time ?? null,
             delivery_instructions: dto.delivery_instructions ?? null,
             transport_provider: dto.transport_provider ?? null,
@@ -1415,6 +1441,22 @@ export class DocumentsSalesService {
       });
 
       if (existingExtension) {
+        const phoneValuesWereSent = dto.delivery_phones !== undefined || dto.delivery_phone !== undefined;
+        const incomingPhones = phoneValuesWereSent
+          ? this.normalizeDeliveryPhones(dto.delivery_phones, dto.delivery_phone)
+          : null;
+        const storedPhones = Array.isArray(existingExtension.delivery_phones) && existingExtension.delivery_phones.length
+          ? existingExtension.delivery_phones
+          : existingExtension.delivery_phone?.trim()
+            ? [existingExtension.delivery_phone]
+            : [];
+        const clearPhones = clearDeliveryFields.has('delivery_phone') && incomingPhones?.length === 0;
+        const nextPhones = clearPhones
+          ? []
+          : incomingPhones?.length
+            ? incomingPhones
+            : storedPhones;
+
         const sellerWasSent = dto.seller_id !== undefined;
         const sellerType = dto.seller_type === 'PARTNER' ? 'PARTNER' : 'EMPLOYEE';
         const existingSellerId = existingExtension.seller_type === 'PARTNER'
@@ -1472,7 +1514,8 @@ export class DocumentsSalesService {
             priority: dto.priority ?? existingExtension.priority,
             delivery_address: mergeDeliveryText('delivery_address'),
             delivery_contact: mergeDeliveryText('delivery_contact'),
-            delivery_phone: mergeDeliveryText('delivery_phone'),
+            delivery_phone: nextPhones[0] ?? null,
+            delivery_phones: nextPhones,
             delivery_time: mergeDeliveryText('delivery_time'),
             delivery_instructions: mergeDeliveryText('delivery_instructions'),
             transport_provider: mergeDeliveryText('transport_provider'),
@@ -2687,6 +2730,7 @@ export class DocumentsSalesService {
             delivery_address: true,
             delivery_contact: true,
             delivery_phone: true,
+            delivery_phones: true,
             delivery_time: true,
             delivery_instructions: true,
             transport_provider: true,

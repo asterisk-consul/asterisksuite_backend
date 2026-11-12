@@ -101,6 +101,9 @@ model hr_vales {
   exchange_rate    Decimal?          @db.Decimal(18, 6)
   rate_type        CurrencyRateType?
   converted_amount Decimal?          @db.Decimal(18, 2)
+  treasury_target_type String?        @db.VarChar(20)
+  treasury_target_company_id String?  @db.Uuid
+  treasury_target_external_id String? @db.Uuid
   status           HrValeStatus      @default(DRAFT)
   description      String?           @db.VarChar(255)
   date             DateTime          @db.Date

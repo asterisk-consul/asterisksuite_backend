@@ -292,7 +292,7 @@ export class BankAccountsService {
 
   async getMovements(id: string) {
     await this.findOne(id);
-    return this.prisma.bank_account_movements.findMany({
+    const movements = await this.prisma.bank_account_movements.findMany({
       where: { bank_account_id: id, deleted_at: null },
       include: {
         bank_concept: { select: { id: true, code: true, name: true, nature: true, concept_type: true } },
@@ -300,6 +300,27 @@ export class BankAccountsService {
         payment: { select: { status: true } },
       },
       orderBy: [{ date: 'desc' }, { created_at: 'desc' }],
+    });
+    return this.attachIntercompanySourceCompany(id, movements);
+  }
+
+  private async attachIntercompanySourceCompany<T extends { reference_type?: string | null; reference_id?: string | null }>(
+    accountId: string,
+    movements: T[],
+  ): Promise<Array<T & { intercompany_source_company?: { id: string; name: string } }>> {
+    const operationIds = [...new Set(movements
+      .filter((movement) => movement.reference_type?.startsWith('intercompany_') && movement.reference_id)
+      .map((movement) => movement.reference_id!))];
+    if (!operationIds.length) return movements as Array<T & { intercompany_source_company?: { id: string; name: string } }>;
+
+    const operations = await this.db.getDefaultClient().intercompany_treasury_operations.findMany({
+      where: { id: { in: operationIds }, fund_type: 'BANK_ACCOUNT', fund_id: accountId },
+      select: { id: true, source_company: { select: { id: true, name: true } } },
+    });
+    const sourceByOperationId = new Map(operations.map((operation) => [operation.id, operation.source_company]));
+    return movements.map((movement) => {
+      const sourceCompany = movement.reference_id ? sourceByOperationId.get(movement.reference_id) : undefined;
+      return sourceCompany ? { ...movement, intercompany_source_company: sourceCompany } : movement;
     });
   }
 
@@ -434,7 +455,8 @@ export class BankAccountsService {
           },
         })
       : null;
-    return { ...movement, linked_check: linkedCheck };
+    const [movementWithOrigin] = await this.attachIntercompanySourceCompany(accountId, [movement]);
+    return { ...movementWithOrigin, linked_check: linkedCheck };
   }
 
   // ═══════════════════════════════════════════

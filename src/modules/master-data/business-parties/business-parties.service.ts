@@ -2,6 +2,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateBusinessPartyDto } from './dto/create-business-party.dto';
 import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
+import { AddBusinessPartyLocationDto } from './dto/add-business-party-location.dto';
+import { LinkBusinessPartyLocationDto } from './dto/link-business-party-location.dto';
 import { validateDocumentNumber } from '@/common/validators/document.validator';
 import { assertPartyIdentityIsUnique } from './party-identity.util';
 
@@ -489,6 +491,61 @@ export class BusinessPartiesService {
     return this.prisma.business_parties.update({
       where: { id },
       data: { active: false },
+    });
+  }
+
+  async addLocation(partyId: string, dto: AddBusinessPartyLocationDto) {
+    if (!dto.address.trim()) throw new BadRequestException('La dirección es obligatoria.');
+    const partyExists = await this.prisma.business_parties.findUnique({
+      where: { id: partyId },
+      select: { id: true },
+    });
+    if (!partyExists) throw new NotFoundException('No se encontró el cliente seleccionado.');
+
+    return this.prisma.party_locations.create({
+      data: {
+        label: dto.label?.trim() || null,
+        business_parties: { connect: { id: partyId } },
+        locations: {
+          create: {
+            address: dto.address.trim(),
+            city: dto.city?.trim() || null,
+            province: dto.province?.trim() || null,
+            country: dto.country?.trim() || null,
+            postal_code: dto.postalCode?.trim() || null,
+          },
+        },
+      },
+      include: { locations: true },
+    });
+  }
+
+  async linkLocation(partyId: string, dto: LinkBusinessPartyLocationDto) {
+    const partyExists = await this.prisma.business_parties.findUnique({
+      where: { id: partyId },
+      select: { id: true },
+    });
+    if (!partyExists) throw new NotFoundException('No se encontró el cliente seleccionado.');
+
+    const locationExists = await this.prisma.locations.findFirst({
+      where: { id: dto.location_id, deleted_at: null },
+      select: { id: true },
+    });
+    if (!locationExists) throw new NotFoundException('No se encontró la ubicación seleccionada.');
+
+    const existingLink = await this.prisma.party_locations.findFirst({
+      where: { party_id: partyId, location_id: dto.location_id, deleted_at: null },
+      include: { locations: true },
+    });
+    if (existingLink) return existingLink;
+
+    return this.prisma.party_locations.create({
+      data: {
+        party_id: partyId,
+        location_id: dto.location_id,
+        label: dto.label?.trim() || null,
+      },
+      include: { locations: true },
     });
   }
 

@@ -181,6 +181,8 @@ export const ModelName = {
   price_lists: 'price_lists',
   product_list_prices: 'product_list_prices',
   companies: 'companies',
+  intercompany_treasury_shares: 'intercompany_treasury_shares',
+  intercompany_treasury_operations: 'intercompany_treasury_operations',
   platform_modules: 'platform_modules',
   subscription_plans: 'subscription_plans',
   subscription_plan_modules: 'subscription_plan_modules',
@@ -825,6 +827,7 @@ export const Orden_venta_documentsScalarFieldEnum = {
   delivery_address: 'delivery_address',
   delivery_contact: 'delivery_contact',
   delivery_phone: 'delivery_phone',
+  delivery_phones: 'delivery_phones',
   delivery_time: 'delivery_time',
   delivery_instructions: 'delivery_instructions',
   transport_provider: 'transport_provider',
@@ -1376,6 +1379,9 @@ export const Hr_valesScalarFieldEnum = {
   exchange_rate: 'exchange_rate',
   rate_type: 'rate_type',
   converted_amount: 'converted_amount',
+  treasury_target_type: 'treasury_target_type',
+  treasury_target_company_id: 'treasury_target_company_id',
+  treasury_target_external_id: 'treasury_target_external_id',
   status: 'status',
   description: 'description',
   date: 'date',
@@ -2862,6 +2868,48 @@ export const CompaniesScalarFieldEnum = {
 export type CompaniesScalarFieldEnum = (typeof CompaniesScalarFieldEnum)[keyof typeof CompaniesScalarFieldEnum]
 
 
+export const Intercompany_treasury_sharesScalarFieldEnum = {
+  id: 'id',
+  owner_company_id: 'owner_company_id',
+  consumer_company_id: 'consumer_company_id',
+  fund_type: 'fund_type',
+  fund_id: 'fund_id',
+  allow_payments: 'allow_payments',
+  allow_collections: 'allow_collections',
+  allow_hr: 'allow_hr',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by',
+  updated_by: 'updated_by'
+} as const
+
+export type Intercompany_treasury_sharesScalarFieldEnum = (typeof Intercompany_treasury_sharesScalarFieldEnum)[keyof typeof Intercompany_treasury_sharesScalarFieldEnum]
+
+
+export const Intercompany_treasury_operationsScalarFieldEnum = {
+  id: 'id',
+  source_company_id: 'source_company_id',
+  fund_company_id: 'fund_company_id',
+  source_type: 'source_type',
+  source_id: 'source_id',
+  fund_type: 'fund_type',
+  fund_id: 'fund_id',
+  attempt: 'attempt',
+  operation_type: 'operation_type',
+  amount: 'amount',
+  currency_code: 'currency_code',
+  status: 'status',
+  error: 'error',
+  owner_movement_id: 'owner_movement_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by'
+} as const
+
+export type Intercompany_treasury_operationsScalarFieldEnum = (typeof Intercompany_treasury_operationsScalarFieldEnum)[keyof typeof Intercompany_treasury_operationsScalarFieldEnum]
+
+
 export const Platform_modulesScalarFieldEnum = {
   code: 'code',
   name: 'name',
@@ -3984,6 +4032,10 @@ export const PaymentsScalarFieldEnum = {
   reference: 'reference',
   bank_account_id: 'bank_account_id',
   cash_box_id: 'cash_box_id',
+  bank_account_company_id: 'bank_account_company_id',
+  bank_account_external_id: 'bank_account_external_id',
+  cash_box_company_id: 'cash_box_company_id',
+  cash_box_external_id: 'cash_box_external_id',
   account_id: 'account_id',
   status: 'status',
   payment_mode: 'payment_mode',
@@ -4009,6 +4061,10 @@ export const Payment_tendersScalarFieldEnum = {
   amount: 'amount',
   cash_box_id: 'cash_box_id',
   bank_account_id: 'bank_account_id',
+  bank_account_company_id: 'bank_account_company_id',
+  bank_account_external_id: 'bank_account_external_id',
+  cash_box_company_id: 'cash_box_company_id',
+  cash_box_external_id: 'cash_box_external_id',
   created_at: 'created_at',
   updated_at: 'updated_at',
   deleted_at: 'deleted_at',

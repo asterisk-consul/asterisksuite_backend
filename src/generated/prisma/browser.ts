@@ -670,6 +670,16 @@ export type product_list_prices = Prisma.product_list_pricesModel
  */
 export type companies = Prisma.companiesModel
 /**
+ * Model intercompany_treasury_shares
+ * 
+ */
+export type intercompany_treasury_shares = Prisma.intercompany_treasury_sharesModel
+/**
+ * Model intercompany_treasury_operations
+ * 
+ */
+export type intercompany_treasury_operations = Prisma.intercompany_treasury_operationsModel
+/**
  * Model platform_modules
  * 
  */

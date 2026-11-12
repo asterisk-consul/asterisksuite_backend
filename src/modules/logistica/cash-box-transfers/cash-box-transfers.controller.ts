@@ -70,6 +70,12 @@ export class CashBoxTransfersController {
     return this.transfersService.cancel(id, user.id);
   }
 
+  @Patch(':id/reverse')
+  @RequirePermissions('cash_box_transfers.cancel')
+  reverse(@Param('id') id: string, @CurrentUser() user: AuthUser) {
+    return this.transfersService.reverse(id, user.id);
+  }
+
   @Delete(':id')
   @UseGuards(CashBoxAccessGuard)
   @RequirePermissions('cash_box_transfers.delete')

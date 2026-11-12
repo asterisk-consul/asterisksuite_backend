@@ -99,6 +99,22 @@ export class PaymentTenderDto {
   @IsString()
   @IsOptional()
   bank_account_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  cash_box_company_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  cash_box_external_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  bank_account_company_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  bank_account_external_id?: string;
 }
 
 export class PaymentBankChargeRetentionDto {
@@ -216,9 +232,25 @@ export class CreatePaymentDto {
   @IsOptional()
   bank_account_id?: string;
 
+  @IsUUID()
+  @IsOptional()
+  bank_account_company_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  bank_account_external_id?: string;
+
   @IsString()
   @IsOptional()
   cash_box_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  cash_box_company_id?: string;
+
+  @IsUUID()
+  @IsOptional()
+  cash_box_external_id?: string;
 
   @IsString()
   @IsOptional()

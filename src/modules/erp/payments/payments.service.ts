@@ -12,6 +12,7 @@ import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledg
 import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
 import { CreditCardsService } from '../credit-cards/credit-cards.service';
+import { IntercompanyTreasuryService } from '../intercompany-treasury/intercompany-treasury.service';
 import {
   getPurchaseCreditNoteTotalsByInvoice,
   getSalesCreditNoteTotalsByInvoice,
@@ -28,6 +29,7 @@ export class PaymentsService {
     private documentsSales: DocumentsSalesService,
     private bankMovements: BankMovementsService,
     private creditCardsService: CreditCardsService,
+    private intercompanyTreasury: IntercompanyTreasuryService,
   ) {}
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -60,8 +62,34 @@ export class PaymentsService {
     }
   }
 
+  private validateFundInstrumentSelection(
+    method: string,
+    selection: {
+      cashBoxId?: string | null;
+      cashBoxCompanyId?: string | null;
+      cashBoxExternalId?: string | null;
+      bankAccountId?: string | null;
+      bankAccountCompanyId?: string | null;
+      bankAccountExternalId?: string | null;
+    },
+  ) {
+    const hasCash = Boolean(selection.cashBoxCompanyId || selection.cashBoxExternalId);
+    const hasBank = Boolean(selection.bankAccountCompanyId || selection.bankAccountExternalId);
+    if (Boolean(selection.cashBoxCompanyId) !== Boolean(selection.cashBoxExternalId)
+      || Boolean(selection.bankAccountCompanyId) !== Boolean(selection.bankAccountExternalId)) {
+      throw new BadRequestException('El fondo compartido requiere empresa titular e identificador del fondo');
+    }
+    if (method === 'CASH' && hasBank) throw new BadRequestException('El efectivo solo puede asociarse a una caja');
+    if (method === 'BANK_TRANSFER' && hasCash) throw new BadRequestException('La transferencia solo puede asociarse a una cuenta bancaria');
+    if (!['CASH', 'BANK_TRANSFER'].includes(method) && (hasCash || hasBank)) {
+      throw new BadRequestException('Este medio de pago no admite una caja o cuenta bancaria');
+    }
+    if (selection.cashBoxId && hasCash) throw new BadRequestException('Elegí una caja local o compartida, no ambas');
+    if (selection.bankAccountId && hasBank) throw new BadRequestException('Elegí una cuenta local o compartida, no ambas');
+  }
+
   private validateMixedTenders(
-    tenders: Array<{ method: string; amount: any; cash_box_id?: string | null; bank_account_id?: string | null }> | undefined,
+    tenders: Array<{ method: string; amount: any; cash_box_id?: string | null; bank_account_id?: string | null; cash_box_company_id?: string | null; cash_box_external_id?: string | null; bank_account_company_id?: string | null; bank_account_external_id?: string | null }> | undefined,
     amount: number,
     hasChecks: boolean,
   ) {
@@ -86,9 +114,17 @@ export class PaymentsService {
     }
 
     for (const tender of tenders) {
-      this.validatePaymentInstrument(tender.method, {
+      this.validateFundInstrumentSelection(tender.method, {
         cashBoxId: tender.cash_box_id,
+        cashBoxCompanyId: tender.cash_box_company_id,
+        cashBoxExternalId: tender.cash_box_external_id,
         bankAccountId: tender.bank_account_id,
+        bankAccountCompanyId: tender.bank_account_company_id,
+        bankAccountExternalId: tender.bank_account_external_id,
+      });
+      this.validatePaymentInstrument(tender.method, {
+        cashBoxId: tender.cash_box_company_id && tender.cash_box_external_id ? 'INTERCOMPANY' : tender.cash_box_id,
+        bankAccountId: tender.bank_account_company_id && tender.bank_account_external_id ? 'INTERCOMPANY' : tender.bank_account_id,
         hasChecks: hasCheckTender,
       });
       if (tender.method === 'CASH' && tender.bank_account_id) {
@@ -274,11 +310,40 @@ export class PaymentsService {
         throw new BadRequestException('Un VEP debe registrarse como un pago bancario independiente');
       }
       this.validateMixedTenders(dto.tenders, dto.amount, hasRequestedChecks);
+      for (const tender of dto.tenders ?? []) {
+        if ((tender.cash_box_company_id && !tender.cash_box_external_id) || (tender.bank_account_company_id && !tender.bank_account_external_id)
+          || (tender.cash_box_external_id && !tender.cash_box_company_id) || (tender.bank_account_external_id && !tender.bank_account_company_id)) {
+          throw new BadRequestException('El fondo compartido requiere empresa titular e identificador del fondo');
+        }
+        if ((tender.cash_box_company_id || tender.cash_box_external_id) && tender.cash_box_id) throw new BadRequestException('El efectivo no puede asociarse a una caja local y una compartida al mismo tiempo');
+        if ((tender.bank_account_company_id || tender.bank_account_external_id) && tender.bank_account_id) throw new BadRequestException('La transferencia no puede asociarse a una cuenta local y una compartida al mismo tiempo');
+        if (tender.method === 'CASH' && tender.cash_box_company_id && tender.cash_box_external_id) {
+          await this.intercompanyTreasury.validateUse(tender.cash_box_company_id, 'CASH_BOX', tender.cash_box_external_id, dto.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT');
+        }
+        if (tender.method === 'BANK_TRANSFER' && tender.bank_account_company_id && tender.bank_account_external_id) {
+          await this.intercompanyTreasury.validateUse(tender.bank_account_company_id, 'BANK_ACCOUNT', tender.bank_account_external_id, dto.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT');
+        }
+      }
     } else {
       if (dto.tenders?.length) throw new BadRequestException('Los medios detallados solo se usan en pagos mixtos');
-      this.validatePaymentInstrument(dto.payment_method, {
+      this.validateFundInstrumentSelection(dto.payment_method, {
         cashBoxId: dto.cash_box_id,
+        cashBoxCompanyId: dto.cash_box_company_id,
+        cashBoxExternalId: dto.cash_box_external_id,
         bankAccountId: dto.bank_account_id,
+        bankAccountCompanyId: dto.bank_account_company_id,
+        bankAccountExternalId: dto.bank_account_external_id,
+      });
+      const externalCash = Boolean(dto.cash_box_company_id && dto.cash_box_external_id);
+      const externalBank = Boolean(dto.bank_account_company_id && dto.bank_account_external_id);
+      if (dto.cash_box_company_id && !dto.cash_box_external_id || dto.bank_account_company_id && !dto.bank_account_external_id) {
+        throw new BadRequestException('El fondo compartido requiere empresa titular e identificador del fondo');
+      }
+      if (externalCash) await this.intercompanyTreasury.validateUse(dto.cash_box_company_id!, 'CASH_BOX', dto.cash_box_external_id!, dto.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT');
+      if (externalBank) await this.intercompanyTreasury.validateUse(dto.bank_account_company_id!, 'BANK_ACCOUNT', dto.bank_account_external_id!, dto.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT');
+      this.validatePaymentInstrument(dto.payment_method, {
+        cashBoxId: externalCash ? 'INTERCOMPANY' : dto.cash_box_id,
+        bankAccountId: externalBank ? 'INTERCOMPANY' : dto.bank_account_id,
         hasChecks: hasRequestedChecks,
         creditCardId: dto.credit_card_id,
       });
@@ -419,8 +484,12 @@ export class PaymentsService {
           exchange_note: dto.exchange_note,
           description: dto.description,
           reference: dto.reference,
-          bank_account_id: isMixedPayment ? null : dto.bank_account_id,
-          cash_box_id: isMixedPayment ? null : dto.cash_box_id,
+          bank_account_id: isMixedPayment || dto.bank_account_company_id ? null : dto.bank_account_id,
+          cash_box_id: isMixedPayment || dto.cash_box_company_id ? null : dto.cash_box_id,
+          bank_account_company_id: isMixedPayment ? null : dto.bank_account_company_id ?? null,
+          bank_account_external_id: isMixedPayment ? null : dto.bank_account_external_id ?? null,
+          cash_box_company_id: isMixedPayment ? null : dto.cash_box_company_id ?? null,
+          cash_box_external_id: isMixedPayment ? null : dto.cash_box_external_id ?? null,
           account_id: dto.account_id,
           withholding_remittance_id: dto.withholding_remittance_id,
           status: 'DRAFT',
@@ -434,8 +503,12 @@ export class PaymentsService {
             payment_id: payment.id,
             method: tender.method as any,
             amount: tender.amount,
-            cash_box_id: tender.cash_box_id ?? null,
-            bank_account_id: tender.bank_account_id ?? null,
+            cash_box_id: tender.cash_box_company_id ? null : tender.cash_box_id ?? null,
+            bank_account_id: tender.bank_account_company_id ? null : tender.bank_account_id ?? null,
+            cash_box_company_id: tender.cash_box_company_id ?? null,
+            cash_box_external_id: tender.cash_box_external_id ?? null,
+            bank_account_company_id: tender.bank_account_company_id ?? null,
+            bank_account_external_id: tender.bank_account_external_id ?? null,
             created_by: userId,
           })),
         });
@@ -658,14 +731,41 @@ export class PaymentsService {
     const hasCheckTender = payment.payment_method === 'CHECK' || mixedTenders.some((tender: any) => tender.method === 'CHECK');
     const checkCount = hasCheckTender ? await this.prisma.payment_checks.count({ where: { payment_id: id } }) : 0;
     if (payment.payment_method === 'MIXED') {
-      this.validateMixedTenders(mixedTenders, Number(payment.amount), checkCount > 0);
+      const validationTenders = mixedTenders.map((tender: any) => ({
+        ...tender,
+        cash_box_id: tender.cash_box_company_id && tender.cash_box_external_id ? 'INTERCOMPANY' : tender.cash_box_id,
+        bank_account_id: tender.bank_account_company_id && tender.bank_account_external_id ? 'INTERCOMPANY' : tender.bank_account_id,
+      }));
+      this.validateMixedTenders(validationTenders, Number(payment.amount), checkCount > 0);
+      for (const tender of mixedTenders as any[]) {
+        if ((tender.cash_box_company_id && !tender.cash_box_external_id) || (tender.bank_account_company_id && !tender.bank_account_external_id)
+          || (tender.cash_box_external_id && !tender.cash_box_company_id) || (tender.bank_account_external_id && !tender.bank_account_company_id)) {
+          throw new BadRequestException('El fondo compartido requiere empresa titular e identificador del fondo');
+        }
+        const use = payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT';
+        if (tender.method === 'CASH' && tender.cash_box_company_id && tender.cash_box_external_id) await this.intercompanyTreasury.validateUse(tender.cash_box_company_id, 'CASH_BOX', tender.cash_box_external_id, use);
+        if (tender.method === 'BANK_TRANSFER' && tender.bank_account_company_id && tender.bank_account_external_id) await this.intercompanyTreasury.validateUse(tender.bank_account_company_id, 'BANK_ACCOUNT', tender.bank_account_external_id, use);
+      }
     } else {
-      this.validatePaymentInstrument(payment.payment_method, {
+      const externalCash = Boolean(payment.cash_box_company_id && payment.cash_box_external_id);
+      const externalBank = Boolean(payment.bank_account_company_id && payment.bank_account_external_id);
+      this.validateFundInstrumentSelection(payment.payment_method, {
         cashBoxId: payment.cash_box_id,
+        cashBoxCompanyId: payment.cash_box_company_id,
+        cashBoxExternalId: payment.cash_box_external_id,
         bankAccountId: payment.bank_account_id,
+        bankAccountCompanyId: payment.bank_account_company_id,
+        bankAccountExternalId: payment.bank_account_external_id,
+      });
+      this.validatePaymentInstrument(payment.payment_method, {
+        cashBoxId: externalCash ? 'INTERCOMPANY' : payment.cash_box_id,
+        bankAccountId: externalBank ? 'INTERCOMPANY' : payment.bank_account_id,
         hasChecks: checkCount > 0,
         creditCardId: payment.credit_card_transactions?.[0]?.credit_card_id,
       });
+      const use = payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT';
+      if (externalCash) await this.intercompanyTreasury.validateUse(payment.cash_box_company_id!, 'CASH_BOX', payment.cash_box_external_id!, use);
+      if (externalBank) await this.intercompanyTreasury.validateUse(payment.bank_account_company_id!, 'BANK_ACCOUNT', payment.bank_account_external_id!, use);
     }
 
     // Validate documents if present
@@ -699,6 +799,15 @@ export class PaymentsService {
 
     if (withholdings.length > 0 && !payment.party_id) {
       throw new BadRequestException('party_id es requerido cuando se registran retenciones');
+    }
+
+    if (paymentDocs.length > 0 && withheldTotal > 0) {
+      const appliedTotal = paymentDocs.reduce((sum, document) => sum + document.amount_applied.toNumber(), 0);
+      if (withheldTotal > appliedTotal + 0.01) {
+        throw new BadRequestException(
+          `Las retenciones (${withheldTotal.toFixed(2)}) no pueden superar el importe bruto aplicado (${appliedTotal.toFixed(2)})`,
+        );
+      }
     }
 
     if (paymentDocs.length > 0) {
@@ -817,7 +926,43 @@ export class PaymentsService {
     const isAdvanceNoDocs = payment.payment_mode === 'ADVANCE' && paymentDocs.length === 0;
     const isDirectObligationPayment = paymentObligations.length > 0 && paymentDocs.length === 0;
 
-    const confirmed = await this.prisma.$transaction(async (tx) => {
+    const sourceCompanyId = this.getCompanyId();
+    if (!sourceCompanyId) throw new BadRequestException('No se pudo resolver la empresa actual del pago');
+    const externalUses = payment.payment_method === 'MIXED'
+      ? mixedTenders.flatMap((tender: any) => {
+          if (tender.method === 'CASH' && tender.cash_box_company_id && tender.cash_box_external_id) return [{ companyId: tender.cash_box_company_id, fundType: 'CASH_BOX' as const, fundId: tender.cash_box_external_id, amount: Number(tender.amount) }];
+          if (tender.method === 'BANK_TRANSFER' && tender.bank_account_company_id && tender.bank_account_external_id) return [{ companyId: tender.bank_account_company_id, fundType: 'BANK_ACCOUNT' as const, fundId: tender.bank_account_external_id, amount: Number(tender.amount) }];
+          return [];
+        })
+      : payment.cash_box_company_id && payment.cash_box_external_id
+        ? [{ companyId: payment.cash_box_company_id, fundType: 'CASH_BOX' as const, fundId: payment.cash_box_external_id, amount: Number(payment.amount) }]
+        : payment.bank_account_company_id && payment.bank_account_external_id
+          ? [{ companyId: payment.bank_account_company_id, fundType: 'BANK_ACCOUNT' as const, fundId: payment.bank_account_external_id, amount: Number(payment.amount) }]
+          : [];
+    try {
+      for (const target of externalUses) {
+        await this.intercompanyTreasury.applyUsage({
+          ownerCompanyId: target.companyId,
+          fundType: target.fundType,
+          fundId: target.fundId,
+          sourceType: 'payment',
+          sourceId: payment.id,
+          operationType: payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT',
+          amount: target.amount,
+          currencyCode: payment.currency_code,
+          date: payment.date,
+          description: payment.description ?? `${payment.type === 'COLLECTION' ? 'Cobro' : 'Pago'} #${payment.number}`,
+          userId,
+        });
+      }
+    } catch (error) {
+      await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'payment', payment.id, userId);
+      throw error;
+    }
+
+    let confirmed: any;
+    try {
+      confirmed = await this.prisma.$transaction(async (tx) => {
       // Apply to documents
       for (const pd of paymentDocs) {
         const doc = await tx.documents.findUnique({
@@ -982,7 +1127,14 @@ export class PaymentsService {
           updated_by: userId,
         },
       });
-    }, { timeout: 15_000 });
+      }, { timeout: 15_000 });
+    } catch (error) {
+      if (externalUses.length) {
+        const current = await this.prisma.payments.findFirst({ where: { id: payment.id, deleted_at: null }, select: { status: true } });
+        if (current?.status === 'DRAFT') await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'payment', payment.id, userId);
+      }
+      throw error;
+    }
 
     const operationIds = [
       ...new Set(
@@ -1062,7 +1214,10 @@ export class PaymentsService {
       throw new BadRequestException('Solo se pueden rechazar pagos confirmados');
     }
 
+    const sourceCompanyId = this.getCompanyId();
+    if (sourceCompanyId) await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'payment', payment.id);
     await this.reverseSideEffects(payment, userId, 'payment_rejection');
+    if (sourceCompanyId) await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'payment', payment.id, userId);
     await this.prisma.treasury_obligations.updateMany({
       where: { payment_id: id, deleted_at: null },
       data: { payment_id: null, status: 'READY', paid_at: null, updated_at: new Date(), updated_by: userId },
@@ -1104,7 +1259,10 @@ export class PaymentsService {
       await this.creditCardsService.assertPurchaseCanBeReversed(transaction.id);
     }
 
+    const sourceCompanyId = this.getCompanyId();
+    if (sourceCompanyId) await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'payment', payment.id);
     await this.reverseSideEffects(payment, userId, 'payment_reversal', checkAction);
+    if (sourceCompanyId) await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'payment', payment.id, userId);
     await this.prisma.treasury_obligations.updateMany({
       where: { payment_id: id, deleted_at: null },
       data: { payment_id: null, status: 'READY', paid_at: null, updated_at: new Date(), updated_by: userId },
@@ -1148,6 +1306,10 @@ export class PaymentsService {
             where: { deleted_at: null },
             select: { id: true, status: true, certificate_number: true, remittance_id: true },
           },
+          tenders: {
+            where: { deleted_at: null },
+            select: { method: true },
+          },
         },
       });
       if (!payment) throw new NotFoundException('Pago o cobro no encontrado');
@@ -1157,8 +1319,10 @@ export class PaymentsService {
       if (!['PAYMENT', 'COLLECTION'].includes(payment.type)) {
         throw new BadRequestException('Esta acción solo está disponible para pagos y cobros');
       }
-      if (!['CASH', 'BANK_TRANSFER'].includes(payment.payment_method)) {
-        throw new BadRequestException('Solo se pueden recuperar pagos o cobros en efectivo o transferencia bancaria');
+      const hasCheckInMixedPayment = payment.payment_method === 'MIXED'
+        && (payment.tenders ?? []).some((tender: any) => tender.method === 'CHECK');
+      if (!['CASH', 'BANK_TRANSFER', 'CHECK'].includes(payment.payment_method) && !hasCheckInMixedPayment) {
+        throw new BadRequestException('Solo se pueden recuperar pagos o cobros en efectivo, transferencia o con cheques');
       }
 
       const withholdingIds = payment.withholdings.map((withholding) => withholding.id);
@@ -1181,6 +1345,46 @@ export class PaymentsService {
       const documentIds = [...new Set(payment.documents.map((document) => document.document_id))].sort();
       for (const documentId of documentIds) {
         await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${documentId}::uuid FOR UPDATE`;
+      }
+
+      // Al anular, los cheques se devuelven a cartera (o quedan cancelados si
+      // el usuario eligió esa opción). Al recuperar el pago como borrador,
+      // soltamos la reserva para que el cheque pueda volver a seleccionarse y
+      // no quede bloqueado por el pago que todavía no se confirmó.
+      const [paymentCheckLinks, checksReservedByPayment] = await Promise.all([
+        tx.payment_checks.findMany({ where: { payment_id: id }, select: { check_id: true } }),
+        tx.checks.findMany({ where: { payment_id: id, deleted_at: null }, select: { id: true } }),
+      ]);
+      const checkIds = [...new Set([
+        ...paymentCheckLinks.map((link) => link.check_id),
+        ...checksReservedByPayment.map((check) => check.id),
+      ])].sort();
+      for (const checkId of checkIds) {
+        await tx.$queryRaw`SELECT id FROM tenant.checks WHERE id = ${checkId}::uuid FOR UPDATE`;
+      }
+      if (checkIds.length) {
+        const checks = await tx.checks.findMany({
+          where: { id: { in: checkIds }, deleted_at: null },
+          select: { id: true, payment_id: true, status: true, check_number: true },
+        });
+        if (checks.length !== checkIds.length) {
+          throw new BadRequestException('No se puede recuperar el pago porque uno de sus cheques fue eliminado');
+        }
+        const unavailableCheck = checks.find((check) =>
+          !['PENDING', 'CANCELLED'].includes(check.status)
+          || (check.payment_id != null && check.payment_id !== id),
+        );
+        if (unavailableCheck) {
+          throw new BadRequestException(
+            `No se puede recuperar el pago porque el cheque #${unavailableCheck.check_number} ya tuvo otro movimiento o está asociado a otro pago`,
+          );
+        }
+
+        await tx.payment_checks.deleteMany({ where: { payment_id: id } });
+        await tx.checks.updateMany({
+          where: { id: { in: checkIds }, payment_id: id },
+          data: { payment_id: null, updated_at: new Date(), updated_by: userId },
+        });
       }
 
       const now = new Date();
@@ -1293,6 +1497,10 @@ export class PaymentsService {
       include: {
         party: { select: { id: true, name: true } },
         account: { select: { id: true, code: true, name: true, account_type: true } },
+        tenders: {
+          where: { deleted_at: null },
+          select: { bank_account_company_id: true, cash_box_company_id: true },
+        },
         documents: {
           where: { deleted_at: null },
           select: {
@@ -1441,7 +1649,12 @@ export class PaymentsService {
       }];
     });
     const creatorIds = [...new Set(payments.map((p) => p.created_by).filter(Boolean))] as string[];
-    const [users, obligations] = await Promise.all([
+    const intercompanyCompanyIds = [...new Set(payments.flatMap((payment) => [
+      payment.bank_account_company_id,
+      payment.cash_box_company_id,
+      ...payment.tenders.flatMap((tender) => [tender.bank_account_company_id, tender.cash_box_company_id]),
+    ]).filter((id): id is string => Boolean(id)))];
+    const [users, obligations, intercompanyCompanies] = await Promise.all([
       creatorIds.length
         ? this.db.getDefaultClient().users.findMany({
             where: { id: { in: creatorIds } },
@@ -1465,8 +1678,15 @@ export class PaymentsService {
             },
           })
         : Promise.resolve([]),
+      intercompanyCompanyIds.length
+        ? this.db.getDefaultClient().companies.findMany({
+            where: { id: { in: intercompanyCompanyIds } },
+            select: { id: true, name: true },
+          })
+        : Promise.resolve([]),
     ]);
     const userMap = Object.fromEntries(users.map((user) => [user.id, { name: user.name, email: user.email }]));
+    const intercompanyCompanyMap = new Map(intercompanyCompanies.map((company) => [company.id, company]));
     const obligationsByPayment = new Map<string, typeof obligations>();
     for (const obligation of obligations) {
       if (!obligation.payment_id) continue;
@@ -1478,6 +1698,14 @@ export class PaymentsService {
     const paymentRows = payments.map((p) => ({
       ...p,
       creator: p.created_by ? (userMap[p.created_by] ?? null) : null,
+      intercompany_companies: [...new Set([
+        p.bank_account_company_id,
+        p.cash_box_company_id,
+        ...p.tenders.flatMap((tender) => [tender.bank_account_company_id, tender.cash_box_company_id]),
+      ].filter((id): id is string => Boolean(id)))].flatMap((id) => {
+        const company = intercompanyCompanyMap.get(id);
+        return company ? [company] : [];
+      }),
       obligations: obligationsByPayment.get(p.id) ?? [],
     }));
     return [...paymentRows, ...partnerValePayments]
@@ -1663,6 +1891,25 @@ export class PaymentsService {
       : dto.check_ids ?? currentCheckIds;
     if (effectiveMethod === 'MIXED') {
       this.validateMixedTenders(effectiveTenders, Number(dto.amount ?? payment.amount), effectiveCheckIds.length > 0);
+      for (const tender of effectiveTenders as any[]) {
+        if ((tender.cash_box_company_id && !tender.cash_box_external_id) || (tender.bank_account_company_id && !tender.bank_account_external_id)
+          || (tender.cash_box_external_id && !tender.cash_box_company_id) || (tender.bank_account_external_id && !tender.bank_account_company_id)) {
+          throw new BadRequestException('El fondo compartido requiere empresa titular e identificador del fondo');
+        }
+        if ((tender.cash_box_company_id || tender.cash_box_external_id) && tender.cash_box_id) throw new BadRequestException('El efectivo no puede asociarse a una caja local y una compartida al mismo tiempo');
+        if ((tender.bank_account_company_id || tender.bank_account_external_id) && tender.bank_account_id) throw new BadRequestException('La transferencia no puede asociarse a una cuenta local y una compartida al mismo tiempo');
+        const use = payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT';
+        if (tender.method === 'CASH' && tender.cash_box_company_id && tender.cash_box_external_id) await this.intercompanyTreasury.validateUse(tender.cash_box_company_id, 'CASH_BOX', tender.cash_box_external_id, use);
+        if (tender.method === 'BANK_TRANSFER' && tender.bank_account_company_id && tender.bank_account_external_id) await this.intercompanyTreasury.validateUse(tender.bank_account_company_id, 'BANK_ACCOUNT', tender.bank_account_external_id, use);
+      }
+      for (const tender of effectiveTenders as any[]) {
+        if (tender.method === 'CASH' && tender.cash_box_company_id && tender.cash_box_external_id) {
+          await this.intercompanyTreasury.validateUse(tender.cash_box_company_id, 'CASH_BOX', tender.cash_box_external_id, payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT');
+        }
+        if (tender.method === 'BANK_TRANSFER' && tender.bank_account_company_id && tender.bank_account_external_id) {
+          await this.intercompanyTreasury.validateUse(tender.bank_account_company_id, 'BANK_ACCOUNT', tender.bank_account_external_id, payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT');
+        }
+      }
       const checkTender = effectiveTenders.find((tender: any) => tender.method === 'CHECK');
       if (checkTender && dto.checks) {
         const requestedCheckAmount = dto.checks.reduce((sum, check) => sum + Number(check.amount_applied), 0);
@@ -1673,9 +1920,28 @@ export class PaymentsService {
     } else {
       if (dto.tenders?.length) throw new BadRequestException('Los medios detallados solo se usan en pagos mixtos');
       const checkCount = effectiveMethod === 'CHECK' ? effectiveCheckIds.length : 0;
+      const cashCompanyId = dto.cash_box_company_id !== undefined ? dto.cash_box_company_id : payment.cash_box_company_id;
+      const cashExternalId = dto.cash_box_external_id !== undefined ? dto.cash_box_external_id : payment.cash_box_external_id;
+      const bankCompanyId = dto.bank_account_company_id !== undefined ? dto.bank_account_company_id : payment.bank_account_company_id;
+      const bankExternalId = dto.bank_account_external_id !== undefined ? dto.bank_account_external_id : payment.bank_account_external_id;
+      this.validateFundInstrumentSelection(effectiveMethod, {
+        cashBoxId: dto.cash_box_id !== undefined ? dto.cash_box_id : payment.cash_box_id,
+        cashBoxCompanyId: cashCompanyId,
+        cashBoxExternalId: cashExternalId,
+        bankAccountId: dto.bank_account_id !== undefined ? dto.bank_account_id : payment.bank_account_id,
+        bankAccountCompanyId: bankCompanyId,
+        bankAccountExternalId: bankExternalId,
+      });
+      if ((cashCompanyId && !cashExternalId) || (bankCompanyId && !bankExternalId) || (cashExternalId && !cashCompanyId) || (bankExternalId && !bankCompanyId)) {
+        throw new BadRequestException('El fondo compartido requiere empresa titular e identificador del fondo');
+      }
+      if ((cashCompanyId || cashExternalId) && (dto.cash_box_id ?? payment.cash_box_id)) throw new BadRequestException('El pago no puede asociarse a una caja local y una compartida al mismo tiempo');
+      if ((bankCompanyId || bankExternalId) && (dto.bank_account_id ?? payment.bank_account_id)) throw new BadRequestException('El pago no puede asociarse a una cuenta local y una compartida al mismo tiempo');
+      if (cashCompanyId && cashExternalId) await this.intercompanyTreasury.validateUse(cashCompanyId, 'CASH_BOX', cashExternalId, payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT');
+      if (bankCompanyId && bankExternalId) await this.intercompanyTreasury.validateUse(bankCompanyId, 'BANK_ACCOUNT', bankExternalId, payment.type === 'COLLECTION' ? 'COLLECTION' : 'PAYMENT');
       this.validatePaymentInstrument(effectiveMethod, {
-        cashBoxId: dto.cash_box_id ?? payment.cash_box_id,
-        bankAccountId: dto.bank_account_id ?? payment.bank_account_id,
+        cashBoxId: cashCompanyId && cashExternalId ? 'INTERCOMPANY' : dto.cash_box_id ?? payment.cash_box_id,
+        bankAccountId: bankCompanyId && bankExternalId ? 'INTERCOMPANY' : dto.bank_account_id ?? payment.bank_account_id,
         hasChecks: checkCount > 0,
         creditCardId: dto.credit_card_id ?? payment.credit_card_transactions?.[0]?.credit_card_id,
       });
@@ -1701,10 +1967,22 @@ export class PaymentsService {
     if (effectiveMethod === 'MIXED') {
       data.bank_account_id = null;
       data.cash_box_id = null;
+      data.bank_account_company_id = null;
+      data.bank_account_external_id = null;
+      data.cash_box_company_id = null;
+      data.cash_box_external_id = null;
       data.amount = dto.amount ?? payment.amount;
     } else {
-      if (dto.bank_account_id) data.bank_account_id = dto.bank_account_id;
-      if (dto.cash_box_id) data.cash_box_id = dto.cash_box_id;
+      if (dto.bank_account_id !== undefined || dto.bank_account_company_id !== undefined) {
+        data.bank_account_id = dto.bank_account_company_id ? null : dto.bank_account_id || null;
+      }
+      if (dto.bank_account_company_id !== undefined) data.bank_account_company_id = dto.bank_account_company_id || null;
+      if (dto.bank_account_external_id !== undefined) data.bank_account_external_id = dto.bank_account_external_id || null;
+      if (dto.cash_box_id !== undefined || dto.cash_box_company_id !== undefined) {
+        data.cash_box_id = dto.cash_box_company_id ? null : dto.cash_box_id || null;
+      }
+      if (dto.cash_box_company_id !== undefined) data.cash_box_company_id = dto.cash_box_company_id || null;
+      if (dto.cash_box_external_id !== undefined) data.cash_box_external_id = dto.cash_box_external_id || null;
     }
     if (dto.account_id !== undefined) data.account_id = dto.account_id || null;
     if (dto.payment_mode) data.payment_mode = dto.payment_mode;
@@ -1723,8 +2001,12 @@ export class PaymentsService {
               payment_id: id,
               method: tender.method as any,
               amount: tender.amount,
-              cash_box_id: tender.cash_box_id ?? null,
-              bank_account_id: tender.bank_account_id ?? null,
+              cash_box_id: tender.cash_box_company_id ? null : tender.cash_box_id ?? null,
+              bank_account_id: tender.bank_account_company_id ? null : tender.bank_account_id ?? null,
+              cash_box_company_id: tender.cash_box_company_id ?? null,
+              cash_box_external_id: tender.cash_box_external_id ?? null,
+              bank_account_company_id: tender.bank_account_company_id ?? null,
+              bank_account_external_id: tender.bank_account_external_id ?? null,
               created_by: userId,
             })),
           });
@@ -3103,6 +3385,7 @@ export class PaymentsService {
         });
         await recalculateBankAccountLedger(this.prisma, movement.bank_account_id);
       }
+
     }
 
     // Revert cash box movement

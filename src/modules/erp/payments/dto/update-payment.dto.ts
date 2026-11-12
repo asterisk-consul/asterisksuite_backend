@@ -74,7 +74,23 @@ export class UpdatePaymentDto {
 
   @IsString()
   @IsOptional()
+  bank_account_company_id?: string;
+
+  @IsString()
+  @IsOptional()
+  bank_account_external_id?: string;
+
+  @IsString()
+  @IsOptional()
   cash_box_id?: string;
+
+  @IsString()
+  @IsOptional()
+  cash_box_company_id?: string;
+
+  @IsString()
+  @IsOptional()
+  cash_box_external_id?: string;
 
   @IsString()
   @IsOptional()

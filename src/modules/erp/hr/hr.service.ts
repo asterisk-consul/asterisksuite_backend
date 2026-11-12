@@ -5,6 +5,8 @@ import { ConfirmHrValeDto } from './dto/confirm-hr-vale.dto';
 import { parseLocalDateTime } from '@/common/utils/dates';
 import { recalculateCurrentAccountLedger, removeDocumentAccountEffects } from '../current-accounts/current-account-ledger';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
+import { IntercompanyTreasuryService } from '../intercompany-treasury/intercompany-treasury.service';
+import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 import { CreatePartnerInvestmentPlanDto } from './dto/create-partner-investment-plan.dto';
 
 @Injectable()
@@ -14,6 +16,7 @@ export class HrService {
   constructor(
     private db: PrismaService,
     private bankMovements: BankMovementsService,
+    private intercompanyTreasury: IntercompanyTreasuryService,
   ) {}
 
   private get prisma() {
@@ -625,11 +628,46 @@ export class HrService {
 
     const isDebit = ['RETIRO', 'REEMBOLSO', 'PRESTAMO'].includes(vale.type);
     const requiresTreasury = vale.party_type === 'PARTNER' && !['SUELDO', 'ADELANTO', 'EXTRAS', 'COMISION'].includes(vale.type);
-    if (requiresTreasury && (!treasury?.treasury_target_type || !treasury.treasury_target_id)) {
+    const externalTarget = Boolean(treasury?.treasury_target_company_id && treasury?.treasury_target_external_id);
+    if (requiresTreasury && !treasury?.treasury_target_type) {
       throw new BadRequestException('Seleccioná una caja o cuenta bancaria para registrar el movimiento del socio');
     }
+    if (requiresTreasury && externalTarget && treasury?.treasury_target_id) throw new BadRequestException('Elegí una sola caja o cuenta bancaria, local o compartida');
+    if (requiresTreasury && !externalTarget && !treasury?.treasury_target_id) throw new BadRequestException('Seleccioná una caja o cuenta bancaria para registrar el movimiento del socio');
+    if (requiresTreasury && ((treasury?.treasury_target_company_id && !treasury?.treasury_target_external_id) || (treasury?.treasury_target_external_id && !treasury?.treasury_target_company_id))) {
+      throw new BadRequestException('El fondo compartido requiere empresa titular e identificador del fondo');
+    }
+    const useType = isDebit ? 'PAYMENT' : 'COLLECTION';
+    if (requiresTreasury && externalTarget) {
+      await this.intercompanyTreasury.validateUse(
+        treasury!.treasury_target_company_id!,
+        treasury!.treasury_target_type === 'CASH_BOX' ? 'CASH_BOX' : 'BANK_ACCOUNT',
+        treasury!.treasury_target_external_id!,
+        'HR',
+      );
+    }
 
-    return this.prisma.$transaction(async (tx) => {
+    const sourceCompanyId = getCurrentCompanyId();
+    if (!sourceCompanyId) throw new BadRequestException('No se pudo resolver la empresa actual del vale');
+    if (requiresTreasury && externalTarget) {
+      await this.intercompanyTreasury.applyUsage({
+        ownerCompanyId: treasury!.treasury_target_company_id!,
+        fundType: treasury!.treasury_target_type === 'CASH_BOX' ? 'CASH_BOX' : 'BANK_ACCOUNT',
+        fundId: treasury!.treasury_target_external_id!,
+        sourceType: 'hr_vale',
+        sourceId: vale.id,
+        operationType: useType,
+        accessUse: 'HR',
+        amount: Number(vale.amount),
+        currencyCode: vale.currency_code,
+        date: vale.date,
+        description: `${vale.type} de socio · Vale #${vale.number}${vale.description ? ` · ${vale.description}` : ''}`,
+        userId,
+      });
+    }
+
+    try {
+      return await this.prisma.$transaction(async (tx) => {
       // Serialize confirmations and cancellations for the same person.
       await tx.$queryRaw`SELECT id FROM tenant.business_parties WHERE id = ${vale.party_id}::uuid FOR UPDATE`;
       const currentVale = await tx.hr_vales.findUnique({ where: { id } });
@@ -698,7 +736,7 @@ export class HrService {
       // Crear documento VALE + current_account_entry
       await this.createValeDocument(vale, userId, tx, requiresTreasury);
 
-      if (requiresTreasury) {
+      if (requiresTreasury && !externalTarget) {
         await this.createPartnerTreasuryMovement(vale, treasury!, isDebit, userId, tx);
       }
 
@@ -707,6 +745,9 @@ export class HrService {
         data: {
           status: requiresTreasury ? 'PAID' : 'CONFIRMED',
           paid_at: requiresTreasury ? new Date() : null,
+          treasury_target_type: requiresTreasury ? treasury?.treasury_target_type ?? null : null,
+          treasury_target_company_id: externalTarget ? treasury?.treasury_target_company_id ?? null : null,
+          treasury_target_external_id: externalTarget ? treasury?.treasury_target_external_id ?? null : null,
           confirmed_at: new Date(),
           confirmed_by: userId,
           updated_at: new Date(),
@@ -715,7 +756,14 @@ export class HrService {
           party: { select: { id: true, name: true, tax_id: true } },
         },
       });
-    });
+      });
+    } catch (error) {
+      if (requiresTreasury && externalTarget) {
+        const current = await this.prisma.hr_vales.findUnique({ where: { id: vale.id }, select: { status: true } });
+        if (current?.status === 'DRAFT') await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'hr_vale', vale.id, userId);
+      }
+      throw error;
+    }
   }
 
   private async createPartnerTreasuryMovement(
@@ -850,7 +898,17 @@ export class HrService {
   }
 
   async cancelVale(id: string, userId: string, targetDocumentId?: string) {
-    return this.prisma.$transaction(async (tx) => {
+    const sourceCompanyId = getCurrentCompanyId();
+    const currentVale = await this.prisma.hr_vales.findUnique({
+      where: { id },
+      select: { party_type: true, status: true, treasury_target_company_id: true },
+    });
+    if (!currentVale) throw new NotFoundException('Vale no encontrado');
+    if (currentVale.party_type === 'PARTNER' && currentVale.treasury_target_company_id && sourceCompanyId
+      && ['CONFIRMED', 'PAID'].includes(currentVale.status)) {
+      await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'hr_vale', id);
+    }
+    const cancelled = await this.prisma.$transaction(async (tx) => {
       const party = await tx.hr_vales.findUnique({ where: { id }, select: { party_id: true } });
       if (!party) throw new NotFoundException('Vale no encontrado');
       await tx.$queryRaw`SELECT id FROM tenant.business_parties WHERE id = ${party.party_id}::uuid FOR UPDATE`;
@@ -957,10 +1015,19 @@ export class HrService {
         include: { party: { select: { id: true, name: true, tax_id: true } } },
       });
     });
+    const externalTarget = await this.prisma.hr_vales.findUnique({
+      where: { id },
+      select: { party_type: true, treasury_target_company_id: true },
+    });
+    if (externalTarget?.party_type === 'PARTNER' && externalTarget.treasury_target_company_id && sourceCompanyId) {
+      await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'hr_vale', id, userId);
+    }
+    return cancelled;
   }
 
   private async reversePartnerTreasuryMovement(vale: any, userId: string, prisma: any = this.prisma) {
     if (vale.party_type !== 'PARTNER') return;
+    if (vale.treasury_target_company_id) return;
     const [cashMovement, bankMovement] = await Promise.all([
       prisma.cash_box_movements.findFirst({
         where: { reference_type: 'hr_vale', reference_id: vale.id, deleted_at: null },

@@ -631,39 +631,47 @@ export class CashBoxesService {
   // RECALCULAR SALDOS (corrección de divergencias)
   // ═══════════════════════════════════════════
 
-  OUTFLOW_TYPES = ['PAYMENT', 'LOAN', 'LOAN_PAYMENT', 'CHECK_ISSUED', 'CHECK_BOUNCED', 'DEBIT'];
-
-  async recalculate(cashBoxId: string) {
-    const box = await this.prisma.cash_boxes.findUnique({
+  async recalculate(cashBoxId: string, prisma: any = this.prisma) {
+    const box = await prisma.cash_boxes.findUnique({
       where: { id: cashBoxId },
       include: { balances: true },
     });
     if (!box) throw new NotFoundException('Caja no encontrada');
 
     // 1. Recalcular saldos por moneda desde todos los movimientos
-    const movements = await this.prisma.cash_box_movements.findMany({
+    const movements = await prisma.cash_box_movements.findMany({
       where: { cash_box_id: cashBoxId, deleted_at: null },
-      orderBy: { date: 'asc' },
+      orderBy: [{ date: 'asc' }, { created_at: 'asc' }, { id: 'asc' }],
     });
 
     const balanceByCurrency = new Map<string, number>();
     for (const m of movements) {
       const cur = m.currency_code;
-      const current = balanceByCurrency.get(cur) ?? 0;
-      const isOutflow = this.OUTFLOW_TYPES.includes(m.type);
-      balanceByCurrency.set(cur, isOutflow ? current - m.amount.toNumber() : current + m.amount.toNumber());
+      const before = balanceByCurrency.get(cur) ?? 0;
+      const delta = Number((Number(m.balance_after) - Number(m.balance_before)).toFixed(2));
+      const after = Number((before + delta).toFixed(2));
+      if (Number(m.balance_before) !== before || Number(m.balance_after) !== after) {
+        await prisma.cash_box_movements.update({
+          where: { id: m.id },
+          data: { balance_before: before, balance_after: after },
+        });
+      }
+      balanceByCurrency.set(cur, after);
     }
 
-    // Actualizar balances por moneda
+    // Actualizar balances por moneda, incluyendo monedas que ya no tienen movimientos activos.
+    for (const existing of box.balances.filter(b => !b.deleted_at)) {
+      const newBalance = balanceByCurrency.get(existing.currency_code) ?? 0;
+      balanceByCurrency.set(existing.currency_code, newBalance);
+      await prisma.cash_box_balances.update({
+        where: { id: existing.id },
+        data: { balance: newBalance, updated_at: new Date() },
+      });
+    }
     for (const [currencyCode, newBalance] of balanceByCurrency) {
       const existing = box.balances.find(b => b.currency_code === currencyCode && !b.deleted_at);
-      if (existing) {
-        await this.prisma.cash_box_balances.update({
-          where: { id: existing.id },
-          data: { balance: newBalance, updated_at: new Date() },
-        });
-      } else {
-        await this.prisma.cash_box_balances.create({
+      if (!existing) {
+        await prisma.cash_box_balances.create({
           data: { cash_box_id: cashBoxId, currency_code: currencyCode, balance: newBalance, created_by: 'system' },
         });
       }
@@ -671,7 +679,7 @@ export class CashBoxesService {
 
     // 2. Recalcular totales de la sesión actual
     const currentSession = box.current_session_id
-      ? await this.prisma.cash_box_sessions.findUnique({ where: { id: box.current_session_id } })
+      ? await prisma.cash_box_sessions.findUnique({ where: { id: box.current_session_id } })
       : null;
 
     if (currentSession) {
@@ -679,15 +687,12 @@ export class CashBoxesService {
       let totalIncome = 0;
       let totalExpenses = 0;
       for (const m of sessionMovements) {
-        const isOutflow = this.OUTFLOW_TYPES.includes(m.type);
-        if (isOutflow) {
-          totalExpenses += m.amount.toNumber();
-        } else {
-          totalIncome += m.amount.toNumber();
-        }
+        const delta = Number((Number(m.balance_after) - Number(m.balance_before)).toFixed(2));
+        if (delta >= 0) totalIncome += delta;
+        else totalExpenses += Math.abs(delta);
       }
 
-      await this.prisma.cash_box_sessions.update({
+      await prisma.cash_box_sessions.update({
         where: { id: currentSession.id },
         data: {
           total_income: totalIncome,

@@ -13,4 +13,12 @@ export class ConfirmHrValeDto {
   @IsOptional()
   @IsUUID()
   treasury_target_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  treasury_target_company_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  treasury_target_external_id?: string;
 }

@@ -23,7 +23,66 @@ model companies {
   platformAdminScopes    platform_admin_company_scopes[]
   subscription           company_subscriptions?
   moduleOverrides        company_module_overrides[]
+  ownedTreasuryShares    intercompany_treasury_shares[] @relation("treasury_share_owner")
+  receivedTreasuryShares intercompany_treasury_shares[] @relation("treasury_share_consumer")
+  sourceTreasuryOperations intercompany_treasury_operations[] @relation("treasury_operation_source")
+  fundTreasuryOperations intercompany_treasury_operations[] @relation("treasury_operation_fund")
 
+  @@schema("public")
+}
+
+// Permisos explícitos para usar una caja o cuenta bancaria en otra empresa.
+model intercompany_treasury_shares {
+  id                           String   @id @default(uuid()) @db.Uuid
+  owner_company_id             String   @db.Uuid
+  consumer_company_id          String   @db.Uuid
+  fund_type                    String   @db.VarChar(20)
+  fund_id                      String   @db.Uuid
+  allow_payments               Boolean  @default(false)
+  allow_collections            Boolean  @default(false)
+  allow_hr                     Boolean  @default(false)
+  active                       Boolean  @default(true)
+  created_at                   DateTime @default(now()) @db.Timestamp(6)
+  updated_at                   DateTime? @updatedAt @db.Timestamp(6)
+  created_by                   String?  @db.Uuid
+  updated_by                   String?  @db.Uuid
+
+  owner_company    companies @relation("treasury_share_owner", fields: [owner_company_id], references: [id], onDelete: Cascade)
+  consumer_company companies @relation("treasury_share_consumer", fields: [consumer_company_id], references: [id], onDelete: Cascade)
+
+  @@unique([owner_company_id, consumer_company_id, fund_type, fund_id])
+  @@index([consumer_company_id, active, fund_type])
+  @@index([owner_company_id, fund_type, fund_id])
+  @@schema("public")
+}
+
+// Saga/idempotencia entre el comprobante de una empresa y el movimiento
+// registrado en la tesorería de otra.
+model intercompany_treasury_operations {
+  id                String   @id @default(uuid()) @db.Uuid
+  source_company_id String   @db.Uuid
+  fund_company_id   String   @db.Uuid
+  source_type       String   @db.VarChar(30)
+  source_id         String   @db.Uuid
+  fund_type         String   @db.VarChar(20)
+  fund_id           String   @db.Uuid
+  attempt           Int      @default(1)
+  operation_type    String   @db.VarChar(20)
+  amount            Decimal  @db.Decimal(15, 2)
+  currency_code     String   @db.VarChar(10)
+  status            String   @default("PENDING") @db.VarChar(20)
+  error             String?  @db.VarChar(500)
+  owner_movement_id String?  @db.Uuid
+  created_at        DateTime @default(now()) @db.Timestamp(6)
+  updated_at        DateTime? @updatedAt @db.Timestamp(6)
+  created_by        String?  @db.Uuid
+
+  source_company companies @relation("treasury_operation_source", fields: [source_company_id], references: [id], onDelete: Restrict)
+  fund_company   companies @relation("treasury_operation_fund", fields: [fund_company_id], references: [id], onDelete: Restrict)
+
+  @@unique([source_company_id, source_type, source_id, fund_type, fund_id, attempt])
+  @@index([status, created_at])
+  @@index([fund_company_id, fund_type, fund_id, created_at])
   @@schema("public")
 }
 

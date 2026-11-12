@@ -40,8 +40,10 @@ export class LocationsService {
     const take = Math.min(Math.max(Math.trunc(requestedLimit) || 30, 1), 50);
 
     return this.prisma.locations.findMany({
-      where: term
-        ? {
+      where: {
+        deleted_at: null,
+        ...(term
+          ? {
             OR: [
               { address: { contains: term, mode: 'insensitive' } },
               { city: { contains: term, mode: 'insensitive' } },
@@ -50,7 +52,8 @@ export class LocationsService {
               { postal_code: { contains: term, mode: 'insensitive' } },
             ],
           }
-        : undefined,
+          : {}),
+      },
       orderBy: [{ city: 'asc' }, { address: 'asc' }],
       take,
       select: {

@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { IsArray, IsDateString, IsIn, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
+import { ArrayMaxSize, IsArray, IsDateString, IsIn, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
 
 export class CreateDocumentItemTaxDto {
   @IsUUID()
@@ -239,34 +239,58 @@ export class CreateDocumentDto {
   // ─── Orden de Venta fields ──────────────────────
   @IsOptional()
   @IsString()
+  @IsIn(['BAJA', 'MEDIA', 'ALTA', 'URGENTE'], { message: 'Elegí una prioridad válida para la entrega.' })
+  @MaxLength(20, { message: 'La prioridad admite hasta 20 caracteres.' })
   priority?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(300, { message: 'La dirección de entrega admite hasta 300 caracteres.' })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   delivery_address?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(100, { message: 'El contacto de entrega admite hasta 100 caracteres.' })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   delivery_contact?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(30, { message: 'Cada teléfono admite hasta 30 caracteres.' })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   delivery_phone?: string;
 
   @IsOptional()
+  @IsArray()
+  @ArrayMaxSize(10, { message: 'Podés cargar hasta 10 teléfonos de entrega.' })
+  @IsString({ each: true, message: 'Cada teléfono debe ser texto.' })
+  @MaxLength(30, { each: true, message: 'Cada teléfono admite hasta 30 caracteres.' })
+  @Transform(({ value }) => Array.isArray(value)
+    ? value.map(item => typeof item === 'string' ? item.trim() : item).filter(item => item !== '')
+    : value)
+  delivery_phones?: string[];
+
+  @IsOptional()
   @IsString()
+  @MaxLength(100, { message: 'El tiempo de entrega admite hasta 100 caracteres.' })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   delivery_time?: string;
 
   @IsOptional()
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   delivery_instructions?: string;
 
   @IsOptional()
   @IsString()
+  @MaxLength(100, { message: 'El transporte admite hasta 100 caracteres.' })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   transport_provider?: string;
 
   @IsOptional()
   @IsDateString()
+  @Transform(({ value }) => value === '' ? undefined : value)
   confirmed_delivery_date?: string;
 
   @IsOptional()

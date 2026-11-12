@@ -41,6 +41,10 @@ export type Payment_tendersMinAggregateOutputType = {
   amount: runtime.Decimal | null
   cash_box_id: string | null
   bank_account_id: string | null
+  bank_account_company_id: string | null
+  bank_account_external_id: string | null
+  cash_box_company_id: string | null
+  cash_box_external_id: string | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -56,6 +60,10 @@ export type Payment_tendersMaxAggregateOutputType = {
   amount: runtime.Decimal | null
   cash_box_id: string | null
   bank_account_id: string | null
+  bank_account_company_id: string | null
+  bank_account_external_id: string | null
+  cash_box_company_id: string | null
+  cash_box_external_id: string | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -71,6 +79,10 @@ export type Payment_tendersCountAggregateOutputType = {
   amount: number
   cash_box_id: number
   bank_account_id: number
+  bank_account_company_id: number
+  bank_account_external_id: number
+  cash_box_company_id: number
+  cash_box_external_id: number
   created_at: number
   updated_at: number
   deleted_at: number
@@ -96,6 +108,10 @@ export type Payment_tendersMinAggregateInputType = {
   amount?: true
   cash_box_id?: true
   bank_account_id?: true
+  bank_account_company_id?: true
+  bank_account_external_id?: true
+  cash_box_company_id?: true
+  cash_box_external_id?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -111,6 +127,10 @@ export type Payment_tendersMaxAggregateInputType = {
   amount?: true
   cash_box_id?: true
   bank_account_id?: true
+  bank_account_company_id?: true
+  bank_account_external_id?: true
+  cash_box_company_id?: true
+  cash_box_external_id?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -126,6 +146,10 @@ export type Payment_tendersCountAggregateInputType = {
   amount?: true
   cash_box_id?: true
   bank_account_id?: true
+  bank_account_company_id?: true
+  bank_account_external_id?: true
+  cash_box_company_id?: true
+  cash_box_external_id?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -228,6 +252,10 @@ export type Payment_tendersGroupByOutputType = {
   amount: runtime.Decimal
   cash_box_id: string | null
   bank_account_id: string | null
+  bank_account_company_id: string | null
+  bank_account_external_id: string | null
+  cash_box_company_id: string | null
+  cash_box_external_id: string | null
   created_at: Date
   updated_at: Date | null
   deleted_at: Date | null
@@ -266,6 +294,10 @@ export type payment_tendersWhereInput = {
   amount?: Prisma.DecimalFilter<"payment_tenders"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
   bank_account_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  bank_account_company_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  bank_account_external_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  cash_box_company_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  cash_box_external_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
   created_at?: Prisma.DateTimeFilter<"payment_tenders"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"payment_tenders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"payment_tenders"> | Date | string | null
@@ -284,6 +316,10 @@ export type payment_tendersOrderByWithRelationInput = {
   amount?: Prisma.SortOrder
   cash_box_id?: Prisma.SortOrderInput | Prisma.SortOrder
   bank_account_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  bank_account_company_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  bank_account_external_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  cash_box_company_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  cash_box_external_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -306,6 +342,10 @@ export type payment_tendersWhereUniqueInput = Prisma.AtLeast<{
   amount?: Prisma.DecimalFilter<"payment_tenders"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
   bank_account_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  bank_account_company_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  bank_account_external_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  cash_box_company_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  cash_box_external_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
   created_at?: Prisma.DateTimeFilter<"payment_tenders"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"payment_tenders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"payment_tenders"> | Date | string | null
@@ -324,6 +364,10 @@ export type payment_tendersOrderByWithAggregationInput = {
   amount?: Prisma.SortOrder
   cash_box_id?: Prisma.SortOrderInput | Prisma.SortOrder
   bank_account_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  bank_account_company_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  bank_account_external_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  cash_box_company_id?: Prisma.SortOrderInput | Prisma.SortOrder
+  cash_box_external_id?: Prisma.SortOrderInput | Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted_at?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -347,6 +391,10 @@ export type payment_tendersScalarWhereWithAggregatesInput = {
   amount?: Prisma.DecimalWithAggregatesFilter<"payment_tenders"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.UuidNullableWithAggregatesFilter<"payment_tenders"> | string | null
   bank_account_id?: Prisma.UuidNullableWithAggregatesFilter<"payment_tenders"> | string | null
+  bank_account_company_id?: Prisma.UuidNullableWithAggregatesFilter<"payment_tenders"> | string | null
+  bank_account_external_id?: Prisma.UuidNullableWithAggregatesFilter<"payment_tenders"> | string | null
+  cash_box_company_id?: Prisma.UuidNullableWithAggregatesFilter<"payment_tenders"> | string | null
+  cash_box_external_id?: Prisma.UuidNullableWithAggregatesFilter<"payment_tenders"> | string | null
   created_at?: Prisma.DateTimeWithAggregatesFilter<"payment_tenders"> | Date | string
   updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"payment_tenders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableWithAggregatesFilter<"payment_tenders"> | Date | string | null
@@ -359,6 +407,10 @@ export type payment_tendersCreateInput = {
   id?: string
   method: $Enums.PaymentMethod
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -377,6 +429,10 @@ export type payment_tendersUncheckedCreateInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: string | null
   bank_account_id?: string | null
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -389,6 +445,10 @@ export type payment_tendersUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -407,6 +467,10 @@ export type payment_tendersUncheckedUpdateInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bank_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -422,6 +486,10 @@ export type payment_tendersCreateManyInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: string | null
   bank_account_id?: string | null
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -434,6 +502,10 @@ export type payment_tendersUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -449,6 +521,10 @@ export type payment_tendersUncheckedUpdateManyInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bank_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -479,6 +555,10 @@ export type payment_tendersCountOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   cash_box_id?: Prisma.SortOrder
   bank_account_id?: Prisma.SortOrder
+  bank_account_company_id?: Prisma.SortOrder
+  bank_account_external_id?: Prisma.SortOrder
+  cash_box_company_id?: Prisma.SortOrder
+  cash_box_external_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -498,6 +578,10 @@ export type payment_tendersMaxOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   cash_box_id?: Prisma.SortOrder
   bank_account_id?: Prisma.SortOrder
+  bank_account_company_id?: Prisma.SortOrder
+  bank_account_external_id?: Prisma.SortOrder
+  cash_box_company_id?: Prisma.SortOrder
+  cash_box_external_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -513,6 +597,10 @@ export type payment_tendersMinOrderByAggregateInput = {
   amount?: Prisma.SortOrder
   cash_box_id?: Prisma.SortOrder
   bank_account_id?: Prisma.SortOrder
+  bank_account_company_id?: Prisma.SortOrder
+  bank_account_external_id?: Prisma.SortOrder
+  cash_box_company_id?: Prisma.SortOrder
+  cash_box_external_id?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -655,6 +743,10 @@ export type payment_tendersCreateWithoutBank_accountInput = {
   id?: string
   method: $Enums.PaymentMethod
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -671,6 +763,10 @@ export type payment_tendersUncheckedCreateWithoutBank_accountInput = {
   method: $Enums.PaymentMethod
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: string | null
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -715,6 +811,10 @@ export type payment_tendersScalarWhereInput = {
   amount?: Prisma.DecimalFilter<"payment_tenders"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
   bank_account_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  bank_account_company_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  bank_account_external_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  cash_box_company_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
+  cash_box_external_id?: Prisma.UuidNullableFilter<"payment_tenders"> | string | null
   created_at?: Prisma.DateTimeFilter<"payment_tenders"> | Date | string
   updated_at?: Prisma.DateTimeNullableFilter<"payment_tenders"> | Date | string | null
   deleted_at?: Prisma.DateTimeNullableFilter<"payment_tenders"> | Date | string | null
@@ -727,6 +827,10 @@ export type payment_tendersCreateWithoutCash_boxInput = {
   id?: string
   method: $Enums.PaymentMethod
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -743,6 +847,10 @@ export type payment_tendersUncheckedCreateWithoutCash_boxInput = {
   method: $Enums.PaymentMethod
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   bank_account_id?: string | null
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -781,6 +889,10 @@ export type payment_tendersCreateWithoutPaymentInput = {
   id?: string
   method: $Enums.PaymentMethod
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -797,6 +909,10 @@ export type payment_tendersUncheckedCreateWithoutPaymentInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: string | null
   bank_account_id?: string | null
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -837,6 +953,10 @@ export type payment_tendersCreateManyBank_accountInput = {
   method: $Enums.PaymentMethod
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: string | null
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -849,6 +969,10 @@ export type payment_tendersUpdateWithoutBank_accountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -865,6 +989,10 @@ export type payment_tendersUncheckedUpdateWithoutBank_accountInput = {
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -879,6 +1007,10 @@ export type payment_tendersUncheckedUpdateManyWithoutBank_accountInput = {
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -893,6 +1025,10 @@ export type payment_tendersCreateManyCash_boxInput = {
   method: $Enums.PaymentMethod
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   bank_account_id?: string | null
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -905,6 +1041,10 @@ export type payment_tendersUpdateWithoutCash_boxInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -921,6 +1061,10 @@ export type payment_tendersUncheckedUpdateWithoutCash_boxInput = {
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   bank_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -935,6 +1079,10 @@ export type payment_tendersUncheckedUpdateManyWithoutCash_boxInput = {
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   bank_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -949,6 +1097,10 @@ export type payment_tendersCreateManyPaymentInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: string | null
   bank_account_id?: string | null
+  bank_account_company_id?: string | null
+  bank_account_external_id?: string | null
+  cash_box_company_id?: string | null
+  cash_box_external_id?: string | null
   created_at?: Date | string
   updated_at?: Date | string | null
   deleted_at?: Date | string | null
@@ -961,6 +1113,10 @@ export type payment_tendersUpdateWithoutPaymentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   method?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -977,6 +1133,10 @@ export type payment_tendersUncheckedUpdateWithoutPaymentInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bank_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -991,6 +1151,10 @@ export type payment_tendersUncheckedUpdateManyWithoutPaymentInput = {
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   cash_box_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bank_account_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bank_account_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_company_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  cash_box_external_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1008,6 +1172,10 @@ export type payment_tendersSelect<ExtArgs extends runtime.Types.Extensions.Inter
   amount?: boolean
   cash_box_id?: boolean
   bank_account_id?: boolean
+  bank_account_company_id?: boolean
+  bank_account_external_id?: boolean
+  cash_box_company_id?: boolean
+  cash_box_external_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1026,6 +1194,10 @@ export type payment_tendersSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   amount?: boolean
   cash_box_id?: boolean
   bank_account_id?: boolean
+  bank_account_company_id?: boolean
+  bank_account_external_id?: boolean
+  cash_box_company_id?: boolean
+  cash_box_external_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1044,6 +1216,10 @@ export type payment_tendersSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   amount?: boolean
   cash_box_id?: boolean
   bank_account_id?: boolean
+  bank_account_company_id?: boolean
+  bank_account_external_id?: boolean
+  cash_box_company_id?: boolean
+  cash_box_external_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1062,6 +1238,10 @@ export type payment_tendersSelectScalar = {
   amount?: boolean
   cash_box_id?: boolean
   bank_account_id?: boolean
+  bank_account_company_id?: boolean
+  bank_account_external_id?: boolean
+  cash_box_company_id?: boolean
+  cash_box_external_id?: boolean
   created_at?: boolean
   updated_at?: boolean
   deleted_at?: boolean
@@ -1070,7 +1250,7 @@ export type payment_tendersSelectScalar = {
   deleted_by?: boolean
 }
 
-export type payment_tendersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "payment_id" | "method" | "amount" | "cash_box_id" | "bank_account_id" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["payment_tenders"]>
+export type payment_tendersOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "payment_id" | "method" | "amount" | "cash_box_id" | "bank_account_id" | "bank_account_company_id" | "bank_account_external_id" | "cash_box_company_id" | "cash_box_external_id" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["payment_tenders"]>
 export type payment_tendersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   payment?: boolean | Prisma.paymentsDefaultArgs<ExtArgs>
   cash_box?: boolean | Prisma.payment_tenders$cash_boxArgs<ExtArgs>
@@ -1101,6 +1281,10 @@ export type $payment_tendersPayload<ExtArgs extends runtime.Types.Extensions.Int
     amount: runtime.Decimal
     cash_box_id: string | null
     bank_account_id: string | null
+    bank_account_company_id: string | null
+    bank_account_external_id: string | null
+    cash_box_company_id: string | null
+    cash_box_external_id: string | null
     created_at: Date
     updated_at: Date | null
     deleted_at: Date | null
@@ -1539,6 +1723,10 @@ export interface payment_tendersFieldRefs {
   readonly amount: Prisma.FieldRef<"payment_tenders", 'Decimal'>
   readonly cash_box_id: Prisma.FieldRef<"payment_tenders", 'String'>
   readonly bank_account_id: Prisma.FieldRef<"payment_tenders", 'String'>
+  readonly bank_account_company_id: Prisma.FieldRef<"payment_tenders", 'String'>
+  readonly bank_account_external_id: Prisma.FieldRef<"payment_tenders", 'String'>
+  readonly cash_box_company_id: Prisma.FieldRef<"payment_tenders", 'String'>
+  readonly cash_box_external_id: Prisma.FieldRef<"payment_tenders", 'String'>
   readonly created_at: Prisma.FieldRef<"payment_tenders", 'DateTime'>
   readonly updated_at: Prisma.FieldRef<"payment_tenders", 'DateTime'>
   readonly deleted_at: Prisma.FieldRef<"payment_tenders", 'DateTime'>

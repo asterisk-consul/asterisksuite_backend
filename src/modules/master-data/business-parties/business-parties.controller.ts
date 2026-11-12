@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  ParseUUIDPipe,
   Query,
   Res,
   UploadedFile,
@@ -18,6 +19,8 @@ import * as XLSX from 'xlsx';
 import { BusinessPartiesService } from './business-parties.service';
 import { CreateBusinessPartyDto } from './dto/create-business-party.dto';
 import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
+import { AddBusinessPartyLocationDto } from './dto/add-business-party-location.dto';
+import { LinkBusinessPartyLocationDto } from './dto/link-business-party-location.dto';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 
@@ -309,6 +312,24 @@ export class BusinessPartiesController {
     }
 
     return { created, updated, saved: created + updated, failed: skipped, total: rows.length, errors };
+  }
+
+  @Post(':id/locations/link')
+  @RequirePermissions('business_parties.update', 'locations.read')
+  linkLocation(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: LinkBusinessPartyLocationDto,
+  ) {
+    return this.service.linkLocation(id, dto);
+  }
+
+  @Post(':id/locations')
+  @RequirePermissions('business_parties.update', 'locations.create')
+  addLocation(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: AddBusinessPartyLocationDto,
+  ) {
+    return this.service.addLocation(id, dto);
   }
 
   // 🔥 Rutas con :id DESPUÉS de las rutas fijas

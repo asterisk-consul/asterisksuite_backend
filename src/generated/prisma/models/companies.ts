@@ -271,6 +271,10 @@ export type companiesWhereInput = {
   platformAdminScopes?: Prisma.Platform_admin_company_scopesListRelationFilter
   subscription?: Prisma.XOR<Prisma.Company_subscriptionsNullableScalarRelationFilter, Prisma.company_subscriptionsWhereInput> | null
   moduleOverrides?: Prisma.Company_module_overridesListRelationFilter
+  ownedTreasuryShares?: Prisma.Intercompany_treasury_sharesListRelationFilter
+  receivedTreasuryShares?: Prisma.Intercompany_treasury_sharesListRelationFilter
+  sourceTreasuryOperations?: Prisma.Intercompany_treasury_operationsListRelationFilter
+  fundTreasuryOperations?: Prisma.Intercompany_treasury_operationsListRelationFilter
 }
 
 export type companiesOrderByWithRelationInput = {
@@ -298,6 +302,10 @@ export type companiesOrderByWithRelationInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesOrderByRelationAggregateInput
   subscription?: Prisma.company_subscriptionsOrderByWithRelationInput
   moduleOverrides?: Prisma.company_module_overridesOrderByRelationAggregateInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesOrderByRelationAggregateInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesOrderByRelationAggregateInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsOrderByRelationAggregateInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsOrderByRelationAggregateInput
 }
 
 export type companiesWhereUniqueInput = Prisma.AtLeast<{
@@ -328,6 +336,10 @@ export type companiesWhereUniqueInput = Prisma.AtLeast<{
   platformAdminScopes?: Prisma.Platform_admin_company_scopesListRelationFilter
   subscription?: Prisma.XOR<Prisma.Company_subscriptionsNullableScalarRelationFilter, Prisma.company_subscriptionsWhereInput> | null
   moduleOverrides?: Prisma.Company_module_overridesListRelationFilter
+  ownedTreasuryShares?: Prisma.Intercompany_treasury_sharesListRelationFilter
+  receivedTreasuryShares?: Prisma.Intercompany_treasury_sharesListRelationFilter
+  sourceTreasuryOperations?: Prisma.Intercompany_treasury_operationsListRelationFilter
+  fundTreasuryOperations?: Prisma.Intercompany_treasury_operationsListRelationFilter
 }, "id" | "subdomain" | "schema_name">
 
 export type companiesOrderByWithAggregationInput = {
@@ -397,6 +409,10 @@ export type companiesCreateInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateInput = {
@@ -424,6 +440,10 @@ export type companiesUncheckedCreateInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUpdateInput = {
@@ -451,6 +471,10 @@ export type companiesUpdateInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateInput = {
@@ -478,6 +502,10 @@ export type companiesUncheckedUpdateInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateManyInput = {
@@ -591,6 +619,62 @@ export type companiesMinOrderByAggregateInput = {
 export type CompaniesScalarRelationFilter = {
   is?: Prisma.companiesWhereInput
   isNot?: Prisma.companiesWhereInput
+}
+
+export type companiesCreateNestedOneWithoutOwnedTreasurySharesInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutOwnedTreasurySharesInput, Prisma.companiesUncheckedCreateWithoutOwnedTreasurySharesInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutOwnedTreasurySharesInput
+  connect?: Prisma.companiesWhereUniqueInput
+}
+
+export type companiesCreateNestedOneWithoutReceivedTreasurySharesInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutReceivedTreasurySharesInput, Prisma.companiesUncheckedCreateWithoutReceivedTreasurySharesInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutReceivedTreasurySharesInput
+  connect?: Prisma.companiesWhereUniqueInput
+}
+
+export type companiesUpdateOneRequiredWithoutOwnedTreasurySharesNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutOwnedTreasurySharesInput, Prisma.companiesUncheckedCreateWithoutOwnedTreasurySharesInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutOwnedTreasurySharesInput
+  upsert?: Prisma.companiesUpsertWithoutOwnedTreasurySharesInput
+  connect?: Prisma.companiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutOwnedTreasurySharesInput, Prisma.companiesUpdateWithoutOwnedTreasurySharesInput>, Prisma.companiesUncheckedUpdateWithoutOwnedTreasurySharesInput>
+}
+
+export type companiesUpdateOneRequiredWithoutReceivedTreasurySharesNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutReceivedTreasurySharesInput, Prisma.companiesUncheckedCreateWithoutReceivedTreasurySharesInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutReceivedTreasurySharesInput
+  upsert?: Prisma.companiesUpsertWithoutReceivedTreasurySharesInput
+  connect?: Prisma.companiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutReceivedTreasurySharesInput, Prisma.companiesUpdateWithoutReceivedTreasurySharesInput>, Prisma.companiesUncheckedUpdateWithoutReceivedTreasurySharesInput>
+}
+
+export type companiesCreateNestedOneWithoutSourceTreasuryOperationsInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutSourceTreasuryOperationsInput, Prisma.companiesUncheckedCreateWithoutSourceTreasuryOperationsInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutSourceTreasuryOperationsInput
+  connect?: Prisma.companiesWhereUniqueInput
+}
+
+export type companiesCreateNestedOneWithoutFundTreasuryOperationsInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutFundTreasuryOperationsInput, Prisma.companiesUncheckedCreateWithoutFundTreasuryOperationsInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutFundTreasuryOperationsInput
+  connect?: Prisma.companiesWhereUniqueInput
+}
+
+export type companiesUpdateOneRequiredWithoutSourceTreasuryOperationsNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutSourceTreasuryOperationsInput, Prisma.companiesUncheckedCreateWithoutSourceTreasuryOperationsInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutSourceTreasuryOperationsInput
+  upsert?: Prisma.companiesUpsertWithoutSourceTreasuryOperationsInput
+  connect?: Prisma.companiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutSourceTreasuryOperationsInput, Prisma.companiesUpdateWithoutSourceTreasuryOperationsInput>, Prisma.companiesUncheckedUpdateWithoutSourceTreasuryOperationsInput>
+}
+
+export type companiesUpdateOneRequiredWithoutFundTreasuryOperationsNestedInput = {
+  create?: Prisma.XOR<Prisma.companiesCreateWithoutFundTreasuryOperationsInput, Prisma.companiesUncheckedCreateWithoutFundTreasuryOperationsInput>
+  connectOrCreate?: Prisma.companiesCreateOrConnectWithoutFundTreasuryOperationsInput
+  upsert?: Prisma.companiesUpsertWithoutFundTreasuryOperationsInput
+  connect?: Prisma.companiesWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutFundTreasuryOperationsInput, Prisma.companiesUpdateWithoutFundTreasuryOperationsInput>, Prisma.companiesUncheckedUpdateWithoutFundTreasuryOperationsInput>
 }
 
 export type companiesCreateNestedOneWithoutSubscriptionInput = {
@@ -719,6 +803,550 @@ export type companiesUpdateOneRequiredWithoutMcpGrantsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.companiesUpdateToOneWithWhereWithoutMcpGrantsInput, Prisma.companiesUpdateWithoutMcpGrantsInput>, Prisma.companiesUncheckedUpdateWithoutMcpGrantsInput>
 }
 
+export type companiesCreateWithoutOwnedTreasurySharesInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutCompanyInput
+  arcaSettings?: Prisma.company_arca_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsCreateNestedManyWithoutCompanyInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutCompanyInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
+  subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
+  moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
+}
+
+export type companiesUncheckedCreateWithoutOwnedTreasurySharesInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutCompanyInput
+  arcaSettings?: Prisma.company_arca_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedCreateNestedManyWithoutCompanyInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutCompanyInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
+  subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
+  moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
+}
+
+export type companiesCreateOrConnectWithoutOwnedTreasurySharesInput = {
+  where: Prisma.companiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.companiesCreateWithoutOwnedTreasurySharesInput, Prisma.companiesUncheckedCreateWithoutOwnedTreasurySharesInput>
+}
+
+export type companiesCreateWithoutReceivedTreasurySharesInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutCompanyInput
+  arcaSettings?: Prisma.company_arca_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsCreateNestedManyWithoutCompanyInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutCompanyInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
+  subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
+  moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
+}
+
+export type companiesUncheckedCreateWithoutReceivedTreasurySharesInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutCompanyInput
+  arcaSettings?: Prisma.company_arca_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedCreateNestedManyWithoutCompanyInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutCompanyInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
+  subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
+  moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
+}
+
+export type companiesCreateOrConnectWithoutReceivedTreasurySharesInput = {
+  where: Prisma.companiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.companiesCreateWithoutReceivedTreasurySharesInput, Prisma.companiesUncheckedCreateWithoutReceivedTreasurySharesInput>
+}
+
+export type companiesUpsertWithoutOwnedTreasurySharesInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutOwnedTreasurySharesInput, Prisma.companiesUncheckedUpdateWithoutOwnedTreasurySharesInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutOwnedTreasurySharesInput, Prisma.companiesUncheckedCreateWithoutOwnedTreasurySharesInput>
+  where?: Prisma.companiesWhereInput
+}
+
+export type companiesUpdateToOneWithWhereWithoutOwnedTreasurySharesInput = {
+  where?: Prisma.companiesWhereInput
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutOwnedTreasurySharesInput, Prisma.companiesUncheckedUpdateWithoutOwnedTreasurySharesInput>
+}
+
+export type companiesUpdateWithoutOwnedTreasurySharesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutCompanyNestedInput
+  arcaSettings?: Prisma.company_arca_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUpdateManyWithoutCompanyNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutCompanyNestedInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
+  subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
+  moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
+}
+
+export type companiesUncheckedUpdateWithoutOwnedTreasurySharesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutCompanyNestedInput
+  arcaSettings?: Prisma.company_arca_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedUpdateManyWithoutCompanyNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutCompanyNestedInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
+  subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
+  moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
+}
+
+export type companiesUpsertWithoutReceivedTreasurySharesInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutReceivedTreasurySharesInput, Prisma.companiesUncheckedUpdateWithoutReceivedTreasurySharesInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutReceivedTreasurySharesInput, Prisma.companiesUncheckedCreateWithoutReceivedTreasurySharesInput>
+  where?: Prisma.companiesWhereInput
+}
+
+export type companiesUpdateToOneWithWhereWithoutReceivedTreasurySharesInput = {
+  where?: Prisma.companiesWhereInput
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutReceivedTreasurySharesInput, Prisma.companiesUncheckedUpdateWithoutReceivedTreasurySharesInput>
+}
+
+export type companiesUpdateWithoutReceivedTreasurySharesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutCompanyNestedInput
+  arcaSettings?: Prisma.company_arca_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUpdateManyWithoutCompanyNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutCompanyNestedInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
+  subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
+  moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
+}
+
+export type companiesUncheckedUpdateWithoutReceivedTreasurySharesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutCompanyNestedInput
+  arcaSettings?: Prisma.company_arca_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedUpdateManyWithoutCompanyNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutCompanyNestedInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
+  subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
+  moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
+}
+
+export type companiesCreateWithoutSourceTreasuryOperationsInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutCompanyInput
+  arcaSettings?: Prisma.company_arca_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsCreateNestedManyWithoutCompanyInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutCompanyInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
+  subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
+  moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
+}
+
+export type companiesUncheckedCreateWithoutSourceTreasuryOperationsInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutCompanyInput
+  arcaSettings?: Prisma.company_arca_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedCreateNestedManyWithoutCompanyInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutCompanyInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
+  subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
+  moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
+}
+
+export type companiesCreateOrConnectWithoutSourceTreasuryOperationsInput = {
+  where: Prisma.companiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.companiesCreateWithoutSourceTreasuryOperationsInput, Prisma.companiesUncheckedCreateWithoutSourceTreasuryOperationsInput>
+}
+
+export type companiesCreateWithoutFundTreasuryOperationsInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesCreateNestedManyWithoutCompanyInput
+  arcaSettings?: Prisma.company_arca_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsCreateNestedManyWithoutCompanyInput
+  mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutCompanyInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
+  subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
+  moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+}
+
+export type companiesUncheckedCreateWithoutFundTreasuryOperationsInput = {
+  id?: string
+  name: string
+  tax_id?: string | null
+  vat_condition?: string | null
+  address?: string | null
+  email?: string | null
+  phone?: string | null
+  subdomain?: string | null
+  schema_name?: string | null
+  created_at?: Date | string
+  updated_at?: Date | string
+  deleted_at?: Date | string | null
+  created_by?: string | null
+  updated_by?: string | null
+  deleted_by?: string | null
+  companyUsers?: Prisma.company_usersUncheckedCreateNestedManyWithoutCompanyInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedCreateNestedManyWithoutCompanyInput
+  arcaSettings?: Prisma.company_arca_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedCreateNestedOneWithoutCompanyInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedCreateNestedManyWithoutCompanyInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutCompanyInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
+  subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
+  moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+}
+
+export type companiesCreateOrConnectWithoutFundTreasuryOperationsInput = {
+  where: Prisma.companiesWhereUniqueInput
+  create: Prisma.XOR<Prisma.companiesCreateWithoutFundTreasuryOperationsInput, Prisma.companiesUncheckedCreateWithoutFundTreasuryOperationsInput>
+}
+
+export type companiesUpsertWithoutSourceTreasuryOperationsInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutSourceTreasuryOperationsInput, Prisma.companiesUncheckedUpdateWithoutSourceTreasuryOperationsInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutSourceTreasuryOperationsInput, Prisma.companiesUncheckedCreateWithoutSourceTreasuryOperationsInput>
+  where?: Prisma.companiesWhereInput
+}
+
+export type companiesUpdateToOneWithWhereWithoutSourceTreasuryOperationsInput = {
+  where?: Prisma.companiesWhereInput
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutSourceTreasuryOperationsInput, Prisma.companiesUncheckedUpdateWithoutSourceTreasuryOperationsInput>
+}
+
+export type companiesUpdateWithoutSourceTreasuryOperationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutCompanyNestedInput
+  arcaSettings?: Prisma.company_arca_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUpdateManyWithoutCompanyNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutCompanyNestedInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
+  subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
+  moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
+}
+
+export type companiesUncheckedUpdateWithoutSourceTreasuryOperationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutCompanyNestedInput
+  arcaSettings?: Prisma.company_arca_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedUpdateManyWithoutCompanyNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutCompanyNestedInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
+  subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
+  moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
+}
+
+export type companiesUpsertWithoutFundTreasuryOperationsInput = {
+  update: Prisma.XOR<Prisma.companiesUpdateWithoutFundTreasuryOperationsInput, Prisma.companiesUncheckedUpdateWithoutFundTreasuryOperationsInput>
+  create: Prisma.XOR<Prisma.companiesCreateWithoutFundTreasuryOperationsInput, Prisma.companiesUncheckedCreateWithoutFundTreasuryOperationsInput>
+  where?: Prisma.companiesWhereInput
+}
+
+export type companiesUpdateToOneWithWhereWithoutFundTreasuryOperationsInput = {
+  where?: Prisma.companiesWhereInput
+  data: Prisma.XOR<Prisma.companiesUpdateWithoutFundTreasuryOperationsInput, Prisma.companiesUncheckedUpdateWithoutFundTreasuryOperationsInput>
+}
+
+export type companiesUpdateWithoutFundTreasuryOperationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUpdateManyWithoutCompanyNestedInput
+  arcaSettings?: Prisma.company_arca_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUpdateManyWithoutCompanyNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutCompanyNestedInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
+  subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
+  moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+}
+
+export type companiesUncheckedUpdateWithoutFundTreasuryOperationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  tax_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vat_condition?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subdomain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  schema_name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deleted_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  created_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updated_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted_by?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyUsers?: Prisma.company_usersUncheckedUpdateManyWithoutCompanyNestedInput
+  tablePreferences?: Prisma.user_table_preferencesUncheckedUpdateManyWithoutCompanyNestedInput
+  arcaSettings?: Prisma.company_arca_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportSettings?: Prisma.company_whatsapp_report_settingsUncheckedUpdateOneWithoutCompanyNestedInput
+  whatsappReportRuns?: Prisma.company_whatsapp_report_runsUncheckedUpdateManyWithoutCompanyNestedInput
+  mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutCompanyNestedInput
+  platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
+  subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
+  moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+}
+
 export type companiesCreateWithoutSubscriptionInput = {
   id?: string
   name: string
@@ -743,6 +1371,10 @@ export type companiesCreateWithoutSubscriptionInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutCompanyInput
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutSubscriptionInput = {
@@ -769,6 +1401,10 @@ export type companiesUncheckedCreateWithoutSubscriptionInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutCompanyInput
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutSubscriptionInput = {
@@ -811,6 +1447,10 @@ export type companiesUpdateWithoutSubscriptionInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutCompanyNestedInput
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutSubscriptionInput = {
@@ -837,6 +1477,10 @@ export type companiesUncheckedUpdateWithoutSubscriptionInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutCompanyNestedInput
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateWithoutModuleOverridesInput = {
@@ -863,6 +1507,10 @@ export type companiesCreateWithoutModuleOverridesInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutCompanyInput
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutModuleOverridesInput = {
@@ -889,6 +1537,10 @@ export type companiesUncheckedCreateWithoutModuleOverridesInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutCompanyInput
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutModuleOverridesInput = {
@@ -931,6 +1583,10 @@ export type companiesUpdateWithoutModuleOverridesInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutCompanyNestedInput
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutModuleOverridesInput = {
@@ -957,6 +1613,10 @@ export type companiesUncheckedUpdateWithoutModuleOverridesInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutCompanyNestedInput
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateWithoutCompanyUsersInput = {
@@ -983,6 +1643,10 @@ export type companiesCreateWithoutCompanyUsersInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutCompanyUsersInput = {
@@ -1009,6 +1673,10 @@ export type companiesUncheckedCreateWithoutCompanyUsersInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutCompanyUsersInput = {
@@ -1051,6 +1719,10 @@ export type companiesUpdateWithoutCompanyUsersInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutCompanyUsersInput = {
@@ -1077,6 +1749,10 @@ export type companiesUncheckedUpdateWithoutCompanyUsersInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateWithoutPlatformAdminScopesInput = {
@@ -1103,6 +1779,10 @@ export type companiesCreateWithoutPlatformAdminScopesInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutPlatformAdminScopesInput = {
@@ -1129,6 +1809,10 @@ export type companiesUncheckedCreateWithoutPlatformAdminScopesInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutPlatformAdminScopesInput = {
@@ -1171,6 +1855,10 @@ export type companiesUpdateWithoutPlatformAdminScopesInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutPlatformAdminScopesInput = {
@@ -1197,6 +1885,10 @@ export type companiesUncheckedUpdateWithoutPlatformAdminScopesInput = {
   mcpGrants?: Prisma.mcp_oauth_grantsUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateWithoutArcaSettingsInput = {
@@ -1223,6 +1915,10 @@ export type companiesCreateWithoutArcaSettingsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutArcaSettingsInput = {
@@ -1249,6 +1945,10 @@ export type companiesUncheckedCreateWithoutArcaSettingsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutArcaSettingsInput = {
@@ -1291,6 +1991,10 @@ export type companiesUpdateWithoutArcaSettingsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutArcaSettingsInput = {
@@ -1317,6 +2021,10 @@ export type companiesUncheckedUpdateWithoutArcaSettingsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateWithoutTablePreferencesInput = {
@@ -1343,6 +2051,10 @@ export type companiesCreateWithoutTablePreferencesInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutTablePreferencesInput = {
@@ -1369,6 +2081,10 @@ export type companiesUncheckedCreateWithoutTablePreferencesInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutTablePreferencesInput = {
@@ -1411,6 +2127,10 @@ export type companiesUpdateWithoutTablePreferencesInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutTablePreferencesInput = {
@@ -1437,6 +2157,10 @@ export type companiesUncheckedUpdateWithoutTablePreferencesInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateWithoutWhatsappReportSettingsInput = {
@@ -1463,6 +2187,10 @@ export type companiesCreateWithoutWhatsappReportSettingsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutWhatsappReportSettingsInput = {
@@ -1489,6 +2217,10 @@ export type companiesUncheckedCreateWithoutWhatsappReportSettingsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutWhatsappReportSettingsInput = {
@@ -1531,6 +2263,10 @@ export type companiesUpdateWithoutWhatsappReportSettingsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutWhatsappReportSettingsInput = {
@@ -1557,6 +2293,10 @@ export type companiesUncheckedUpdateWithoutWhatsappReportSettingsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateWithoutWhatsappReportRunsInput = {
@@ -1583,6 +2323,10 @@ export type companiesCreateWithoutWhatsappReportRunsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutWhatsappReportRunsInput = {
@@ -1609,6 +2353,10 @@ export type companiesUncheckedCreateWithoutWhatsappReportRunsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutWhatsappReportRunsInput = {
@@ -1651,6 +2399,10 @@ export type companiesUpdateWithoutWhatsappReportRunsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutWhatsappReportRunsInput = {
@@ -1677,6 +2429,10 @@ export type companiesUncheckedUpdateWithoutWhatsappReportRunsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesCreateWithoutMcpGrantsInput = {
@@ -1703,6 +2459,10 @@ export type companiesCreateWithoutMcpGrantsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesUncheckedCreateWithoutMcpGrantsInput = {
@@ -1729,6 +2489,10 @@ export type companiesUncheckedCreateWithoutMcpGrantsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedCreateNestedManyWithoutCompanyInput
   subscription?: Prisma.company_subscriptionsUncheckedCreateNestedOneWithoutCompanyInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedCreateNestedManyWithoutCompanyInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutOwner_companyInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedCreateNestedManyWithoutConsumer_companyInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutSource_companyInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedCreateNestedManyWithoutFund_companyInput
 }
 
 export type companiesCreateOrConnectWithoutMcpGrantsInput = {
@@ -1771,6 +2535,10 @@ export type companiesUpdateWithoutMcpGrantsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUpdateManyWithoutFund_companyNestedInput
 }
 
 export type companiesUncheckedUpdateWithoutMcpGrantsInput = {
@@ -1797,6 +2565,10 @@ export type companiesUncheckedUpdateWithoutMcpGrantsInput = {
   platformAdminScopes?: Prisma.platform_admin_company_scopesUncheckedUpdateManyWithoutCompanyNestedInput
   subscription?: Prisma.company_subscriptionsUncheckedUpdateOneWithoutCompanyNestedInput
   moduleOverrides?: Prisma.company_module_overridesUncheckedUpdateManyWithoutCompanyNestedInput
+  ownedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutOwner_companyNestedInput
+  receivedTreasuryShares?: Prisma.intercompany_treasury_sharesUncheckedUpdateManyWithoutConsumer_companyNestedInput
+  sourceTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutSource_companyNestedInput
+  fundTreasuryOperations?: Prisma.intercompany_treasury_operationsUncheckedUpdateManyWithoutFund_companyNestedInput
 }
 
 
@@ -1811,6 +2583,10 @@ export type CompaniesCountOutputType = {
   mcpGrants: number
   platformAdminScopes: number
   moduleOverrides: number
+  ownedTreasuryShares: number
+  receivedTreasuryShares: number
+  sourceTreasuryOperations: number
+  fundTreasuryOperations: number
 }
 
 export type CompaniesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1820,6 +2596,10 @@ export type CompaniesCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensi
   mcpGrants?: boolean | CompaniesCountOutputTypeCountMcpGrantsArgs
   platformAdminScopes?: boolean | CompaniesCountOutputTypeCountPlatformAdminScopesArgs
   moduleOverrides?: boolean | CompaniesCountOutputTypeCountModuleOverridesArgs
+  ownedTreasuryShares?: boolean | CompaniesCountOutputTypeCountOwnedTreasurySharesArgs
+  receivedTreasuryShares?: boolean | CompaniesCountOutputTypeCountReceivedTreasurySharesArgs
+  sourceTreasuryOperations?: boolean | CompaniesCountOutputTypeCountSourceTreasuryOperationsArgs
+  fundTreasuryOperations?: boolean | CompaniesCountOutputTypeCountFundTreasuryOperationsArgs
 }
 
 /**
@@ -1874,6 +2654,34 @@ export type CompaniesCountOutputTypeCountModuleOverridesArgs<ExtArgs extends run
   where?: Prisma.company_module_overridesWhereInput
 }
 
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountOwnedTreasurySharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.intercompany_treasury_sharesWhereInput
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountReceivedTreasurySharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.intercompany_treasury_sharesWhereInput
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountSourceTreasuryOperationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.intercompany_treasury_operationsWhereInput
+}
+
+/**
+ * CompaniesCountOutputType without action
+ */
+export type CompaniesCountOutputTypeCountFundTreasuryOperationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.intercompany_treasury_operationsWhereInput
+}
+
 
 export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1900,6 +2708,10 @@ export type companiesSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   platformAdminScopes?: boolean | Prisma.companies$platformAdminScopesArgs<ExtArgs>
   subscription?: boolean | Prisma.companies$subscriptionArgs<ExtArgs>
   moduleOverrides?: boolean | Prisma.companies$moduleOverridesArgs<ExtArgs>
+  ownedTreasuryShares?: boolean | Prisma.companies$ownedTreasurySharesArgs<ExtArgs>
+  receivedTreasuryShares?: boolean | Prisma.companies$receivedTreasurySharesArgs<ExtArgs>
+  sourceTreasuryOperations?: boolean | Prisma.companies$sourceTreasuryOperationsArgs<ExtArgs>
+  fundTreasuryOperations?: boolean | Prisma.companies$fundTreasuryOperationsArgs<ExtArgs>
   _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["companies"]>
 
@@ -1968,6 +2780,10 @@ export type companiesInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   platformAdminScopes?: boolean | Prisma.companies$platformAdminScopesArgs<ExtArgs>
   subscription?: boolean | Prisma.companies$subscriptionArgs<ExtArgs>
   moduleOverrides?: boolean | Prisma.companies$moduleOverridesArgs<ExtArgs>
+  ownedTreasuryShares?: boolean | Prisma.companies$ownedTreasurySharesArgs<ExtArgs>
+  receivedTreasuryShares?: boolean | Prisma.companies$receivedTreasurySharesArgs<ExtArgs>
+  sourceTreasuryOperations?: boolean | Prisma.companies$sourceTreasuryOperationsArgs<ExtArgs>
+  fundTreasuryOperations?: boolean | Prisma.companies$fundTreasuryOperationsArgs<ExtArgs>
   _count?: boolean | Prisma.CompaniesCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type companiesIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1985,6 +2801,10 @@ export type $companiesPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     platformAdminScopes: Prisma.$platform_admin_company_scopesPayload<ExtArgs>[]
     subscription: Prisma.$company_subscriptionsPayload<ExtArgs> | null
     moduleOverrides: Prisma.$company_module_overridesPayload<ExtArgs>[]
+    ownedTreasuryShares: Prisma.$intercompany_treasury_sharesPayload<ExtArgs>[]
+    receivedTreasuryShares: Prisma.$intercompany_treasury_sharesPayload<ExtArgs>[]
+    sourceTreasuryOperations: Prisma.$intercompany_treasury_operationsPayload<ExtArgs>[]
+    fundTreasuryOperations: Prisma.$intercompany_treasury_operationsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2405,6 +3225,10 @@ export interface Prisma__companiesClient<T, Null = never, ExtArgs extends runtim
   platformAdminScopes<T extends Prisma.companies$platformAdminScopesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$platformAdminScopesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$platform_admin_company_scopesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscription<T extends Prisma.companies$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$subscriptionArgs<ExtArgs>>): Prisma.Prisma__company_subscriptionsClient<runtime.Types.Result.GetResult<Prisma.$company_subscriptionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   moduleOverrides<T extends Prisma.companies$moduleOverridesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$moduleOverridesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$company_module_overridesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownedTreasuryShares<T extends Prisma.companies$ownedTreasurySharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$ownedTreasurySharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$intercompany_treasury_sharesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  receivedTreasuryShares<T extends Prisma.companies$receivedTreasurySharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$receivedTreasurySharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$intercompany_treasury_sharesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sourceTreasuryOperations<T extends Prisma.companies$sourceTreasuryOperationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$sourceTreasuryOperationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$intercompany_treasury_operationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  fundTreasuryOperations<T extends Prisma.companies$fundTreasuryOperationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.companies$fundTreasuryOperationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$intercompany_treasury_operationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3040,6 +3864,102 @@ export type companies$moduleOverridesArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.Company_module_overridesScalarFieldEnum | Prisma.Company_module_overridesScalarFieldEnum[]
+}
+
+/**
+ * companies.ownedTreasuryShares
+ */
+export type companies$ownedTreasurySharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the intercompany_treasury_shares
+   */
+  select?: Prisma.intercompany_treasury_sharesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the intercompany_treasury_shares
+   */
+  omit?: Prisma.intercompany_treasury_sharesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.intercompany_treasury_sharesInclude<ExtArgs> | null
+  where?: Prisma.intercompany_treasury_sharesWhereInput
+  orderBy?: Prisma.intercompany_treasury_sharesOrderByWithRelationInput | Prisma.intercompany_treasury_sharesOrderByWithRelationInput[]
+  cursor?: Prisma.intercompany_treasury_sharesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Intercompany_treasury_sharesScalarFieldEnum | Prisma.Intercompany_treasury_sharesScalarFieldEnum[]
+}
+
+/**
+ * companies.receivedTreasuryShares
+ */
+export type companies$receivedTreasurySharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the intercompany_treasury_shares
+   */
+  select?: Prisma.intercompany_treasury_sharesSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the intercompany_treasury_shares
+   */
+  omit?: Prisma.intercompany_treasury_sharesOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.intercompany_treasury_sharesInclude<ExtArgs> | null
+  where?: Prisma.intercompany_treasury_sharesWhereInput
+  orderBy?: Prisma.intercompany_treasury_sharesOrderByWithRelationInput | Prisma.intercompany_treasury_sharesOrderByWithRelationInput[]
+  cursor?: Prisma.intercompany_treasury_sharesWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Intercompany_treasury_sharesScalarFieldEnum | Prisma.Intercompany_treasury_sharesScalarFieldEnum[]
+}
+
+/**
+ * companies.sourceTreasuryOperations
+ */
+export type companies$sourceTreasuryOperationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the intercompany_treasury_operations
+   */
+  select?: Prisma.intercompany_treasury_operationsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the intercompany_treasury_operations
+   */
+  omit?: Prisma.intercompany_treasury_operationsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.intercompany_treasury_operationsInclude<ExtArgs> | null
+  where?: Prisma.intercompany_treasury_operationsWhereInput
+  orderBy?: Prisma.intercompany_treasury_operationsOrderByWithRelationInput | Prisma.intercompany_treasury_operationsOrderByWithRelationInput[]
+  cursor?: Prisma.intercompany_treasury_operationsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Intercompany_treasury_operationsScalarFieldEnum | Prisma.Intercompany_treasury_operationsScalarFieldEnum[]
+}
+
+/**
+ * companies.fundTreasuryOperations
+ */
+export type companies$fundTreasuryOperationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the intercompany_treasury_operations
+   */
+  select?: Prisma.intercompany_treasury_operationsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the intercompany_treasury_operations
+   */
+  omit?: Prisma.intercompany_treasury_operationsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.intercompany_treasury_operationsInclude<ExtArgs> | null
+  where?: Prisma.intercompany_treasury_operationsWhereInput
+  orderBy?: Prisma.intercompany_treasury_operationsOrderByWithRelationInput | Prisma.intercompany_treasury_operationsOrderByWithRelationInput[]
+  cursor?: Prisma.intercompany_treasury_operationsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Intercompany_treasury_operationsScalarFieldEnum | Prisma.Intercompany_treasury_operationsScalarFieldEnum[]
 }
 
 /**

@@ -420,6 +420,7 @@ model orden_venta_documents {
   delivery_address        String?   @db.VarChar(300)
   delivery_contact        String?   @db.VarChar(100)
   delivery_phone          String?   @db.VarChar(30)
+  delivery_phones         String[]  @default([]) @db.VarChar(30)
   delivery_time           String?   @db.VarChar(100)
   delivery_instructions   String?   @db.Text
   transport_provider      String?   @db.VarChar(100)
