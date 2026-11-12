@@ -403,7 +403,7 @@ export class CashBoxTransfersService {
         const account = await tx.bank_accounts.findUnique({ where: { id: fundId }, select: { balance: true } });
         if (!account) throw new NotFoundException('Cuenta bancaria de la transferencia no encontrada');
         const delta = Number((Number(current.balance_after) - Number(current.balance_before)).toFixed(2));
-        if (Number(account.balance) - delta < -0.01) {
+        if (delta > 0 && Number(account.balance) - delta < -0.01) {
           throw new BadRequestException('El fondo destino ya no tiene saldo suficiente. Reponé el importe y volvé a intentar.');
         }
         await this.bankMovements.cancelMovement(current.id, userId, tx);
@@ -421,7 +421,7 @@ export class CashBoxTransfersService {
         where: { cash_box_id_currency_code: { cash_box_id: fundId, currency_code: current.currency_code } },
       });
       const balanceAfterRemoval = Number((Number(balance?.balance ?? 0) - delta).toFixed(2));
-      if (balanceAfterRemoval < -0.01) {
+      if (delta > 0 && balanceAfterRemoval < -0.01) {
         throw new BadRequestException('El fondo destino ya no tiene saldo suficiente. Reponé el importe y volvé a intentar.');
       }
 
@@ -652,7 +652,19 @@ export class CashBoxTransfersService {
     });
     if (claim.count !== 1) throw new BadRequestException('La transferencia ya está siendo procesada o cambió de estado');
 
+    let destinationRemoved = false;
     try {
+      // El destino debe poder devolver los fondos antes de tocar el origen.
+      await this.removeOriginalTransferMovement(
+        destinationClient,
+        transfer.id,
+        transfer.dest_type,
+        transfer.dest_id,
+        'destination',
+        userId,
+      );
+      destinationRemoved = true;
+
       if (target) {
         await this.ensureReceivedTransfer(
           destinationClient,
@@ -669,14 +681,6 @@ export class CashBoxTransfersService {
         transfer.source_type,
         transfer.source_id,
         'source',
-        userId,
-      );
-      await this.removeOriginalTransferMovement(
-        destinationClient,
-        transfer.id,
-        transfer.dest_type,
-        transfer.dest_id,
-        'destination',
         userId,
       );
 
@@ -696,11 +700,33 @@ export class CashBoxTransfersService {
       });
     } catch (error: any) {
       const message = String(error?.message ?? error).slice(0, 500);
+      // Si el destino rechazó la anulación y conserva su movimiento, ninguno de los
+      // fondos cambió. Volver a Completada permite intentar anular cuando haya saldo.
+      let destinationStillActive = false;
+      if (!destinationRemoved && transfer.status === 'completed') {
+        const movements = transfer.dest_type === 'cash_box'
+          ? destinationClient.cash_box_movements
+          : destinationClient.bank_account_movements;
+        try {
+          destinationStillActive = Boolean(await movements.findFirst({
+            where: { reference_type: 'intercompany_transfer_destination', reference_id: id, deleted_at: null },
+            select: { id: true },
+          }));
+        } catch {
+          // Sin poder verificar el destino, conservar el estado de reintento es más seguro.
+        }
+      }
+      const restoreCompleted = transfer.status === 'completed' && !destinationRemoved && destinationStillActive;
       await this.prisma.cash_box_transfers.update({
         where: { id },
-        data: { status: 'reversing', execution_error: message, updated_at: new Date(), updated_by: userId },
+        data: {
+          status: restoreCompleted ? 'completed' : 'reversing',
+          execution_error: restoreCompleted ? null : message,
+          updated_at: new Date(),
+          updated_by: userId,
+        },
       });
-      if (target) {
+      if (target && !restoreCompleted) {
         try {
           await this.ensureReceivedTransfer(
             destinationClient,
