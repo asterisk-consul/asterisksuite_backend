@@ -5,6 +5,7 @@ import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { CurrentAccountsService } from './current-accounts.service';
 import { CreateCurrentAccountEntryDto } from './dto/create-current-account-entry.dto';
+import { CreateCurrentAccountWithholdingDto } from './dto/create-current-account-withholding.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/current-accounts')
@@ -15,6 +16,16 @@ export class CurrentAccountsController {
   @RequirePermissions('treasury.current_accounts.create')
   addEntry(@Body() dto: CreateCurrentAccountEntryDto, @CurrentUser() user: AuthUser) {
     return this.currentAccountsService.addEntry(dto, user.id);
+  }
+
+  @Post('party/:partyId/withholdings')
+  @RequirePermissions('treasury.current_accounts.create')
+  registerWithholdings(
+    @Param('partyId') partyId: string,
+    @Body() dto: CreateCurrentAccountWithholdingDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.currentAccountsService.registerWithholdings(partyId, dto, user.id);
   }
 
   @Delete('party/:partyId/opening-balance')

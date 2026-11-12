@@ -49,6 +49,15 @@ export class SalesController {
   }
 
   @RequirePermissions('sales-reports.read')
+  @Get('product-lines/:id')
+  getProductReportLines(
+    @Param('id') id: string,
+    @Query() query: QuerySalesDto,
+  ) {
+    return this.salesService.getProductReportLines(id, query);
+  }
+
+  @RequirePermissions('sales-reports.read')
   @Get('sales-documents')
   getPurchaseDocuments(
     @Query() query: QuerySalesDto,

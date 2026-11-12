@@ -49,6 +49,15 @@ export class PurchasesController {
   }
 
   @RequirePermissions('purchases.read')
+  @Get('product-lines/:id')
+  getProductReportLines(
+    @Param('id') id: string,
+    @Query() query: QueryPurchasesDto,
+  ) {
+    return this.purchasesService.getProductReportLines(id, query);
+  }
+
+  @RequirePermissions('purchases.read')
   @Get('purchases-documents')
   getPurchaseDocuments(
     @Query() query: QueryPurchasesDto,

@@ -3,6 +3,9 @@ export interface ProductSummaryDto {
   productCode: string;
   productName: string;
   productCategory: string;
+  unitLabel: string;
+  currencyCode: string;
+  totalQuantity: number;
   totalSales: number;
   totalTaxes: number;
   totalExempt: number;

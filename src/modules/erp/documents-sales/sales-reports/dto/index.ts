@@ -7,3 +7,4 @@ export * from './product-sales-detail-response.dto';
 export * from './sales-movement-response.dto';
 export * from './query-sales.dto';
 export * from './available-product-response.dto';
+export * from './product-report-lines.dto';

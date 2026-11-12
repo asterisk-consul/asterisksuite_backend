@@ -1,9 +1,13 @@
-import { IsOptional, IsDateString, IsUUID, IsEnum } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsOptional, IsDateString, IsUUID, IsEnum, IsInt, Min, Max } from 'class-validator';
 
 export enum DocumentTypeFilter {
   INVOICE = 'INVOICE',
   CREDIT_NOTE = 'CREDIT_NOTE',
   DEBIT_NOTE = 'DEBIT_NOTE',
+  ORDER = 'ORDER',
+  QUOTE = 'QUOTE',
+  REMITO = 'REMITO',
 }
 
 export class QuerySalesDto {
@@ -26,4 +30,17 @@ export class QuerySalesDto {
   @IsOptional()
   @IsEnum(DocumentTypeFilter)
   documentTypeFilter?: DocumentTypeFilter;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(100)
+  pageSize?: number;
 }

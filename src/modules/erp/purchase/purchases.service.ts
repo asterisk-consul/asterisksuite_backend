@@ -17,6 +17,7 @@ import {
 } from './dto/query-purchases.dto';
 import { PurchasesDocumentsResponseDto } from './dto/documents_purchases/purchases-documents-response';
 import { GlobalPurchaseDocumentsResponseDto } from './dto/documents_purchases/global-purchases-documents';
+import { ProductReportLinesResponseDto } from './dto/product-report-lines.dto';
 
 /**
  * Acumulador interno para calcular totales por producto
@@ -113,6 +114,9 @@ export class PurchasesService {
     [DocumentTypeFilter.INVOICE]: 'INVOICE',
     [DocumentTypeFilter.CREDIT_NOTE]: 'CREDIT_NOTE',
     [DocumentTypeFilter.DEBIT_NOTE]: 'DEBIT_NOTE',
+    [DocumentTypeFilter.ORDER]: 'ORDER',
+    [DocumentTypeFilter.QUOTE]: 'QUOTE',
+    [DocumentTypeFilter.REMITO]: 'REMITO',
   };
 
   async getPurchaseSummary(
@@ -128,28 +132,47 @@ export class PurchasesService {
           ...(whereCondition.document_types ?? {}),
         },
       },
-      include: {
+      select: {
+        date: true,
+        currency_code: true,
+        subtotal: true,
+        exempt_amount: true,
         document_items: {
-          include: {
-            products: true,
+          where: { deleted_at: null },
+          select: {
+            quantity: true,
+            price: true,
+            products: {
+              select: {
+                id: true,
+                sku: true,
+                name: true,
+                unit: { select: { name: true, symbol: true } },
+                product_categories: {
+                  where: { deleted_at: null },
+                  select: {
+                    categories: { select: { name: true, sort_order: true } },
+                  },
+                },
+              },
+            },
           },
         },
-        document_taxes: {
-          include: {
-            taxes: true,
-          },
-        },
-        business_parties: true,
-        document_types: true,
+        document_taxes: { select: { tax_amount: true } },
+        document_types: { select: { category: true } },
       },
     });
 
     const productTotals = new Map<
       string,
       {
-        productId: number;
+        productId: string;
         productCode: string;
         productName: string;
+        productCategory: string;
+        unitLabel: string;
+        currencyCode: string;
+        totalQuantity: number;
         totalPurchases: number;
         totalTaxes: number;
         totalExempt: number;
@@ -168,25 +191,42 @@ export class PurchasesService {
       const sign = this.getDocumentSign(doc.document_types.category);
       const isInvoice = sign === 1;
 
-      const documentSubtotal = Number(doc.subtotal) * sign;
+      const documentSubtotal = Number(doc.subtotal);
 
       for (const item of doc.document_items) {
         if (!item.products) continue;
 
         const productId = item.products.id;
         const product = item.products;
+        const currencyCode = doc.currency_code || 'ARS';
+        const categories = product.product_categories
+          .map((relation) => relation.categories)
+          .filter((category): category is NonNullable<typeof category> => Boolean(category))
+          .sort((a, b) => a.sort_order - b.sort_order)
+          .map((category) => category.name.trim())
+          .filter(Boolean);
+        const productCategory = categories.length
+          ? [...new Set(categories)].join(' / ')
+          : 'Sin categoría';
+        const key = `${productId}:${currencyCode}`;
 
-        const itemValue = Number(item.quantity) * Number(item.price);
+        // `document_items.price` guarda el subtotal del renglón (cantidad × precio unitario).
+        // No volver a multiplicarlo por la cantidad: eso inflaba el reporte al cuadrado.
+        const itemValue = Number(item.price);
 
         const proportion =
           documentSubtotal !== 0 ? itemValue / documentSubtotal : 0;
 
         const productValue = itemValue * sign;
 
-        const current = productTotals.get(productId) || {
-          productId: parseInt(productId),
+        const current = productTotals.get(key) || {
+          productId,
           productCode: product.sku || '',
           productName: product.name,
+          productCategory,
+          unitLabel: product.unit?.symbol || product.unit?.name || '',
+          currencyCode,
+          totalQuantity: 0,
           totalPurchases: 0,
           totalTaxes: 0,
           totalExempt: 0,
@@ -206,6 +246,7 @@ export class PurchasesService {
           Number(doc.exempt_amount || 0) * proportion * sign;
 
         current.totalPurchases += productValue;
+        current.totalQuantity += Number(item.quantity) * sign;
         current.totalTaxes += productTaxes;
         current.totalExempt += productExempt;
         current.transactionCount += 1;
@@ -228,16 +269,19 @@ export class PurchasesService {
           current.lastPurchaseDate = docDate;
         }
 
-        productTotals.set(productId, current);
+        productTotals.set(key, current);
       }
     }
 
     const products: ProductSummaryDto[] = Array.from(productTotals.entries())
-      .map(([productId, data]) => ({
-        productId,
+      .map(([, data]) => ({
+        productId: data.productId,
         productCode: data.productCode,
         productName: data.productName,
-        productCategory: '',
+        productCategory: data.productCategory,
+        unitLabel: data.unitLabel,
+        currencyCode: data.currencyCode,
+        totalQuantity: data.totalQuantity,
         totalPurchases: data.totalPurchases,
         totalTaxes: data.totalTaxes,
         totalExempt: data.totalExempt,
@@ -358,7 +402,7 @@ export class PurchasesService {
 
       const productTotal =
         doc.document_items.reduce((sum, item) => {
-          const itemValue = Number(item.quantity) * Number(item.price);
+          const itemValue = Number(item.price);
           return sum + itemValue;
         }, 0) * sign;
 
@@ -366,8 +410,12 @@ export class PurchasesService {
       for (const item of doc.document_items) {
         if (!item.products) continue;
 
-        const itemValue = Number(item.quantity) * Number(item.price);
+        const itemValue = Number(item.price);
         movements.push({
+          documentId: doc.id,
+          documentStatus: doc.status,
+          documentCategory: doc.document_types.category,
+          currencyCode: doc.currency_code || 'ARS',
           ref: doc.ref || '',
           number: doc.number?.toString() || '',
           date: doc.date,
@@ -544,7 +592,7 @@ export class PurchasesService {
       for (const item of doc.document_items) {
         if (!item.products) continue;
 
-        const itemValue = Number(item.quantity) * Number(item.price);
+        const itemValue = Number(item.price);
 
         movements.push({
           ref: doc.ref || '',
@@ -583,6 +631,104 @@ export class PurchasesService {
     }
 
     return movements;
+  }
+
+  async getProductReportLines(
+    id: string,
+    query: QueryPurchasesDto,
+  ): Promise<ProductReportLinesResponseDto> {
+    const filters = Object.fromEntries(
+      Object.entries(query).filter(([key]) => !['productId', 'page', 'pageSize'].includes(key)),
+    ) as QueryPurchasesDto;
+    const documentWhere = this.buildWhereCondition(filters);
+    const where = {
+      product_id: id,
+      deleted_at: null,
+      documents: {
+        ...documentWhere,
+        document_types: {
+          active: true,
+          ...(documentWhere.document_types ?? {}),
+        },
+      },
+    };
+    const page = query.page ?? 1;
+    const pageSize = query.pageSize ?? 25;
+
+    const [total, items] = await Promise.all([
+      this.prisma.document_items.count({ where }),
+      this.prisma.document_items.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: [{ documents: { date: 'desc' } }, { created_at: 'desc' }],
+        select: {
+          id: true,
+          quantity: true,
+          price: true,
+          document_item_taxes: {
+            where: { deleted_at: null },
+            select: { tax_amount: true },
+          },
+          documents: {
+            select: {
+              id: true,
+              number: true,
+              date: true,
+              status: true,
+              ref: true,
+              currency_code: true,
+              subtotal: true,
+              total_taxes: true,
+              exempt_amount: true,
+              document_types: {
+                select: { code: true, description: true, category: true },
+              },
+              business_parties: { select: { name: true } },
+            },
+          },
+        },
+      }),
+    ]);
+
+    return {
+      page,
+      pageSize,
+      total,
+      items: items.map((item) => {
+        const document = item.documents;
+        const sign = this.getDocumentSign(document.document_types?.category ?? null);
+        const rawNet = Number(item.price);
+        const proportion = Number(document.subtotal) !== 0
+          ? rawNet / Number(document.subtotal)
+          : 0;
+        const rawTax = item.document_item_taxes.length
+          ? item.document_item_taxes.reduce((sum, tax) => sum + Number(tax.tax_amount), 0)
+          : Number(document.total_taxes) * proportion;
+        const netAmount = rawNet * sign;
+        const taxAmount = rawTax * sign;
+        const totalAmount = netAmount + taxAmount + Number(document.exempt_amount ?? 0) * proportion * sign;
+
+        return {
+          id: item.id,
+          documentId: document.id,
+          documentDate: document.date,
+          documentNumber: String(document.number),
+          documentReference: document.ref || String(document.number),
+          documentTypeCode: document.document_types?.code || '',
+          documentTypeName: document.document_types?.description || 'Comprobante',
+          documentCategory: document.document_types?.category ?? null,
+          documentStatus: document.status,
+          partyName: document.business_parties?.name || 'Sin tercero',
+          currencyCode: document.currency_code || 'ARS',
+          quantity: Number(item.quantity) * sign,
+          unitPrice: Number(item.price),
+          netAmount,
+          taxAmount,
+          totalAmount,
+        };
+      }),
+    };
   }
 
   async getPurchaseDocuments(
@@ -705,7 +851,7 @@ export class PurchasesService {
   }
 
   private buildWhereCondition(query: QueryPurchasesDto): any {
-    const where: any = {};
+    const where: any = { deleted_at: null };
     if (query.documentTypeFilter) {
       const category = this.categoryMap[query.documentTypeFilter];
       where.document_types = { direction: -1, category };
@@ -738,6 +884,7 @@ export class PurchasesService {
         where.document_items = {
           some: {
             product_id: query.productId.toString(),
+            deleted_at: null,
           },
         };
       }

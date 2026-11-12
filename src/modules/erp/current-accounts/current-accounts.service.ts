@@ -1,8 +1,10 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { CreateCurrentAccountEntryDto } from './dto/create-current-account-entry.dto';
+import { CreateCurrentAccountWithholdingDto } from './dto/create-current-account-withholding.dto';
 import { CurrencyConversionService } from '../currencies/currency-conversion.service';
 import { parseLocalDateTime } from '@/common/utils/dates';
+import { getCurrentCompanyId } from '@/common/context/request-context.helpers';
 import { recalculateCurrentAccountLedger, removeDocumentAccountEffects } from './current-account-ledger';
 
 const STATUS_CANCELLED = 3;
@@ -126,6 +128,170 @@ export class CurrentAccountsService {
     await recalculateCurrentAccountLedger(prisma, account.id);
 
     return entry;
+  }
+
+  async registerWithholdings(partyId: string, dto: CreateCurrentAccountWithholdingDto, userId: string) {
+    if (partyId !== dto.party_id) {
+      throw new BadRequestException('La parte interesada de la retención no coincide con la cuenta corriente');
+    }
+    if (!dto.withholdings?.length) {
+      throw new BadRequestException('Agregá al menos una retención');
+    }
+
+    const companyId = getCurrentCompanyId();
+    if (!companyId) throw new BadRequestException('No se pudo resolver la empresa del contexto');
+
+    const entryDate = parseLocalDateTime(dto.date);
+    const currencyCode = dto.currency_code.trim().toUpperCase();
+    const totalWithheld = Number(dto.withholdings
+      .reduce((sum, withholding) => sum + Number(withholding.withheld_amount), 0)
+      .toFixed(2));
+    if (!Number.isFinite(totalWithheld) || totalWithheld <= 0) {
+      throw new BadRequestException('El total de las retenciones debe ser mayor a cero');
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const party = await tx.business_parties.findFirst({
+        where: { id: partyId, deleted_at: null },
+        select: { id: true, type: true, roles: { where: { active: true }, select: { role: true } } },
+      });
+      if (!party) throw new NotFoundException('Cliente o proveedor no encontrado');
+      const allowedPartyTypes = ['CUSTOMER', 'SUPPLIER', 'SERVICE_PROVIDER', 'UTILITY', 'FINANCIAL', 'TAX_AUTHORITY'];
+      const partyTypes = new Set<string>([party.type, ...party.roles.map((role) => role.role)]);
+      if (!allowedPartyTypes.includes(dto.party_type) || !partyTypes.has(dto.party_type)) {
+        throw new BadRequestException('La retención directa solo está disponible para clientes, proveedores y entidades habilitadas');
+      }
+
+      const currentAccount = await tx.current_accounts.findUnique({ where: { party_id: partyId }, select: { id: true } });
+      if (currentAccount) {
+        await tx.$queryRaw`SELECT id FROM tenant.current_accounts WHERE id = ${currentAccount.id}::uuid FOR UPDATE`;
+      }
+
+      let openingBalanceDocument: any = null;
+      let appliedDocumentAmount = 0;
+      let documentExchangeRate: number | null = null;
+      if (dto.opening_balance_document_id) {
+        await tx.$queryRaw`SELECT id FROM tenant.documents WHERE id = ${dto.opening_balance_document_id}::uuid FOR UPDATE`;
+        openingBalanceDocument = await tx.documents.findFirst({
+          where: { id: dto.opening_balance_document_id, deleted_at: null, party_id: partyId },
+          include: {
+            document_types: { select: { category: true, direction: true, affects_payment: true } },
+          },
+        });
+        if (!openingBalanceDocument) throw new NotFoundException('Saldo inicial no encontrado para este tercero');
+        if (openingBalanceDocument.document_types?.category !== 'OPENING_BALANCE'
+          || !openingBalanceDocument.document_types?.affects_payment
+          || openingBalanceDocument.commercial_operation_id) {
+          throw new BadRequestException('Solo se puede imputar una retención directa al documento de saldo inicial de la cuenta');
+        }
+        if (Number(openingBalanceDocument.status) !== 2) {
+          throw new BadRequestException('El documento de saldo inicial no está confirmado');
+        }
+        if (Number(openingBalanceDocument.total) <= 0) {
+          throw new BadRequestException('Este saldo inicial no representa un importe pendiente de cobro o pago');
+        }
+
+        const documentCurrency = String(openingBalanceDocument.currency_code ?? currencyCode).toUpperCase();
+        documentExchangeRate = dto.exchange_rate && dto.exchange_rate > 0
+          ? dto.exchange_rate
+          : openingBalanceDocument.exchange_rate == null ? null : Number(openingBalanceDocument.exchange_rate);
+        appliedDocumentAmount = this.convertWithholdingAmount(totalWithheld, currencyCode, documentCurrency, documentExchangeRate);
+        const pending = Math.max(0, Number(openingBalanceDocument.total) - Number(openingBalanceDocument.paid_amount));
+        if (appliedDocumentAmount > pending + 0.01) {
+          throw new BadRequestException(`La retención convertida (${appliedDocumentAmount.toFixed(2)} ${documentCurrency}) supera el saldo inicial pendiente (${pending.toFixed(2)} ${documentCurrency})`);
+        }
+      }
+
+      const created: any[] = [];
+      for (const withholding of dto.withholdings) {
+        const row = await tx.withholdings.create({
+          data: {
+            company_id: companyId,
+            business_party_id: partyId,
+            direction: dto.party_type === 'CUSTOMER' ? 'SUFRIDA' : 'PRACTICADA',
+            payment_id: null,
+            tax_type: withholding.tax_type,
+            jurisdiction_id: withholding.jurisdiction_id ?? null,
+            withholding_concept_id: withholding.withholding_concept_id ?? null,
+            tax_rule_id: withholding.tax_rule_id ?? null,
+            base_amount: withholding.base_amount,
+            rate: withholding.rate ?? null,
+            withheld_amount: withholding.withheld_amount,
+            automatic_amount: withholding.automatic_amount ?? (withholding.manual_amount != null ? null : withholding.withheld_amount),
+            manual_amount: withholding.manual_amount ?? null,
+            currency_code: currencyCode,
+            exchange_rate: dto.exchange_rate ?? null,
+            certificate_number: withholding.certificate_number?.trim() || null,
+            certificate_date: withholding.certificate_date ? parseLocalDateTime(withholding.certificate_date) : null,
+            status: 'APPLIED',
+            date: entryDate,
+            observations: [dto.description?.trim(), withholding.observations?.trim()].filter(Boolean).join(' · ') || null,
+            created_by: userId,
+            ...(openingBalanceDocument ? {
+              allocations: {
+                create: [{
+                  document_id: openingBalanceDocument.id,
+                  allocated_amount: withholding.withheld_amount,
+                  created_by: userId,
+                }],
+              },
+            } : {}),
+          },
+        });
+
+        const entry = await this.addEntry({
+          party_id: partyId,
+          party_type: dto.party_type,
+          currency_code: currencyCode,
+          type: 'WITHHOLDING',
+          amount: Number(withholding.withheld_amount),
+          exchange_rate: dto.exchange_rate,
+          rate_type: dto.rate_type,
+          description: `Retención ${withholding.tax_type}${withholding.certificate_number ? ` · Cert. ${withholding.certificate_number}` : ''}${openingBalanceDocument ? ` · Saldo inicial #${openingBalanceDocument.number}` : ''}`,
+          reference_type: 'withholding',
+          reference_id: row.id,
+          date: dto.date,
+        }, userId, tx);
+        created.push({ withholding: row, entry });
+      }
+
+      if (openingBalanceDocument) {
+        const convertedPaidIncrement = openingBalanceDocument.currency_code?.toUpperCase() === 'ARS'
+          ? appliedDocumentAmount
+          : openingBalanceDocument.exchange_rate != null
+            ? Number((appliedDocumentAmount * Number(openingBalanceDocument.exchange_rate)).toFixed(2))
+            : null;
+        await tx.documents.update({
+          where: { id: openingBalanceDocument.id },
+          data: {
+            paid_amount: { increment: appliedDocumentAmount },
+            ...(openingBalanceDocument.converted_paid_amount != null && convertedPaidIncrement != null
+              ? { converted_paid_amount: { increment: convertedPaidIncrement } }
+              : {}),
+            updated_at: new Date(),
+            updated_by: userId,
+          },
+        });
+      }
+
+      return {
+        withholdings: created.map(({ withholding }) => withholding),
+        entries: created.map(({ entry }) => entry),
+        total_withheld: totalWithheld,
+        document_amount_applied: appliedDocumentAmount,
+      };
+    }, { timeout: 15_000 });
+  }
+
+  private convertWithholdingAmount(amount: number, fromCurrency: string, toCurrency: string, exchangeRate: number | null) {
+    const from = fromCurrency.toUpperCase();
+    const to = toCurrency.toUpperCase();
+    if (from === to) return Number(amount.toFixed(2));
+    if (!['ARS', 'USD'].includes(from) || !['ARS', 'USD'].includes(to) || !exchangeRate || exchangeRate <= 0) {
+      throw new BadRequestException(`Falta un tipo de cambio válido para aplicar la retención de ${from} a ${to}`);
+    }
+    if (from === 'USD' && to === 'ARS') return Number((amount * exchangeRate).toFixed(2));
+    return Number((amount / exchangeRate).toFixed(2));
   }
 
   private async addOpeningBalance(dto: CreateCurrentAccountEntryDto, userId: string) {

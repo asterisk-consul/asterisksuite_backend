@@ -113,7 +113,14 @@ export class FiscalController {
     const ids = [...new Set(dto.withholding_ids)]
     if (ids.length !== dto.withholding_ids.length) throw new BadRequestException('Hay retenciones repetidas en la selección')
     const selected = await this.prisma.withholdings.findMany({
-      where: { id: { in: ids }, deleted_at: null, remittance_id: null, direction: 'PRACTICADA', status: { in: ['APPLIED', 'CERTIFIED'] }, payment: { status: { in: ['CONFIRMED', 'PAID'] } } },
+      where: {
+        id: { in: ids }, deleted_at: null, remittance_id: null,
+        direction: 'PRACTICADA', status: { in: ['APPLIED', 'CERTIFIED'] },
+        OR: [
+          { payment: { status: { in: ['CONFIRMED', 'PAID'] } } },
+          { payment_id: null },
+        ],
+      },
       select: { id: true, tax_type: true, jurisdiction_id: true, currency_code: true, date: true, withheld_amount: true },
       take: 201,
     })

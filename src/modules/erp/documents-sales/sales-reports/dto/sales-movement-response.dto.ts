@@ -1,6 +1,10 @@
 // src/modules/erp/purchases/dto/purchase-movement-response.dto.ts
 
 export interface SalesMovementResponseDto {
+  documentId?: string;
+  documentStatus?: number;
+  documentCategory?: string | null;
+  currencyCode?: string;
   ref: string;
   number: string;
   date: Date;
