@@ -287,14 +287,78 @@ export class ManagementReportsService {
       companies.push(company);
     }
     companies.sort((a, b) => a.company_name.localeCompare(b.company_name, 'es'));
+    const view = dto.view ?? 'consolidated';
+    const scopedCompanies = view === 'consolidated'
+      ? companies
+      : companies.map((company) => this.projectCompanyToView(company, view));
 
     return {
       generated_at: new Date().toISOString(),
-      view: dto.view ?? 'consolidated',
+      view,
       period: { from: dto.date_from, to: dto.date_to },
       currency_note: 'Los importes se presentan separados por moneda para evitar conversiones incorrectas.',
-      companies,
-      consolidated: this.consolidateCompanies(companies),
+      companies: scopedCompanies,
+      consolidated: this.consolidateCompanies(scopedCompanies),
+    };
+  }
+
+  private projectCompanyToView(company: ConsolidatedCompany, view: ConsolidatedReportView): ConsolidatedCompany {
+    const metricsByView: Record<Exclude<ConsolidatedReportView, 'consolidated'>, Array<keyof Pick<ConsolidatedCompany, 'sales' | 'purchases' | 'collections' | 'payments' | 'receivables' | 'payables' | 'banks' | 'cash' | 'pending_checks'>>> = {
+      customers: ['sales', 'collections', 'receivables'],
+      suppliers: ['purchases', 'payments', 'payables'],
+      hr: [],
+      treasury: ['collections', 'payments', 'banks', 'cash', 'pending_checks'],
+      documents: ['sales', 'purchases'],
+      inventory: [],
+    };
+    const detailKeysByView: Record<Exclude<ConsolidatedReportView, 'consolidated'>, Array<keyof ConsolidatedCompany['details']>> = {
+      customers: ['party_summary', 'collections_by_party', 'customer_balances', 'documents'],
+      suppliers: ['party_summary', 'payments_by_party', 'supplier_balances', 'obligations', 'documents'],
+      hr: ['hr_vales', 'employees', 'partners'],
+      treasury: ['payment_statuses', 'checks', 'treasury_movements', 'transfers', 'treasury_variation', 'bank_accounts', 'cash_boxes'],
+      documents: ['documents'],
+      inventory: ['inventory_orders', 'stock_movements'],
+    };
+    const metricKeys = new Set(metricsByView[view as Exclude<ConsolidatedReportView, 'consolidated'>]);
+    const detailKeys = new Set(detailKeysByView[view as Exclude<ConsolidatedReportView, 'consolidated'>]);
+    const details = Object.fromEntries(
+      Object.entries(company.details).map(([key, value]) => [key, detailKeys.has(key as keyof ConsolidatedCompany['details']) ? value : []]),
+    ) as ConsolidatedCompany['details'];
+
+    if (view === 'customers') {
+      details.party_summary = details.party_summary.filter((row) => row.role === 'CUSTOMER');
+      details.documents = details.documents.filter((row) => row.direction === 'SALE');
+    } else if (view === 'suppliers') {
+      details.party_summary = details.party_summary.filter((row) => row.role === 'SUPPLIER');
+      details.documents = details.documents.filter((row) => row.direction === 'PURCHASE');
+    }
+
+    const countKeysByView: Record<Exclude<ConsolidatedReportView, 'consolidated'>, Array<keyof ConsolidatedCompany['counts']>> = {
+      customers: ['sales', 'collections'],
+      suppliers: ['purchases', 'payments'],
+      hr: [],
+      treasury: ['collections', 'payments', 'pending_checks'],
+      documents: ['sales', 'purchases'],
+      inventory: [],
+    };
+    const countKeys = new Set(countKeysByView[view as Exclude<ConsolidatedReportView, 'consolidated'>]);
+    const counts = Object.fromEntries(
+      Object.entries(company.counts).map(([key, value]) => [key, countKeys.has(key as keyof ConsolidatedCompany['counts']) ? value : 0]),
+    ) as ConsolidatedCompany['counts'];
+
+    return {
+      ...company,
+      sales: metricKeys.has('sales') ? company.sales : {},
+      purchases: metricKeys.has('purchases') ? company.purchases : {},
+      collections: metricKeys.has('collections') ? company.collections : {},
+      payments: metricKeys.has('payments') ? company.payments : {},
+      receivables: metricKeys.has('receivables') ? company.receivables : {},
+      payables: metricKeys.has('payables') ? company.payables : {},
+      banks: metricKeys.has('banks') ? company.banks : {},
+      cash: metricKeys.has('cash') ? company.cash : {},
+      pending_checks: metricKeys.has('pending_checks') ? company.pending_checks : {},
+      counts,
+      details: { ...details, narratives: [], alerts: [] },
     };
   }
 

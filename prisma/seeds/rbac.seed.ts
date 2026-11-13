@@ -55,7 +55,7 @@ async function main() {
   for (const perm of RBAC_PERMISSIONS) {
     await prisma.permissions.upsert({
       where: { code: perm.code },
-      update: {},
+      update: perm.code === 'management_reports.read' ? { description: perm.description } : {},
       create: { code: perm.code, description: perm.description },
     });
   }

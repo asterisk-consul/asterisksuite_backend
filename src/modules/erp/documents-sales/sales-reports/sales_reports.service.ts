@@ -794,11 +794,11 @@ export class SalesService {
           ...(whereCondition.document_types ?? {}),
         },
       },
-      include: {
-        document_types: {
-          include: { document_sequences: true },
-        },
-        document_sequences: true,
+      select: {
+        total: true,
+        currency_code: true,
+        document_types: { select: { code: true, category: true, document_sequences: { select: { point_of_sale: true } } } },
+        document_sequences: { select: { point_of_sale: true } },
       },
       orderBy: { date: 'desc' },
     });
@@ -807,7 +807,8 @@ export class SalesService {
       point_of_sale: string;
       count: number;
       total: number;
-      docTypeCounts: Map<string, number>;
+      currency_code: string;
+      docTypes: Map<string, { count: number; total: number }>;
     }>();
 
     for (const doc of documents) {
@@ -817,23 +818,28 @@ export class SalesService {
         doc.document_sequences?.point_of_sale ??
         doc.document_types?.document_sequences?.point_of_sale ??
         'S/PV';
-      const existing = pvMap.get(pv);
+      const currency = doc.currency_code?.trim().toUpperCase() || 'ARS';
+      const key = `${pv}|${currency}`;
+      const existing = pvMap.get(key);
+      const docTypeCode = doc.document_types?.code ?? 'N/A';
+      const amount = Number(doc.total) * this.getDocumentSign(doc.document_types?.category ?? null);
 
       if (existing) {
         existing.count += 1;
-        existing.total += Number(doc.total);
-
-        const docTypeCode = doc.document_types?.code ?? 'N/A';
-        const prev = existing.docTypeCounts.get(docTypeCode) ?? 0;
-        existing.docTypeCounts.set(docTypeCode, prev + 1);
+        existing.total += amount;
+        const type = existing.docTypes.get(docTypeCode) ?? { count: 0, total: 0 };
+        type.count += 1;
+        type.total += amount;
+        existing.docTypes.set(docTypeCode, type);
       } else {
-        const docTypeCounts = new Map<string, number>();
-        docTypeCounts.set(doc.document_types?.code ?? 'N/A', 1);
-        pvMap.set(pv, {
+        const docTypes = new Map<string, { count: number; total: number }>();
+        docTypes.set(docTypeCode, { count: 1, total: amount });
+        pvMap.set(key, {
           point_of_sale: pv,
           count: 1,
-          total: Number(doc.total),
-          docTypeCounts,
+          total: amount,
+          currency_code: currency,
+          docTypes,
         });
       }
     }
@@ -843,20 +849,94 @@ export class SalesService {
         point_of_sale: entry.point_of_sale,
         count: entry.count,
         total: entry.total,
-        byDocumentType: Array.from(entry.docTypeCounts.entries()).map(
-          ([code, cnt]) => ({ code, count: cnt }),
+        currency_code: entry.currency_code,
+        byDocumentType: Array.from(entry.docTypes.entries()).map(
+          ([code, values]) => ({ code, ...values }),
         ),
       }))
-      .sort((a, b) => a.point_of_sale.localeCompare(b.point_of_sale));
+      .sort((a, b) => a.point_of_sale.localeCompare(b.point_of_sale) || a.currency_code.localeCompare(b.currency_code));
 
-    const grandTotal = results.reduce((sum, r) => sum + r.total, 0);
-    const totalCount = results.reduce((sum, r) => sum + r.count, 0);
+    const totalsByCurrency = new Map<string, number>();
+    for (const row of results) totalsByCurrency.set(row.currency_code, (totalsByCurrency.get(row.currency_code) ?? 0) + row.total);
 
     return {
-      grandTotal,
-      totalCount,
-      totalPV: results.length,
+      totalDocuments: results.reduce((sum, row) => sum + row.count, 0),
+      totalPV: new Set(results.map((row) => row.point_of_sale)).size,
+      totalsByCurrency: [...totalsByCurrency.entries()].map(([currency_code, total]) => ({ currency_code, total })),
       data: results,
+    };
+  }
+
+  async getByPointOfSaleDocuments(query: QuerySalesDto) {
+    if (!query.pointOfSale?.trim()) throw new NotFoundException('Indicá el punto de venta para consultar sus documentos.');
+    const whereCondition = this.buildWhereCondition(query);
+    const page = query.page ?? 1;
+    const pageSize = query.pageSize ?? 25;
+    const pointOfSaleConditions = query.pointOfSale === 'S/PV'
+      ? [{ document_sequence_id: null, document_types: { document_sequences: null } }]
+      : [
+          { document_sequences: { point_of_sale: query.pointOfSale } },
+          { document_sequence_id: null, document_types: { document_sequences: { point_of_sale: query.pointOfSale } } },
+        ];
+    const where = {
+      ...whereCondition,
+      ...(query.currencyCode ? { currency_code: query.currencyCode } : {}),
+      document_types: { active: true, ...(whereCondition.document_types ?? {}) },
+      AND: [{
+        OR: pointOfSaleConditions,
+      }],
+    };
+    const [total, documents] = await Promise.all([
+      this.prisma.documents.count({ where }),
+      this.prisma.documents.findMany({
+        where,
+        orderBy: [{ date: 'desc' }, { id: 'asc' }],
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        select: {
+          id: true, number: true, date: true, status: true, total: true, currency_code: true, ref: true,
+          business_parties: { select: { name: true } },
+          document_types: { select: { code: true, description: true, category: true, document_sequences: { select: { point_of_sale: true, prefix: true } } } },
+          document_sequences: { select: { point_of_sale: true, prefix: true } },
+          document_items: {
+            where: { deleted_at: null },
+            select: {
+              id: true, quantity: true, price: true,
+              products: { select: { name: true } },
+              product_variants: { select: { name: true } },
+            },
+          },
+        },
+      }),
+    ]);
+
+    return {
+      point_of_sale: query.pointOfSale,
+      currency_code: query.currencyCode ?? null,
+      page,
+      pageSize,
+      total,
+      totalPages: Math.ceil(total / pageSize),
+      documents: documents.map((document) => ({
+        id: document.id,
+        reference: `${(document.document_sequences?.prefix ?? document.document_types.document_sequences?.prefix) ? `${document.document_sequences?.prefix ?? document.document_types.document_sequences?.prefix} ` : ''}${(document.document_sequences?.point_of_sale ?? document.document_types.document_sequences?.point_of_sale) ? `${(document.document_sequences?.point_of_sale ?? document.document_types.document_sequences?.point_of_sale)?.padStart(4, '0')}-` : ''}${String(document.number).padStart(8, '0')}`,
+        date: document.date,
+        status: document.status,
+        type_code: document.document_types.code,
+        type_name: document.document_types.description,
+        category: document.document_types.category,
+        party_name: document.business_parties?.name ?? 'Sin tercero',
+        currency_code: document.currency_code?.trim().toUpperCase() || 'ARS',
+        total: Number(document.total) * this.getDocumentSign(document.document_types.category),
+        total_quantity: document.document_items.reduce((sum, item) => sum + Number(item.quantity) * this.getDocumentSign(document.document_types.category), 0),
+        items: document.document_items.map((item) => ({
+          id: item.id,
+          product_name: item.products?.name ?? item.product_variants?.name ?? 'Artículo sin producto',
+          variant_name: item.product_variants?.name ?? null,
+          quantity: Number(item.quantity) * this.getDocumentSign(document.document_types.category),
+          total: Number(item.price) * this.getDocumentSign(document.document_types.category),
+        })),
+      })),
     };
   }
 

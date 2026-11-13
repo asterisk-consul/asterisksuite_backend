@@ -72,6 +72,12 @@ export class SalesController {
   }
 
   @RequirePermissions('sales-reports.read')
+  @Get('by-point-of-sale/documents')
+  getPointOfSaleDocuments(@Query() query: QuerySalesDto) {
+    return this.salesService.getByPointOfSaleDocuments(query);
+  }
+
+  @RequirePermissions('sales-reports.read')
   @Get('by-point-of-sale')
   getByPointOfSale(
     @Query() query: QuerySalesDto,

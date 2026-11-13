@@ -10,6 +10,7 @@
  */
 
 import { Pool } from 'pg';
+import { MANAGEMENT_REPORT_PERMISSIONS } from '../../src/access-control/management-report-permissions';
 
 // ════════════════════════════════════════════════════════════════
 // RBAC — PERMISOS
@@ -48,7 +49,7 @@ export const RBAC_PERMISSIONS = [
   { code: 'commercial_adjustment_concepts.read', description: 'Ver conceptos comerciales reutilizables' },
   { code: 'commercial_adjustment_concepts.create', description: 'Crear conceptos comerciales reutilizables' },
   { code: 'commercial_adjustment_concepts.update', description: 'Editar conceptos comerciales reutilizables' },
-  { code: 'management_reports.read', description: 'Ver y exportar reportes gerenciales y consolidados' },
+  ...MANAGEMENT_REPORT_PERMISSIONS,
   { code: 'tasks.read', description: 'Ver tableros y tareas de la empresa' },
   { code: 'tasks.create', description: 'Crear tableros y tareas' },
   { code: 'tasks.update', description: 'Editar tareas y moverlas entre columnas' },
@@ -500,7 +501,7 @@ export const RBAC_ROLES = [
     description: 'Acceso a módulos de negocio sin administración de roles',
     is_system: true,
     permissionCodes: RBAC_PERMISSIONS.filter(
-      (p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.') && p.code !== 'management_reports.read',
+      (p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.') && !p.code.startsWith('management_reports.'),
     ).map((p) => p.code),
   },
   {
@@ -579,7 +580,7 @@ export const RBAC_ROLES = [
     name: 'Observador',
     description: 'Solo lectura',
     is_system: true,
-    permissionCodes: RBAC_PERMISSIONS.filter((p) => p.code.endsWith('.read') && p.code !== 'management_reports.read').map((p) => p.code),
+    permissionCodes: RBAC_PERMISSIONS.filter((p) => p.code.endsWith('.read') && !p.code.startsWith('management_reports.')).map((p) => p.code),
   },
   {
     code: 'capturist',

@@ -17,10 +17,14 @@ import {
 export const financialResultsMetrics = [
   'sales_confirmed',
   'purchase_invoices',
-  'sales_invoices',
+  'purchase_invoices_pending',
   'payments',
+  'expenses',
+  'other_outflows',
+  'outflows',
   'collections',
   'pending_orders',
+  'opening_balance_receivable',
 ] as const;
 
 export type FinancialResultsMetric = typeof financialResultsMetrics[number];

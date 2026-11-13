@@ -20,13 +20,13 @@ export class BankAccountsController {
   constructor(private readonly bankAccountsService: BankAccountsService) {}
 
   @Post()
-  @RequirePermissions('treasury.bank_accounts.create')
+  @RequirePermissions('bank_accounts.create')
   create(@Body() dto: CreateBankAccountDto, @CurrentUser() user: AuthUser) {
     return this.bankAccountsService.create(dto, user.id);
   }
 
   @Get()
-  @RequirePermissions('treasury.bank_accounts.read')
+  @RequirePermissions('bank_accounts.read')
   findAll(@Req() req: Request, @CurrentUser() user: AuthUser) {
     const companyRole = req['companyUserRole'] as string | undefined;
     return this.bankAccountsService.findAll(
@@ -36,35 +36,35 @@ export class BankAccountsController {
 
   @Get(':id')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.read')
+  @RequirePermissions('bank_accounts.read')
   findOne(@Param('id') id: string) {
     return this.bankAccountsService.findOne(id);
   }
 
   @Patch(':id')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   update(@Param('id') id: string, @Body() dto: UpdateBankAccountDto, @CurrentUser() user: AuthUser) {
     return this.bankAccountsService.update(id, dto, user.id);
   }
 
   @Delete(':id')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.delete')
+  @RequirePermissions('bank_accounts.delete')
   remove(@Param('id') id: string, @Body() dto: DeleteBankAccountDto, @CurrentUser() user: AuthUser) {
     return this.bankAccountsService.remove(id, dto, user.id);
   }
 
   @Get(':id/movements')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.read')
+  @RequirePermissions('bank_accounts.read')
   getMovements(@Param('id') id: string) {
     return this.bankAccountsService.getMovements(id);
   }
 
   @Get(':id/movements/:movementId/details')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.read')
+  @RequirePermissions('bank_accounts.read')
   getMovementDetails(@Param('id') id: string, @Param('movementId') movementId: string) {
     return this.bankAccountsService.getMovementDetails(id, movementId);
   }
@@ -116,35 +116,35 @@ export class BankAccountsController {
 
   @Get(':id/charge-rules')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.read')
+  @RequirePermissions('bank_accounts.read')
   getChargeRules(@Param('id') id: string) {
     return this.bankAccountsService.getChargeRules(id);
   }
 
   @Get(':id/suggested-charges')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.read')
+  @RequirePermissions('bank_accounts.read')
   getSuggestedCharges(@Param('id') id: string, @Query() query: SuggestedBankChargesQueryDto) {
     return this.bankAccountsService.getSuggestedCharges(id, query);
   }
 
   @Post(':id/charge-rules')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   createChargeRule(@Param('id') id: string, @Body() dto: CreateBankChargeRuleDto, @CurrentUser() user: AuthUser) {
     return this.bankAccountsService.createChargeRule(id, dto, user.id);
   }
 
   @Patch(':id/charge-rules/:ruleId')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   updateChargeRule(@Param('id') id: string, @Param('ruleId') ruleId: string, @Body() dto: UpdateBankChargeRuleDto, @CurrentUser() user: AuthUser) {
     return this.bankAccountsService.updateChargeRule(id, ruleId, dto, user.id);
   }
 
   @Delete(':id/charge-rules/:ruleId')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   removeChargeRule(@Param('id') id: string, @Param('ruleId') ruleId: string, @CurrentUser() user: AuthUser) {
     return this.bankAccountsService.removeChargeRule(id, ruleId, user.id);
   }
@@ -155,14 +155,14 @@ export class BankAccountsController {
 
   @Get(':id/user-roles')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.read')
+  @RequirePermissions('bank_accounts.read')
   getUserRoles(@Param('id') id: string) {
     return this.bankAccountsService.getUserRoles(id);
   }
 
   @Post(':id/user-roles')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   addUserRole(
     @Param('id') id: string,
     @Body() body: { user_id: string; role: string },
@@ -172,7 +172,7 @@ export class BankAccountsController {
 
   @Delete(':id/user-roles/:userId')
   @UseGuards(BankAccountAccessGuard)
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   removeUserRole(@Param('id') id: string, @Param('userId') userId: string) {
     return this.bankAccountsService.removeUserRole(id, userId);
   }

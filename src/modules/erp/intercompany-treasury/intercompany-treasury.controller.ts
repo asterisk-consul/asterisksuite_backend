@@ -13,34 +13,34 @@ export class IntercompanyTreasuryController {
   constructor(private readonly service: IntercompanyTreasuryService) {}
 
   @Get('cash-boxes/companies')
-  @RequirePermissions('treasury.cash_boxes.update')
+  @RequirePermissions('cash_boxes.update')
   @AllowCompanyAdmins()
   cashBoxCompanies() { return this.service.listCompanies(); }
 
   @Get('bank-accounts/companies')
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   @AllowCompanyAdmins()
   bankAccountCompanies() { return this.service.listCompanies(); }
 
   @Get('cash-boxes/:id/shares')
-  @RequirePermissions('treasury.cash_boxes.update')
+  @RequirePermissions('cash_boxes.update')
   @AllowCompanyAdmins()
   getCashBoxSharing(@Param('id') id: string) { return this.service.getSharing('CASH_BOX', id); }
 
   @Post('cash-boxes/:id/shares')
-  @RequirePermissions('treasury.cash_boxes.update')
+  @RequirePermissions('cash_boxes.update')
   @AllowCompanyAdmins()
   updateCashBoxSharing(@Param('id') id: string, @Body() body: UpdateIntercompanySharesDto, @CurrentUser() user: AuthUser) {
     return this.service.updateSharing('CASH_BOX', id, body, user.id);
   }
 
   @Get('bank-accounts/:id/shares')
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   @AllowCompanyAdmins()
   getBankAccountSharing(@Param('id') id: string) { return this.service.getSharing('BANK_ACCOUNT', id); }
 
   @Post('bank-accounts/:id/shares')
-  @RequirePermissions('treasury.bank_accounts.update')
+  @RequirePermissions('bank_accounts.update')
   @AllowCompanyAdmins()
   updateBankAccountSharing(@Param('id') id: string, @Body() body: UpdateIntercompanySharesDto, @CurrentUser() user: AuthUser) {
     return this.service.updateSharing('BANK_ACCOUNT', id, body, user.id);

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsOptional, IsDateString, IsUUID, IsEnum, IsInt, Min, Max } from 'class-validator';
+import { IsOptional, IsDateString, IsUUID, IsEnum, IsInt, Min, Max, IsString, MaxLength } from 'class-validator';
 
 export enum DocumentTypeFilter {
   INVOICE = 'INVOICE',
@@ -30,6 +30,16 @@ export class QuerySalesDto {
   @IsOptional()
   @IsEnum(DocumentTypeFilter)
   documentTypeFilter?: DocumentTypeFilter;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  pointOfSale?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(10)
+  currencyCode?: string;
 
   @IsOptional()
   @Type(() => Number)
