@@ -5,12 +5,15 @@ import { UpdateCheckDto } from './dto/update-check.dto';
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 import { parseLocalDateTime } from '@/common/utils/dates';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
+import { IntercompanyTreasuryService } from '../intercompany-treasury/intercompany-treasury.service';
+import { requestContext } from '@/common/context/request-context';
 
 @Injectable()
 export class ChecksService {
   constructor(
     private db: PrismaService,
     private bankMovements: BankMovementsService,
+    private intercompanyTreasury: IntercompanyTreasuryService,
   ) {}
 
   private get prisma() {
@@ -41,15 +44,50 @@ export class ChecksService {
     }
   }
 
+  private async validateBankTarget(input: {
+    localId?: string | null;
+    companyId?: string | null;
+    externalId?: string | null;
+    currencyCode: string;
+    use: 'PAYMENT' | 'COLLECTION';
+  }) {
+    if (Boolean(input.companyId) !== Boolean(input.externalId)) {
+      throw new BadRequestException('La cuenta compartida requiere empresa titular y cuenta bancaria');
+    }
+    if (input.localId && input.companyId) {
+      throw new BadRequestException('Elegí una cuenta local o compartida, no ambas');
+    }
+    if (input.localId) return this.validateBankAccount(input.localId, input.currencyCode);
+    if (!input.companyId || !input.externalId) return;
+    const share = await this.intercompanyTreasury.validateUse(input.companyId, 'BANK_ACCOUNT', input.externalId, input.use);
+    const owner = this.db.getTenantClient(share.owner_company.schema_name!);
+    const account = await owner.bank_accounts.findFirst({
+      where: { id: input.externalId, active: true, deleted_at: null },
+      select: { currency_code: true },
+    });
+    if (!account || account.currency_code !== input.currencyCode) {
+      throw new BadRequestException('La cuenta compartida no está activa o su moneda no coincide con el cheque');
+    }
+  }
+
   async create(dto: CreateCheckDto, userId: string) {
-    if (dto.is_own && !dto.bank_account_id) {
+    if (dto.is_own && !dto.bank_account_id && !(dto.bank_account_company_id && dto.bank_account_external_id)) {
       throw new BadRequestException('Seleccioná la cuenta bancaria que se debitará para el cheque propio');
     }
-    await this.validateBankAccount(dto.bank_account_id, dto.currency_code);
+    if (!dto.is_own && (dto.bank_account_company_id || dto.bank_account_external_id)) {
+      throw new BadRequestException('La cuenta compartida se elige al depositar el cheque de terceros');
+    }
+    await this.validateBankTarget({
+      localId: dto.bank_account_id, companyId: dto.bank_account_company_id,
+      externalId: dto.bank_account_external_id, currencyCode: dto.currency_code,
+      use: dto.is_own ? 'PAYMENT' : 'COLLECTION',
+    });
     return this.prisma.checks.create({
       data: {
         payment_id: dto.payment_id,
         bank_account_id: dto.bank_account_id,
+        bank_account_company_id: dto.bank_account_company_id,
+        bank_account_external_id: dto.bank_account_external_id,
         check_number: dto.check_number,
         bank_name: dto.bank_name,
         bank_branch: dto.bank_branch,
@@ -175,14 +213,25 @@ export class ChecksService {
       throw new BadRequestException('El estado del cheque se actualiza mediante sus acciones de pago, depósito, débito o rechazo');
     }
 
-    if (check.is_own && !(dto.bank_account_id ?? check.bank_account_id)) {
+    const bankTargetChanged = dto.bank_account_id !== undefined
+      || dto.bank_account_company_id !== undefined || dto.bank_account_external_id !== undefined;
+    if (bankTargetChanged && check.status === 'CLEARED') {
+      throw new BadRequestException('No se puede cambiar la cuenta de un cheque ya cobrado o debitado');
+    }
+    const selectingLocal = Boolean(dto.bank_account_id);
+    const selectingShared = Boolean(dto.bank_account_company_id || dto.bank_account_external_id);
+    if (selectingLocal && selectingShared) {
+      throw new BadRequestException('Elegí una cuenta local o compartida, no ambas');
+    }
+    const target = {
+      localId: selectingShared ? null : dto.bank_account_id !== undefined ? dto.bank_account_id : check.bank_account_id,
+      companyId: selectingLocal ? null : dto.bank_account_company_id !== undefined ? dto.bank_account_company_id : check.bank_account_company_id,
+      externalId: selectingLocal ? null : dto.bank_account_external_id !== undefined ? dto.bank_account_external_id : check.bank_account_external_id,
+    };
+    if (check.is_own && !target.localId && !(target.companyId && target.externalId)) {
       throw new BadRequestException('El cheque propio debe tener una cuenta bancaria a debitar');
     }
-
-    await this.validateBankAccount(
-      dto.bank_account_id ?? check.bank_account_id ?? undefined,
-      dto.currency_code ?? check.currency_code,
-    );
+    await this.validateBankTarget({ ...target, currencyCode: dto.currency_code ?? check.currency_code, use: check.is_own ? 'PAYMENT' : 'COLLECTION' });
 
     const data: Record<string, any> = {
       updated_at: new Date(),
@@ -193,7 +242,11 @@ export class ChecksService {
     if (dto.issue_date !== undefined) data.issue_date = new Date(dto.issue_date);
     if (dto.currency_code !== undefined) data.currency_code = dto.currency_code;
     if (dto.bank_name !== undefined && dto.bank_name !== '') data.bank_name = dto.bank_name;
-    if (dto.bank_account_id !== undefined) data.bank_account_id = dto.bank_account_id;
+    if (bankTargetChanged) {
+      data.bank_account_id = target.localId;
+      data.bank_account_company_id = target.companyId;
+      data.bank_account_external_id = target.externalId;
+    }
     if (dto.bank_branch !== undefined) data.bank_branch = dto.bank_branch;
     if (dto.account_number !== undefined) data.account_number = dto.account_number;
     if (dto.issuer_name !== undefined && dto.issuer_name !== '') data.issuer_name = dto.issuer_name;
@@ -292,7 +345,13 @@ export class ChecksService {
     return this.findOne(id);
   }
 
-  async deposit(id: string, dto: { bank_account_id: string; amount?: number; date?: string }, userId: string) {
+  async deposit(id: string, dto: {
+    bank_account_id?: string;
+    bank_account_company_id?: string;
+    bank_account_external_id?: string;
+    amount?: number;
+    date?: string;
+  }, userId: string) {
     const check = await this.findOne(id);
     if (check.is_own) {
       throw new BadRequestException('Los cheques propios se debitan manualmente desde la cuenta asociada');
@@ -301,15 +360,58 @@ export class ChecksService {
       throw new BadRequestException('Solo se pueden depositar cheques pendientes o confirmados');
     }
 
-    const bankAccount = await this.prisma.bank_accounts.findUnique({
-      where: { id: dto.bank_account_id },
-    });
-    if (!bankAccount) {
-      throw new NotFoundException('Cuenta bancaria destino no encontrada');
-    }
-
     const depositAmount = Number(check.available_amount ?? check.amount);
+    if (!Number.isFinite(depositAmount) || depositAmount <= 0) {
+      throw new BadRequestException('El cheque no tiene importe disponible para depositar');
+    }
     const effectiveDate = dto.date ? parseLocalDateTime(dto.date) : new Date();
+    if (dto.amount !== undefined && Math.abs(Number(dto.amount) - depositAmount) > 0.01) {
+      throw new BadRequestException('El depósito debe corresponder al valor disponible completo del cheque');
+    }
+    if (!dto.bank_account_id && !dto.bank_account_company_id) {
+      throw new BadRequestException('Seleccioná una cuenta bancaria para depositar el cheque');
+    }
+    await this.validateBankTarget({
+      localId: dto.bank_account_id, companyId: dto.bank_account_company_id,
+      externalId: dto.bank_account_external_id, currencyCode: check.currency_code, use: 'COLLECTION',
+    });
+
+    if (dto.bank_account_company_id && dto.bank_account_external_id) {
+      const sourceCompanyId = requestContext.getStore()?.companyId;
+      if (!sourceCompanyId) throw new BadRequestException('No se pudo resolver la empresa del cheque');
+      let posted = false;
+      try {
+        await this.prisma.$transaction(async (tx) => {
+          await tx.$queryRaw`SELECT id FROM tenant.checks WHERE id = ${id}::uuid FOR UPDATE`;
+          const current = await tx.checks.findFirst({ where: { id, deleted_at: null } });
+          if (!current || !['PENDING', 'CONFIRMED'].includes(current.status)) {
+            throw new BadRequestException('El cheque ya fue procesado');
+          }
+          await this.intercompanyTreasury.applyUsage({
+            ownerCompanyId: dto.bank_account_company_id!, fundType: 'BANK_ACCOUNT',
+            fundId: dto.bank_account_external_id!, sourceType: 'check', sourceId: check.id,
+            operationType: 'COLLECTION', amount: depositAmount, currencyCode: check.currency_code,
+            date: effectiveDate, description: `Depósito cheque #${check.check_number}`, userId,
+          });
+          posted = true;
+          await tx.checks.update({
+            where: { id },
+            data: {
+              status: 'CLEARED', available_amount: 0,
+              bank_account_id: null,
+              bank_account_company_id: dto.bank_account_company_id,
+              bank_account_external_id: dto.bank_account_external_id,
+              deposit_date: effectiveDate, clearing_date: effectiveDate,
+              updated_at: new Date(), updated_by: userId,
+            },
+          });
+        }, { timeout: 20_000 });
+      } catch (error) {
+        if (posted) await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'check', check.id, userId);
+        throw error;
+      }
+      return this.findOne(id);
+    }
 
     await this.prisma.$transaction(async (tx) => {
       await tx.checks.update({
@@ -317,7 +419,9 @@ export class ChecksService {
         data: {
           status: 'CLEARED',
           available_amount: 0,
-          bank_account_id: dto.bank_account_id,
+          bank_account_id: dto.bank_account_id!,
+          bank_account_company_id: null,
+          bank_account_external_id: null,
           deposit_date: effectiveDate,
           clearing_date: effectiveDate,
           updated_at: new Date(),
@@ -327,7 +431,7 @@ export class ChecksService {
 
       await this.bankMovements.addMovement(
         {
-          bankAccountId: dto.bank_account_id,
+          bankAccountId: dto.bank_account_id!,
           type: 'COLLECTION',
           nature: 'CREDIT',
           amount: depositAmount,
@@ -436,6 +540,28 @@ export class ChecksService {
     const check = await this.findOne(id);
     if (check.status !== 'CLEARED') {
       throw new BadRequestException('Solo se pueden revertir cheques cobrados o debitados');
+    }
+
+    if (check.bank_account_company_id && check.bank_account_external_id) {
+      const sourceCompanyId = requestContext.getStore()?.companyId;
+      if (!sourceCompanyId) throw new BadRequestException('No se pudo resolver la empresa del cheque');
+      const operation = await this.db.getDefaultClient().intercompany_treasury_operations.findFirst({
+        where: { source_company_id: sourceCompanyId, source_type: 'check', source_id: id, status: 'COMPLETED' },
+        select: { id: true, amount: true },
+      });
+      if (!operation) throw new BadRequestException('No se encontró el movimiento interempresa del cheque');
+      await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'check', id, operation.id);
+      await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'check', id, userId, operation.id);
+      await this.prisma.checks.update({
+        where: { id },
+        data: {
+          status: check.is_own ? 'CONFIRMED' : 'PENDING',
+          available_amount: Number(operation.amount),
+          deposit_date: null, clearing_date: null, payment_date: null,
+          updated_at: new Date(), updated_by: userId,
+        },
+      });
+      return this.findOne(id);
     }
 
     const cashMovement = await this.prisma.cash_box_movements.findFirst({
@@ -632,7 +758,9 @@ export class ChecksService {
     if (!check.is_own || check.status !== 'CONFIRMED') {
       throw new BadRequestException('Solo se pueden debitar cheques propios confirmados');
     }
-    if (!check.bank_account_id) throw new BadRequestException('El cheque no tiene cuenta bancaria asociada');
+    if (!check.bank_account_id && !(check.bank_account_company_id && check.bank_account_external_id)) {
+      throw new BadRequestException('El cheque no tiene cuenta bancaria asociada');
+    }
 
     const effectiveDate = parseLocalDateTime(debitDate);
     if (effectiveDate < new Date(check.due_date)) {
@@ -642,6 +770,38 @@ export class ChecksService {
       throw new BadRequestException('No se puede registrar un débito bancario con fecha futura');
     }
     const amount = Number(check.amount);
+    if (check.bank_account_company_id && check.bank_account_external_id) {
+      const sourceCompanyId = requestContext.getStore()?.companyId;
+      if (!sourceCompanyId) throw new BadRequestException('No se pudo resolver la empresa del cheque');
+      let posted = false;
+      try {
+        await this.prisma.$transaction(async (tx) => {
+          await tx.$queryRaw`SELECT id FROM tenant.checks WHERE id = ${id}::uuid FOR UPDATE`;
+          const current = await tx.checks.findFirst({ where: { id, deleted_at: null } });
+          if (!current || current.status !== 'CONFIRMED') {
+            throw new BadRequestException('El cheque ya fue procesado');
+          }
+          await this.intercompanyTreasury.applyUsage({
+            ownerCompanyId: check.bank_account_company_id!, fundType: 'BANK_ACCOUNT',
+            fundId: check.bank_account_external_id!, sourceType: 'check', sourceId: check.id,
+            operationType: 'PAYMENT', amount, currencyCode: check.currency_code,
+            date: effectiveDate, description: `Débito cheque propio #${check.check_number}`, userId,
+          });
+          posted = true;
+          await tx.checks.update({
+            where: { id },
+            data: {
+              status: 'CLEARED', payment_date: effectiveDate, clearing_date: effectiveDate,
+              updated_at: new Date(), updated_by: userId,
+            },
+          });
+        }, { timeout: 20_000 });
+      } catch (error) {
+        if (posted) await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'check', check.id, userId);
+        throw error;
+      }
+      return this.findOne(id);
+    }
     await this.prisma.$transaction(async (tx) => {
       const existing = await tx.bank_account_movements.findFirst({
         where: { reference_type: 'check', reference_id: check.id, deleted_at: null },

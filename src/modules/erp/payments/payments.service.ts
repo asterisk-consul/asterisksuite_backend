@@ -939,6 +939,18 @@ export class PaymentsService {
         : payment.bank_account_company_id && payment.bank_account_external_id
           ? [{ companyId: payment.bank_account_company_id, fundType: 'BANK_ACCOUNT' as const, fundId: payment.bank_account_external_id, amount: Number(payment.amount) }]
           : [];
+    let intercompanyDescription = payment.description?.trim() || `${payment.type === 'COLLECTION' ? 'Cobro' : 'Pago'} #${payment.number}`;
+    if (externalUses.length && payment.type === 'COLLECTION' && paymentDocs.length) {
+      const linkedDocuments = await this.prisma.documents.findMany({
+        where: { id: { in: paymentDocs.map((item) => item.document_id) } },
+        select: { number: true, document_types: { select: { category: true } }, commercial_operation: { select: { root_document: { select: { number: true, document_types: { select: { category: true } } } } } } },
+      });
+      const orderNumbers = [...new Set(linkedDocuments.map((doc) =>
+        doc.document_types?.category === 'ORDER' ? doc.number :
+          doc.commercial_operation?.root_document?.document_types?.category === 'ORDER' ? doc.commercial_operation.root_document.number : null,
+      ).filter((number): number is number => number !== null))].slice(0, 3);
+      if (orderNumbers.length) intercompanyDescription = `Cobro de OV ${orderNumbers.map((number) => `#${number}`).join(', ')}`;
+    }
     try {
       for (const target of externalUses) {
         await this.intercompanyTreasury.applyUsage({
@@ -951,7 +963,7 @@ export class PaymentsService {
           amount: target.amount,
           currencyCode: payment.currency_code,
           date: payment.date,
-          description: payment.description ?? `${payment.type === 'COLLECTION' ? 'Cobro' : 'Pago'} #${payment.number}`,
+          description: intercompanyDescription,
           userId,
         });
       }
@@ -2780,7 +2792,17 @@ export class PaymentsService {
       if (check.is_own) {
         // Cheque propio: queda confirmado y pendiente de conciliación.
         // Tesorería registra el débito cuando aparece en el extracto bancario.
-        if (check.bank_account_id) {
+        if (check.bank_account_company_id && check.bank_account_external_id) {
+          const share = await this.intercompanyTreasury.validateUse(check.bank_account_company_id, 'BANK_ACCOUNT', check.bank_account_external_id, 'PAYMENT');
+          const owner = this.db.getTenantClient(share.owner_company.schema_name!);
+          const account = await owner.bank_accounts.findFirst({
+            where: { id: check.bank_account_external_id, active: true, deleted_at: null },
+            select: { currency_code: true },
+          });
+          if (!account || account.currency_code !== check.currency_code) {
+            throw new BadRequestException(`La cuenta compartida del cheque propio #${check.check_number} no está activa o su moneda no coincide`);
+          }
+        } else if (check.bank_account_id) {
           const bankAccount = await prisma.bank_accounts.findUnique({
             where: { id: check.bank_account_id },
           });
@@ -3624,7 +3646,12 @@ export class PaymentsService {
       if (check.is_own) {
         // Revertir únicamente si el cheque llegó a generar un débito real. Un
         // cheque confirmado pero todavía no vencido no afectó el banco.
-        if (check.bank_account_id) {
+        if (check.bank_account_company_id && check.bank_account_external_id && check.status === 'CLEARED') {
+          const sourceCompanyId = this.getCompanyId();
+          if (!sourceCompanyId) throw new BadRequestException('No se pudo resolver la empresa del cheque');
+          await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'check', check.id);
+          await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'check', check.id, userId);
+        } else if (check.bank_account_id) {
           const issuedMovement = await this.prisma.bank_account_movements.findFirst({
             where: {
               reference_type: 'check',

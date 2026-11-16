@@ -5,7 +5,7 @@ import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-n
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
 import { validateDocumentNumber } from '@/common/validators/document.validator';
-import { assertPartyIdentityIsUnique } from '@/modules/master-data/business-parties/party-identity.util';
+import { assertPartyIdentityIsUnique, assertPartyNameIsUnique } from '@/modules/master-data/business-parties/party-identity.util';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -34,9 +34,11 @@ export class PartnersService {
 
     // Validar formato de documento
     validateDocumentNumber(dto.document_type, dto.document_number);
+    validateDocumentNumber(dto.document_type, dto.tax_id);
     if (partnerKind === 'PARTNER') this.validateSharePercentage(dto.share_percentage);
 
     await assertPartyIdentityIsUnique(this.prisma, [dto.document_number, dto.tax_id], { partyId: dto.party_id });
+    const partyName = dto.party_id ? null : await assertPartyNameIsUnique(this.prisma, dto.business_name || `${dto.first_name} ${dto.last_name}`);
 
     let finalUserId = dto.user_id;
     const preparedWhatsAppPhone = dto.create_user
@@ -93,7 +95,7 @@ export class PartnersService {
       const party = await this.prisma.business_parties.create({
         data: {
           type: 'PARTNER',
-          name: dto.business_name || `${dto.first_name} ${dto.last_name}`,
+          name: partyName!,
           email: dto.email,
           tax_id: dto.tax_id || dto.document_number,
           document_type: dto.document_type,
@@ -207,6 +209,10 @@ export class PartnersService {
     const partner = await this.findOne(id);
     const partnerKind = dto.partner_kind ?? partner.partner_kind ?? 'PARTNER';
 
+    if (dto.business_name !== undefined && partner.party_id) {
+      dto.business_name = await assertPartyNameIsUnique(this.prisma, dto.business_name, partner.party_id);
+    }
+
     if (partnerKind === 'PARTNER' && dto.share_percentage !== undefined) this.validateSharePercentage(dto.share_percentage);
 
     if (dto.document_type !== undefined || dto.document_number !== undefined) {
@@ -216,6 +222,10 @@ export class PartnersService {
         [dto.document_number ?? partner.document_number],
         { partyId: partner.party_id ?? undefined, partnerId: id },
       );
+    }
+    if (dto.tax_id !== undefined) {
+      validateDocumentNumber(dto.document_type ?? partner.document_type ?? undefined, dto.tax_id);
+      await assertPartyIdentityIsUnique(this.prisma, [dto.tax_id], { partyId: partner.party_id ?? undefined, partnerId: id });
     }
 
     // Extraer campos de business_party del DTO

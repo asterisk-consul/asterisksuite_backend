@@ -13,6 +13,32 @@ export function normalizeIdentityDocument(value?: string | null): string {
   return (value ?? '').replace(/[^a-z0-9]/gi, '').toUpperCase();
 }
 
+/** Evita fichas duplicadas aun cuando el tercero no tenga CUIT o documento. */
+export async function assertPartyNameIsUnique(
+  prisma: PrismaTransactionClient,
+  value: string,
+  partyId?: string,
+): Promise<string> {
+  const name = value.trim().replace(/\s+/g, ' ');
+  if (!name) throw new BadRequestException('Ingresá el nombre o la razón social de la parte interesada');
+
+  const duplicate = await prisma.$queryRaw(Prisma.sql`
+    SELECT name
+    FROM tenant.business_parties
+    WHERE deleted_at IS NULL
+      AND lower(regexp_replace(btrim(name), '[[:space:]]+', ' ', 'g')) = lower(${name})
+      AND (${partyId ?? null}::uuid IS NULL OR id <> ${partyId ?? null}::uuid)
+    LIMIT 1
+  `) as Array<{ name: string }>;
+
+  if (duplicate.length) {
+    throw new BadRequestException(
+      `Ya existe una parte interesada con el mismo nombre (${duplicate[0].name}). Revisá la ficha existente antes de crear otra.`,
+    );
+  }
+  return name;
+}
+
 /**
  * Checks the three entry points that can create a legal/person identity.
  * Keep this query narrow: PostgreSQL normalizes stored values, so the service

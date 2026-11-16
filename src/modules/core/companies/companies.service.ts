@@ -605,7 +605,7 @@ export class CompaniesService {
   async updateUser(
     companyId: string,
     userId: string,
-    dto: { name?: string; email?: string; whatsapp_phone?: string | null },
+    dto: { name?: string; email?: string; company_role?: 'ADMIN' | 'USER'; whatsapp_phone?: string | null },
     requestUserId: string,
   ) {
     await this.assertUserIsOwnerOrAdmin(requestUserId, companyId);
@@ -616,6 +616,15 @@ export class CompaniesService {
 
     if (!membership) {
       throw new NotFoundException('Usuario no encontrado en esta empresa');
+    }
+
+    if (dto.company_role !== undefined) {
+      if (membership.role === 'OWNER') {
+        throw new ForbiddenException('El rol Propietario no se puede cambiar desde la edición de usuario');
+      }
+      if (userId === requestUserId && dto.company_role !== membership.role) {
+        throw new ForbiddenException('No podés cambiar tu propio tipo de usuario');
+      }
     }
 
     const preparedWhatsAppPhone = dto.whatsapp_phone !== undefined
@@ -640,10 +649,16 @@ export class CompaniesService {
       },
       select: { id: true, name: true, email: true },
     });
+    if (dto.company_role !== undefined && dto.company_role !== membership.role) {
+      await this.prisma.company_users.update({
+        where: { company_id_user_id: { company_id: companyId, user_id: userId } },
+        data: { role: dto.company_role },
+      });
+    }
     if (dto.whatsapp_phone !== undefined) {
       await this.whatsAppNotifications.saveManagedPhone(userId, preparedWhatsAppPhone ?? null);
     }
-    return user;
+    return { ...user, company_role: dto.company_role ?? membership.role };
   }
 
   async changeUserPassword(companyId: string, userId: string, newPassword: string, requestUserId: string) {

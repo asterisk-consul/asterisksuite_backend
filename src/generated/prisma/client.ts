@@ -872,6 +872,11 @@ export type task_members = Prisma.task_membersModel
  */
 export type task_labels = Prisma.task_labelsModel
 /**
+ * Model task_categories
+ * 
+ */
+export type task_categories = Prisma.task_categoriesModel
+/**
  * Model task_label_assignments
  * 
  */
@@ -881,6 +886,11 @@ export type task_label_assignments = Prisma.task_label_assignmentsModel
  * 
  */
 export type task_comments = Prisma.task_commentsModel
+/**
+ * Model task_work_logs
+ * 
+ */
+export type task_work_logs = Prisma.task_work_logsModel
 /**
  * Model task_checklists
  * 

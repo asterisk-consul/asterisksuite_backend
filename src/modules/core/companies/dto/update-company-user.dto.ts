@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsOptional, MinLength, MaxLength, Matches, ValidateIf } from 'class-validator';
+import { IsString, IsEmail, IsIn, IsOptional, MinLength, MaxLength, Matches, ValidateIf } from 'class-validator';
 
 export class UpdateCompanyUserDto {
   @IsOptional()
@@ -9,6 +9,10 @@ export class UpdateCompanyUserDto {
   @IsOptional()
   @IsEmail()
   email?: string;
+
+  @IsOptional()
+  @IsIn(['ADMIN', 'USER'], { message: 'El tipo de usuario debe ser ADMIN o USER.' })
+  company_role?: 'ADMIN' | 'USER';
 
   @ValidateIf((_object, value) => value !== undefined && value !== null && String(value).trim() !== '')
   @IsString()

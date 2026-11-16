@@ -11,7 +11,7 @@ import type {
 
 type MoneyByCurrency = Record<string, string>;
 type CountByCurrency = Record<string, number>;
-type FinancialResultsMetricKey = FinancialResultsMetric | 'sales_order_paid' | 'purchase_invoices_paid';
+type FinancialResultsMetricKey = FinancialResultsMetric | 'sales_order_paid';
 type Metrics = Record<FinancialResultsMetricKey, MoneyByCurrency>;
 type CountKey = FinancialResultsMetric | 'orders_paid_full' | 'orders_paid_partial' | 'orders_unpaid' | 'purchase_invoices_paid_full' | 'purchase_invoices_paid_partial' | 'purchase_invoices_unpaid';
 type Counts = Record<CountKey, CountByCurrency>;
@@ -60,6 +60,8 @@ type DetailEntry = {
   document_category: string;
   document_label: string;
   document_reference: string;
+  related_document_id?: string;
+  related_document_reference?: string;
   document_date: string;
   party_id: string | null;
   party_name: string;
@@ -126,11 +128,11 @@ const DOCUMENT_DETAIL_SELECT = {
 type DocumentDetailRecord = Prisma.documentsGetPayload<{ select: typeof DOCUMENT_DETAIL_SELECT }>;
 
 const EMPTY_COUNTS = () => Object.fromEntries(
-  ['sales_confirmed', 'purchase_invoices', 'purchase_invoices_pending', 'payments', 'expenses', 'other_outflows', 'outflows', 'collections', 'pending_orders', 'opening_balance_receivable', 'orders_paid_full', 'orders_paid_partial', 'orders_unpaid', 'purchase_invoices_paid_full', 'purchase_invoices_paid_partial', 'purchase_invoices_unpaid']
+  ['sales_confirmed', 'purchase_invoices', 'purchase_invoices_paid', 'purchase_invoice_payments', 'purchase_invoices_pending', 'payments', 'invoice_payment_outflows', 'non_invoice_payments', 'expenses', 'other_outflows', 'non_invoice_outflows', 'outflows', 'collections', 'pending_orders', 'opening_balance_receivable', 'orders_paid_full', 'orders_paid_partial', 'orders_unpaid', 'purchase_invoices_paid_full', 'purchase_invoices_paid_partial', 'purchase_invoices_unpaid']
     .map(key => [key, {}]),
 ) as Counts;
 const EMPTY_METRICS = () => Object.fromEntries(
-  ['sales_confirmed', 'sales_order_paid', 'purchase_invoices', 'purchase_invoices_paid', 'purchase_invoices_pending', 'payments', 'expenses', 'other_outflows', 'outflows', 'collections', 'pending_orders', 'opening_balance_receivable']
+  ['sales_confirmed', 'sales_order_paid', 'purchase_invoices', 'purchase_invoice_payments', 'purchase_invoices_paid', 'purchase_invoices_pending', 'payments', 'invoice_payment_outflows', 'non_invoice_payments', 'expenses', 'other_outflows', 'non_invoice_outflows', 'outflows', 'collections', 'pending_orders', 'opening_balance_receivable']
     .map(key => [key, {}]),
 ) as Metrics;
 
@@ -161,12 +163,17 @@ export class FinancialResultsReportService {
       currency_note: 'Cada moneda se mantiene separada; el reporte no convierte ni mezcla importes.',
       criteria: {
         sales_confirmed: `Solo OV en los estados seleccionados (${(dto.ov_statuses ?? [1, 2, 3, 4, 5, 6, 7]).join(', ')}), por fecha de la orden. Las facturas asociadas no se suman ni se descuentan de este importe; cobrado y saldo reflejan el acumulado actual.`,
-        purchase_invoices: 'Total de facturas de compra confirmadas (estado 2), por fecha del comprobante. El resumen también informa cuánto está pagado y cuánto queda pendiente según paid_amount actual.',
+        purchase_invoices: 'Total de facturas de compra confirmadas (estado 2), por fecha del comprobante. El importe facturado se desglosa entre paid_amount acumulado actual y saldo pendiente actual, ambos en moneda de factura.',
+        purchase_invoices_paid: 'Importe pagado aplicado actualmente a facturas de compra confirmadas cuya fecha está en el período. Incluye facturas con pago parcial y se expresa en moneda de factura; no es un movimiento de caja del período.',
+        purchase_invoice_payments: 'Aplicaciones de pagos PAID a facturas de compra confirmadas, por fecha efectiva del pago. El importe se expresa en la moneda del pago y no se convierte ni se mezcla.',
         purchase_invoices_pending: 'Saldo pendiente actual de las facturas de compra confirmadas del período: total menos paid_amount, sin permitir saldos negativos.',
-        payments: 'Pagos pagados de tipo PAYMENT, por fecha efectiva del movimiento; se muestran separados al elegir el desglose de egresos.',
+        payments: 'Movimientos pagados de tipo PAYMENT, por fecha efectiva del movimiento; incluye los pagos vinculados a facturas.',
+        invoice_payment_outflows: 'Movimientos PAYMENT completos asociados a una factura de compra confirmada. Se expresan en la moneda del movimiento.',
+        non_invoice_payments: 'Movimientos PAYMENT que no están asociados a una factura de compra confirmada.',
         expenses: 'Gastos pagados de tipo EXPENSE, por fecha efectiva del movimiento; se muestran separados al elegir el desglose de egresos.',
         other_outflows: 'Vales de empleados y obligaciones pagadas sin un movimiento PAYMENT asociado, evitando duplicaciones.',
-        outflows: 'Egresos efectivos del período: PAYMENT, EXPENSE, vales de empleados y obligaciones pagadas sin PAYMENT asociado. Los pagos aplicados a facturas se cuentan una sola vez como movimientos.',
+        non_invoice_outflows: 'Pagos sin factura asociada, gastos directos y vales u obligaciones sin movimiento PAYMENT. No incluye movimientos PAYMENT aplicados a facturas.',
+        outflows: 'Salidas efectivas del período: todos los PAYMENT, EXPENSE, vales de empleados y obligaciones pagadas sin PAYMENT asociado. Los pagos de facturas son parte de este total.',
         collections: 'Cobros pagados (COLLECTION), presentados en una sección independiente.',
         pending_orders: 'Saldo positivo de las OV aprobadas y posteriores: total menos importe cobrado aplicado.',
         opening_balance_receivable: 'Saldos iniciales positivos de clientes, cargados hasta la fecha Hasta y aún pendientes al momento de consultar; se muestran por separado de las OV.',
@@ -199,6 +206,9 @@ export class FinancialResultsReportService {
   }
 
   async getDocumentItems(dto: FinancialResultsDocumentItemsDto, userId: string) {
+    if (['payments', 'purchase_invoices_paid', 'purchase_invoice_payments', 'invoice_payment_outflows', 'non_invoice_payments', 'expenses', 'other_outflows', 'non_invoice_outflows', 'outflows', 'collections'].includes(dto.metric)) {
+      throw new BadRequestException('Este importe representa un saldo o movimiento financiero y no se distribuye por partidas de producto.');
+    }
     const range = this.parseRange(dto.date_from, dto.date_to);
     const [membership] = await this.getMemberships([dto.company_id], userId);
     return this.db.withTemporaryTenantClient(`${membership.company.subdomain}_db`, async client => {
@@ -286,14 +296,24 @@ export class FinancialResultsReportService {
   private async buildCompanySummary(client: ExtendedPrismaClient, range: DateRange, ovStatuses?: number[]) {
     const metrics = EMPTY_METRICS();
     const counts = EMPTY_COUNTS();
-    const [paymentGroups] = await Promise.all([
+    const [paymentGroups, invoicePaymentGroups] = await Promise.all([
       client.payments.groupBy({
         by: ['currency_code', 'type'],
         where: this.paymentWhere(['PAYMENT', 'EXPENSE', 'COLLECTION'], range),
         _sum: { amount: true },
         _count: { id: true },
       }),
+      client.payments.groupBy({
+        by: ['currency_code'],
+        where: {
+          ...this.paymentWhere(['PAYMENT'], range),
+          documents: { some: this.purchaseInvoicePaymentLinkWhere() },
+        },
+        _sum: { amount: true },
+        _count: { id: true },
+      }),
       this.addPurchaseInvoiceTotals(client, range, metrics, counts),
+      this.addPurchaseInvoicePaymentTotals(client, range, metrics.purchase_invoice_payments, counts.purchase_invoice_payments),
       this.addOtherOutflowTotals(client, range, metrics.other_outflows, counts.other_outflows),
     ]);
 
@@ -313,9 +333,47 @@ export class FinancialResultsReportService {
         this.addCount(counts.expenses, currency, row._count.id);
       }
     }
+    for (const row of invoicePaymentGroups) {
+      const currency = this.currency(row.currency_code);
+      this.addMoney(metrics.invoice_payment_outflows, currency, row._sum.amount ?? 0);
+      this.addCount(counts.invoice_payment_outflows, currency, row._count.id);
+    }
+    metrics.non_invoice_payments = this.subtractMoneyMaps(metrics.payments, metrics.invoice_payment_outflows);
+    counts.non_invoice_payments = this.subtractCountMaps(counts.payments, counts.invoice_payment_outflows);
+    metrics.non_invoice_outflows = this.sumMoneyMaps(metrics.non_invoice_payments, metrics.expenses, metrics.other_outflows);
+    counts.non_invoice_outflows = this.sumCountMaps(counts.non_invoice_payments, counts.expenses, counts.other_outflows);
     metrics.outflows = this.sumMoneyMaps(metrics.payments, metrics.expenses, metrics.other_outflows);
     counts.outflows = this.sumCountMaps(counts.payments, counts.expenses, counts.other_outflows);
     return { metrics, counts };
+  }
+
+  private async addPurchaseInvoicePaymentTotals(
+    client: ExtendedPrismaClient,
+    range: DateRange,
+    totals: MoneyByCurrency,
+    counts: CountByCurrency,
+  ) {
+    let cursor: string | undefined;
+    while (true) {
+      const links = await client.payment_documents.findMany({
+        where: {
+          ...this.purchaseInvoicePaymentLinkWhere(),
+          payment: this.paymentWhere(['PAYMENT'], range),
+        },
+        select: { id: true, amount_applied: true, payment: { select: { currency_code: true } } },
+        orderBy: { id: 'asc' },
+        take: DOCUMENT_BATCH_SIZE,
+        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+      });
+      if (!links.length) break;
+      for (const link of links) {
+        const currency = this.currency(link.payment.currency_code);
+        this.addMoney(totals, currency, link.amount_applied);
+        this.addCount(counts, currency, 1);
+      }
+      cursor = links[links.length - 1]!.id;
+      if (links.length < DOCUMENT_BATCH_SIZE) break;
+    }
   }
 
   private async addPurchaseInvoiceTotals(client: ExtendedPrismaClient, range: DateRange, metrics: Metrics, counts: Counts) {
@@ -337,6 +395,7 @@ export class FinancialResultsReportService {
         this.addMoney(metrics.purchase_invoices, currency, total);
         this.addMoney(metrics.purchase_invoices_paid, currency, paid);
         this.addCount(counts.purchase_invoices, currency, 1);
+        if (paid.greaterThan(0)) this.addCount(counts.purchase_invoices_paid, currency, 1);
         if (pending.greaterThan(0)) {
           this.addMoney(metrics.purchase_invoices_pending, currency, pending);
           this.addCount(counts.purchase_invoices_pending, currency, 1);
@@ -514,7 +573,9 @@ export class FinancialResultsReportService {
     const offset = (dto.page - 1) * dto.page_size;
     const pageEnd = offset + dto.page_size;
 
-    if (['payments', 'expenses', 'collections', 'outflows', 'other_outflows'].includes(dto.metric)) {
+    if (dto.metric === 'purchase_invoice_payments') {
+      await this.processPurchaseInvoicePaymentDetail(client, dto, range, state, query, offset, pageEnd);
+    } else if (['payments', 'invoice_payment_outflows', 'non_invoice_payments', 'expenses', 'collections', 'outflows', 'non_invoice_outflows', 'other_outflows'].includes(dto.metric)) {
       await this.processPaymentDetail(client, dto, range, state, query, offset, pageEnd);
     } else {
       await this.processDocumentDetail(client, dto, range, state, query, offset, pageEnd);
@@ -552,7 +613,7 @@ export class FinancialResultsReportService {
       if (!rows.length) break;
 
       for (const document of rows) {
-        if (['sales_confirmed', 'pending_orders', 'purchase_invoices', 'purchase_invoices_pending'].includes(dto.metric) && dto.payment_state && dto.payment_state !== 'ALL') {
+        if (['sales_confirmed', 'pending_orders', 'purchase_invoices', 'purchase_invoices_paid', 'purchase_invoices_pending'].includes(dto.metric) && dto.payment_state && dto.payment_state !== 'ALL') {
           const total = new Prisma.Decimal(document.total);
           const paid = this.appliedAmount(total, document.paid_amount);
           const paymentState = this.paymentState(total, paid);
@@ -635,15 +696,28 @@ export class FinancialResultsReportService {
       ? ['COLLECTION']
       : dto.metric === 'expenses'
         ? ['EXPENSE']
-        : dto.metric === 'payments'
+        : ['payments', 'invoice_payment_outflows', 'non_invoice_payments'].includes(dto.metric)
           ? ['PAYMENT']
-          : dto.metric === 'outflows'
+          : ['outflows', 'non_invoice_outflows'].includes(dto.metric)
             ? ['PAYMENT', 'EXPENSE']
             : [];
     let cursor: string | undefined;
     while (types.length) {
+      const paymentWhere: Prisma.paymentsWhereInput = this.paymentWhere([...types], range);
+      if (dto.metric === 'invoice_payment_outflows') {
+        paymentWhere.documents = { some: this.purchaseInvoicePaymentLinkWhere() };
+      } else if (dto.metric === 'non_invoice_payments') {
+        paymentWhere.documents = { none: this.purchaseInvoicePaymentLinkWhere() };
+      } else if (dto.metric === 'non_invoice_outflows') {
+        paymentWhere.AND = [{
+          OR: [
+            { type: 'EXPENSE' },
+            { type: 'PAYMENT', documents: { none: this.purchaseInvoicePaymentLinkWhere() } },
+          ],
+        }];
+      }
       const rows = await client.payments.findMany({
-        where: this.paymentWhere([...types], range),
+        where: paymentWhere,
         select: {
           id: true, number: true, type: true, date: true, payment_date: true, amount: true,
           currency_code: true, description: true, reference: true, party_id: true, party: { select: { name: true } },
@@ -651,7 +725,7 @@ export class FinancialResultsReportService {
           account_id: true, account: { select: { id: true, code: true, name: true } },
           documents: {
             where: { deleted_at: null, document: { deleted_at: null } },
-            select: { document: { select: { document_types: { select: { category: true, direction: true } } } } },
+            select: { document: { select: { status: true, document_types: { select: { category: true, direction: true } } } } },
           },
         },
         orderBy: [{ date: 'desc' }, { id: 'asc' }],
@@ -662,7 +736,7 @@ export class FinancialResultsReportService {
 
       for (const payment of rows) {
         const currency = this.currency(payment.currency_code);
-        const linkedPurchaseInvoice = payment.documents.some(link => link.document.document_types.category === 'INVOICE' && link.document.document_types.direction === -1);
+        const linkedPurchaseInvoice = payment.documents.some(link => link.document.status === 2 && link.document.document_types.category === 'INVOICE' && link.document.document_types.direction === -1);
         const linkedVale = payment.documents.some(link => link.document.document_types.category === 'VALE');
         const typeLabel = payment.type === 'EXPENSE'
           ? 'Gasto · EXPENSE'
@@ -735,8 +809,121 @@ export class FinancialResultsReportService {
       cursor = rows[rows.length - 1]!.id;
       if (rows.length < DOCUMENT_BATCH_SIZE) break;
     }
-    if (dto.metric === 'outflows' || dto.metric === 'other_outflows') {
+    if (dto.metric === 'outflows' || dto.metric === 'non_invoice_outflows' || dto.metric === 'other_outflows') {
       await this.processOtherOutflowDetail(client, dto, range, state, query, offset, pageEnd);
+    }
+  }
+
+  private async processPurchaseInvoicePaymentDetail(
+    client: ExtendedPrismaClient,
+    dto: FinancialResultsDetailDto,
+    range: DateRange,
+    state: DetailState,
+    query: string,
+    offset: number,
+    pageEnd: number,
+  ) {
+    let cursor: string | undefined;
+    while (true) {
+      const links = await client.payment_documents.findMany({
+        where: {
+          ...this.purchaseInvoicePaymentLinkWhere(),
+          payment: this.paymentWhere(['PAYMENT'], range),
+        },
+        select: {
+          id: true,
+          amount_applied: true,
+          payment: {
+            select: {
+              id: true, number: true, date: true, payment_date: true, amount: true, currency_code: true,
+              description: true, reference: true, party_id: true, party: { select: { name: true } },
+              account_id: true, account: { select: { id: true, code: true, name: true } },
+            },
+          },
+          document: {
+            select: {
+              id: true, number: true, date: true, total: true, currency_code: true, ref: true,
+              party_id: true, business_parties: { select: { name: true } },
+              document_types: { select: { description: true } },
+              document_sequences: { select: { point_of_sale: true, prefix: true } },
+            },
+          },
+        },
+        orderBy: { id: 'asc' },
+        take: DOCUMENT_BATCH_SIZE,
+        ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+      });
+      if (!links.length) break;
+
+      for (const link of links) {
+        const payment = link.payment;
+        const invoice = link.document;
+        const currency = this.currency(payment.currency_code);
+        const amount = new Prisma.Decimal(link.amount_applied);
+        const account = payment.account;
+        const accountKey = `PAYMENT:${payment.account_id ?? '__unassigned__'}`;
+        const accountName = account
+          ? this.accountLabel(account)
+          : payment.account_id ? `Cuenta histórica (${payment.account_id.slice(0, 8)})` : 'Sin cuenta contable asignada';
+        const invoiceReference = this.documentReference(invoice);
+        const metricType = 'Aplicación a factura de compra';
+        const origin = `Factura ${invoiceReference} · importe en moneda del pago (${currency})`;
+        const allocation: Allocation = {
+          key: accountKey,
+          account_id: payment.account_id,
+          account_code: account?.code ?? null,
+          account_name: accountName,
+          label: accountName,
+          metric_type: metricType,
+          currency_code: currency,
+          amount,
+          item_count: 1,
+          origins: [origin],
+        };
+        const effectiveDate = payment.payment_date ?? payment.date;
+        const paymentReference = `Pago #${payment.number}`;
+        const entry: DetailEntry = {
+          id: link.id,
+          document_id: payment.id,
+          document_category: 'PAYMENT',
+          document_label: 'Pago aplicado',
+          document_reference: paymentReference,
+          related_document_id: invoice.id,
+          related_document_reference: `Factura ${invoiceReference}`,
+          document_date: effectiveDate.toISOString().slice(0, 10),
+          party_id: invoice.party_id ?? payment.party_id,
+          party_name: invoice.business_parties?.name ?? payment.party?.name ?? 'Sin tercero',
+          reference: invoice.ref || invoiceReference,
+          description: payment.description,
+          status: 'PAID',
+          currency_code: currency,
+          account_key: accountKey,
+          account_id: payment.account_id,
+          account_code: account?.code ?? null,
+          account_name: accountName,
+          metric_type: metricType,
+          origin,
+          amount: amount.toFixed(2),
+          document_total_amount: new Prisma.Decimal(payment.amount).toFixed(2),
+          paid_amount: null,
+          pending_amount: null,
+          payment_state: null,
+          item_count: 1,
+          expandable: false,
+        };
+        if (query && !this.matchesSearch(query, [
+          paymentReference, payment.id, invoiceReference, invoice.id, invoice.ref,
+          entry.party_name, payment.reference, payment.description, accountName,
+        ])) continue;
+        this.addComposition(state.composition, allocation);
+        if (dto.currency_code && currency !== this.currency(dto.currency_code)) continue;
+        if (dto.account_key && accountKey !== dto.account_key) continue;
+        this.appendDetailEntry(state, entry, offset, pageEnd);
+        state.total_documents += 1;
+      }
+
+      cursor = links[links.length - 1]!.id;
+      if (links.length < DOCUMENT_BATCH_SIZE) break;
     }
   }
 
@@ -931,20 +1118,40 @@ export class FinancialResultsReportService {
 
   private documentAllocations(document: DocumentDetailRecord, metric: FinancialResultsMetric): Allocation[] {
     const currency = this.currency(document.currency_code);
-    if (metric === 'pending_orders' || metric === 'purchase_invoices_pending' || metric === 'opening_balance_receivable') {
+    if (metric === 'pending_orders' || metric === 'purchase_invoices_paid' || metric === 'purchase_invoices_pending' || metric === 'opening_balance_receivable') {
       const total = new Prisma.Decimal(document.total);
       const paid = this.appliedAmount(total, document.paid_amount);
       const pending = Prisma.Decimal.max(total.minus(paid), new Prisma.Decimal(0));
-      if (!pending.greaterThan(0)) return [];
+      const isPaidInvoice = metric === 'purchase_invoices_paid';
+      const amount = isPaidInvoice ? paid : pending;
+      if (!amount.greaterThan(0)) return [];
       const isOpeningBalance = metric === 'opening_balance_receivable';
       const isPurchaseInvoice = metric === 'purchase_invoices_pending';
-      const label = isOpeningBalance ? 'Saldo inicial por cobrar' : isPurchaseInvoice ? 'Saldo de factura de compra pendiente' : 'Saldo de OV confirmada por cobrar';
+      const label = isOpeningBalance
+        ? 'Saldo inicial por cobrar'
+        : isPaidInvoice
+          ? 'Pagado aplicado a facturas del período'
+          : isPurchaseInvoice
+            ? 'Saldo de factura de compra pendiente'
+            : 'Saldo de OV confirmada por cobrar';
       return [{
-        key: isOpeningBalance ? '__opening_balance_receivable__' : isPurchaseInvoice ? '__purchase_invoice_pending__' : '__pending_receivable__',
+        key: isOpeningBalance
+          ? '__opening_balance_receivable__'
+          : isPaidInvoice
+            ? '__purchase_invoice_paid__'
+            : isPurchaseInvoice
+              ? '__purchase_invoice_pending__'
+              : '__pending_receivable__',
         account_id: null, account_code: null, account_name: label,
-        label, metric_type: null, currency_code: currency, amount: pending,
+        label, metric_type: null, currency_code: currency, amount,
         item_count: 0,
-        origins: [isOpeningBalance ? 'Saldo inicial del cliente menos cobros y retenciones imputados' : isPurchaseInvoice ? 'Total de factura de compra menos paid_amount aplicado' : 'Total de la OV menos el importe cobrado registrado'],
+        origins: [isOpeningBalance
+          ? 'Saldo inicial del cliente menos cobros y retenciones imputados'
+          : isPaidInvoice
+            ? 'paid_amount acumulado actual; sin distribución por partidas de producto'
+            : isPurchaseInvoice
+              ? 'Total de factura de compra menos paid_amount aplicado'
+              : 'Total de la OV menos el importe cobrado registrado'],
       }];
     }
 
@@ -1018,7 +1225,7 @@ export class FinancialResultsReportService {
     const total = new Prisma.Decimal(document.total);
     const paid = this.appliedAmount(total, document.paid_amount);
     const pending = Prisma.Decimal.max(total.minus(paid), new Prisma.Decimal(0));
-    const tracksPayment = ['sales_confirmed', 'pending_orders', 'purchase_invoices', 'purchase_invoices_pending'].includes(metric);
+    const tracksPayment = ['sales_confirmed', 'pending_orders', 'purchase_invoices', 'purchase_invoices_paid', 'purchase_invoices_pending'].includes(metric);
     return {
       id: `${document.id}:${allocation.key}`,
       document_id: document.id,
@@ -1037,14 +1244,14 @@ export class FinancialResultsReportService {
       account_code: allocation.account_code,
       account_name: allocation.label,
       metric_type: allocation.metric_type,
-      origin: allocation.origins.join(' · ') || (metric === 'pending_orders' ? 'Saldo pendiente de la OV' : metric === 'purchase_invoices_pending' ? 'Saldo pendiente de factura de compra' : metric === 'opening_balance_receivable' ? 'Saldo inicial pendiente de cobro' : 'Sin renglones activos'),
+      origin: allocation.origins.join(' · ') || (metric === 'pending_orders' ? 'Saldo pendiente de la OV' : metric === 'purchase_invoices_paid' ? 'Importe pagado acumulado de factura de compra' : metric === 'purchase_invoices_pending' ? 'Saldo pendiente de factura de compra' : metric === 'opening_balance_receivable' ? 'Saldo inicial pendiente de cobro' : 'Sin renglones activos'),
       amount: allocation.amount.toFixed(2),
       document_total_amount: total.toFixed(2),
       paid_amount: tracksPayment ? paid.toFixed(2) : null,
       pending_amount: tracksPayment ? pending.toFixed(2) : null,
       payment_state: tracksPayment ? this.paymentState(total, paid) : null,
       item_count: allocation.item_count,
-      expandable: true,
+      expandable: metric !== 'purchase_invoices_paid',
     };
   }
 
@@ -1088,7 +1295,7 @@ export class FinancialResultsReportService {
     if (metric === 'sales_confirmed') {
       return { ...common, status: { in: ovStatuses ?? [1, 2, 3, 4, 5, 6, 7] }, document_types: { direction: 1, category: 'ORDER' } };
     }
-    if (metric === 'purchase_invoices' || metric === 'purchase_invoices_pending') {
+    if (metric === 'purchase_invoices' || metric === 'purchase_invoices_paid' || metric === 'purchase_invoices_pending') {
       return { ...common, status: 2, document_types: { direction: -1, category: 'INVOICE' } };
     }
     if (metric === 'pending_orders') {
@@ -1119,6 +1326,17 @@ export class FinancialResultsReportService {
     };
   }
 
+  private purchaseInvoicePaymentLinkWhere(): Prisma.payment_documentsWhereInput {
+    return {
+      deleted_at: null,
+      document: {
+        deleted_at: null,
+        status: 2,
+        document_types: { category: 'INVOICE', direction: -1 },
+      },
+    };
+  }
+
   private sumMoneyMaps(...maps: MoneyByCurrency[]): MoneyByCurrency {
     const result: MoneyByCurrency = {};
     for (const values of maps) {
@@ -1131,6 +1349,22 @@ export class FinancialResultsReportService {
     const result: CountByCurrency = {};
     for (const values of maps) {
       for (const [currency, count] of Object.entries(values)) result[currency] = (result[currency] ?? 0) + count;
+    }
+    return result;
+  }
+
+  private subtractMoneyMaps(total: MoneyByCurrency, subset: MoneyByCurrency): MoneyByCurrency {
+    const result: MoneyByCurrency = {};
+    for (const currency of new Set([...Object.keys(total), ...Object.keys(subset)])) {
+      result[currency] = new Prisma.Decimal(total[currency] ?? 0).minus(subset[currency] ?? 0).toFixed(2);
+    }
+    return result;
+  }
+
+  private subtractCountMaps(total: CountByCurrency, subset: CountByCurrency): CountByCurrency {
+    const result: CountByCurrency = {};
+    for (const currency of new Set([...Object.keys(total), ...Object.keys(subset)])) {
+      result[currency] = (total[currency] ?? 0) - (subset[currency] ?? 0);
     }
     return result;
   }

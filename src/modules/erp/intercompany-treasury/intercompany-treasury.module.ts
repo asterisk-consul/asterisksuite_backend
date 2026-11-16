@@ -3,11 +3,12 @@ import { PrismaModule } from '@/prisma/prisma.module';
 import { BankMovementsModule } from '../bank-movements/bank-movements.module';
 import { IntercompanyTreasuryController } from './intercompany-treasury.controller';
 import { IntercompanyTreasuryService } from './intercompany-treasury.service';
+import { IntercompanyOverviewService } from './intercompany-overview.service';
 
 @Module({
   imports: [PrismaModule, BankMovementsModule],
   controllers: [IntercompanyTreasuryController],
-  providers: [IntercompanyTreasuryService],
-  exports: [IntercompanyTreasuryService],
+  providers: [IntercompanyTreasuryService, IntercompanyOverviewService],
+  exports: [IntercompanyTreasuryService, IntercompanyOverviewService],
 })
 export class IntercompanyTreasuryModule {}

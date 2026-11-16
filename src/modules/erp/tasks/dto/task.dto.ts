@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsArray, ArrayMaxSize, ArrayMinSize, ArrayUnique, IsBoolean, IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, IsUUID, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
+import { IsArray, ArrayMaxSize, ArrayMinSize, ArrayUnique, IsBoolean, IsDateString, IsEnum, IsIn, IsInt, IsOptional, IsString, IsUUID, Max, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
 
 export enum TaskPriorityDto {
   LOW = 'LOW',
@@ -20,6 +20,18 @@ export class TaskMemberInputDto {
 
   @IsEnum(TaskMemberRoleDto)
   role!: TaskMemberRoleDto;
+}
+
+export class TaskWorkLogInputDto {
+  @IsInt()
+  @Min(1)
+  @Max(1440)
+  minutes!: number;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  description?: string;
 }
 
 export class CreateTaskBoardDto {
@@ -45,6 +57,10 @@ export class CreateTaskBoardDto {
   @MinLength(1, { each: true })
   @MaxLength(80, { each: true })
   columns?: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  require_work_log_on_transition?: boolean;
 }
 
 export class CreateTaskDto {
@@ -64,6 +80,10 @@ export class CreateTaskDto {
   @IsOptional()
   @IsUUID()
   party_id?: string | null;
+
+  @IsOptional()
+  @IsUUID()
+  category_id?: string | null;
 
   @IsOptional()
   @IsUUID()
@@ -118,6 +138,10 @@ export class UpdateTaskDto {
 
   @IsOptional()
   @IsUUID()
+  category_id?: string | null;
+
+  @IsOptional()
+  @IsUUID()
   assigned_to?: string | null;
 
   @IsOptional()
@@ -150,12 +174,29 @@ export class UpdateTaskDto {
   @ValidateNested({ each: true })
   @Type(() => TaskMemberInputDto)
   members?: TaskMemberInputDto[];
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TaskWorkLogInputDto)
+  work_log?: TaskWorkLogInputDto;
 }
 
 export class SetTaskCompletionDto {
   @IsBoolean()
   completed!: boolean;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => TaskWorkLogInputDto)
+  work_log?: TaskWorkLogInputDto;
 }
+
+export class UpdateTaskBoardSettingsDto {
+  @IsBoolean()
+  require_work_log_on_transition!: boolean;
+}
+
+export class CreateTaskManualWorkLogDto extends TaskWorkLogInputDto {}
 
 export class CreateTaskLabelDto {
   @IsString()
@@ -167,6 +208,35 @@ export class CreateTaskLabelDto {
   @IsString()
   @IsIn(['primary', 'success', 'info', 'warning', 'error', 'neutral'])
   color?: string;
+}
+
+export class CreateTaskCategoryDto {
+  @IsString()
+  @MinLength(1)
+  @MaxLength(60)
+  name!: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['primary', 'success', 'info', 'warning', 'error', 'neutral'])
+  color?: string;
+}
+
+export class UpdateTaskCategoryDto {
+  @IsOptional()
+  @IsString()
+  @MinLength(1)
+  @MaxLength(60)
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['primary', 'success', 'info', 'warning', 'error', 'neutral'])
+  color?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  active?: boolean;
 }
 
 export class CreateTaskCommentDto {
@@ -247,6 +317,34 @@ export class TaskBoardQueryDto {
   @IsOptional()
   @IsUUID()
   party_id?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(120)
+  search?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  member_ids?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  label_ids?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(1000)
+  category_ids?: string;
+
+  @IsOptional()
+  @IsIn(['ALL', 'OPEN', 'COMPLETED'])
+  completion?: string;
+
+  @IsOptional()
+  @IsIn(['ALL', 'NO_DUE', 'OVERDUE', 'TODAY', 'TOMORROW'])
+  due_status?: string;
 }
 
 export class TaskPartyQueryDto {

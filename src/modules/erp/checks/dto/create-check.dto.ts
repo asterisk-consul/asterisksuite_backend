@@ -1,4 +1,4 @@
-import { IsBoolean, IsDateString, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { IsBoolean, IsDateString, IsIn, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min } from 'class-validator';
 
 export class CreateCheckDto {
   @IsOptional()
@@ -8,6 +8,14 @@ export class CreateCheckDto {
   @IsOptional()
   @IsString()
   bank_account_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  bank_account_company_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  bank_account_external_id?: string;
 
   @IsNotEmpty()
   @IsString()

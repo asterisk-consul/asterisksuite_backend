@@ -1,51 +1,51 @@
 model companies {
-  id                     String                            @id @default(uuid()) @db.Uuid
-  name                   String                            @db.VarChar(255)
-  tax_id                 String?                           @db.VarChar(50)
-  vat_condition          String?                           @db.VarChar(30) // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, EXENTO
-  address                String?                           @db.VarChar(500)
-  email                  String?                           @db.VarChar(255)
-  phone                  String?                           @db.VarChar(30)
-  subdomain              String?                           @unique @db.VarChar(100)
-  schema_name            String?                           @unique @db.VarChar(100)
-  created_at             DateTime                          @default(now()) @db.Timestamp(6)
-  updated_at             DateTime                          @updatedAt @db.Timestamp(6)
-  deleted_at             DateTime?
-  created_by             String?                           @db.Uuid
-  updated_by             String?                           @db.Uuid
-  deleted_by             String?                           @db.Uuid
-  companyUsers           company_users[]
-  tablePreferences       user_table_preferences[]
-  arcaSettings           company_arca_settings?
-  whatsappReportSettings company_whatsapp_report_settings?
-  whatsappReportRuns     company_whatsapp_report_runs[]
-  mcpGrants              mcp_oauth_grants[]
-  platformAdminScopes    platform_admin_company_scopes[]
-  subscription           company_subscriptions?
-  moduleOverrides        company_module_overrides[]
-  ownedTreasuryShares    intercompany_treasury_shares[] @relation("treasury_share_owner")
-  receivedTreasuryShares intercompany_treasury_shares[] @relation("treasury_share_consumer")
+  id                       String                             @id @default(uuid()) @db.Uuid
+  name                     String                             @db.VarChar(255)
+  tax_id                   String?                            @db.VarChar(50)
+  vat_condition            String?                            @db.VarChar(30) // RESPONSABLE_INSCRIPTO, MONOTRIBUTO, EXENTO
+  address                  String?                            @db.VarChar(500)
+  email                    String?                            @db.VarChar(255)
+  phone                    String?                            @db.VarChar(30)
+  subdomain                String?                            @unique @db.VarChar(100)
+  schema_name              String?                            @unique @db.VarChar(100)
+  created_at               DateTime                           @default(now()) @db.Timestamp(6)
+  updated_at               DateTime                           @updatedAt @db.Timestamp(6)
+  deleted_at               DateTime?
+  created_by               String?                            @db.Uuid
+  updated_by               String?                            @db.Uuid
+  deleted_by               String?                            @db.Uuid
+  companyUsers             company_users[]
+  tablePreferences         user_table_preferences[]
+  arcaSettings             company_arca_settings?
+  whatsappReportSettings   company_whatsapp_report_settings?
+  whatsappReportRuns       company_whatsapp_report_runs[]
+  mcpGrants                mcp_oauth_grants[]
+  platformAdminScopes      platform_admin_company_scopes[]
+  subscription             company_subscriptions?
+  moduleOverrides          company_module_overrides[]
+  ownedTreasuryShares      intercompany_treasury_shares[]     @relation("treasury_share_owner")
+  receivedTreasuryShares   intercompany_treasury_shares[]     @relation("treasury_share_consumer")
   sourceTreasuryOperations intercompany_treasury_operations[] @relation("treasury_operation_source")
-  fundTreasuryOperations intercompany_treasury_operations[] @relation("treasury_operation_fund")
+  fundTreasuryOperations   intercompany_treasury_operations[] @relation("treasury_operation_fund")
 
   @@schema("public")
 }
 
 // Permisos explícitos para usar una caja o cuenta bancaria en otra empresa.
 model intercompany_treasury_shares {
-  id                           String   @id @default(uuid()) @db.Uuid
-  owner_company_id             String   @db.Uuid
-  consumer_company_id          String   @db.Uuid
-  fund_type                    String   @db.VarChar(20)
-  fund_id                      String   @db.Uuid
-  allow_payments               Boolean  @default(false)
-  allow_collections            Boolean  @default(false)
-  allow_hr                     Boolean  @default(false)
-  active                       Boolean  @default(true)
-  created_at                   DateTime @default(now()) @db.Timestamp(6)
-  updated_at                   DateTime? @updatedAt @db.Timestamp(6)
-  created_by                   String?  @db.Uuid
-  updated_by                   String?  @db.Uuid
+  id                  String    @id @default(uuid()) @db.Uuid
+  owner_company_id    String    @db.Uuid
+  consumer_company_id String    @db.Uuid
+  fund_type           String    @db.VarChar(20)
+  fund_id             String    @db.Uuid
+  allow_payments      Boolean   @default(false)
+  allow_collections   Boolean   @default(false)
+  allow_hr            Boolean   @default(false)
+  active              Boolean   @default(true)
+  created_at          DateTime  @default(now()) @db.Timestamp(6)
+  updated_at          DateTime? @updatedAt @db.Timestamp(6)
+  created_by          String?   @db.Uuid
+  updated_by          String?   @db.Uuid
 
   owner_company    companies @relation("treasury_share_owner", fields: [owner_company_id], references: [id], onDelete: Cascade)
   consumer_company companies @relation("treasury_share_consumer", fields: [consumer_company_id], references: [id], onDelete: Cascade)
@@ -59,23 +59,25 @@ model intercompany_treasury_shares {
 // Saga/idempotencia entre el comprobante de una empresa y el movimiento
 // registrado en la tesorería de otra.
 model intercompany_treasury_operations {
-  id                String   @id @default(uuid()) @db.Uuid
-  source_company_id String   @db.Uuid
-  fund_company_id   String   @db.Uuid
-  source_type       String   @db.VarChar(30)
-  source_id         String   @db.Uuid
-  fund_type         String   @db.VarChar(20)
-  fund_id           String   @db.Uuid
-  attempt           Int      @default(1)
-  operation_type    String   @db.VarChar(20)
-  amount            Decimal  @db.Decimal(15, 2)
-  currency_code     String   @db.VarChar(10)
-  status            String   @default("PENDING") @db.VarChar(20)
-  error             String?  @db.VarChar(500)
-  owner_movement_id String?  @db.Uuid
-  created_at        DateTime @default(now()) @db.Timestamp(6)
+  id                String    @id @default(uuid()) @db.Uuid
+  source_company_id String    @db.Uuid
+  fund_company_id   String    @db.Uuid
+  source_type       String    @db.VarChar(30)
+  source_id         String    @db.Uuid
+  fund_type         String    @db.VarChar(20)
+  fund_id           String    @db.Uuid
+  attempt           Int       @default(1)
+  operation_type    String    @db.VarChar(20)
+  amount            Decimal   @db.Decimal(15, 2)
+  currency_code     String    @db.VarChar(10)
+  status            String    @default("PENDING") @db.VarChar(20)
+  error             String?   @db.VarChar(500)
+  owner_movement_id String?   @db.Uuid
+  description       String?   @db.VarChar(255)
+  effective_date    DateTime? @db.Date
+  created_at        DateTime  @default(now()) @db.Timestamp(6)
   updated_at        DateTime? @updatedAt @db.Timestamp(6)
-  created_by        String?  @db.Uuid
+  created_by        String?   @db.Uuid
 
   source_company companies @relation("treasury_operation_source", fields: [source_company_id], references: [id], onDelete: Restrict)
   fund_company   companies @relation("treasury_operation_fund", fields: [fund_company_id], references: [id], onDelete: Restrict)
@@ -83,6 +85,7 @@ model intercompany_treasury_operations {
   @@unique([source_company_id, source_type, source_id, fund_type, fund_id, attempt])
   @@index([status, created_at])
   @@index([fund_company_id, fund_type, fund_id, created_at])
+  @@index([source_company_id, fund_company_id, status, currency_code], map: "intercompany_treasury_operations_pair_status_idx")
   @@schema("public")
 }
 

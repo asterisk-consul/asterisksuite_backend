@@ -5,13 +5,22 @@ import { TaskPriority } from '@/generated/prisma/client';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
-import { CreateTaskBoardDto, CreateTaskChecklistDto, CreateTaskChecklistItemDto, CreateTaskColumnDto, CreateTaskCommentDto, CreateTaskDto, CreateTaskLabelDto, MoveAllTasksDto, MoveTaskColumnDto, SetTaskCompletionDto, TaskColumnPreferencesDto, TaskMemberInputDto, TaskPriorityDto, UpdateTaskChecklistItemDto, UpdateTaskDto } from './dto/task.dto';
+import { CreateTaskBoardDto, CreateTaskCategoryDto, CreateTaskChecklistDto, CreateTaskChecklistItemDto, CreateTaskColumnDto, CreateTaskCommentDto, CreateTaskDto, CreateTaskLabelDto, CreateTaskManualWorkLogDto, MoveAllTasksDto, MoveTaskColumnDto, SetTaskCompletionDto, TaskBoardQueryDto, TaskColumnPreferencesDto, TaskMemberInputDto, TaskPriorityDto, TaskWorkLogInputDto, UpdateTaskBoardSettingsDto, UpdateTaskCategoryDto, UpdateTaskChecklistItemDto, UpdateTaskDto } from './dto/task.dto';
 
 const DEFAULT_COLUMNS = [
   { name: 'Pendiente', color: 'neutral', is_closed: false },
   { name: 'En curso', color: 'info', is_closed: false },
   { name: 'En revisión', color: 'warning', is_closed: false },
   { name: 'Finalizada', color: 'success', is_closed: true },
+];
+
+const DEFAULT_TASK_CATEGORIES = [
+  { name: 'Soporte', color: 'info' },
+  { name: 'Desarrollo', color: 'primary' },
+  { name: 'Implementación', color: 'warning' },
+  { name: 'Capacitación', color: 'success' },
+  { name: 'Oportunidad de mejora', color: 'error' },
+  { name: 'I+D', color: 'neutral' },
 ];
 
 @Injectable()
@@ -70,6 +79,7 @@ export class TasksService {
         party_id: true,
         party: { select: { id: true, name: true } },
         is_default: true,
+        require_work_log_on_transition: true,
         created_at: true,
         _count: { select: { columns: true, tasks: true } },
       },
@@ -91,6 +101,7 @@ export class TasksService {
           description: dto.description?.trim() || null,
           party_id: dto.party_id ?? null,
           is_default: (await tx.task_boards.count({ where: { deleted_at: null } })) === 0,
+          require_work_log_on_transition: dto.require_work_log_on_transition ?? false,
           created_by: user.id,
           columns: {
             create: names.map((name, position) => ({
@@ -101,7 +112,7 @@ export class TasksService {
             })),
           },
         },
-        select: { id: true, name: true, description: true, is_default: true },
+        select: { id: true, name: true, description: true, is_default: true, require_work_log_on_transition: true },
       });
       return board;
     });
@@ -122,6 +133,17 @@ export class TasksService {
     return tenant.task_board_columns.create({
       data: { board_id: boardId, name, position: count, color: 'neutral', created_by: user.id },
       select: { id: true, name: true, position: true, color: true, is_closed: true },
+    });
+  }
+
+  async updateBoardSettings(boardId: string, dto: UpdateTaskBoardSettingsDto, user: AuthUser) {
+    const tenant = this.tenant;
+    const board = await tenant.task_boards.findFirst({ where: { id: boardId, active: true, deleted_at: null }, select: { id: true } });
+    if (!board) throw new NotFoundException('Tablero no encontrado');
+    return tenant.task_boards.update({
+      where: { id: boardId },
+      data: { require_work_log_on_transition: dto.require_work_log_on_transition, updated_by: user.id },
+      select: { id: true, require_work_log_on_transition: true },
     });
   }
 
@@ -158,6 +180,7 @@ export class TasksService {
       take: 501,
       select: {
         title: true, description: true, priority: true, party_id: true, assigned_to: true, start_at: true, due_at: true,
+        category_id: true,
         labels: { select: { label_id: true } },
       },
     });
@@ -178,6 +201,7 @@ export class TasksService {
             description: task.description,
             priority: task.priority,
             party_id: task.party_id,
+            category_id: task.category_id,
             assigned_to: task.assigned_to,
             start_at: task.start_at,
             due_at: task.due_at,
@@ -197,6 +221,10 @@ export class TasksService {
     const tenant = this.tenant;
     const source = await tenant.task_board_columns.findFirst({ where: { id: columnId, deleted_at: null }, select: { id: true, board_id: true } });
     if (!source) throw new NotFoundException('Lista de origen no encontrada');
+    const boardSettings = await tenant.task_boards.findUnique({ where: { id: source.board_id }, select: { require_work_log_on_transition: true } });
+    if (boardSettings?.require_work_log_on_transition) {
+      throw new BadRequestException('Este tablero exige registrar tiempo por tarea; desactivá la regla o mové las tareas una por una');
+    }
     const target = await tenant.task_board_columns.findFirst({ where: { id: dto.target_column_id, board_id: source.board_id, deleted_at: null }, select: { id: true, is_closed: true } });
     if (!target) throw new BadRequestException('La lista de destino debe pertenecer al mismo tablero');
     if (target.id === source.id) throw new BadRequestException('Elegí una lista de destino diferente');
@@ -232,7 +260,50 @@ export class TasksService {
     });
   }
 
-  async getBoard(boardId: string, partyId: string | undefined, userId: string) {
+  async getBoard(boardId: string, query: TaskBoardQueryDto, userId: string) {
+    const taskWhere: Record<string, any> = {
+      deleted_at: null,
+      ...(query.party_id ? { party_id: query.party_id } : {}),
+      ...(query.label_ids ? { labels: { some: { label_id: { in: this.parseFilterIds(query.label_ids) } } } } : {}),
+      ...(query.category_ids ? { category_id: { in: this.parseFilterIds(query.category_ids) } } : {}),
+      ...(query.completion === 'OPEN' ? { completed_at: null } : query.completion === 'COMPLETED' ? { completed_at: { not: null } } : {}),
+    };
+    const memberIds = query.member_ids ? query.member_ids.split(',').filter(id => id === 'NONE' || id === 'ME' || /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) : [];
+    const selectedMembers = memberIds.filter(id => !['NONE', 'ME'].includes(id));
+    if (memberIds.length) {
+      const or: any[] = [];
+      if (memberIds.includes('NONE')) or.push({ assigned_to: null, members: { none: {} } });
+      const actualIds = [...new Set([...selectedMembers, ...(memberIds.includes('ME') ? [userId] : [])])];
+      if (actualIds.length) or.push({ OR: [{ assigned_to: { in: actualIds } }, { members: { some: { user_id: { in: actualIds } } } }] });
+      taskWhere.AND = [...(taskWhere.AND ?? []), { OR: or }];
+    }
+    if (query.due_status === 'NO_DUE') taskWhere.due_at = null;
+    if (query.due_status && ['OVERDUE', 'TODAY', 'TOMORROW'].includes(query.due_status)) {
+      const dateParts = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Argentina/Buenos_Aires', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+      const datePart = (type: string) => dateParts.find(part => part.type === type)?.value ?? '';
+      const start = new Date(`${datePart('year')}-${datePart('month')}-${datePart('day')}T03:00:00.000Z`);
+      const tomorrow = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+      const nextDay = new Date(tomorrow.getTime() + 24 * 60 * 60 * 1000);
+      taskWhere.completed_at = null;
+      taskWhere.due_at = query.due_status === 'OVERDUE' ? { lt: start } : query.due_status === 'TODAY' ? { gte: start, lt: tomorrow } : { gte: tomorrow, lt: nextDay };
+    }
+    const search = query.search?.trim();
+    if (search) {
+      const companyId = this.context().companyId!;
+      const matchingUsers = await this.db.getDefaultClient().company_users.findMany({
+        where: { company_id: companyId, user: { active: true, deleted_at: null, name: { contains: search, mode: 'insensitive' } } },
+        select: { user_id: true }, take: 100,
+      });
+      const matchingUserIds = matchingUsers.map(row => row.user_id);
+      taskWhere.AND = [...(taskWhere.AND ?? []), { OR: [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+        { party: { name: { contains: search, mode: 'insensitive' } } },
+        { labels: { some: { label: { name: { contains: search, mode: 'insensitive' } } } } },
+        { category: { name: { contains: search, mode: 'insensitive' } } },
+        ...(matchingUserIds.length ? [{ assigned_to: { in: matchingUserIds } }, { members: { some: { user_id: { in: matchingUserIds } } } }] : []),
+      ] }];
+    }
     const board = await this.tenant.task_boards.findFirst({
       where: { id: boardId, active: true, deleted_at: null },
       select: {
@@ -242,6 +313,7 @@ export class TasksService {
         party_id: true,
         party: { select: { id: true, name: true } },
         is_default: true,
+        require_work_log_on_transition: true,
         columns: {
           where: { deleted_at: null },
           orderBy: [{ position: 'asc' }, { created_at: 'asc' }],
@@ -254,11 +326,11 @@ export class TasksService {
             preferences: { where: { user_id: userId }, select: { is_pinned: true, is_watching: true }, take: 1 },
             _count: {
               select: {
-                tasks: { where: { deleted_at: null, ...(partyId ? { party_id: partyId } : {}) } },
+                tasks: { where: taskWhere as any },
               },
             },
             tasks: {
-              where: { deleted_at: null, ...(partyId ? { party_id: partyId } : {}) },
+              where: taskWhere as any,
               orderBy: [{ position: 'asc' }, { updated_at: 'desc' }],
               take: 100,
               select: {
@@ -274,6 +346,7 @@ export class TasksService {
                 updated_at: true,
                 completed_at: true,
                 party: { select: { id: true, name: true } },
+                category: { select: { id: true, name: true, color: true, active: true } },
                 members: { select: { user_id: true, role: true } },
                 labels: { select: { label: { select: { id: true, name: true, color: true } } } },
                 _count: { select: { comments: true, checklists: true } },
@@ -298,6 +371,7 @@ export class TasksService {
         tasks: column.tasks.map(task => ({
           ...(taskMap.get(task.id) ?? task),
           labels: task.labels.map(({ label }) => label),
+          category: task.category,
           comments_count: task._count.comments,
           checklist_count: task._count.checklists,
         })),
@@ -354,6 +428,33 @@ export class TasksService {
     return members.map(({ user }) => user).sort((a, b) => a.name.localeCompare(b.name, 'es'));
   }
 
+  async getWorkLogs(taskId: string) {
+    const tenant = this.tenant;
+    const task = await tenant.tasks.findFirst({ where: { id: taskId, deleted_at: null }, select: { id: true } });
+    if (!task) throw new NotFoundException('Tarea no encontrada');
+    const logs = await tenant.task_work_logs.findMany({
+      where: { task_id: taskId },
+      orderBy: { created_at: 'desc' },
+      take: 200,
+      select: { id: true, user_id: true, minutes: true, description: true, created_at: true },
+    });
+    const userIds = [...new Set(logs.map(log => log.user_id))];
+    const users = userIds.length ? await this.db.getDefaultClient().users.findMany({ where: { id: { in: userIds } }, select: { id: true, name: true }, take: userIds.length }) : [];
+    const byId = new Map(users.map(item => [item.id, item.name]));
+    const aggregate = await tenant.task_work_logs.aggregate({ where: { task_id: taskId }, _sum: { minutes: true } });
+    return { items: logs.map(log => ({ ...log, user_name: byId.get(log.user_id) ?? 'Usuario' })), total_minutes: aggregate._sum.minutes ?? 0, limited: logs.length === 200 };
+  }
+
+  async addManualWorkLog(taskId: string, dto: CreateTaskManualWorkLogDto, user: AuthUser) {
+    const tenant = this.tenant;
+    const task = await tenant.tasks.findFirst({ where: { id: taskId, deleted_at: null }, select: { id: true } });
+    if (!task) throw new NotFoundException('Tarea no encontrada');
+    return tenant.task_work_logs.create({
+      data: { task_id: taskId, user_id: user.id, minutes: dto.minutes, description: dto.description?.trim() || null },
+      select: { id: true, user_id: true, minutes: true, description: true, created_at: true },
+    });
+  }
+
   async getLabels() {
     return this.tenant.task_labels.findMany({
       where: { active: true },
@@ -361,6 +462,44 @@ export class TasksService {
       take: 200,
       select: { id: true, name: true, color: true },
     });
+  }
+
+  async getCategories() {
+    const tenant = this.tenant;
+    const existing = await tenant.task_categories.findMany({ select: { name: true }, take: 200 });
+    const existingNames = new Set(existing.map(item => item.name.toLocaleLowerCase('es')));
+    const missing = DEFAULT_TASK_CATEGORIES.filter(item => !existingNames.has(item.name.toLocaleLowerCase('es')));
+    if (missing.length) {
+      await tenant.task_categories.createMany({ data: missing.map(item => ({ ...item })), skipDuplicates: true });
+    }
+    return tenant.task_categories.findMany({ orderBy: [{ active: 'desc' }, { name: 'asc' }], take: 200, select: { id: true, name: true, color: true, active: true } });
+  }
+
+  async createCategory(dto: CreateTaskCategoryDto, user: AuthUser) {
+    const tenant = this.tenant;
+    const name = dto.name.trim();
+    const existing = await tenant.task_categories.findFirst({ where: { name: { equals: name, mode: 'insensitive' } } });
+    if (existing) {
+      if (!existing.active) return tenant.task_categories.update({ where: { id: existing.id }, data: { active: true, color: dto.color ?? existing.color }, select: { id: true, name: true, color: true, active: true } });
+      throw new BadRequestException('Ya existe una categoría con ese nombre');
+    }
+    return tenant.task_categories.create({ data: { name, color: dto.color ?? 'neutral', created_by: user.id }, select: { id: true, name: true, color: true, active: true } });
+  }
+
+  async updateCategory(categoryId: string, dto: UpdateTaskCategoryDto) {
+    const tenant = this.tenant;
+    if (dto.name !== undefined && (typeof dto.name !== 'string' || !dto.name.trim())) throw new BadRequestException('El nombre de la categoría no puede quedar vacío');
+    const current = await tenant.task_categories.findUnique({ where: { id: categoryId }, select: { id: true } });
+    if (!current) throw new NotFoundException('Categoría no encontrada');
+    if (dto.name?.trim()) {
+      const duplicate = await tenant.task_categories.findFirst({ where: { id: { not: categoryId }, name: { equals: dto.name.trim(), mode: 'insensitive' } }, select: { id: true } });
+      if (duplicate) throw new BadRequestException('Ya existe una categoría con ese nombre');
+    }
+    return tenant.task_categories.update({ where: { id: categoryId }, data: { ...(dto.name !== undefined ? { name: dto.name.trim() } : {}), ...(dto.color !== undefined ? { color: dto.color } : {}), ...(dto.active !== undefined ? { active: dto.active } : {}) }, select: { id: true, name: true, color: true, active: true } });
+  }
+
+  private parseFilterIds(value: string) {
+    return [...new Set(value.split(',').map(item => item.trim()).filter(item => /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(item)))];
   }
 
   async createLabel(dto: CreateTaskLabelDto, user: AuthUser) {
@@ -605,6 +744,7 @@ export class TasksService {
     const taskMembers = this.withoutResponsible(dto.members ?? [], dto.assigned_to);
     await this.validateMembers(taskMembers);
     await this.validateLabels(dto.label_ids);
+    await this.validateCategory(dto.category_id);
     const maxPosition = await tenant.tasks.aggregate({ where: { column_id: column.id, deleted_at: null }, _max: { position: true } });
     const title = dto.title.trim();
     const description = dto.description?.trim() || null;
@@ -618,6 +758,7 @@ export class TasksService {
           description,
           priority: (dto.priority ?? TaskPriorityDto.NORMAL) as TaskPriority,
           party_id: partyId ?? null,
+          category_id: dto.category_id ?? null,
           assigned_to: dto.assigned_to ?? null,
           start_at: dto.start_at ? new Date(dto.start_at) : null,
           due_at: dto.due_at ? new Date(dto.due_at) : null,
@@ -674,7 +815,7 @@ export class TasksService {
     return tenant.$transaction(async tx => {
       const task = await tx.tasks.findFirst({
         where: { id: taskId, deleted_at: null },
-        select: { id: true, board_id: true, column_id: true, completed_at: true, column: { select: { is_closed: true } } },
+        select: { id: true, board_id: true, column_id: true, completed_at: true, column: { select: { is_closed: true } }, board: { select: { require_work_log_on_transition: true } } },
       });
       if (!task) throw new NotFoundException('Tarea no encontrada');
       if (!!task.completed_at === dto.completed) return { success: true, completed: dto.completed, column_id: task.column_id, position: undefined, completed_at: task.completed_at };
@@ -693,6 +834,8 @@ export class TasksService {
           select: { id: true, is_closed: true },
         });
       }
+
+      await this.recordTransitionWorkLog(tx, task.id, user.id, task.board.require_work_log_on_transition, dto.work_log);
 
       const data: Record<string, unknown> = {
         completed_at: dto.completed ? new Date() : null,
@@ -715,7 +858,7 @@ export class TasksService {
   async updateTask(taskId: string, dto: UpdateTaskDto, user: AuthUser) {
     const tenant = this.tenant;
     const context = this.context();
-    const task = await tenant.tasks.findFirst({ where: { id: taskId, deleted_at: null }, select: { id: true, title: true, description: true, assigned_to: true, created_by: true, board_id: true, column_id: true, members: { select: { user_id: true, role: true } }, board: { select: { party_id: true } } } });
+    const task = await tenant.tasks.findFirst({ where: { id: taskId, deleted_at: null }, select: { id: true, title: true, description: true, assigned_to: true, category_id: true, created_by: true, board_id: true, column_id: true, position: true, members: { select: { user_id: true, role: true } }, board: { select: { party_id: true, require_work_log_on_transition: true } } } });
     if (!task) throw new NotFoundException('Tarea no encontrada');
     const targetColumn = dto.column_id
       ? await tenant.task_board_columns.findFirst({
@@ -737,21 +880,52 @@ export class TasksService {
     const nextMembers = this.withoutResponsible(dto.members ?? task.members, assignedTo);
     if (dto.members !== undefined) await this.validateMembers(nextMembers);
     if (dto.label_ids !== undefined) await this.validateLabels(dto.label_ids);
+    if (dto.category_id !== undefined && dto.category_id !== task.category_id) await this.validateCategory(dto.category_id);
     const inAppEnabled = await this.getInAppTasksNotificationsEnabled(context.companyId!);
     const data: Record<string, unknown> = { updated_by: user.id };
     if (dto.title !== undefined) data.title = dto.title.trim();
     if (dto.description !== undefined) data.description = dto.description?.trim() || null;
     if (dto.priority !== undefined) data.priority = dto.priority as TaskPriority;
     if (dto.party_id !== undefined) data.party_id = dto.party_id ?? null;
+    if (dto.category_id !== undefined) data.category_id = dto.category_id ?? null;
     if (dto.assigned_to !== undefined) data.assigned_to = dto.assigned_to ?? null;
     if (dto.start_at !== undefined) data.start_at = dto.start_at ? new Date(dto.start_at) : null;
     if (dto.due_at !== undefined) data.due_at = dto.due_at ? new Date(dto.due_at) : null;
-    if (targetColumn) {
+    if (targetColumn && targetColumn.id !== task.column_id) {
+      const maxPosition = await tenant.tasks.aggregate({
+        where: { column_id: targetColumn.id, deleted_at: null },
+        _max: { position: true },
+      });
       data.column_id = targetColumn.id;
+      data.position = dto.position ?? (maxPosition._max.position ?? -1) + 1;
+      data.completed_at = targetColumn.is_closed ? new Date() : null;
+    } else if (targetColumn && dto.position !== undefined) {
+      data.position = dto.position;
       data.completed_at = targetColumn.is_closed ? new Date() : null;
     }
-    if (dto.position !== undefined) data.position = dto.position;
     const updated = await tenant.$transaction(async tx => {
+      if (targetColumn && targetColumn.id !== task.column_id) {
+        await this.recordTransitionWorkLog(tx, task.id, user.id, task.board.require_work_log_on_transition, dto.work_log);
+      }
+      const targetPosition = typeof data.position === 'number' ? data.position : task.position;
+      if (targetColumn && targetColumn.id !== task.column_id) {
+        await tx.tasks.updateMany({
+          where: { column_id: task.column_id, deleted_at: null, id: { not: task.id }, position: { gt: task.position } },
+          data: { position: { decrement: 1 } },
+        });
+        await tx.tasks.updateMany({
+          where: { column_id: targetColumn.id, deleted_at: null, id: { not: task.id }, position: { gte: targetPosition } },
+          data: { position: { increment: 1 } },
+        });
+      } else if (targetColumn && dto.position !== undefined && dto.position !== task.position) {
+        const range = dto.position < task.position
+          ? { gte: dto.position, lt: task.position }
+          : { gt: task.position, lte: dto.position };
+        await tx.tasks.updateMany({
+          where: { column_id: task.column_id, deleted_at: null, id: { not: task.id }, position: range },
+          data: { position: dto.position < task.position ? { increment: 1 } : { decrement: 1 } },
+        });
+      }
       if (dto.label_ids !== undefined) {
         await tx.task_label_assignments.deleteMany({ where: { task_id: task.id } });
         if (dto.label_ids.length) {
@@ -816,6 +990,7 @@ export class TasksService {
         id: true, board_id: true, column_id: true, title: true, description: true, priority: true,
         assigned_to: true, start_at: true, due_at: true, position: true, created_at: true,
         updated_at: true, completed_at: true, party: { select: { id: true, name: true } },
+        category: { select: { id: true, name: true, color: true, active: true } },
         members: { select: { user_id: true, role: true } },
         labels: { select: { label: { select: { id: true, name: true, color: true } } } },
         _count: { select: { comments: true, checklists: true } },
@@ -826,6 +1001,7 @@ export class TasksService {
     return {
       ...decorated,
       labels: task.labels.map(({ label }) => label),
+      category: task.category,
       comments_count: task._count.comments,
       checklist_count: task._count.checklists,
     };
@@ -930,6 +1106,22 @@ export class TasksService {
       select: { id: true },
     });
     if (labels.length !== new Set(labelIds).size) throw new BadRequestException('Una o más etiquetas no están disponibles en esta empresa');
+  }
+
+  private async validateCategory(categoryId?: string | null) {
+    if (!categoryId) return;
+    const category = await this.tenant.task_categories.findFirst({ where: { id: categoryId, active: true }, select: { id: true } });
+    if (!category) throw new BadRequestException('La categoría no está disponible en esta empresa');
+  }
+
+  private async recordTransitionWorkLog(tx: any, taskId: string, userId: string, required: boolean, input?: TaskWorkLogInputDto) {
+    if (input) {
+      await tx.task_work_logs.create({
+        data: { task_id: taskId, user_id: userId, minutes: input.minutes, description: input.description?.trim() || null },
+      });
+      return;
+    }
+    if (required) throw new BadRequestException({ code: 'TASK_WORK_LOG_REQUIRED', message: 'Registrá el tiempo trabajado para cambiar la tarea de estado.' });
   }
 
   private async attachAssignees<T extends { id: string; assigned_to: string | null; members?: Array<{ user_id: string; role: string }> }>(items: T[]) {

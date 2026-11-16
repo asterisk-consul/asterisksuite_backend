@@ -229,14 +229,22 @@ export class UsersController {
   @Get('all')
   @UseGuards(JwtAuthGuard)
   async findAllUsers() {
-    const companyUserIds = await this.getCompanyUserIds();
-    if (companyUserIds.length === 0) return [];
-    const users = await this.prisma.getDefaultClient().users.findMany({
-      where: { id: { in: companyUserIds } },
+    const companyId = getCurrentCompanyId();
+    if (!companyId) return [];
+    const publicPrisma = this.prisma.getDefaultClient();
+    const memberships = await publicPrisma.company_users.findMany({
+      where: { company_id: companyId },
+      select: { user_id: true, role: true },
+    });
+    if (memberships.length === 0) return [];
+
+    const users = await publicPrisma.users.findMany({
+      where: { id: { in: memberships.map((membership) => membership.user_id) } },
       select: { id: true, name: true, email: true },
       take: 100,
     });
-    return users;
+    const roleByUserId = new Map(memberships.map((membership) => [membership.user_id, membership.role]));
+    return users.map((user) => ({ ...user, company_role: roleByUserId.get(user.id) ?? 'USER' }));
   }
 
   @Get(':userId/roles')

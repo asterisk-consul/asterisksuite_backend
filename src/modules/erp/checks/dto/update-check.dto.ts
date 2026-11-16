@@ -30,6 +30,14 @@ export class UpdateCheckDto {
   bank_account_id?: string;
 
   @IsOptional()
+  @IsUUID()
+  bank_account_company_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  bank_account_external_id?: string;
+
+  @IsOptional()
   @IsString()
   @MaxLength(100)
   bank_branch?: string;

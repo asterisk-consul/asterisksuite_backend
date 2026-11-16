@@ -63,6 +63,16 @@ export class CashBoxTransfersController {
     return this.transfersService.confirm(id, user.id);
   }
 
+  @Patch(':id/intercompany-purpose')
+  @RequirePermissions('cash_box_transfers.confirm')
+  setIntercompanyPurpose(
+    @Param('id') id: string,
+    @Body() body: { purpose: 'SETTLEMENT' | 'OTHER' },
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.transfersService.setIntercompanyPurpose(id, body.purpose, user.id);
+  }
+
   @Patch(':id/cancel')
   @UseGuards(CashBoxAccessGuard)
   @RequirePermissions('cash_box_transfers.cancel')

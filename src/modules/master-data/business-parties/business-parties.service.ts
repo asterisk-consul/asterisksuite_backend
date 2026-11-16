@@ -5,7 +5,7 @@ import { UpdateBusinessPartyDto } from './dto/update-business-party.dto';
 import { AddBusinessPartyLocationDto } from './dto/add-business-party-location.dto';
 import { LinkBusinessPartyLocationDto } from './dto/link-business-party-location.dto';
 import { validateDocumentNumber } from '@/common/validators/document.validator';
-import { assertPartyIdentityIsUnique } from './party-identity.util';
+import { assertPartyIdentityIsUnique, assertPartyNameIsUnique } from './party-identity.util';
 
 // Campos laborales del DTO que pertenecen al empleados vinculado, no al party
 const LABOR_FIELDS = [
@@ -38,9 +38,11 @@ export class BusinessPartiesService {
 
   // ✅ CREATE con relaciones + auto-creación de employee/partner
   async create(data: CreateBusinessPartyDto) {
-    // Validar formato de documento
-    validateDocumentNumber(data.document_type, data.tax_id);
-    await assertPartyIdentityIsUnique(this.prisma, [data.tax_id]);
+    const name = await assertPartyNameIsUnique(this.prisma, data.name);
+    const taxId = data.type === 'TAX_AUTHORITY' ? null : data.tax_id?.trim() || null;
+    const documentType = data.type === 'TAX_AUTHORITY' ? null : data.document_type?.trim() || null;
+    validateDocumentNumber(documentType ?? undefined, taxId ?? undefined);
+    await assertPartyIdentityIsUnique(this.prisma, [taxId]);
 
     const laborData = this.pickLaborFields(data);
     const {
@@ -58,6 +60,9 @@ export class BusinessPartiesService {
     const party = await this.prisma.business_parties.create({
       data: {
         ...partyData,
+        name,
+        tax_id: taxId,
+        document_type: documentType,
 
         party_locations: locations
           ? {
@@ -297,10 +302,14 @@ export class BusinessPartiesService {
   // ✅ UPDATE (con sync de relaciones)
   async update(id: string, data: UpdateBusinessPartyDto) {
     const current = await this.findOne(id);
-    if (data.tax_id !== undefined && data.tax_id !== current.tax_id) {
-      await assertPartyIdentityIsUnique(this.prisma, [data.tax_id], { partyId: id });
+    const name = await assertPartyNameIsUnique(this.prisma, data.name ?? current.name, id);
+    const type = data.type ?? current.type;
+    const taxId = type === 'TAX_AUTHORITY' ? null : data.tax_id !== undefined ? data.tax_id?.trim() || null : current.tax_id;
+    const documentType = type === 'TAX_AUTHORITY' ? null : data.document_type !== undefined ? data.document_type?.trim() || null : current.document_type;
+    if (taxId !== current.tax_id) {
+      await assertPartyIdentityIsUnique(this.prisma, [taxId], { partyId: id });
     }
-    validateDocumentNumber(data.document_type ?? current.document_type ?? undefined, data.tax_id ?? current.tax_id ?? undefined);
+    validateDocumentNumber(documentType ?? undefined, taxId ?? undefined);
 
     const laborData = this.pickLaborFields(data);
     const {
@@ -315,6 +324,9 @@ export class BusinessPartiesService {
       where: { id },
       data: {
         ...partyData,
+        name,
+        tax_id: taxId,
+        document_type: documentType,
 
         // 🔥 LOCATIONS sync
         party_locations: locations

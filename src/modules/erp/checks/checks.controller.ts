@@ -88,7 +88,7 @@ export class ChecksController {
   @RequirePermissions('checks.deposit')
   deposit(
     @Param('id') id: string,
-    @Body() body: { bank_account_id: string; amount?: number; date?: string },
+    @Body() body: { bank_account_id?: string; bank_account_company_id?: string; bank_account_external_id?: string; amount?: number; date?: string },
     @CurrentUser() user: AuthUser,
   ) {
     return this.checksService.deposit(id, body, user.id);

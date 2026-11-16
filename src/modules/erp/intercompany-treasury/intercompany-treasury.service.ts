@@ -195,6 +195,8 @@ export class IntercompanyTreasuryService {
             operation_type: input.operationType,
             amount: input.amount,
             currency_code: input.currencyCode,
+            description: input.description.slice(0, 255),
+            effective_date: input.date,
             created_by: input.userId,
           },
         });
@@ -215,6 +217,8 @@ export class IntercompanyTreasuryService {
               operation_type: input.operationType,
               amount: input.amount,
               currency_code: input.currencyCode,
+              description: input.description.slice(0, 255),
+              effective_date: input.date,
               updated_at: new Date(),
             },
           });
@@ -228,6 +232,8 @@ export class IntercompanyTreasuryService {
           operation_type: input.operationType,
           amount: input.amount,
           currency_code: input.currencyCode,
+          description: input.description.slice(0, 255),
+          effective_date: input.date,
           updated_at: new Date(),
         },
       });
@@ -286,9 +292,22 @@ export class IntercompanyTreasuryService {
         const already = await tenant.bank_account_movements.findFirst({ where: { reference_type: referenceType, reference_id: operation.id, deleted_at: null }, select: { id: true } });
         if (already) movementId = already.id;
         else {
-          const bankOperation = await this.bankMovements.openOperation({ bankAccountId: input.fundId, operationType: input.operationType, sourceType: input.sourceType, sourceId: operation.id, date: input.date, currencyCode: input.currencyCode, description: postedDescription, userId: input.userId }, tenant);
-          const movement = await this.bankMovements.addMovement({ bankAccountId: input.fundId, type: input.operationType, nature: input.operationType === 'PAYMENT' ? 'DEBIT' : 'CREDIT', amount: input.operationType === 'PAYMENT' ? -Math.abs(input.amount) : Math.abs(input.amount), currencyCode: input.currencyCode, operationId: bankOperation.id, description: postedDescription, referenceType, referenceId: operation.id, date: input.date, userId: input.userId }, tenant);
-          movementId = movement.id;
+          movementId = await tenant.$transaction(async (tx) => {
+            await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${input.fundId}::uuid FOR UPDATE`;
+            const lockedAccount = await tx.bank_accounts.findFirst({
+              where: { id: input.fundId, active: true, deleted_at: null },
+              select: { balance: true, currency_code: true },
+            });
+            if (!lockedAccount || lockedAccount.currency_code !== input.currencyCode) {
+              throw new BadRequestException('La cuenta bancaria compartida no está activa o su moneda no coincide');
+            }
+            if (input.sourceType === 'check' && input.operationType === 'PAYMENT' && Number(lockedAccount.balance) < input.amount) {
+              throw new BadRequestException('Saldo insuficiente en la cuenta bancaria compartida para debitar el cheque');
+            }
+            const bankOperation = await this.bankMovements.openOperation({ bankAccountId: input.fundId, operationType: input.sourceType === 'check' ? 'CHECK' : input.operationType, sourceType: input.sourceType, sourceId: operation.id, date: input.date, currencyCode: input.currencyCode, description: postedDescription, userId: input.userId }, tx);
+            const movement = await this.bankMovements.addMovement({ bankAccountId: input.fundId, type: input.sourceType === 'check' ? input.operationType === 'PAYMENT' ? 'CHECK_ISSUED' : 'CHECK_RECEIVED' : input.operationType, nature: input.operationType === 'PAYMENT' ? 'DEBIT' : 'CREDIT', amount: input.operationType === 'PAYMENT' ? -Math.abs(input.amount) : Math.abs(input.amount), currencyCode: input.currencyCode, operationId: bankOperation.id, description: postedDescription, referenceType, referenceId: operation.id, date: input.date, userId: input.userId }, tx);
+            return movement.id;
+          }, { timeout: 20_000 });
         }
       }
       return await this.publicDb.intercompany_treasury_operations.update({ where: { id: operation.id }, data: { status: 'COMPLETED', owner_movement_id: movementId, error: null, updated_at: new Date() } });
@@ -349,10 +368,19 @@ export class IntercompanyTreasuryService {
     } else {
       const exists = await tenant.bank_account_movements.findFirst({ where: { reference_type: reversalType, reference_id: operation.id, deleted_at: null }, select: { id: true } });
       if (!exists) {
-        const sourceMovement = await tenant.bank_account_movements.findFirst({ where: { id: operation.owner_movement_id, deleted_at: null } });
-        if (!sourceMovement) throw new NotFoundException('No se encontró el movimiento bancario compartido para revertir');
-        const bankOperation = await this.bankMovements.openOperation({ bankAccountId: operation.fund_id, operationType: operation.operation_type === 'PAYMENT' ? 'PAYMENT' : 'COLLECTION', sourceType: `${sourceType}_reversal`, sourceId: operation.id, currencyCode: operation.currency_code, description: `Reversión intercompany · ${sourceType} ${sourceId}`, userId }, tenant);
-        await this.bankMovements.addMovement({ bankAccountId: operation.fund_id, type: 'ADJUSTMENT', nature: Number(sourceMovement.amount) < 0 ? 'CREDIT' : 'DEBIT', amount: -Number(sourceMovement.amount), currencyCode: operation.currency_code, operationId: bankOperation.id, description: `Reversión intercompany · ${sourceType} ${sourceId}`, referenceType: reversalType, referenceId: operation.id, date: new Date(), userId }, tenant);
+        await tenant.$transaction(async (tx) => {
+          await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${operation.fund_id}::uuid FOR UPDATE`;
+          const sourceMovement = await tx.bank_account_movements.findFirst({ where: { id: operation.owner_movement_id, deleted_at: null } });
+          if (!sourceMovement) throw new NotFoundException('No se encontró el movimiento bancario compartido para revertir');
+          if (sourceType === 'check' && Number(sourceMovement.amount) > 0) {
+            const account = await tx.bank_accounts.findFirst({ where: { id: operation.fund_id, active: true, deleted_at: null }, select: { balance: true } });
+            if (!account || Number(account.balance) < Number(sourceMovement.amount)) {
+              throw new BadRequestException('Saldo insuficiente en la cuenta bancaria compartida para revertir el depósito del cheque');
+            }
+          }
+          const bankOperation = await this.bankMovements.openOperation({ bankAccountId: operation.fund_id, operationType: operation.operation_type === 'PAYMENT' ? 'PAYMENT' : 'COLLECTION', sourceType: `${sourceType}_reversal`, sourceId: operation.id, currencyCode: operation.currency_code, description: `Reversión intercompany · ${sourceType} ${sourceId}`, userId }, tx);
+          await this.bankMovements.addMovement({ bankAccountId: operation.fund_id, type: 'ADJUSTMENT', nature: Number(sourceMovement.amount) < 0 ? 'CREDIT' : 'DEBIT', amount: -Number(sourceMovement.amount), currencyCode: operation.currency_code, operationId: bankOperation.id, description: `Reversión intercompany · ${sourceType} ${sourceId}`, referenceType: reversalType, referenceId: operation.id, date: new Date(), userId }, tx);
+        }, { timeout: 20_000 });
       }
     }
       reversed.push(await this.publicDb.intercompany_treasury_operations.update({ where: { id: operation.id }, data: { status: 'REVERSED', error: null, updated_at: new Date() } }));
@@ -394,6 +422,12 @@ export class IntercompanyTreasuryService {
         if (existingReversal) continue;
         const original = await tenant.bank_account_movements.findFirst({ where: { id: operation.owner_movement_id, deleted_at: null }, select: { id: true } });
         if (!original) throw new NotFoundException('No se encontró el movimiento bancario compartido para revertir');
+        if (sourceType === 'check' && operation.operation_type === 'COLLECTION') {
+          const account = await tenant.bank_accounts.findFirst({ where: { id: operation.fund_id, active: true, deleted_at: null }, select: { balance: true } });
+          if (!account || Number(account.balance) < Number(operation.amount)) {
+            throw new BadRequestException('Saldo insuficiente en la cuenta bancaria compartida para revertir el depósito del cheque');
+          }
+        }
       }
     }
   }

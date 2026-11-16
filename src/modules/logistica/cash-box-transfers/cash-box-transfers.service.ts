@@ -190,6 +190,7 @@ export class CashBoxTransfersService {
         description: dto.description,
         reference: dto.reference,
         transfer_type: dto.transfer_type,
+        intercompany_purpose: target ? dto.intercompany_purpose ?? 'OTHER' : null,
         status: 'pending',
         record_side: 'source',
         created_by: userId,
@@ -335,6 +336,7 @@ export class CashBoxTransfersService {
         description: transfer.description,
         reference: transfer.reference,
         transfer_type: transfer.transfer_type,
+        intercompany_purpose: transfer.intercompany_purpose,
         status,
         execution_error: executionError,
         record_side: 'destination',
@@ -588,6 +590,34 @@ export class CashBoxTransfersService {
     }
 
     return { ...transfer, creator };
+  }
+
+  async setIntercompanyPurpose(id: string, purpose: 'SETTLEMENT' | 'OTHER', userId: string) {
+    if (purpose !== 'SETTLEMENT' && purpose !== 'OTHER') {
+      throw new BadRequestException('Seleccioná si la transferencia es una rendición entre empresas u otra transferencia');
+    }
+    const transfer = await this.prisma.cash_box_transfers.findFirst({
+      where: { id, record_side: 'source', deleted_at: null },
+    });
+    if (!transfer?.dest_company_id || transfer.status !== 'completed') {
+      throw new BadRequestException('Solo se pueden clasificar transferencias entre empresas completadas desde su origen');
+    }
+    await this.assertSourceAccess(transfer.source_type, transfer.source_id, userId);
+    const target = await this.resolveDestinationCompany(transfer.dest_company_id, userId, 'cash_box_transfers.confirm');
+    if (!target) throw new BadRequestException('No se pudo resolver la empresa destino');
+    const mirror = await target.client.cash_box_transfers.findFirst({
+      where: { id, record_side: 'destination', status: 'completed', deleted_at: null }, select: { id: true },
+    });
+    if (!mirror) throw new BadRequestException('No se encontró la transferencia recibida para mantener ambas empresas sincronizadas');
+    await target.client.cash_box_transfers.update({ where: { id }, data: { intercompany_purpose: purpose, updated_by: userId } });
+    try {
+      return await this.prisma.cash_box_transfers.update({ where: { id }, data: { intercompany_purpose: purpose, updated_by: userId } });
+    } catch (error) {
+      await target.client.cash_box_transfers.update({
+        where: { id }, data: { intercompany_purpose: transfer.intercompany_purpose, updated_by: userId },
+      });
+      throw error;
+    }
   }
 
   async cancel(id: string, userId: string) {

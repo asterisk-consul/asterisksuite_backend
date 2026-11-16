@@ -217,8 +217,10 @@ export const ModelName = {
   tasks: 'tasks',
   task_members: 'task_members',
   task_labels: 'task_labels',
+  task_categories: 'task_categories',
   task_label_assignments: 'task_label_assignments',
   task_comments: 'task_comments',
+  task_work_logs: 'task_work_logs',
   task_checklists: 'task_checklists',
   task_checklist_items: 'task_checklist_items',
   task_board_column_preferences: 'task_board_column_preferences',
@@ -2902,6 +2904,8 @@ export const Intercompany_treasury_operationsScalarFieldEnum = {
   status: 'status',
   error: 'error',
   owner_movement_id: 'owner_movement_id',
+  description: 'description',
+  effective_date: 'effective_date',
   created_at: 'created_at',
   updated_at: 'updated_at',
   created_by: 'created_by'
@@ -3363,6 +3367,7 @@ export const Task_boardsScalarFieldEnum = {
   description: 'description',
   party_id: 'party_id',
   is_default: 'is_default',
+  require_work_log_on_transition: 'require_work_log_on_transition',
   active: 'active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -3396,6 +3401,7 @@ export const TasksScalarFieldEnum = {
   board_id: 'board_id',
   column_id: 'column_id',
   party_id: 'party_id',
+  category_id: 'category_id',
   title: 'title',
   description: 'description',
   priority: 'priority',
@@ -3438,6 +3444,19 @@ export const Task_labelsScalarFieldEnum = {
 export type Task_labelsScalarFieldEnum = (typeof Task_labelsScalarFieldEnum)[keyof typeof Task_labelsScalarFieldEnum]
 
 
+export const Task_categoriesScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  color: 'color',
+  active: 'active',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  created_by: 'created_by'
+} as const
+
+export type Task_categoriesScalarFieldEnum = (typeof Task_categoriesScalarFieldEnum)[keyof typeof Task_categoriesScalarFieldEnum]
+
+
 export const Task_label_assignmentsScalarFieldEnum = {
   task_id: 'task_id',
   label_id: 'label_id'
@@ -3455,6 +3474,18 @@ export const Task_commentsScalarFieldEnum = {
 } as const
 
 export type Task_commentsScalarFieldEnum = (typeof Task_commentsScalarFieldEnum)[keyof typeof Task_commentsScalarFieldEnum]
+
+
+export const Task_work_logsScalarFieldEnum = {
+  id: 'id',
+  task_id: 'task_id',
+  user_id: 'user_id',
+  minutes: 'minutes',
+  description: 'description',
+  created_at: 'created_at'
+} as const
+
+export type Task_work_logsScalarFieldEnum = (typeof Task_work_logsScalarFieldEnum)[keyof typeof Task_work_logsScalarFieldEnum]
 
 
 export const Task_checklistsScalarFieldEnum = {
@@ -4000,6 +4031,7 @@ export const Cash_box_transfersScalarFieldEnum = {
   description: 'description',
   reference: 'reference',
   transfer_type: 'transfer_type',
+  intercompany_purpose: 'intercompany_purpose',
   status: 'status',
   record_side: 'record_side',
   execution_error: 'execution_error',
@@ -4096,6 +4128,8 @@ export const ChecksScalarFieldEnum = {
   id: 'id',
   payment_id: 'payment_id',
   bank_account_id: 'bank_account_id',
+  bank_account_company_id: 'bank_account_company_id',
+  bank_account_external_id: 'bank_account_external_id',
   check_number: 'check_number',
   bank_name: 'bank_name',
   bank_branch: 'bank_branch',

@@ -5,12 +5,21 @@ import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { RequireAnyPermission, RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { AllowCompanyAdmins } from '@/access-control/decorators/allow-company-admins.decorator';
 import { IntercompanyTreasuryService } from './intercompany-treasury.service';
+import { IntercompanyOverviewService } from './intercompany-overview.service';
 import { UpdateIntercompanySharesDto } from './dto/update-intercompany-shares.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/treasury/intercompany')
 export class IntercompanyTreasuryController {
-  constructor(private readonly service: IntercompanyTreasuryService) {}
+  constructor(private readonly service: IntercompanyTreasuryService, private readonly overview: IntercompanyOverviewService) {}
+
+  @Get('overview/availability')
+  @RequireAnyPermission('payments.read', 'cash_box_transfers.read')
+  availability() { return this.overview.availability(); }
+
+  @Get('overview')
+  @RequireAnyPermission('payments.read', 'cash_box_transfers.read')
+  getOverview() { return this.overview.overview(); }
 
   @Get('cash-boxes/companies')
   @RequirePermissions('cash_boxes.update')

@@ -5,7 +5,7 @@ import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-n
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { validateDocumentNumber } from '@/common/validators/document.validator';
-import { assertPartyIdentityIsUnique } from '@/modules/master-data/business-parties/party-identity.util';
+import { assertPartyIdentityIsUnique, assertPartyNameIsUnique } from '@/modules/master-data/business-parties/party-identity.util';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -26,8 +26,10 @@ export class EmployeesService {
 
     // Validar formato de documento
     validateDocumentNumber(dto.document_type, dto.document_number);
+    validateDocumentNumber(dto.document_type, dto.tax_id);
 
     await assertPartyIdentityIsUnique(this.prisma, [dto.document_number, dto.tax_id], { partyId: dto.party_id });
+    const partyName = dto.party_id ? null : await assertPartyNameIsUnique(this.prisma, dto.business_name || `${dto.first_name} ${dto.last_name}`);
 
     let finalUserId = dto.user_id;
     const preparedWhatsAppPhone = dto.create_user
@@ -84,7 +86,7 @@ export class EmployeesService {
       const party = await this.prisma.business_parties.create({
         data: {
           type: 'EMPLOYEE',
-          name: dto.business_name || `${dto.first_name} ${dto.last_name}`,
+          name: partyName!,
           email: dto.email,
           tax_id: dto.tax_id || dto.document_number,
           document_type: dto.document_type,
@@ -215,6 +217,10 @@ export class EmployeesService {
   async update(id: string, dto: UpdateEmployeeDto, userId: string) {
     const employee = await this.findOne(id);
 
+    if (dto.business_name !== undefined && employee.party_id) {
+      dto.business_name = await assertPartyNameIsUnique(this.prisma, dto.business_name, employee.party_id);
+    }
+
     if (dto.document_type !== undefined || dto.document_number !== undefined) {
       validateDocumentNumber(dto.document_type ?? employee.document_type ?? undefined, dto.document_number ?? employee.document_number ?? undefined);
       await assertPartyIdentityIsUnique(
@@ -222,6 +228,10 @@ export class EmployeesService {
         [dto.document_number ?? employee.document_number],
         { partyId: employee.party_id ?? undefined, employeeId: id },
       );
+    }
+    if (dto.tax_id !== undefined) {
+      validateDocumentNumber(dto.document_type ?? employee.document_type ?? undefined, dto.tax_id);
+      await assertPartyIdentityIsUnique(this.prisma, [dto.tax_id], { partyId: employee.party_id ?? undefined, employeeId: id });
     }
 
     // Extraer campos de business_party del DTO

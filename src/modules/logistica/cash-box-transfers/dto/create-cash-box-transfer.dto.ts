@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsPositive } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsDateString, IsEnum, IsPositive, IsIn } from 'class-validator';
 
 export class CreateCashBoxTransferDto {
   @IsString()
@@ -20,6 +20,10 @@ export class CreateCashBoxTransferDto {
   @IsString()
   @IsOptional()
   dest_company_id?: string;
+
+  @IsOptional()
+  @IsIn(['SETTLEMENT', 'OTHER'])
+  intercompany_purpose?: 'SETTLEMENT' | 'OTHER';
 
   @IsNumber()
   @IsPositive()

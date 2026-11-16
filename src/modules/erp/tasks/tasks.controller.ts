@@ -6,7 +6,7 @@ import { RequirePermissions } from '@/access-control/decorators/require-permissi
 import { PermissionsGuard } from '@/access-control/guards/permissions.guard';
 import { AllowCompanyAdmins } from '@/access-control/decorators/allow-company-admins.decorator';
 import { TasksService } from './tasks.service';
-import { CreateTaskBoardDto, CreateTaskChecklistDto, CreateTaskChecklistItemDto, CreateTaskColumnDto, CreateTaskCommentDto, CreateTaskDto, CreateTaskLabelDto, MoveAllTasksDto, MoveTaskColumnDto, SetTaskCompletionDto, TaskBoardQueryDto, TaskColumnPreferencesDto, TaskNotificationSettingsDto, TaskPartyQueryDto, UpdateTaskChecklistItemDto, UpdateTaskDto } from './dto/task.dto';
+import { CreateTaskBoardDto, CreateTaskCategoryDto, CreateTaskChecklistDto, CreateTaskChecklistItemDto, CreateTaskColumnDto, CreateTaskCommentDto, CreateTaskDto, CreateTaskLabelDto, CreateTaskManualWorkLogDto, MoveAllTasksDto, MoveTaskColumnDto, SetTaskCompletionDto, TaskBoardQueryDto, TaskColumnPreferencesDto, TaskNotificationSettingsDto, TaskPartyQueryDto, UpdateTaskBoardSettingsDto, UpdateTaskCategoryDto, UpdateTaskChecklistItemDto, UpdateTaskDto } from './dto/task.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/tasks')
@@ -81,6 +81,12 @@ export class TasksController {
     return this.service.createBoard(dto, user);
   }
 
+  @Patch('boards/:boardId/settings')
+  @RequirePermissions('tasks.update')
+  updateBoardSettings(@Param('boardId', ParseUUIDPipe) boardId: string, @Body() dto: UpdateTaskBoardSettingsDto, @CurrentUser() user: AuthUser) {
+    return this.service.updateBoardSettings(boardId, dto, user);
+  }
+
   @Get('members')
   @RequirePermissions('tasks.read')
   getMembers() {
@@ -99,6 +105,36 @@ export class TasksController {
     return this.service.createLabel(dto, user);
   }
 
+  @Get('categories')
+  @RequirePermissions('tasks.read')
+  getCategories() {
+    return this.service.getCategories();
+  }
+
+  @Post('categories')
+  @RequirePermissions('tasks.update')
+  createCategory(@Body() dto: CreateTaskCategoryDto, @CurrentUser() user: AuthUser) {
+    return this.service.createCategory(dto, user);
+  }
+
+  @Get(':taskId/work-logs')
+  @RequirePermissions('tasks.read')
+  getWorkLogs(@Param('taskId', ParseUUIDPipe) taskId: string) {
+    return this.service.getWorkLogs(taskId);
+  }
+
+  @Post(':taskId/work-logs')
+  @RequirePermissions('tasks.update')
+  addManualWorkLog(@Param('taskId', ParseUUIDPipe) taskId: string, @Body() dto: CreateTaskManualWorkLogDto, @CurrentUser() user: AuthUser) {
+    return this.service.addManualWorkLog(taskId, dto, user);
+  }
+
+  @Patch('categories/:categoryId')
+  @RequirePermissions('tasks.update')
+  updateCategory(@Param('categoryId', ParseUUIDPipe) categoryId: string, @Body() dto: UpdateTaskCategoryDto) {
+    return this.service.updateCategory(categoryId, dto);
+  }
+
   @Get('by-party/:partyId')
   @RequirePermissions('tasks.read')
   getTasksByParty(@Param('partyId', ParseUUIDPipe) partyId: string, @Query() query: TaskPartyQueryDto) {
@@ -108,7 +144,7 @@ export class TasksController {
   @Get('boards/:boardId')
   @RequirePermissions('tasks.read')
   getBoard(@Param('boardId', ParseUUIDPipe) boardId: string, @Query() query: TaskBoardQueryDto, @CurrentUser() user: AuthUser) {
-    return this.service.getBoard(boardId, query.party_id, user.id);
+    return this.service.getBoard(boardId, query, user.id);
   }
 
   @Post('boards/:boardId/columns')
