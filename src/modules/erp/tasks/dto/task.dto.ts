@@ -338,6 +338,11 @@ export class TaskBoardQueryDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(1000)
+  party_ids?: string;
+
+  @IsOptional()
+  @IsString()
   @MaxLength(120)
   search?: string;
 

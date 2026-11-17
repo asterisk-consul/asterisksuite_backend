@@ -268,7 +268,7 @@ export class TasksService {
   async getBoard(boardId: string, query: TaskBoardQueryDto, userId: string) {
     const taskWhere: Record<string, any> = {
       deleted_at: null,
-      ...(query.party_id ? { party_id: query.party_id } : {}),
+      ...(query.party_ids ? { party_id: { in: this.parseFilterIds(query.party_ids) } } : query.party_id ? { party_id: query.party_id } : {}),
       ...(query.label_ids ? { labels: { some: { label_id: { in: this.parseFilterIds(query.label_ids) } } } } : {}),
       ...(query.category_ids ? { category_id: { in: this.parseFilterIds(query.category_ids) } } : {}),
       ...(query.completion === 'OPEN' ? { completed_at: null } : query.completion === 'COMPLETED' ? { completed_at: { not: null } } : {}),
