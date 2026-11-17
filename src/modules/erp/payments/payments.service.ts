@@ -11,6 +11,7 @@ import { DocumentsSalesService } from '../documents-sales/documents_sales.servic
 import { recalculateBankAccountLedger } from '../bank-accounts/bank-account-ledger';
 import { recalculateCurrentAccountLedger } from '../current-accounts/current-account-ledger';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
+import { CashBoxesService } from '@/modules/logistica/cash-boxes/cash-boxes.service';
 import { CreditCardsService } from '../credit-cards/credit-cards.service';
 import { IntercompanyTreasuryService } from '../intercompany-treasury/intercompany-treasury.service';
 import {
@@ -28,6 +29,7 @@ export class PaymentsService {
     private commercialFlow: SalesCommercialFlowService,
     private documentsSales: DocumentsSalesService,
     private bankMovements: BankMovementsService,
+    private cashBoxes: CashBoxesService,
     private creditCardsService: CreditCardsService,
     private intercompanyTreasury: IntercompanyTreasuryService,
   ) {}
@@ -1227,9 +1229,10 @@ export class PaymentsService {
     }
 
     const sourceCompanyId = this.getCompanyId();
-    if (sourceCompanyId) await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'payment', payment.id);
-    await this.reverseSideEffects(payment, userId, 'payment_rejection');
-    if (sourceCompanyId) await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'payment', payment.id, userId);
+    if (sourceCompanyId) await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'payment', payment.id, undefined, true);
+    await this.removePaymentBankCashMovements(payment, userId, true);
+    if (sourceCompanyId) await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'payment', payment.id, userId, undefined, true);
+    await this.reverseSideEffects(payment, userId);
     await this.prisma.treasury_obligations.updateMany({
       where: { payment_id: id, deleted_at: null },
       data: { payment_id: null, status: 'READY', paid_at: null, updated_at: new Date(), updated_by: userId },
@@ -1272,9 +1275,10 @@ export class PaymentsService {
     }
 
     const sourceCompanyId = this.getCompanyId();
-    if (sourceCompanyId) await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'payment', payment.id);
-    await this.reverseSideEffects(payment, userId, 'payment_reversal', checkAction);
-    if (sourceCompanyId) await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'payment', payment.id, userId);
+    if (sourceCompanyId) await this.intercompanyTreasury.validateCanReverseUsage(sourceCompanyId, 'payment', payment.id, undefined, true);
+    await this.removePaymentBankCashMovements(payment, userId, true);
+    if (sourceCompanyId) await this.intercompanyTreasury.reverseUsage(sourceCompanyId, 'payment', payment.id, userId, undefined, true);
+    await this.reverseSideEffects(payment, userId, checkAction);
     await this.prisma.treasury_obligations.updateMany({
       where: { payment_id: id, deleted_at: null },
       data: { payment_id: null, status: 'READY', paid_at: null, updated_at: new Date(), updated_by: userId },
@@ -3260,12 +3264,128 @@ export class PaymentsService {
     });
   }
 
+  private async removePaymentBankCashMovements(payment: any, userId: string, validateOnly = false) {
+    const prisma = this.prisma;
+    await prisma.$transaction(async (tx: any) => {
+      const cashMovements = await tx.cash_box_movements.findMany({
+        where: {
+          OR: [
+            { payment_id: payment.id, reference_type: { in: ['payment', 'payment_financial_adjustment'] } },
+            { reference_type: { in: ['payment', 'payment_financial_adjustment'] }, reference_id: payment.id },
+          ],
+          deleted_at: null,
+        },
+        orderBy: [{ cash_box_id: 'asc' }, { currency_code: 'asc' }, { created_at: 'asc' }],
+      });
+      const bankOperations = await tx.bank_operations.findMany({
+        where: { source_type: 'payment', source_id: payment.id, deleted_at: null },
+        select: { id: true },
+      });
+      const operationIds = bankOperations.map((operation: any) => operation.id);
+      const operationMovements = operationIds.length
+        ? await tx.bank_account_movements.findMany({
+            where: { bank_operation_id: { in: operationIds }, deleted_at: null },
+            select: { id: true, bank_account_id: true, amount: true },
+          })
+        : [];
+      const operationMovementIds = new Set(operationMovements.map((movement: any) => movement.id));
+      const linkedBankMovements = await tx.bank_account_movements.findMany({
+        where: {
+          OR: [
+            { payment_id: payment.id, reference_type: { in: ['payment', 'payment_financial_adjustment', 'payment_bank_charge'] } },
+            { reference_type: { in: ['payment', 'payment_financial_adjustment'] }, reference_id: payment.id },
+          ],
+          deleted_at: null,
+        },
+        select: { id: true, bank_account_id: true, bank_operation_id: true, amount: true },
+      });
+      const standaloneBankMovements = linkedBankMovements.filter((movement: any) => !operationMovementIds.has(movement.id));
+
+      const cashBoxIds = [...new Set<string>(cashMovements.map((movement: any) => movement.cash_box_id))].sort();
+      const bankAccountIds = [...new Set<string>([...operationMovements, ...standaloneBankMovements].map((movement: any) => movement.bank_account_id))].sort();
+      for (const id of cashBoxIds) await tx.$queryRaw`SELECT id FROM tenant.cash_boxes WHERE id = ${id}::uuid FOR UPDATE`;
+      for (const id of bankAccountIds) await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${id}::uuid FOR UPDATE`;
+      for (const movement of cashMovements) {
+        await tx.$queryRaw`SELECT id FROM tenant.cash_box_balances WHERE cash_box_id = ${movement.cash_box_id}::uuid AND currency_code = ${movement.currency_code} FOR UPDATE`;
+      }
+
+      const bankDeltaByAccount = new Map<string, number>();
+      for (const movement of [...operationMovements, ...standaloneBankMovements]) {
+        bankDeltaByAccount.set(movement.bank_account_id, (bankDeltaByAccount.get(movement.bank_account_id) ?? 0) + Number(movement.amount));
+      }
+      for (const [accountId, delta] of bankDeltaByAccount) {
+        if (delta <= 0) continue;
+        const account = await tx.bank_accounts.findUnique({ where: { id: accountId }, select: { balance: true } });
+        if (!account || Number(account.balance) - delta < -0.01) {
+          throw new BadRequestException('No se puede anular el pago: el saldo bancario ya no alcanza para retirar el cobro registrado.');
+        }
+      }
+      const cashDeltaByBalance = new Map<string, { cashBoxId: string; currencyCode: string; delta: number }>();
+      for (const movement of cashMovements) {
+        const key = `${movement.cash_box_id}:${movement.currency_code}`;
+        const current = cashDeltaByBalance.get(key) ?? { cashBoxId: movement.cash_box_id, currencyCode: movement.currency_code, delta: 0 };
+        current.delta += Number(movement.balance_after) - Number(movement.balance_before);
+        cashDeltaByBalance.set(key, current);
+      }
+      for (const item of cashDeltaByBalance.values()) {
+        if (item.delta <= 0) continue;
+        const balance = await tx.cash_box_balances.findUnique({
+          where: { cash_box_id_currency_code: { cash_box_id: item.cashBoxId, currency_code: item.currencyCode } },
+          select: { balance: true },
+        });
+        if (Number(balance?.balance ?? 0) - item.delta < -0.01) {
+          throw new BadRequestException('No se puede anular el cobro: el saldo de caja ya no alcanza para retirar el importe registrado.');
+        }
+      }
+
+      if (validateOnly) return;
+
+      for (const operation of bankOperations) await this.bankMovements.cancelOperation(operation.id, userId, tx);
+      for (const movement of standaloneBankMovements) await this.bankMovements.cancelMovement(movement.id, userId, tx);
+
+      if (cashMovements.length) {
+        const now = new Date();
+        await tx.cash_box_movements.updateMany({
+          where: { id: { in: cashMovements.map((movement: any) => movement.id) }, deleted_at: null },
+          data: { deleted_at: now, deleted_by: userId, updated_at: now, updated_by: userId },
+        });
+        for (const cashBoxId of cashBoxIds) await this.cashBoxes.recalculate(cashBoxId, tx);
+        const sessionIds = [...new Set<string>(cashMovements.map((movement: any) => movement.session_id).filter(Boolean))];
+        for (const sessionId of sessionIds) {
+          const sessionMovements = await tx.cash_box_movements.findMany({
+            where: { session_id: sessionId, deleted_at: null },
+            select: { balance_before: true, balance_after: true },
+          });
+          const totals = sessionMovements.reduce((result: { income: number; expenses: number }, movement: any) => {
+            const delta = Number(movement.balance_after) - Number(movement.balance_before);
+            if (delta >= 0) result.income += delta;
+            else result.expenses += Math.abs(delta);
+            return result;
+          }, { income: 0, expenses: 0 });
+          await tx.cash_box_sessions.update({
+            where: { id: sessionId },
+            data: {
+              total_income: totals.income,
+              total_expenses: totals.expenses,
+              movement_count: sessionMovements.length,
+              updated_at: now,
+              updated_by: userId,
+            },
+          });
+        }
+      }
+    }, { timeout: 30_000, maxWait: 10_000 });
+  }
+
   private async reverseSideEffects(
     payment: any,
     userId: string,
-    referenceType: string,
     checkAction: 'RETURN_TO_PORTFOLIO' | 'CANCEL' = 'RETURN_TO_PORTFOLIO',
   ) {
+    // Retirar los movimientos originales de caja/banco y reconstruir sus saldos.
+    // Los cheques conservan su flujo propio y se procesan más abajo.
+    await this.removePaymentBankCashMovements(payment, userId);
+
     // Anular retenciones asociadas
     await this.prisma.withholdings.updateMany({
       where: { payment_id: payment.id, deleted_at: null },
@@ -3315,205 +3435,6 @@ export class PaymentsService {
           updated_by: userId,
         },
       });
-    }
-
-    if (payment.payment_method === 'MIXED') {
-      const cashMovements = await this.prisma.cash_box_movements.findMany({
-        where: { payment_id: payment.id, reference_type: 'payment', deleted_at: null },
-        orderBy: { created_at: 'asc' },
-      });
-      for (const movement of cashMovements) {
-        const cashBox = await this.prisma.cash_boxes.findFirst({
-          where: { id: movement.cash_box_id, deleted_at: null },
-          select: { current_session_id: true },
-        });
-        const balance = await this.prisma.cash_box_balances.findUnique({
-          where: { cash_box_id_currency_code: { cash_box_id: movement.cash_box_id, currency_code: movement.currency_code } },
-        });
-        if (!balance) throw new BadRequestException('No se encontró el saldo de caja para revertir el pago mixto');
-
-        const currentBalance = Number(balance.balance);
-        const originalDelta = Number(movement.balance_after) - Number(movement.balance_before);
-        const reversalDelta = -originalDelta;
-        const balanceAfter = Number((currentBalance + reversalDelta).toFixed(2));
-        const amount = Math.abs(Number(movement.amount));
-        const wasOutflow = originalDelta < 0;
-        await this.prisma.cash_box_movements.create({
-          data: {
-            cash_box_id: movement.cash_box_id,
-            session_id: cashBox?.current_session_id ?? null,
-            type: 'ADJUSTMENT',
-            amount,
-            currency_code: movement.currency_code,
-            exchange_rate: movement.exchange_rate,
-            rate_type: movement.rate_type,
-            converted_amount: movement.converted_amount,
-            balance_before: currentBalance,
-            balance_after: balanceAfter,
-            description: `Reversión de pago mixto #${payment.number}`,
-            payment_id: payment.id,
-            reference_type: referenceType,
-            reference_id: payment.id,
-            date: new Date(),
-            created_by: userId,
-          },
-        });
-        if (cashBox?.current_session_id) {
-          await this.prisma.cash_box_sessions.update({
-            where: { id: cashBox.current_session_id },
-            data: {
-              movement_count: { increment: 1 },
-              ...(wasOutflow ? { total_income: { increment: amount } } : { total_expenses: { increment: amount } }),
-            },
-          });
-        }
-        await this.prisma.cash_box_balances.update({ where: { id: balance.id }, data: { balance: balanceAfter, updated_at: new Date() } });
-      }
-
-      const bankMovements = await this.prisma.bank_account_movements.findMany({
-        where: { payment_id: payment.id, reference_type: 'payment', deleted_at: null },
-        orderBy: { created_at: 'asc' },
-      });
-      for (const movement of bankMovements) {
-        const bankAccount = await this.prisma.bank_accounts.findUnique({ where: { id: movement.bank_account_id } });
-        if (!bankAccount) continue;
-        const currentBalance = Number(bankAccount.balance);
-        const reversalAmount = -Number(movement.amount);
-        const balanceAfter = Number((currentBalance + reversalAmount).toFixed(2));
-        const isOutflow = movement.nature === 'DEBIT';
-        await this.prisma.bank_account_movements.create({
-          data: {
-            bank_account_id: movement.bank_account_id,
-            type: payment.type === 'EXPENSE' ? 'PAYMENT' : (payment.type as any),
-            nature: isOutflow ? 'CREDIT' : 'DEBIT',
-            amount: reversalAmount,
-            currency_code: movement.currency_code,
-            exchange_rate: movement.exchange_rate,
-            rate_type: movement.rate_type,
-            converted_amount: movement.converted_amount,
-            balance_before: currentBalance,
-            balance_after: balanceAfter,
-            description: `Reversión de pago mixto #${payment.number}`,
-            payment_id: payment.id,
-            reference_type: referenceType,
-            reference_id: payment.id,
-            date: new Date(),
-            created_by: userId,
-          },
-        });
-        await this.prisma.bank_accounts.update({
-          where: { id: movement.bank_account_id },
-          data: { balance: balanceAfter, updated_at: new Date(), updated_by: userId },
-        });
-        await recalculateBankAccountLedger(this.prisma, movement.bank_account_id);
-      }
-
-    }
-
-    // Revert cash box movement
-    if (payment.cash_box_id) {
-      const cashBox = await this.prisma.cash_boxes.findFirst({
-        where: { id: payment.cash_box_id, deleted_at: null },
-        select: { currency_code: true, current_session_id: true },
-      });
-      if (!cashBox) throw new BadRequestException('Caja no encontrada');
-      if (cashBox.currency_code !== payment.currency_code) {
-        throw new BadRequestException(
-          `La caja opera en ${cashBox.currency_code} y el pago está expresado en ${payment.currency_code}`,
-        );
-      }
-      const balance = await this.prisma.cash_box_balances.findUnique({
-        where: {
-          cash_box_id_currency_code: {
-            cash_box_id: payment.cash_box_id,
-            currency_code: payment.currency_code,
-          },
-        },
-      });
-
-      if (balance) {
-        const currentBalance = balance.balance.toNumber();
-        const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
-        const amount = payment.amount.toNumber();
-        const balanceAfter = isOutflow ? currentBalance + amount : currentBalance - amount;
-
-        await this.prisma.cash_box_movements.create({
-          data: {
-            cash_box_id: payment.cash_box_id,
-            session_id: cashBox.current_session_id,
-            type: 'ADJUSTMENT',
-            amount: payment.amount,
-            currency_code: payment.currency_code,
-            exchange_rate: payment.exchange_rate,
-            rate_type: payment.rate_type,
-            converted_amount: payment.converted_amount,
-            balance_before: currentBalance,
-            balance_after: balanceAfter,
-            description: `Reversión de pago #${payment.number}`,
-            payment_id: payment.id,
-            reference_type: referenceType,
-            reference_id: payment.id,
-            date: new Date(),
-            created_by: userId,
-          },
-        });
-
-        if (cashBox.current_session_id) {
-          await this.prisma.cash_box_sessions.update({
-            where: { id: cashBox.current_session_id },
-            data: {
-              movement_count: { increment: 1 },
-              ...(isOutflow ? { total_income: { increment: amount } } : { total_expenses: { increment: amount } }),
-            },
-          });
-        }
-
-        await this.prisma.cash_box_balances.update({
-          where: { id: balance.id },
-          data: { balance: balanceAfter, updated_at: new Date() },
-        });
-      }
-    }
-
-    // Revert bank movement (only for non-check payments)
-    if (payment.bank_account_id && payment.payment_method !== 'CHECK') {
-      const bankAccount = await this.prisma.bank_accounts.findUnique({
-        where: { id: payment.bank_account_id },
-      });
-
-      if (bankAccount) {
-        const currentBankBalance = bankAccount.balance.toNumber();
-        const isOutflow = payment.type === 'PAYMENT' || payment.type === 'EXPENSE';
-        const amount = payment.amount.toNumber();
-        const bankBalanceAfter = isOutflow ? currentBankBalance + amount : currentBankBalance - amount;
-
-        await this.prisma.bank_account_movements.create({
-          data: {
-            bank_account_id: payment.bank_account_id,
-            type: payment.type === 'EXPENSE' ? 'PAYMENT' : (payment.type as any),
-            nature: isOutflow ? 'CREDIT' : 'DEBIT',
-            amount: isOutflow ? Math.abs(amount) : -Math.abs(amount),
-            currency_code: payment.currency_code,
-            exchange_rate: payment.exchange_rate,
-            rate_type: payment.rate_type,
-            converted_amount: payment.converted_amount,
-            balance_before: currentBankBalance,
-            balance_after: bankBalanceAfter,
-            description: `Reversión de pago #${payment.number}`,
-            payment_id: payment.id,
-            reference_type: 'payment_reversal',
-            reference_id: payment.id,
-            date: new Date(),
-            created_by: userId,
-          },
-        });
-
-        await this.prisma.bank_accounts.update({
-          where: { id: payment.bank_account_id },
-          data: { balance: bankBalanceAfter, updated_at: new Date() },
-        });
-        await recalculateBankAccountLedger(this.prisma, payment.bank_account_id);
-      }
     }
 
     // Revert linked checks

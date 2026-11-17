@@ -2,13 +2,18 @@ import { BadRequestException, ForbiddenException, Injectable, NotFoundException 
 import { PrismaService } from '@/prisma/prisma.service';
 import { requestContext } from '@/common/context/request-context';
 import { BankMovementsService } from '../bank-movements/bank-movements.service';
+import { CashBoxesService } from '@/modules/logistica/cash-boxes/cash-boxes.service';
 
 type FundType = 'CASH_BOX' | 'BANK_ACCOUNT';
 type UseType = 'PAYMENT' | 'COLLECTION' | 'HR';
 
 @Injectable()
 export class IntercompanyTreasuryService {
-  constructor(private readonly db: PrismaService, private readonly bankMovements: BankMovementsService) {}
+  constructor(
+    private readonly db: PrismaService,
+    private readonly bankMovements: BankMovementsService,
+    private readonly cashBoxes: CashBoxesService,
+  ) {}
 
   private get publicDb() { return this.db.getDefaultClient(); }
   private get localDb() { return this.db.getClientForCurrentContext(); }
@@ -317,7 +322,14 @@ export class IntercompanyTreasuryService {
     }
   }
 
-  async reverseUsage(sourceCompanyId: string, sourceType: string, sourceId: string, userId: string, operationId?: string) {
+  async reverseUsage(
+    sourceCompanyId: string,
+    sourceType: string,
+    sourceId: string,
+    userId: string,
+    operationId?: string,
+    removeOriginalMovement = false,
+  ) {
     const operations = await this.publicDb.intercompany_treasury_operations.findMany({
       where: { source_company_id: sourceCompanyId, source_type: sourceType, source_id: sourceId, status: 'COMPLETED', ...(operationId ? { id: operationId } : {}) },
       orderBy: { created_at: 'asc' },
@@ -335,7 +347,57 @@ export class IntercompanyTreasuryService {
     if (!fundCompany?.schema_name) throw new BadRequestException('No se encuentra la empresa titular para revertir el movimiento compartido');
     const tenant = this.db.getTenantClient(fundCompany.schema_name);
     const reversalType = `intercompany_${sourceType.toLowerCase()}_reversal`;
-    if (operation.fund_type === 'CASH_BOX') {
+    if (removeOriginalMovement) {
+      if (!operation.owner_movement_id) throw new NotFoundException('No se encontró el movimiento original del fondo compartido');
+      if (operation.fund_type === 'CASH_BOX') {
+        const original = await tenant.cash_box_movements.findUnique({ where: { id: operation.owner_movement_id } });
+        if (!original) throw new NotFoundException('No se encontró el movimiento original de la caja compartida');
+        if (original.deleted_at) {
+          // La eliminación pudo completarse antes de que el estado intercompany se actualizara.
+        } else {
+          await tenant.$transaction(async (tx: any) => {
+            await tx.$queryRaw`SELECT id FROM tenant.cash_boxes WHERE id = ${operation.fund_id}::uuid FOR UPDATE`;
+            await tx.$queryRaw`SELECT id FROM tenant.cash_box_balances WHERE cash_box_id = ${operation.fund_id}::uuid AND currency_code = ${operation.currency_code} FOR UPDATE`;
+            const current = await tx.cash_box_movements.findFirst({ where: { id: original.id, deleted_at: null } });
+            if (!current) return;
+            const balance = await tx.cash_box_balances.findUnique({ where: { cash_box_id_currency_code: { cash_box_id: operation.fund_id, currency_code: operation.currency_code } } });
+            const delta = Number(current.balance_after) - Number(current.balance_before);
+            if (delta > 0 && Number(balance?.balance ?? 0) - delta < -0.01) {
+              throw new BadRequestException('El saldo actual de la caja titular no alcanza para retirar el movimiento compartido');
+            }
+            await tx.cash_box_movements.update({ where: { id: current.id }, data: { deleted_at: new Date(), deleted_by: userId, updated_at: new Date(), updated_by: userId } });
+            await this.cashBoxes.recalculate(operation.fund_id, tx);
+            if (current.session_id) {
+              const sessionMovements = await tx.cash_box_movements.findMany({ where: { session_id: current.session_id, deleted_at: null }, select: { balance_before: true, balance_after: true } });
+              const totals = sessionMovements.reduce((result: { income: number; expenses: number }, movement: any) => {
+                const movementDelta = Number(movement.balance_after) - Number(movement.balance_before);
+                if (movementDelta >= 0) result.income += movementDelta;
+                else result.expenses += Math.abs(movementDelta);
+                return result;
+              }, { income: 0, expenses: 0 });
+              await tx.cash_box_sessions.update({ where: { id: current.session_id }, data: { total_income: totals.income, total_expenses: totals.expenses, movement_count: sessionMovements.length, updated_at: new Date(), updated_by: userId } });
+            }
+          });
+        }
+      } else {
+        const original = await tenant.bank_account_movements.findUnique({ where: { id: operation.owner_movement_id } });
+        if (!original) throw new NotFoundException('No se encontró el movimiento original de la cuenta bancaria compartida');
+        if (!original.deleted_at) {
+          await tenant.$transaction(async (tx: any) => {
+            await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${operation.fund_id}::uuid FOR UPDATE`;
+            const current = await tx.bank_account_movements.findFirst({ where: { id: original.id, deleted_at: null } });
+            if (!current) return;
+            const account = await tx.bank_accounts.findUnique({ where: { id: operation.fund_id }, select: { balance: true } });
+            const delta = Number(current.balance_after) - Number(current.balance_before);
+            if (delta > 0 && Number(account?.balance ?? 0) - delta < -0.01) {
+              throw new BadRequestException('El saldo actual de la cuenta titular no alcanza para retirar el movimiento compartido');
+            }
+            if (current.bank_operation_id) await this.bankMovements.cancelOperation(current.bank_operation_id, userId, tx);
+            else await this.bankMovements.cancelMovement(current.id, userId, tx);
+          }, { timeout: 20_000 });
+        }
+      }
+    } else if (operation.fund_type === 'CASH_BOX') {
       const exists = await tenant.cash_box_movements.findFirst({ where: { reference_type: reversalType, reference_id: operation.id, deleted_at: null }, select: { id: true } });
       if (!exists) await tenant.$transaction(async (tx: any) => {
         await tx.$queryRaw`SELECT id FROM tenant.cash_boxes WHERE id = ${operation.fund_id}::uuid FOR UPDATE`;
@@ -395,7 +457,13 @@ export class IntercompanyTreasuryService {
     return reversed;
   }
 
-  async validateCanReverseUsage(sourceCompanyId: string, sourceType: string, sourceId: string, operationId?: string) {
+  async validateCanReverseUsage(
+    sourceCompanyId: string,
+    sourceType: string,
+    sourceId: string,
+    operationId?: string,
+    removeOriginalMovement = false,
+  ) {
     const operations = await this.publicDb.intercompany_treasury_operations.findMany({
       where: { source_company_id: sourceCompanyId, source_type: sourceType, source_id: sourceId, status: 'COMPLETED', ...(operationId ? { id: operationId } : {}) },
       orderBy: { created_at: 'asc' },
@@ -405,7 +473,18 @@ export class IntercompanyTreasuryService {
       if (!company?.schema_name) throw new BadRequestException('No se encuentra la empresa titular para revertir el movimiento compartido');
       const tenant = this.db.getTenantClient(company.schema_name);
       const reversalType = `intercompany_${sourceType.toLowerCase()}_reversal`;
+      if (!operation.owner_movement_id) throw new NotFoundException('No se encontró el movimiento original del fondo compartido');
       if (operation.fund_type === 'CASH_BOX') {
+        if (removeOriginalMovement) {
+          const original = await tenant.cash_box_movements.findFirst({ where: { id: operation.owner_movement_id, deleted_at: null } });
+          if (!original) continue;
+          const balance = await tenant.cash_box_balances.findUnique({ where: { cash_box_id_currency_code: { cash_box_id: operation.fund_id, currency_code: operation.currency_code } } });
+          const delta = Number(original.balance_after) - Number(original.balance_before);
+          if (delta > 0 && Number(balance?.balance ?? 0) - delta < -0.01) {
+            throw new BadRequestException('El saldo actual de la caja titular no alcanza para retirar el movimiento compartido');
+          }
+          continue;
+        }
         const existingReversal = await tenant.cash_box_movements.findFirst({ where: { reference_type: reversalType, reference_id: operation.id, deleted_at: null }, select: { id: true } });
         if (existingReversal) continue;
         const original = await tenant.cash_box_movements.findFirst({ where: { id: operation.owner_movement_id, deleted_at: null } });
@@ -418,6 +497,16 @@ export class IntercompanyTreasuryService {
           throw new BadRequestException('El saldo actual de la caja titular no alcanza para revertir el cobro compartido');
         }
       } else {
+        if (removeOriginalMovement) {
+          const original = await tenant.bank_account_movements.findFirst({ where: { id: operation.owner_movement_id, deleted_at: null } });
+          if (!original) continue;
+          const account = await tenant.bank_accounts.findFirst({ where: { id: operation.fund_id, active: true, deleted_at: null }, select: { balance: true } });
+          const delta = Number(original.balance_after) - Number(original.balance_before);
+          if (delta > 0 && Number(account?.balance ?? 0) - delta < -0.01) {
+            throw new BadRequestException('El saldo actual de la cuenta titular no alcanza para retirar el movimiento compartido');
+          }
+          continue;
+        }
         const existingReversal = await tenant.bank_account_movements.findFirst({ where: { reference_type: reversalType, reference_id: operation.id, deleted_at: null }, select: { id: true } });
         if (existingReversal) continue;
         const original = await tenant.bank_account_movements.findFirst({ where: { id: operation.owner_movement_id, deleted_at: null }, select: { id: true } });

@@ -398,7 +398,7 @@ export class CashBoxTransfersService {
     }
 
     if (fundType === 'bank_account') {
-      await client.$transaction(async (tx: any) => {
+      const remove = async (tx: any) => {
         await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${fundId}::uuid FOR UPDATE`;
         const current = await tx.bank_account_movements.findFirst({ where: { id: movement.id, deleted_at: null } });
         if (!current) return;
@@ -409,11 +409,13 @@ export class CashBoxTransfersService {
           throw new BadRequestException('El fondo destino ya no tiene saldo suficiente. Reponé el importe y volvé a intentar.');
         }
         await this.bankMovements.cancelMovement(current.id, userId, tx);
-      });
+      };
+      if (typeof client.$transaction === 'function') await client.$transaction(remove);
+      else await remove(client);
       return;
     }
 
-    await client.$transaction(async (tx: any) => {
+    const remove = async (tx: any) => {
       await tx.$queryRaw`SELECT id FROM tenant.cash_boxes WHERE id = ${fundId}::uuid FOR UPDATE`;
       await tx.$queryRaw`SELECT id FROM tenant.cash_box_balances WHERE cash_box_id = ${fundId}::uuid AND currency_code = ${movement.currency_code} FOR UPDATE`;
       const current = await tx.cash_box_movements.findFirst({ where: { id: movement.id, deleted_at: null } });
@@ -465,7 +467,9 @@ export class CashBoxTransfersService {
           },
         });
       }
-    });
+    };
+    if (typeof client.$transaction === 'function') await client.$transaction(remove);
+    else await remove(client);
   }
 
   private async createBankMovement(bankAccountId: string, amount: number, currencyCode: string, description: string, userId: string) {
@@ -684,18 +688,18 @@ export class CashBoxTransfersService {
 
     let destinationRemoved = false;
     try {
-      // El destino debe poder devolver los fondos antes de tocar el origen.
-      await this.removeOriginalTransferMovement(
-        destinationClient,
-        transfer.id,
-        transfer.dest_type,
-        transfer.dest_id,
-        'destination',
-        userId,
-      );
-      destinationRemoved = true;
-
       if (target) {
+        // En una transferencia entre empresas, primero se confirma que el fondo
+        // receptor puede retirar el ingreso; recién entonces se toca el origen.
+        await this.removeOriginalTransferMovement(
+          destinationClient,
+          transfer.id,
+          transfer.dest_type,
+          transfer.dest_id,
+          'destination',
+          userId,
+        );
+        destinationRemoved = true;
         await this.ensureReceivedTransfer(
           destinationClient,
           transfer,
@@ -703,18 +707,14 @@ export class CashBoxTransfersService {
           userId,
           'reversing',
         );
-      }
-
-      await this.removeOriginalTransferMovement(
-        this.prisma,
-        transfer.id,
-        transfer.source_type,
-        transfer.source_id,
-        'source',
-        userId,
-      );
-
-      if (target) {
+        await this.removeOriginalTransferMovement(
+          this.prisma,
+          transfer.id,
+          transfer.source_type,
+          transfer.source_id,
+          'source',
+          userId,
+        );
         await this.ensureReceivedTransfer(
           destinationClient,
           transfer,
@@ -722,6 +722,28 @@ export class CashBoxTransfersService {
           userId,
           'reversed',
         );
+      } else {
+        // En la misma empresa, ambos lados y sus saldos se modifican dentro
+        // de una sola transacción: no puede quedar una mitad de la transferencia.
+        await this.prisma.$transaction(async (tx: any) => {
+          const cashBoxIds = [
+            ...(transfer.source_type === 'cash_box' ? [transfer.source_id] : []),
+            ...(transfer.dest_type === 'cash_box' ? [transfer.dest_id] : []),
+          ];
+          const bankAccountIds = [
+            ...(transfer.source_type === 'bank_account' ? [transfer.source_id] : []),
+            ...(transfer.dest_type === 'bank_account' ? [transfer.dest_id] : []),
+          ];
+          for (const cashBoxId of [...new Set(cashBoxIds)].sort()) {
+            await tx.$queryRaw`SELECT id FROM tenant.cash_boxes WHERE id = ${cashBoxId}::uuid FOR UPDATE`;
+          }
+          for (const bankAccountId of [...new Set(bankAccountIds)].sort()) {
+            await tx.$queryRaw`SELECT id FROM tenant.bank_accounts WHERE id = ${bankAccountId}::uuid FOR UPDATE`;
+          }
+          await this.removeOriginalTransferMovement(tx, transfer.id, transfer.dest_type, transfer.dest_id, 'destination', userId);
+          await this.removeOriginalTransferMovement(tx, transfer.id, transfer.source_type, transfer.source_id, 'source', userId);
+        }, { timeout: 20_000, maxWait: 10_000 });
+        destinationRemoved = true;
       }
 
       return await this.prisma.cash_box_transfers.update({

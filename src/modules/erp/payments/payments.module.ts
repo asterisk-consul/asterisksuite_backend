@@ -8,9 +8,10 @@ import { AccessControlModule } from '@/access-control/access-control.module';
 import { BankMovementsModule } from '../bank-movements/bank-movements.module';
 import { CreditCardsModule } from '../credit-cards/credit-cards.module';
 import { IntercompanyTreasuryModule } from '../intercompany-treasury/intercompany-treasury.module';
+import { CashBoxesModule } from '@/modules/logistica/cash-boxes/cash-boxes.module';
 
 @Module({
-  imports: [CurrenciesModule, CurrentAccountsModule, DocumentsSalesModule, AccessControlModule, BankMovementsModule, CreditCardsModule, IntercompanyTreasuryModule],
+  imports: [CurrenciesModule, CurrentAccountsModule, DocumentsSalesModule, AccessControlModule, BankMovementsModule, CreditCardsModule, IntercompanyTreasuryModule, CashBoxesModule],
   controllers: [PaymentsController],
   providers: [PaymentsService],
   exports: [PaymentsService],
