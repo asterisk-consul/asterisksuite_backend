@@ -325,32 +325,59 @@ export class WhatsAppNotificationsService {
   async enqueueTaskActivity(input: {
     companyId: string;
     recipientUserIds: string[];
-    eventType: 'TASK_ASSIGNED' | 'TASK_MEMBER_ADDED' | 'TASK_COMMENTED' | 'TASK_MENTIONED';
+    eventType: 'TASK_ASSIGNED' | 'TASK_MEMBER_ADDED' | 'TASK_COMMENTED' | 'TASK_MENTIONED' | 'TASK_UPDATED' | 'TASK_MOVED' | 'TASK_COMPLETED' | 'TASK_REOPENED';
     taskId: string;
     boardId: string;
     taskTitle: string;
     actorUserId: string;
     detail?: string;
   }) {
-    if (!this.isDeliveryEnabled()) return 0;
-    if (!(await this.platformModules.hasModuleOrLegacyAccess(input.companyId, 'WHATSAPP'))) return 0;
-    if (!(await this.platformModules.hasModuleOrLegacyAccess(input.companyId, 'CRM'))) return 0;
+    if (!this.isDeliveryEnabled()) {
+      this.logger.warn(`Aviso de tarea ${input.taskId} omitido: WHATSAPP_NOTIFICATIONS_ENABLED no está en true.`);
+      return 0;
+    }
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(input.companyId, 'WHATSAPP'))) {
+      this.logger.warn(`Aviso de tarea ${input.taskId} omitido: falta el módulo WhatsApp para la empresa ${input.companyId}.`);
+      return 0;
+    }
+    if (!(await this.platformModules.hasModuleOrLegacyAccess(input.companyId, 'CRM'))) {
+      this.logger.warn(`Aviso de tarea ${input.taskId} omitido: falta el módulo CRM para la empresa ${input.companyId}.`);
+      return 0;
+    }
     const settings = await this.findCompanySettings(input.companyId);
-    if (!settings?.enabled || !settings.tasks_enabled) return 0;
+    if (!settings?.enabled) {
+      this.logger.warn(`Aviso de tarea ${input.taskId} omitido: el canal de avisos operativos por WhatsApp está desactivado para la empresa ${input.companyId}.`);
+      return 0;
+    }
+    if (!settings.tasks_enabled) {
+      this.logger.warn(`Aviso de tarea ${input.taskId} omitido: la categoría Tareas está desactivada en WhatsApp para la empresa ${input.companyId}.`);
+      return 0;
+    }
+    if (['TASK_UPDATED', 'TASK_MOVED', 'TASK_COMPLETED', 'TASK_REOPENED'].includes(input.eventType) && settings.task_changes_enabled === false) {
+      this.logger.warn(`Aviso de cambio de tarea ${input.taskId} omitido: los avisos de cambios están desactivados para la empresa ${input.companyId}.`);
+      return 0;
+    }
 
     const recipientIds = [...new Set(input.recipientUserIds)]
       .filter(id => id !== input.actorUserId)
       .slice(0, 60);
+    if (!recipientIds.length) return 0;
     const contacts = await this.findOptedInContacts(input.companyId, recipientIds);
-    if (!contacts.size) return 0;
+    if (!contacts.size) {
+      this.logger.warn(`Aviso de tarea ${input.taskId} omitido: ningún destinatario tiene número de WhatsApp con consentimiento activo.`);
+      return 0;
+    }
     const targetPath = await this.companyDocumentUrl(input.companyId, `/erp/tasks?board_id=${encodeURIComponent(input.boardId)}&task_id=${encodeURIComponent(input.taskId)}`);
-    const title = input.eventType === 'TASK_ASSIGNED'
-      ? 'Te asignaron una tarea'
-      : input.eventType === 'TASK_MEMBER_ADDED'
-        ? 'Te sumaron a una tarea'
-        : input.eventType === 'TASK_MENTIONED'
-          ? 'Te mencionaron en una tarea'
-          : 'Nuevo comentario en una tarea';
+    const title = ({
+      TASK_ASSIGNED: 'Te asignaron una tarea',
+      TASK_MEMBER_ADDED: 'Te sumaron a una tarea',
+      TASK_COMMENTED: 'Nuevo comentario en una tarea',
+      TASK_MENTIONED: 'Te mencionaron en una tarea',
+      TASK_UPDATED: 'Actualización de una tarea',
+      TASK_MOVED: 'Movieron una tarea',
+      TASK_COMPLETED: 'Tarea completada',
+      TASK_REOPENED: 'Reabrieron una tarea',
+    } satisfies Record<typeof input.eventType, string>)[input.eventType];
     const detail = input.detail?.trim();
     const message = [
       `Tarea: ${input.taskTitle}`,
@@ -369,6 +396,7 @@ export class WhatsAppNotificationsService {
       });
       if (inserted) queued += 1;
     }
+    if (!queued) this.logger.warn(`Aviso de tarea ${input.taskId} no se agregó a la cola de WhatsApp; revisá duplicados y el estado de la cola.`);
     return queued;
   }
 
@@ -567,7 +595,8 @@ export class WhatsAppNotificationsService {
               AND c.phone_e164 = q.recipient_phone
           )
           OR (q.event_type IN ('OV_ASSIGNED', 'OV_READY_FOR_DELIVERY') AND s.assignments_enabled = false)
-          OR (q.event_type IN ('TASK_ASSIGNED', 'TASK_MEMBER_ADDED', 'TASK_COMMENTED', 'TASK_MENTIONED') AND s.tasks_enabled = false)
+          OR (q.event_type IN ('TASK_ASSIGNED', 'TASK_MEMBER_ADDED', 'TASK_COMMENTED', 'TASK_MENTIONED', 'TASK_UPDATED', 'TASK_MOVED', 'TASK_COMPLETED', 'TASK_REOPENED') AND s.tasks_enabled = false)
+          OR (q.event_type IN ('TASK_UPDATED', 'TASK_MOVED', 'TASK_COMPLETED', 'TASK_REOPENED') AND s.task_changes_enabled = false)
           OR (q.event_type = 'CUSTOMER_BALANCE_OLD' AND (s.customer_balances_enabled = false OR NOT (s.customer_balance_recipient_ids @> to_jsonb(q.recipient_user_id::text))))
           OR (q.event_type = 'SUPPLIER_BALANCE_OLD' AND (s.supplier_balances_enabled = false OR NOT (s.supplier_balance_recipient_ids @> to_jsonb(q.recipient_user_id::text))))
           OR (q.event_type IN ('CHECK_DUE', 'CHECK_OVERDUE') AND (s.checks_enabled = false OR NOT (s.check_recipient_ids @> to_jsonb(q.recipient_user_id::text))))
@@ -615,7 +644,7 @@ export class WhatsAppNotificationsService {
         SET status = 'CANCELLED', locked_at = NULL,
             last_error = 'La empresa ya no tiene habilitado el módulo CRM y tareas.', updated_at = NOW()
         WHERE company_id = ${candidate.company_id}::uuid
-          AND event_type IN ('TASK_ASSIGNED', 'TASK_MEMBER_ADDED', 'TASK_COMMENTED', 'TASK_MENTIONED')
+          AND event_type IN ('TASK_ASSIGNED', 'TASK_MEMBER_ADDED', 'TASK_COMMENTED', 'TASK_MENTIONED', 'TASK_UPDATED', 'TASK_MOVED', 'TASK_COMPLETED', 'TASK_REOPENED')
           AND status = 'PENDING'
       `;
       return true;

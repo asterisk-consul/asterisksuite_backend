@@ -5,6 +5,7 @@ model task_boards {
   party_id                       String?              @db.Uuid
   is_default                     Boolean              @default(false)
   require_work_log_on_transition Boolean              @default(false)
+  allow_task_timer               Boolean              @default(false)
   active                         Boolean              @default(true)
   created_at                     DateTime             @default(now()) @db.Timestamp(6)
   updated_at                     DateTime             @updatedAt @db.Timestamp(6)
@@ -68,6 +69,7 @@ model tasks {
   checklists   task_checklists[]
   members      task_members[]
   work_logs    task_work_logs[]
+  active_timers task_active_timers[]
 
   @@index([board_id, column_id, position])
   @@index([party_id, due_at])
@@ -152,6 +154,19 @@ model task_work_logs {
 
   @@index([task_id, created_at])
   @@index([user_id, created_at])
+  @@schema("tenant")
+}
+
+model task_active_timers {
+  user_id         String    @id @db.Uuid
+  task_id         String    @db.Uuid
+  started_at      DateTime? @db.Timestamp(6)
+  elapsed_seconds Int       @default(0)
+  created_at      DateTime  @default(now()) @db.Timestamp(6)
+  updated_at      DateTime  @default(now()) @updatedAt @db.Timestamp(6)
+  task            tasks     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+
+  @@index([task_id])
   @@schema("tenant")
 }
 

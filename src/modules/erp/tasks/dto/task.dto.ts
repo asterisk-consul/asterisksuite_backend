@@ -61,6 +61,10 @@ export class CreateTaskBoardDto {
   @IsOptional()
   @IsBoolean()
   require_work_log_on_transition?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  allow_task_timer?: boolean;
 }
 
 export class CreateTaskDto {
@@ -194,6 +198,17 @@ export class SetTaskCompletionDto {
 export class UpdateTaskBoardSettingsDto {
   @IsBoolean()
   require_work_log_on_transition!: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  allow_task_timer?: boolean;
+}
+
+export class FinishTaskTimerDto {
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  description?: string;
 }
 
 export class CreateTaskManualWorkLogDto extends TaskWorkLogInputDto {}
@@ -311,6 +326,9 @@ export class TaskColumnPreferencesDto {
 export class TaskNotificationSettingsDto {
   @IsBoolean()
   in_app_enabled!: boolean;
+
+  @IsBoolean()
+  task_changes_enabled!: boolean;
 }
 
 export class TaskBoardQueryDto {
@@ -341,6 +359,10 @@ export class TaskBoardQueryDto {
   @IsOptional()
   @IsIn(['ALL', 'OPEN', 'COMPLETED'])
   completion?: string;
+
+  @IsOptional()
+  @IsEnum(TaskPriorityDto)
+  priority?: TaskPriorityDto;
 
   @IsOptional()
   @IsIn(['ALL', 'NO_DUE', 'OVERDUE', 'TODAY', 'TOMORROW'])

@@ -6,7 +6,7 @@ import { RequirePermissions } from '@/access-control/decorators/require-permissi
 import { PermissionsGuard } from '@/access-control/guards/permissions.guard';
 import { AllowCompanyAdmins } from '@/access-control/decorators/allow-company-admins.decorator';
 import { TasksService } from './tasks.service';
-import { CreateTaskBoardDto, CreateTaskCategoryDto, CreateTaskChecklistDto, CreateTaskChecklistItemDto, CreateTaskColumnDto, CreateTaskCommentDto, CreateTaskDto, CreateTaskLabelDto, CreateTaskManualWorkLogDto, MoveAllTasksDto, MoveTaskColumnDto, SetTaskCompletionDto, TaskBoardQueryDto, TaskColumnPreferencesDto, TaskNotificationSettingsDto, TaskPartyQueryDto, UpdateTaskBoardSettingsDto, UpdateTaskCategoryDto, UpdateTaskChecklistItemDto, UpdateTaskDto } from './dto/task.dto';
+import { CreateTaskBoardDto, CreateTaskCategoryDto, CreateTaskChecklistDto, CreateTaskChecklistItemDto, CreateTaskColumnDto, CreateTaskCommentDto, CreateTaskDto, CreateTaskLabelDto, CreateTaskManualWorkLogDto, FinishTaskTimerDto, MoveAllTasksDto, MoveTaskColumnDto, SetTaskCompletionDto, TaskBoardQueryDto, TaskColumnPreferencesDto, TaskNotificationSettingsDto, TaskPartyQueryDto, UpdateTaskBoardSettingsDto, UpdateTaskCategoryDto, UpdateTaskChecklistItemDto, UpdateTaskDto } from './dto/task.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('erp/tasks')
@@ -24,7 +24,7 @@ export class TasksController {
   @AllowCompanyAdmins()
   @RequirePermissions('companies.update')
   updateNotificationSettings(@Body() dto: TaskNotificationSettingsDto, @CurrentUser() user: AuthUser) {
-    return this.service.updateNotificationSettings(dto.in_app_enabled, user);
+    return this.service.updateNotificationSettings(dto, user);
   }
 
   @Get(':taskId/checklists')
@@ -121,6 +121,36 @@ export class TasksController {
   @RequirePermissions('tasks.read')
   getWorkLogs(@Param('taskId', ParseUUIDPipe) taskId: string) {
     return this.service.getWorkLogs(taskId);
+  }
+
+  @Get('timer/active')
+  @RequirePermissions('tasks.read')
+  getActiveTaskTimer(@CurrentUser() user: AuthUser) {
+    return this.service.getActiveTaskTimer(user);
+  }
+
+  @Post(':taskId/timer/start')
+  @RequirePermissions('tasks.update')
+  startTaskTimer(@Param('taskId', ParseUUIDPipe) taskId: string, @CurrentUser() user: AuthUser) {
+    return this.service.startTaskTimer(taskId, user);
+  }
+
+  @Patch('timer/pause')
+  @RequirePermissions('tasks.update')
+  pauseTaskTimer(@CurrentUser() user: AuthUser) {
+    return this.service.pauseTaskTimer(user);
+  }
+
+  @Patch('timer/resume')
+  @RequirePermissions('tasks.update')
+  resumeTaskTimer(@CurrentUser() user: AuthUser) {
+    return this.service.resumeTaskTimer(user);
+  }
+
+  @Post('timer/finish')
+  @RequirePermissions('tasks.update')
+  finishTaskTimer(@Body() dto: FinishTaskTimerDto, @CurrentUser() user: AuthUser) {
+    return this.service.finishTaskTimer(dto, user);
   }
 
   @Post(':taskId/work-logs')

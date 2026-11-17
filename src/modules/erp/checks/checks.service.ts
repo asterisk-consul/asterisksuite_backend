@@ -161,6 +161,7 @@ export class ChecksService {
             id: true,
             number: true,
             type: true,
+            status: true,
             amount: true,
             party_id: true,
             party_type: true,
@@ -175,6 +176,7 @@ export class ChecksService {
                 id: true,
                 number: true,
                 type: true,
+                status: true,
                 amount: true,
                 party_id: true,
                 party_type: true,
@@ -195,7 +197,7 @@ export class ChecksService {
       where: { id, deleted_at: null },
       include: {
         payment: {
-          select: { id: true, number: true, type: true, amount: true, party_id: true },
+          select: { id: true, number: true, type: true, status: true, amount: true, party_id: true },
         },
         bank_account: {
           select: { id: true, name: true, bank_name: true, currency_code: true },

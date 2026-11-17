@@ -42,7 +42,7 @@ export interface CreateTaskActivityNotificationInput {
   companyId?: string;
   recipientUserIds: string[];
   actorUserId: string;
-  type: 'TASK_ASSIGNED' | 'TASK_MEMBER_ADDED' | 'TASK_COMMENTED' | 'TASK_MENTIONED';
+  type: 'TASK_ASSIGNED' | 'TASK_MEMBER_ADDED' | 'TASK_COMMENTED' | 'TASK_MENTIONED' | 'TASK_UPDATED' | 'TASK_MOVED' | 'TASK_COMPLETED' | 'TASK_REOPENED';
   title: string;
   message: string;
   targetPath: string;

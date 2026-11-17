@@ -554,6 +554,7 @@ export const ModelName = {
   task_label_assignments: 'task_label_assignments',
   task_comments: 'task_comments',
   task_work_logs: 'task_work_logs',
+  task_active_timers: 'task_active_timers',
   task_checklists: 'task_checklists',
   task_checklist_items: 'task_checklist_items',
   task_board_column_preferences: 'task_board_column_preferences',
@@ -617,7 +618,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "commercial_adjustment_concepts" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "document_activity_events" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_partner_share_details" | "hr_partner_investment_plans" | "hr_partner_investment_installments" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "user_notification_alert_dismissals" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "intercompany_treasury_shares" | "intercompany_treasury_operations" | "platform_modules" | "subscription_plans" | "subscription_plan_modules" | "company_subscriptions" | "company_module_overrides" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "platform_admin_assignments" | "platform_admin_company_scopes" | "company_tax_settings" | "company_arca_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "mcp_oauth_clients" | "mcp_oauth_pending_authorizations" | "mcp_oauth_grants" | "mcp_oauth_codes" | "mcp_oauth_refresh_tokens" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "sales_partner_share_assignments" | "commercial_operations" | "task_boards" | "task_board_columns" | "tasks" | "task_members" | "task_labels" | "task_categories" | "task_label_assignments" | "task_comments" | "task_work_logs" | "task_checklists" | "task_checklist_items" | "task_board_column_preferences" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "bank_movement_accounting_entries" | "bank_movement_accounting_lines" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_tenders" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies" | "user_whatsapp_contacts" | "company_whatsapp_notification_settings" | "whatsapp_notification_outbox" | "whatsapp_notification_dispatch_state"
+    modelProps: "accounts" | "audit_logs" | "bank_concepts" | "product_costs" | "product_cost_breakdowns" | "cost_components" | "cost_templates" | "cost_template_components" | "currencies" | "currency_rates" | "dashboard_configs" | "document_sequences" | "commercial_adjustment_concepts" | "document_type_sequences" | "document_item_taxes" | "document_items" | "document_print_templates" | "document_taxes" | "document_types" | "document_type_taxes" | "documents" | "document_activity_events" | "fiscal_authorizations" | "fiscal_authorization_settings" | "fiscal_authorization_alerts" | "presupuesto_documents" | "orden_venta_documents" | "sales_commission_assignments" | "orden_compra_documents" | "employees" | "partners" | "product_structure_versions" | "entity_photos" | "files" | "intake_records" | "financial_investments" | "financial_investment_valuations" | "financial_investment_transactions" | "tax_jurisdictions" | "withholding_concepts" | "business_party_withholding_profiles" | "business_party_iibb_registrations" | "company_tax_jurisdictions" | "tax_rules" | "tax_rule_brackets" | "withholdings" | "withholding_remittances" | "withholding_tax_applications" | "withholding_allocations" | "hr_accounts" | "hr_account_entries" | "hr_vales" | "hr_vale_partner_share_details" | "hr_partner_investment_plans" | "hr_partner_investment_installments" | "hr_vale_commission_details" | "international_operations" | "international_operation_quotes" | "international_containers" | "container_events" | "international_operation_documents" | "international_operation_payments" | "international_operation_settings" | "cargo_transfer_items" | "cargo_transfers" | "delivery_notes" | "drivers" | "picking_items" | "picking_orders" | "picking_results" | "picking_sources" | "trip_cargo" | "trip_temperature_logs" | "dispatch_orders" | "dispatch_order_items" | "trips" | "trip_stops" | "trip_stop_orders" | "corridors" | "corridor_stops" | "vehicles" | "vehicle_combinations" | "transport_document_types" | "documents_vehicle" | "documents_driver" | "transfer_rates" | "dispatch_rates" | "maintenance_orders" | "maintenance_tasks" | "maintenance_parts" | "maintenance_labor" | "maintenance_services" | "maintenance_status_history" | "tires" | "vehicle_tire_positions" | "tire_movements" | "tire_position_history" | "maintenance_plans" | "maintenance_plan_assets" | "system_modules" | "locations" | "user_notifications" | "user_notification_alert_dismissals" | "operation_taxes" | "pallet_items" | "pallets" | "business_parties" | "business_party_roles" | "party_bank_accounts" | "party_locations" | "party_contacts" | "product_price" | "products" | "units" | "product_variants" | "product_components" | "categories" | "product_categories" | "tags" | "product_tags" | "attributes" | "product_attribute_values" | "product_variant_prices" | "product_variant_costs" | "product_suppliers" | "product_party_prices" | "product_party_price_history" | "price_lists" | "product_list_prices" | "companies" | "intercompany_treasury_shares" | "intercompany_treasury_operations" | "platform_modules" | "subscription_plans" | "subscription_plan_modules" | "company_subscriptions" | "company_module_overrides" | "refresh_tokens" | "audit_logs_public" | "users" | "company_users" | "platform_admin_assignments" | "platform_admin_company_scopes" | "company_tax_settings" | "company_arca_settings" | "user_table_preferences" | "company_whatsapp_report_settings" | "company_whatsapp_report_runs" | "mcp_oauth_clients" | "mcp_oauth_pending_authorizations" | "mcp_oauth_grants" | "mcp_oauth_codes" | "mcp_oauth_refresh_tokens" | "permissions" | "business_roles" | "business_role_permissions" | "business_user_roles" | "user_permission_overrides" | "sales_flow_settings" | "sales_partner_share_assignments" | "commercial_operations" | "task_boards" | "task_board_columns" | "tasks" | "task_members" | "task_labels" | "task_categories" | "task_label_assignments" | "task_comments" | "task_work_logs" | "task_active_timers" | "task_checklists" | "task_checklist_items" | "task_board_column_preferences" | "tax_categories" | "tax_category_taxes" | "product_taxes" | "taxes" | "treasury_obligation_templates" | "treasury_obligations" | "bank_accounts" | "bank_charge_rules" | "bank_account_user_roles" | "bank_operations" | "bank_account_movements" | "bank_movement_accounting_entries" | "bank_movement_accounting_lines" | "payment_bank_charges" | "cash_boxes" | "cash_box_sessions" | "cash_box_balances" | "cash_box_movements" | "cash_box_renditions" | "cash_box_user_roles" | "cash_box_transfers" | "payments" | "payment_tenders" | "payment_documents" | "checks" | "payment_checks" | "credit_cards" | "credit_card_transactions" | "credit_card_settlements" | "bank_account_transfers" | "credit_card_installments" | "credit_card_summaries" | "credit_card_summary_items" | "current_accounts" | "current_account_entries" | "warehouse_stock" | "stock_reservations" | "stock_reservation_allocations" | "warehouse_stock_movements" | "warehouses" | "stock_replenishment_policies" | "user_whatsapp_contacts" | "company_whatsapp_notification_settings" | "whatsapp_notification_outbox" | "whatsapp_notification_dispatch_state"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -13201,6 +13202,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    task_active_timers: {
+      payload: Prisma.$task_active_timersPayload<ExtArgs>
+      fields: Prisma.task_active_timersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.task_active_timersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.task_active_timersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>
+        }
+        findFirst: {
+          args: Prisma.task_active_timersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.task_active_timersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>
+        }
+        findMany: {
+          args: Prisma.task_active_timersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>[]
+        }
+        create: {
+          args: Prisma.task_active_timersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>
+        }
+        createMany: {
+          args: Prisma.task_active_timersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.task_active_timersCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>[]
+        }
+        delete: {
+          args: Prisma.task_active_timersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>
+        }
+        update: {
+          args: Prisma.task_active_timersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>
+        }
+        deleteMany: {
+          args: Prisma.task_active_timersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.task_active_timersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.task_active_timersUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>[]
+        }
+        upsert: {
+          args: Prisma.task_active_timersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$task_active_timersPayload>
+        }
+        aggregate: {
+          args: Prisma.Task_active_timersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTask_active_timers>
+        }
+        groupBy: {
+          args: Prisma.task_active_timersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_active_timersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.task_active_timersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Task_active_timersCountAggregateOutputType> | number
+        }
+      }
+    }
     task_checklists: {
       payload: Prisma.$task_checklistsPayload<ExtArgs>
       fields: Prisma.task_checklistsFieldRefs
@@ -19873,6 +19948,7 @@ export const Task_boardsScalarFieldEnum = {
   party_id: 'party_id',
   is_default: 'is_default',
   require_work_log_on_transition: 'require_work_log_on_transition',
+  allow_task_timer: 'allow_task_timer',
   active: 'active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -19991,6 +20067,18 @@ export const Task_work_logsScalarFieldEnum = {
 } as const
 
 export type Task_work_logsScalarFieldEnum = (typeof Task_work_logsScalarFieldEnum)[keyof typeof Task_work_logsScalarFieldEnum]
+
+
+export const Task_active_timersScalarFieldEnum = {
+  user_id: 'user_id',
+  task_id: 'task_id',
+  started_at: 'started_at',
+  elapsed_seconds: 'elapsed_seconds',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Task_active_timersScalarFieldEnum = (typeof Task_active_timersScalarFieldEnum)[keyof typeof Task_active_timersScalarFieldEnum]
 
 
 export const Task_checklistsScalarFieldEnum = {
@@ -22570,6 +22658,7 @@ export type GlobalOmitConfig = {
   task_label_assignments?: Prisma.task_label_assignmentsOmit
   task_comments?: Prisma.task_commentsOmit
   task_work_logs?: Prisma.task_work_logsOmit
+  task_active_timers?: Prisma.task_active_timersOmit
   task_checklists?: Prisma.task_checklistsOmit
   task_checklist_items?: Prisma.task_checklist_itemsOmit
   task_board_column_preferences?: Prisma.task_board_column_preferencesOmit

@@ -221,6 +221,7 @@ export const ModelName = {
   task_label_assignments: 'task_label_assignments',
   task_comments: 'task_comments',
   task_work_logs: 'task_work_logs',
+  task_active_timers: 'task_active_timers',
   task_checklists: 'task_checklists',
   task_checklist_items: 'task_checklist_items',
   task_board_column_preferences: 'task_board_column_preferences',
@@ -3368,6 +3369,7 @@ export const Task_boardsScalarFieldEnum = {
   party_id: 'party_id',
   is_default: 'is_default',
   require_work_log_on_transition: 'require_work_log_on_transition',
+  allow_task_timer: 'allow_task_timer',
   active: 'active',
   created_at: 'created_at',
   updated_at: 'updated_at',
@@ -3486,6 +3488,18 @@ export const Task_work_logsScalarFieldEnum = {
 } as const
 
 export type Task_work_logsScalarFieldEnum = (typeof Task_work_logsScalarFieldEnum)[keyof typeof Task_work_logsScalarFieldEnum]
+
+
+export const Task_active_timersScalarFieldEnum = {
+  user_id: 'user_id',
+  task_id: 'task_id',
+  started_at: 'started_at',
+  elapsed_seconds: 'elapsed_seconds',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type Task_active_timersScalarFieldEnum = (typeof Task_active_timersScalarFieldEnum)[keyof typeof Task_active_timersScalarFieldEnum]
 
 
 export const Task_checklistsScalarFieldEnum = {

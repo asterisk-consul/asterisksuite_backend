@@ -602,7 +602,7 @@ export class FilesService {
   }
 
   private getOriginalFilePath(fileUuid: string): string | null {
-    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'cash-box-movements', 'cash-box-transfers', 'intake'];
+    const subfolders = ['products', 'companies', 'documents', 'payments', 'checks', 'check-deposits', 'cash-box-movements', 'cash-box-transfers', 'intake', 'tasks'];
     for (const root of this.getStorageRoots()) {
       for (const subfolder of subfolders) {
         const directory = path.join(root, subfolder);
@@ -707,9 +707,17 @@ export class FilesService {
         filePath: requestedPath,
       };
     }
-    if (variant === 'original') return { record, filePath: record.file_path };
+    const originalPathExists = !!record.file_path && fs.existsSync(record.file_path);
+    if (variant === 'original' && originalPathExists) return { record, filePath: record.file_path };
+    if (variant === 'original') {
+      const physical = this.getPhysicalFileMetadata(fileUuid);
+      return { record, filePath: physical?.filePath || record.file_path };
+    }
     const variantPath = this.getFilePath(fileUuid, variant);
-    return { record, filePath: variantPath || record.file_path };
+    if (variantPath) return { record, filePath: variantPath };
+    if (originalPathExists) return { record, filePath: record.file_path };
+    const physical = this.getPhysicalFileMetadata(fileUuid);
+    return { record, filePath: physical?.filePath || record.file_path };
   }
 
   async findByEntity(entityType: string, entityId: string) {
@@ -742,8 +750,7 @@ export class FilesService {
 
     return active.map((p) => {
       const storedFile = fileMap.get(p.file_id) || p.files;
-      const physical = this.getPhysicalFileMetadata(p.file_id);
-      let fileSize = Number(storedFile?.file_size) || physical?.fileSize || 0;
+      let fileSize = Number(storedFile?.file_size) || 0;
       if (!fileSize && storedFile?.file_path) {
         try {
           fileSize = fs.statSync(storedFile.file_path).size;
@@ -751,6 +758,10 @@ export class FilesService {
           // El archivo puede pertenecer a un almacenamiento externo o ya no existir.
         }
       }
+      const needsPhysicalMetadata = !fileSize || !storedFile?.mime_type || !storedFile?.file_name;
+      const pathExists = !!storedFile?.file_path && fs.existsSync(storedFile.file_path);
+      const physical = needsPhysicalMetadata && !pathExists ? this.getPhysicalFileMetadata(p.file_id) : null;
+      if (!fileSize) fileSize = physical?.fileSize || 0;
 
       return {
         id: p.id,

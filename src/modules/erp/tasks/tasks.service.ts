@@ -5,7 +5,7 @@ import { TaskPriority } from '@/generated/prisma/client';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
-import { CreateTaskBoardDto, CreateTaskCategoryDto, CreateTaskChecklistDto, CreateTaskChecklistItemDto, CreateTaskColumnDto, CreateTaskCommentDto, CreateTaskDto, CreateTaskLabelDto, CreateTaskManualWorkLogDto, MoveAllTasksDto, MoveTaskColumnDto, SetTaskCompletionDto, TaskBoardQueryDto, TaskColumnPreferencesDto, TaskMemberInputDto, TaskPriorityDto, TaskWorkLogInputDto, UpdateTaskBoardSettingsDto, UpdateTaskCategoryDto, UpdateTaskChecklistItemDto, UpdateTaskDto } from './dto/task.dto';
+import { CreateTaskBoardDto, CreateTaskCategoryDto, CreateTaskChecklistDto, CreateTaskChecklistItemDto, CreateTaskColumnDto, CreateTaskCommentDto, CreateTaskDto, CreateTaskLabelDto, CreateTaskManualWorkLogDto, FinishTaskTimerDto, MoveAllTasksDto, MoveTaskColumnDto, SetTaskCompletionDto, TaskBoardQueryDto, TaskColumnPreferencesDto, TaskMemberInputDto, TaskPriorityDto, TaskWorkLogInputDto, UpdateTaskBoardSettingsDto, UpdateTaskCategoryDto, UpdateTaskChecklistItemDto, UpdateTaskDto } from './dto/task.dto';
 
 const DEFAULT_COLUMNS = [
   { name: 'Pendiente', color: 'neutral', is_closed: false },
@@ -50,21 +50,24 @@ export class TasksService {
     const companyId = this.context().companyId!;
     const row = await (this.db.getDefaultClient() as any).company_whatsapp_notification_settings.findUnique({
       where: { company_id: companyId },
-      select: { in_app_tasks_enabled: true },
+      select: { in_app_tasks_enabled: true, task_changes_enabled: true },
     });
-    return { in_app_enabled: row?.in_app_tasks_enabled ?? true };
+    return {
+      in_app_enabled: row?.in_app_tasks_enabled ?? true,
+      task_changes_enabled: row?.task_changes_enabled ?? true,
+    };
   }
 
-  async updateNotificationSettings(inAppEnabled: boolean, user: AuthUser) {
+  async updateNotificationSettings(settingsInput: { in_app_enabled: boolean; task_changes_enabled: boolean }, user: AuthUser) {
     const companyId = this.context().companyId!;
     const settings = (this.db.getDefaultClient() as any).company_whatsapp_notification_settings;
     const row = await settings.upsert({
       where: { company_id: companyId },
-      create: { company_id: companyId, in_app_tasks_enabled: inAppEnabled, configured_by: user.id },
-      update: { in_app_tasks_enabled: inAppEnabled, configured_by: user.id },
-      select: { in_app_tasks_enabled: true },
+      create: { company_id: companyId, in_app_tasks_enabled: settingsInput.in_app_enabled, task_changes_enabled: settingsInput.task_changes_enabled, configured_by: user.id },
+      update: { in_app_tasks_enabled: settingsInput.in_app_enabled, task_changes_enabled: settingsInput.task_changes_enabled, configured_by: user.id },
+      select: { in_app_tasks_enabled: true, task_changes_enabled: true },
     });
-    return { in_app_enabled: row.in_app_tasks_enabled };
+    return { in_app_enabled: row.in_app_tasks_enabled, task_changes_enabled: row.task_changes_enabled };
   }
 
   async getBoards() {
@@ -80,6 +83,7 @@ export class TasksService {
         party: { select: { id: true, name: true } },
         is_default: true,
         require_work_log_on_transition: true,
+        allow_task_timer: true,
         created_at: true,
         _count: { select: { columns: true, tasks: true } },
       },
@@ -102,6 +106,7 @@ export class TasksService {
           party_id: dto.party_id ?? null,
           is_default: (await tx.task_boards.count({ where: { deleted_at: null } })) === 0,
           require_work_log_on_transition: dto.require_work_log_on_transition ?? false,
+          allow_task_timer: dto.allow_task_timer ?? false,
           created_by: user.id,
           columns: {
             create: names.map((name, position) => ({
@@ -112,7 +117,7 @@ export class TasksService {
             })),
           },
         },
-        select: { id: true, name: true, description: true, is_default: true, require_work_log_on_transition: true },
+        select: { id: true, name: true, description: true, is_default: true, require_work_log_on_transition: true, allow_task_timer: true },
       });
       return board;
     });
@@ -142,8 +147,8 @@ export class TasksService {
     if (!board) throw new NotFoundException('Tablero no encontrado');
     return tenant.task_boards.update({
       where: { id: boardId },
-      data: { require_work_log_on_transition: dto.require_work_log_on_transition, updated_by: user.id },
-      select: { id: true, require_work_log_on_transition: true },
+      data: { require_work_log_on_transition: dto.require_work_log_on_transition, ...(dto.allow_task_timer !== undefined ? { allow_task_timer: dto.allow_task_timer } : {}), updated_by: user.id },
+      select: { id: true, require_work_log_on_transition: true, allow_task_timer: true },
     });
   }
 
@@ -267,6 +272,7 @@ export class TasksService {
       ...(query.label_ids ? { labels: { some: { label_id: { in: this.parseFilterIds(query.label_ids) } } } } : {}),
       ...(query.category_ids ? { category_id: { in: this.parseFilterIds(query.category_ids) } } : {}),
       ...(query.completion === 'OPEN' ? { completed_at: null } : query.completion === 'COMPLETED' ? { completed_at: { not: null } } : {}),
+      ...(query.priority ? { priority: query.priority } : {}),
     };
     const memberIds = query.member_ids ? query.member_ids.split(',').filter(id => id === 'NONE' || id === 'ME' || /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) : [];
     const selectedMembers = memberIds.filter(id => !['NONE', 'ME'].includes(id));
@@ -314,6 +320,7 @@ export class TasksService {
         party: { select: { id: true, name: true } },
         is_default: true,
         require_work_log_on_transition: true,
+        allow_task_timer: true,
         columns: {
           where: { deleted_at: null },
           orderBy: [{ position: 'asc' }, { created_at: 'asc' }],
@@ -453,6 +460,108 @@ export class TasksService {
       data: { task_id: taskId, user_id: user.id, minutes: dto.minutes, description: dto.description?.trim() || null },
       select: { id: true, user_id: true, minutes: true, description: true, created_at: true },
     });
+  }
+
+  private get activeTaskTimers(): any {
+    return (this.tenant as any).task_active_timers;
+  }
+
+  private timerResponse(timer: any) {
+    return {
+      task_id: timer.task_id,
+      task_title: timer.task.title,
+      board_id: timer.task.board_id,
+      board_name: timer.task.board.name,
+      board_allows_timer: timer.task.board.allow_task_timer,
+      started_at: timer.started_at,
+      elapsed_seconds: timer.elapsed_seconds,
+      paused: !timer.started_at,
+    };
+  }
+
+  async getActiveTaskTimer(user: AuthUser) {
+    const timer = await this.activeTaskTimers.findUnique({
+      where: { user_id: user.id },
+      include: { task: { select: { id: true, title: true, board_id: true, board: { select: { name: true, allow_task_timer: true } } } } },
+    });
+    return timer ? this.timerResponse(timer) : null;
+  }
+
+  async startTaskTimer(taskId: string, user: AuthUser) {
+    const tenant = this.tenant;
+    const task = await tenant.tasks.findFirst({
+      where: { id: taskId, deleted_at: null },
+      select: { id: true, board: { select: { allow_task_timer: true } } },
+    });
+    if (!task) throw new NotFoundException('Tarea no encontrada');
+    if (!task.board.allow_task_timer) throw new BadRequestException('El temporizador no está habilitado para este tablero');
+
+    const timers = (tenant as any).task_active_timers;
+    const existing = await timers.findUnique({ where: { user_id: user.id } });
+    if (existing) {
+      if (existing.task_id !== taskId) {
+        throw new BadRequestException({ code: 'TASK_TIMER_ALREADY_RUNNING', message: 'Ya tenés otro temporizador abierto. Finalizalo antes de iniciar este.' });
+      }
+      if (!existing.started_at) {
+        await timers.update({ where: { user_id: user.id }, data: { started_at: new Date() } });
+      }
+      return this.getActiveTaskTimer(user);
+    }
+
+    try {
+      await timers.create({ data: { user_id: user.id, task_id: taskId, started_at: new Date(), elapsed_seconds: 0 } });
+    } catch (error) {
+      if ((error as { code?: string })?.code === 'P2002') {
+        throw new BadRequestException({ code: 'TASK_TIMER_ALREADY_RUNNING', message: 'Ya tenés otro temporizador abierto. Finalizalo antes de iniciar este.' });
+      }
+      throw error;
+    }
+    return this.getActiveTaskTimer(user);
+  }
+
+  async pauseTaskTimer(user: AuthUser) {
+    const timers = this.activeTaskTimers;
+    const timer = await timers.findUnique({ where: { user_id: user.id } });
+    if (!timer) throw new NotFoundException('No hay un temporizador activo');
+    if (timer.started_at) {
+      const elapsed = Math.max(0, Math.floor((Date.now() - new Date(timer.started_at).getTime()) / 1000));
+      await timers.update({ where: { user_id: user.id }, data: { started_at: null, elapsed_seconds: timer.elapsed_seconds + elapsed } });
+    }
+    return this.getActiveTaskTimer(user);
+  }
+
+  async resumeTaskTimer(user: AuthUser) {
+    const timers = this.activeTaskTimers;
+    const timer = await timers.findUnique({
+      where: { user_id: user.id },
+      include: { task: { select: { board: { select: { allow_task_timer: true } } } } },
+    });
+    if (!timer) throw new NotFoundException('No hay un temporizador pausado');
+    if (!timer.started_at) {
+      if (!timer.task.board.allow_task_timer) throw new BadRequestException('El temporizador está deshabilitado para este tablero');
+      await timers.update({ where: { user_id: user.id }, data: { started_at: new Date() } });
+    }
+    return this.getActiveTaskTimer(user);
+  }
+
+  async finishTaskTimer(dto: FinishTaskTimerDto, user: AuthUser) {
+    const tenant = this.tenant;
+    const result = await tenant.$transaction(async (tx: any) => {
+      const timers = tx.task_active_timers;
+      const timer = await timers.findUnique({ where: { user_id: user.id } });
+      if (!timer) throw new NotFoundException('No hay un temporizador para finalizar');
+      const runningSeconds = timer.started_at
+        ? Math.max(0, Math.floor((Date.now() - new Date(timer.started_at).getTime()) / 1000))
+        : 0;
+      const minutes = Math.max(1, Math.ceil((timer.elapsed_seconds + runningSeconds) / 60));
+      const workLog = await tx.task_work_logs.create({
+        data: { task_id: timer.task_id, user_id: user.id, minutes, description: dto.description?.trim() || null },
+        select: { id: true, task_id: true, user_id: true, minutes: true, description: true, created_at: true },
+      });
+      await timers.delete({ where: { user_id: user.id } });
+      return workLog;
+    });
+    return { success: true, work_log: result };
   }
 
   async getLabels() {
@@ -812,10 +921,14 @@ export class TasksService {
 
   async setTaskCompletion(taskId: string, dto: SetTaskCompletionDto, user: AuthUser) {
     const tenant = this.tenant;
-    return tenant.$transaction(async tx => {
+    const context = this.context();
+    const inAppEnabled = await this.getInAppTasksNotificationsEnabled(context.companyId!);
+    const taskChangesEnabled = await this.getTaskChangesNotificationsEnabled(context.companyId!);
+    const completionEvent: { value: { type: 'TASK_COMPLETED' | 'TASK_REOPENED'; title: string; message: string; taskTitle: string; boardId: string; recipientIds: string[] } | null } = { value: null };
+    const result = await tenant.$transaction(async tx => {
       const task = await tx.tasks.findFirst({
         where: { id: taskId, deleted_at: null },
-        select: { id: true, board_id: true, column_id: true, completed_at: true, column: { select: { is_closed: true } }, board: { select: { require_work_log_on_transition: true } } },
+        select: { id: true, title: true, created_by: true, assigned_to: true, members: { select: { user_id: true } }, board_id: true, column_id: true, completed_at: true, column: { select: { is_closed: true } }, board: { select: { require_work_log_on_transition: true } } },
       });
       if (!task) throw new NotFoundException('Tarea no encontrada');
       if (!!task.completed_at === dto.completed) return { success: true, completed: dto.completed, column_id: task.column_id, position: undefined, completed_at: task.completed_at };
@@ -851,19 +964,41 @@ export class TasksService {
         data: data as any,
         select: { column_id: true, position: true, completed_at: true },
       });
+      const event = dto.completed ? 'TASK_COMPLETED' : 'TASK_REOPENED';
+      const title = dto.completed ? `Se completó ${task.title}` : `Reabrieron ${task.title}`;
+      const message = dto.completed ? 'La marcaron como completada.' : 'La reabrieron y volvió a estar pendiente.';
+      const recipientIds = [...new Set([task.created_by, task.assigned_to, ...task.members.map(member => member.user_id)].filter((id): id is string => !!id && id !== user.id))];
+      if (taskChangesEnabled && recipientIds.length) {
+        completionEvent.value = { type: event, title, message, taskTitle: task.title, boardId: task.board_id, recipientIds };
+        if (inAppEnabled) {
+          await this.notifications.createTaskActivity({
+            tx, companyId: context.companyId, recipientUserIds: recipientIds, actorUserId: user.id,
+            type: event, title, message, targetPath: this.taskPath(task.board_id, task.id), taskId: task.id,
+          });
+        }
+      }
       return { success: true, completed: dto.completed, ...updated };
     });
+    const completion = completionEvent.value;
+    if (completion) {
+      await this.enqueueTaskWhatsApp({
+        companyId: context.companyId!, recipientUserIds: completion.recipientIds, eventType: completion.type,
+        taskId, boardId: completion.boardId, taskTitle: completion.taskTitle, actorUserId: user.id,
+        detail: completion.message,
+      });
+    }
+    return result;
   }
 
   async updateTask(taskId: string, dto: UpdateTaskDto, user: AuthUser) {
     const tenant = this.tenant;
     const context = this.context();
-    const task = await tenant.tasks.findFirst({ where: { id: taskId, deleted_at: null }, select: { id: true, title: true, description: true, assigned_to: true, category_id: true, created_by: true, board_id: true, column_id: true, position: true, members: { select: { user_id: true, role: true } }, board: { select: { party_id: true, require_work_log_on_transition: true } } } });
+    const task = await tenant.tasks.findFirst({ where: { id: taskId, deleted_at: null }, select: { id: true, title: true, description: true, priority: true, party_id: true, assigned_to: true, category_id: true, start_at: true, due_at: true, created_by: true, board_id: true, column_id: true, position: true, column: { select: { name: true } }, members: { select: { user_id: true, role: true } }, labels: { select: { label_id: true } }, board: { select: { party_id: true, require_work_log_on_transition: true } } } });
     if (!task) throw new NotFoundException('Tarea no encontrada');
     const targetColumn = dto.column_id
       ? await tenant.task_board_columns.findFirst({
         where: { id: dto.column_id, board_id: task.board_id, deleted_at: null },
-        select: { id: true, is_closed: true },
+        select: { id: true, name: true, is_closed: true },
       })
       : undefined;
     if (dto.column_id) {
@@ -878,10 +1013,30 @@ export class TasksService {
     if (dto.assigned_to !== undefined) await this.validateMember(dto.assigned_to);
     const assignedTo = dto.assigned_to !== undefined ? dto.assigned_to : task.assigned_to;
     const nextMembers = this.withoutResponsible(dto.members ?? task.members, assignedTo);
+    const sortedMembers = (items: Array<{ user_id: string; role: string }>) => items.map(item => `${item.user_id}:${item.role}`).sort().join('|');
+    const membersChanged = (dto.members !== undefined || dto.assigned_to !== undefined) && sortedMembers(nextMembers) !== sortedMembers(task.members);
+    const labelsChanged = dto.label_ids !== undefined && [...dto.label_ids].sort().join('|') !== task.labels.map(item => item.label_id).sort().join('|');
+    const sameDate = (incoming: string | null | undefined, current: Date | null) => incoming === undefined || (incoming ? new Date(incoming).getTime() : null) === (current?.getTime() ?? null);
     if (dto.members !== undefined) await this.validateMembers(nextMembers);
     if (dto.label_ids !== undefined) await this.validateLabels(dto.label_ids);
     if (dto.category_id !== undefined && dto.category_id !== task.category_id) await this.validateCategory(dto.category_id);
+    const taskMoved = !!targetColumn && targetColumn.id !== task.column_id;
+    const taskUpdated = taskMoved
+      || (dto.title !== undefined && dto.title.trim() !== task.title)
+      || (dto.description !== undefined && (dto.description?.trim() || null) !== task.description)
+      || (dto.priority !== undefined && dto.priority !== task.priority)
+      || (dto.party_id !== undefined && (dto.party_id ?? null) !== task.party_id)
+      || (dto.category_id !== undefined && (dto.category_id ?? null) !== task.category_id)
+      || (dto.assigned_to !== undefined && (dto.assigned_to ?? null) !== task.assigned_to)
+      || !sameDate(dto.start_at, task.start_at)
+      || !sameDate(dto.due_at, task.due_at)
+      || membersChanged
+      || labelsChanged;
+    const taskUpdateNotice: { value: { type: 'TASK_UPDATED' | 'TASK_MOVED'; title: string; message: string; recipientIds: string[]; taskTitle: string; boardId: string } | null } = { value: null };
+    let addedMemberIds: string[] = [];
+    let addedMentions: string[] = [];
     const inAppEnabled = await this.getInAppTasksNotificationsEnabled(context.companyId!);
+    const taskChangesEnabled = await this.getTaskChangesNotificationsEnabled(context.companyId!);
     const data: Record<string, unknown> = { updated_by: user.id };
     if (dto.title !== undefined) data.title = dto.title.trim();
     if (dto.description !== undefined) data.description = dto.description?.trim() || null;
@@ -942,6 +1097,37 @@ export class TasksService {
         }
       }
       const result = await tx.tasks.update({ where: { id: task.id }, data: data as any, select: { id: true, title: true, description: true, assigned_to: true, board_id: true } });
+      const existingMemberIds = new Set(task.members.map(member => member.user_id));
+      addedMemberIds = nextMembers.map(member => member.user_id).filter(id => !existingMemberIds.has(id));
+      const previousMentions = new Set(this.extractMentionedUserIds(task.description));
+      addedMentions = this.extractMentionedUserIds(result.description)
+        .filter(id => !previousMentions.has(id) && id !== result.assigned_to && !addedMemberIds.includes(id));
+      const specificallyNotified = new Set([
+        ...(result.assigned_to && result.assigned_to !== task.assigned_to ? [result.assigned_to] : []),
+        ...addedMemberIds,
+        ...addedMentions,
+      ]);
+      const relatedRecipientIds = [...new Set([
+        task.created_by,
+        task.assigned_to,
+        ...task.members.map(member => member.user_id),
+        result.assigned_to,
+        ...nextMembers.map(member => member.user_id),
+      ].filter((id): id is string => !!id && id !== user.id && !specificallyNotified.has(id)))];
+      if (taskUpdated && taskChangesEnabled && relatedRecipientIds.length) {
+        const type = taskMoved ? 'TASK_MOVED' : 'TASK_UPDATED';
+        const title = taskMoved ? `Movieron ${result.title}` : `Actualización en ${result.title}`;
+        const message = taskMoved
+          ? `La movieron de “${task.column.name}” a “${targetColumn!.name}”.`
+          : 'Se actualizaron los datos de la tarea.';
+        taskUpdateNotice.value = { type, title, message, recipientIds: relatedRecipientIds, taskTitle: result.title, boardId: result.board_id };
+        if (inAppEnabled) {
+          await this.notifications.createTaskActivity({
+            tx, companyId: context.companyId, recipientUserIds: relatedRecipientIds, actorUserId: user.id,
+            taskId: result.id, targetPath: this.taskPath(result.board_id, result.id), type, title, message,
+          });
+        }
+      }
       if (inAppEnabled) {
         if (result.assigned_to && result.assigned_to !== task.assigned_to) {
           await this.notifications.createTaskActivity({
@@ -950,8 +1136,6 @@ export class TasksService {
             targetPath: this.taskPath(result.board_id, result.id), taskId: result.id,
           });
         }
-        const existingMemberIds = new Set(task.members.map(member => member.user_id));
-        const addedMemberIds = nextMembers.map(member => member.user_id).filter(id => !existingMemberIds.has(id));
         if (addedMemberIds.length) {
           await this.notifications.createTaskActivity({
             tx, companyId: context.companyId, recipientUserIds: addedMemberIds, actorUserId: user.id,
@@ -959,9 +1143,6 @@ export class TasksService {
             targetPath: this.taskPath(result.board_id, result.id), taskId: result.id,
           });
         }
-        const previousMentions = new Set(this.extractMentionedUserIds(task.description));
-        const addedMentions = this.extractMentionedUserIds(result.description)
-          .filter(id => !previousMentions.has(id) && id !== result.assigned_to && !addedMemberIds.includes(id));
         if (addedMentions.length) {
           await this.notifications.createTaskActivity({
             tx, companyId: context.companyId, recipientUserIds: addedMentions, actorUserId: user.id,
@@ -973,13 +1154,10 @@ export class TasksService {
       return result;
     });
     if (updated.assigned_to && updated.assigned_to !== task.assigned_to) await this.enqueueTaskWhatsApp({ companyId: context.companyId!, recipientUserIds: [updated.assigned_to], eventType: 'TASK_ASSIGNED', taskId: updated.id, boardId: updated.board_id, taskTitle: updated.title, actorUserId: user.id });
-    const existingMemberIds = new Set(task.members.map(member => member.user_id));
-    const addedMemberIds = nextMembers.map(member => member.user_id).filter(id => !existingMemberIds.has(id));
     if (addedMemberIds.length) await this.enqueueTaskWhatsApp({ companyId: context.companyId!, recipientUserIds: addedMemberIds, eventType: 'TASK_MEMBER_ADDED', taskId: updated.id, boardId: updated.board_id, taskTitle: updated.title, actorUserId: user.id });
-    const previousMentions = new Set(this.extractMentionedUserIds(task.description));
-    const addedMentions = this.extractMentionedUserIds(updated.description)
-      .filter(id => !previousMentions.has(id) && id !== updated.assigned_to && !addedMemberIds.includes(id));
     if (addedMentions.length) await this.enqueueTaskWhatsApp({ companyId: context.companyId!, recipientUserIds: addedMentions, eventType: 'TASK_MENTIONED', taskId: updated.id, boardId: updated.board_id, taskTitle: updated.title, actorUserId: user.id });
+    const updateNotice = taskUpdateNotice.value;
+    if (updateNotice) await this.enqueueTaskWhatsApp({ companyId: context.companyId!, recipientUserIds: updateNotice.recipientIds, eventType: updateNotice.type, taskId: updated.id, boardId: updateNotice.boardId, taskTitle: updateNotice.taskTitle, actorUserId: user.id, detail: updateNotice.message });
     return { id: updated.id };
   }
 
@@ -1019,6 +1197,14 @@ export class TasksService {
     return row?.in_app_tasks_enabled !== false;
   }
 
+  private async getTaskChangesNotificationsEnabled(companyId: string) {
+    const row = await (this.db.getDefaultClient() as any).company_whatsapp_notification_settings.findUnique({
+      where: { company_id: companyId },
+      select: { task_changes_enabled: true },
+    });
+    return row?.task_changes_enabled !== false;
+  }
+
   private extractMentionedUserIds(description?: string | null) {
     if (!description) return [];
     const ids = new Set<string>();
@@ -1035,7 +1221,7 @@ export class TasksService {
   private async enqueueTaskWhatsApp(input: {
     companyId: string;
     recipientUserIds: string[];
-    eventType: 'TASK_ASSIGNED' | 'TASK_MEMBER_ADDED' | 'TASK_COMMENTED' | 'TASK_MENTIONED';
+    eventType: 'TASK_ASSIGNED' | 'TASK_MEMBER_ADDED' | 'TASK_COMMENTED' | 'TASK_MENTIONED' | 'TASK_UPDATED' | 'TASK_MOVED' | 'TASK_COMPLETED' | 'TASK_REOPENED';
     taskId: string;
     boardId: string;
     taskTitle: string;
@@ -1053,6 +1239,8 @@ export class TasksService {
     const tenant = this.tenant;
     const task = await tenant.tasks.findFirst({ where: { id: taskId, deleted_at: null }, select: { id: true } });
     if (!task) throw new NotFoundException('Tarea no encontrada');
+    const activeTimer = await (tenant as any).task_active_timers.findFirst({ where: { task_id: task.id }, select: { user_id: true } });
+    if (activeTimer) throw new BadRequestException('Finalizá los temporizadores asociados antes de eliminar esta tarea');
     await tenant.tasks.update({ where: { id: task.id }, data: { deleted_at: new Date(), updated_by: user.id } });
     return { success: true };
   }
