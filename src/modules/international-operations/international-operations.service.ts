@@ -9,7 +9,6 @@ import { ConvertQuoteDto } from './dto/convert-quote.dto';
 import { DocumentsPurchasesService } from '@/modules/erp/documents-purchases/documents_purchases.service';
 import { OperationStatus, InternationalExpenseType, QuoteStatus } from '@/generated/prisma/enums';
 import {
-  hasInternationalTransitMovements,
   receiveInternationalRemitoFromTransit,
   registerInternationalPurchaseInTransit,
 } from './international-stock';
@@ -727,21 +726,154 @@ export class InternationalOperationsService {
   }
 
   async disassociateDocument(operationId: string, documentId: string) {
-    await this.findOne(operationId);
+    return this.prisma.$transaction(async (tx) => {
+      const operation = await tx.international_operations.findFirst({
+        where: { id: operationId, deleted_at: null },
+        select: { id: true },
+      });
+      if (!operation) throw new NotFoundException('Operación no encontrada');
 
-    const existing = await this.prisma.international_operation_documents.findUnique({
-      where: { operation_id_document_id: { operation_id: operationId, document_id: documentId } },
-    });
-    if (!existing) {
-      throw new NotFoundException('El documento no está asociado a esta operación');
-    }
+      await tx.$queryRaw`SELECT id FROM tenant.international_operations WHERE id = ${operationId}::uuid FOR UPDATE`;
+      await tx.$queryRaw`SELECT operation_id FROM tenant.international_operation_documents WHERE operation_id = ${operationId}::uuid AND document_id = ${documentId}::uuid FOR UPDATE`;
 
-    if (await hasInternationalTransitMovements(this.prisma, documentId)) {
-      throw new BadRequestException('No se puede desasociar el documento porque ya generó movimientos de stock en tránsito');
-    }
+      const existing = await tx.international_operation_documents.findUnique({
+        where: { operation_id_document_id: { operation_id: operationId, document_id: documentId } },
+        include: {
+          document: {
+            select: {
+              id: true,
+              document_types: { select: { category: true, direction: true } },
+              parent_document: { select: { id: true, document_types: { select: { category: true } } } },
+            },
+          },
+        },
+      });
+      if (!existing) throw new NotFoundException('El documento ya no está asociado a esta operación');
+      if (existing.container_id) {
+        await tx.$queryRaw`SELECT id FROM tenant.international_containers WHERE id = ${existing.container_id}::uuid FOR UPDATE`;
+      }
 
-    return this.prisma.international_operation_documents.delete({
-      where: { operation_id_document_id: { operation_id: operationId, document_id: documentId } },
+      const category = existing.document.document_types?.category ?? '';
+      const direction = Number(existing.document.document_types?.direction ?? 0);
+      const rootDocumentId = category === 'INVOICE' && existing.document.parent_document?.document_types?.category === 'ORDER'
+        ? existing.document.parent_document.id
+        : documentId;
+      const family = await tx.documents.findMany({
+        where: {
+          deleted_at: null,
+          document_types: { direction: -1, category: { in: ['ORDER', 'INVOICE', 'REMITO'] } },
+          OR: [
+            { id: rootDocumentId },
+            { parent_document_id: rootDocumentId },
+            { parent_document: { parent_document_id: rootDocumentId } },
+          ],
+        },
+        select: { id: true },
+      });
+      const familyIds = [...new Set([documentId, ...family.map((doc) => doc.id)])];
+      const otherFamilyIds = familyIds.filter((id) => id !== documentId);
+
+      const transitMovements = await tx.warehouse_stock_movements.findMany({
+        where: {
+          reference_type: { in: ['intl_order_transit', 'intl_invoice_transit', 'intl_remito_receipt'] },
+          reference_id: { in: familyIds },
+          deleted_at: null,
+        },
+        select: {
+          id: true,
+          warehouse_id: true,
+          product_id: true,
+          direction: true,
+          quantity: true,
+          reference_id: true,
+          reference_type: true,
+          created_at: true,
+        },
+      });
+
+      const reversedTransitMovements: Array<{ id: string; product_id: string; quantity: unknown }> = [];
+      if (transitMovements.length) {
+        if (existing.expense_type === 'MERCHANDISE' && otherFamilyIds.length) {
+          const remainingFamilyLink = await tx.international_operation_documents.findFirst({
+            where: {
+              operation_id: operationId,
+              expense_type: 'MERCHANDISE',
+              document_id: { in: otherFamilyIds },
+            },
+            select: { document_id: true },
+          });
+          if (remainingFamilyLink) {
+            throw new BadRequestException('No se puede desasociar este documento mientras su OC o factura vinculada siga asociada a la operación. Desasociá primero el otro comprobante de la misma mercadería.');
+          }
+        }
+
+        const expectedReferenceType = category === 'ORDER' ? 'intl_order_transit' : 'intl_invoice_transit';
+        const onlyReversibleEntries = existing.expense_type === 'MERCHANDISE'
+          && direction === -1
+          && transitMovements.every((movement) =>
+            movement.reference_id === documentId
+            && movement.reference_type === expectedReferenceType
+            && movement.direction === 'IN',
+          );
+        if (!onlyReversibleEntries) {
+          throw new BadRequestException('El documento ya tiene movimientos de recepción u otros movimientos asociados. Revertí primero esos movimientos para poder desasociarlo sin alterar el stock.');
+        }
+
+        for (const movement of transitMovements) {
+          await tx.$queryRaw`SELECT id FROM tenant.warehouse_stock_movements WHERE id = ${movement.id}::uuid FOR UPDATE`;
+          await tx.$queryRaw`SELECT id FROM tenant.warehouse_stock WHERE warehouse_id = ${movement.warehouse_id}::uuid AND product_id = ${movement.product_id}::uuid FOR UPDATE`;
+
+          const stock = await tx.warehouse_stock.findUnique({
+            where: { warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id } },
+            select: { quantity: true, reserved_quantity: true, deleted_at: true },
+          });
+          if (!stock || stock.deleted_at || stock.quantity.lessThan(movement.quantity)) {
+            throw new BadRequestException('El stock de tránsito ya no contiene toda la cantidad del documento. Regularizá las salidas antes de desasociarlo.');
+          }
+
+          const remainingQuantity = stock.quantity.sub(movement.quantity);
+          if (remainingQuantity.lessThan(stock.reserved_quantity)) {
+            throw new BadRequestException('No se puede retirar este ingreso porque el stock restante quedaría por debajo de las unidades reservadas. Liberá o reasigná esas reservas primero.');
+          }
+
+          const laterOutflow = await tx.warehouse_stock_movements.findFirst({
+            where: {
+              warehouse_id: movement.warehouse_id,
+              product_id: movement.product_id,
+              direction: 'OUT',
+              created_at: { gte: movement.created_at },
+              deleted_at: null,
+            },
+            select: { id: true },
+          });
+          if (laterOutflow) {
+            throw new BadRequestException('El producto tuvo una salida posterior desde el depósito de tránsito. Revisá y regularizá ese movimiento antes de desasociarlo.');
+          }
+
+          await tx.warehouse_stock.update({
+            where: { warehouse_id_product_id: { warehouse_id: movement.warehouse_id, product_id: movement.product_id } },
+            data: { quantity: { decrement: movement.quantity }, updated_at: new Date() },
+          });
+          await tx.warehouse_stock_movements.update({
+            where: { id: movement.id },
+            data: { deleted_at: new Date(), updated_at: new Date() },
+          });
+          reversedTransitMovements.push({ id: movement.id, product_id: movement.product_id, quantity: movement.quantity });
+        }
+      }
+
+      if (category === 'ORDER' && direction === -1) {
+        await tx.orden_compra_documents.updateMany({
+          where: { document_id: documentId, international_operation_id: operationId },
+          data: { international_operation_id: null, updated_at: new Date() },
+        });
+      }
+
+      await tx.international_operation_documents.delete({
+        where: { operation_id_document_id: { operation_id: operationId, document_id: documentId } },
+      });
+
+      return { operation_id: operationId, document_id: documentId, reversed_transit_movements: reversedTransitMovements };
     });
   }
 
@@ -944,18 +1076,6 @@ export class InternationalOperationsService {
   }
 
   async disassociatePurchaseOrder(operationId: string, documentId: string) {
-    await this.findOne(operationId);
-
-    const po = await this.prisma.orden_compra_documents.findFirst({
-      where: { document_id: documentId, international_operation_id: operationId },
-    });
-    if (!po) {
-      throw new NotFoundException('La orden de compra no está asociada a esta operación');
-    }
-
-    return this.prisma.orden_compra_documents.update({
-      where: { document_id: documentId },
-      data: { international_operation_id: null },
-    });
+    return this.disassociateDocument(operationId, documentId);
   }
 }
