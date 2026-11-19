@@ -1,11 +1,18 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
+import { requestContext } from '@/common/context/request-context';
+import { PermissionContextBuilder } from '@/access-control/authorization/permission-context.builder';
+import { PlatformModulesService } from '@/modules/core/platform-modules/platform-modules.service';
 import { SaveDashboardConfigDto } from './dto/save-dashboard-config.dto';
 @Injectable()
 export class DashboardService {
   private readonly logger = new Logger(DashboardService.name);
 
-  constructor(private db: PrismaService) {}
+  constructor(
+    private db: PrismaService,
+    private permissions: PermissionContextBuilder,
+    private platformModules: PlatformModulesService,
+  ) {}
 
   private get prisma() {
     return this.db.getClientForCurrentContext();
@@ -625,21 +632,36 @@ export class DashboardService {
     };
   }
 
-  async getPersonalData(userId: string) {
+  async getPersonalData(userId: string, requestedDate?: string, requestedActivityPage?: number, companyRole?: string) {
     const now = new Date();
+    const dateKey = this.resolveArgentinaDateKey(requestedDate);
+    const dayStart = new Date(`${dateKey}T00:00:00.000-03:00`);
+    const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
+    const activityPage = Math.min(100, Math.max(1, Math.trunc(requestedActivityPage || 1)));
+    const activityPageSize = 50;
+    const activitySkip = (activityPage - 1) * activityPageSize;
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const request = requestContext.getStore();
+    const companyId = request?.companyId;
 
-    const [recentActivity, pendingDocuments, pendingIntakes, monthlyPayments, monthlyAmountResult] = await Promise.all([
+    const taskModuleEnabled = companyId
+      ? await this.platformModules.hasModuleOrLegacyAccess(companyId, 'CRM')
+      : false;
+    const tasksEnabled = taskModuleEnabled && (
+      companyRole === 'OWNER' || (await this.permissions.build(userId)).can('tasks.read')
+    );
+    const activityTables = ['documents', 'payments', 'checks', 'products', 'business_parties', 'intake_records', 'hr_vales', 'treasury_obligations', ...(tasksEnabled ? ['tasks'] : [])];
+
+    const [todayLogs, activityCount, pendingDocuments, pendingIntakes, monthlyPayments, monthlyAmountResult] = await Promise.all([
       this.prisma.audit_logs.findMany({
-        where: { changed_by: userId },
-        orderBy: { changed_at: 'desc' },
-        take: 5,
-        select: {
-          table_name: true,
-          action: true,
-          changed_at: true,
-          new_data: true,
-        },
+        where: { changed_by: userId, action: 'CREATE', table_name: { in: activityTables }, changed_at: { gte: dayStart, lt: dayEnd } },
+        orderBy: [{ changed_at: 'desc' }, { id: 'desc' }],
+        skip: activitySkip,
+        take: activityPageSize + 1,
+        select: { id: true, table_name: true, record_id: true, changed_at: true, new_data: true },
+      }),
+      this.prisma.audit_logs.count({
+        where: { changed_by: userId, action: 'CREATE', table_name: { in: activityTables }, changed_at: { gte: dayStart, lt: dayEnd } },
       }),
       this.prisma.documents.findMany({
         where: {
@@ -661,13 +683,7 @@ export class DashboardService {
         },
         orderBy: [{ date: 'asc' }, { created_at: 'asc' }],
         select: {
-          id: true,
-          number: true,
-          date: true,
-          status: true,
-          descrip: true,
-          ref: true,
-          created_at: true,
+          id: true, number: true, date: true, status: true, descrip: true, ref: true, created_at: true,
           document_types: { select: { description: true, category: true, direction: true } },
           business_parties: { select: { name: true } },
         },
@@ -684,36 +700,104 @@ export class DashboardService {
         orderBy: { created_at: 'asc' },
         select: { id: true, title: true, notes: true, suggested_type: true, status: true, created_at: true },
       }),
-      this.prisma.payments.count({
-        where: {
-          created_by: userId,
-          deleted_at: null,
-          date: { gte: startOfMonth },
-        },
-      }),
-      this.prisma.payments.aggregate({
-        where: {
-          created_by: userId,
-          deleted_at: null,
-          date: { gte: startOfMonth },
-        },
-        _sum: { amount: true },
-      }),
+      this.prisma.payments.count({ where: { created_by: userId, deleted_at: null, date: { gte: startOfMonth } } }),
+      this.prisma.payments.aggregate({ where: { created_by: userId, deleted_at: null, date: { gte: startOfMonth } }, _sum: { amount: true } }),
     ]);
 
-    const tableLabels: Record<string, string> = {
-      documents: 'Documento',
-      payments: 'Pago',
-      current_account_entries: 'Movimiento CC',
-      checks: 'Cheque',
-      cash_box_movements: 'Movimiento caja',
-    };
+    const logs = todayLogs.slice(0, activityPageSize);
+    const documentIds = [...new Set(logs.filter(log => log.table_name === 'documents').map(log => log.record_id))];
+    const [createdDocuments, pendingTasks, completedTasksToday, completedTasksTodayCount] = await Promise.all([
+      documentIds.length
+        ? this.prisma.documents.findMany({
+            where: { id: { in: documentIds } },
+            select: { id: true, number: true, descrip: true, ref: true, document_types: { select: { description: true, category: true, direction: true } }, business_parties: { select: { name: true } } },
+          })
+        : Promise.resolve([]),
+      tasksEnabled
+        ? this.prisma.tasks.findMany({
+            where: {
+              deleted_at: null,
+              completed_at: null,
+              board: { active: true, deleted_at: null },
+              OR: [{ assigned_to: userId }, { created_by: userId }, { members: { some: { user_id: userId } } }],
+            },
+            orderBy: [{ due_at: 'asc' }, { created_at: 'asc' }],
+            take: 50,
+            select: { id: true, board_id: true, title: true, priority: true, due_at: true, created_at: true, board: { select: { name: true } } },
+          })
+        : Promise.resolve([]),
+      tasksEnabled
+        ? this.prisma.tasks.findMany({
+            where: { deleted_at: null, updated_by: userId, completed_at: { gte: dayStart, lt: dayEnd }, board: { deleted_at: null } },
+            orderBy: { completed_at: 'desc' },
+            take: 50,
+            select: { id: true, board_id: true, title: true, completed_at: true, board: { select: { name: true } } },
+          })
+        : Promise.resolve([]),
+      tasksEnabled
+        ? this.prisma.tasks.count({ where: { deleted_at: null, updated_by: userId, completed_at: { gte: dayStart, lt: dayEnd }, board: { deleted_at: null } } })
+        : Promise.resolve(0),
+    ]);
 
-    const actionLabels: Record<string, string> = {
-      CREATE: 'Creó',
-      UPDATE: 'Actualizó',
-      DELETE: 'Eliminó',
+    const createdDocumentById = new Map<string, (typeof createdDocuments)[number]>(
+      createdDocuments.map((document) => [document.id, document] as const),
+    );
+    const labels: Record<string, string> = {
+      documents: 'Comprobante', payments: 'Movimiento de tesorería', checks: 'Cheque', tasks: 'Tarea',
+      products: 'Producto', business_parties: 'Contraparte', intake_records: 'Captura de comprobante',
+      hr_vales: 'Vale de RR. HH.', treasury_obligations: 'Obligación',
     };
+    const todayActivities = logs.map((log) => {
+      const data = log.new_data && typeof log.new_data === 'object' && !Array.isArray(log.new_data) ? log.new_data as Record<string, any> : {};
+      const document = log.table_name === 'documents' ? createdDocumentById.get(log.record_id) : undefined;
+      const title = log.table_name === 'documents'
+        ? document?.document_types?.description ?? labels.documents
+        : log.table_name === 'payments'
+          ? data.type === 'COLLECTION' ? 'Cobro' : data.type === 'EXPENSE' ? 'Gasto' : 'Pago'
+          : log.table_name === 'checks' ? 'Cheque cargado'
+            : log.table_name === 'tasks' ? 'Tarea creada'
+              : log.table_name === 'intake_records' ? 'Captura recibida'
+                : `${labels[log.table_name] ?? log.table_name} creado`;
+      const number = data.number ?? document?.number;
+      const detail = log.table_name === 'checks'
+        ? [`Cheque #${data.check_number ?? ''}`.trim(), data.bank_name || data.issuer_name].filter(Boolean).join(' · ')
+        : log.table_name === 'documents'
+          ? [`N.º ${number ?? ''}`.trim(), document?.business_parties?.name, document?.descrip || document?.ref].filter(Boolean).join(' · ')
+          : log.table_name === 'payments'
+            ? [`N.º ${number ?? ''}`.trim(), data.description || data.reference].filter(Boolean).join(' · ')
+            : log.table_name === 'tasks' ? data.title || ''
+              : log.table_name === 'intake_records' ? data.title || data.notes || ''
+                : data.name || data.description || data.reference || '';
+      let to: string | null = null;
+      if (log.table_name === 'checks') to = `/erp/treasury/checks/${encodeURIComponent(log.record_id)}/edit`;
+      else if (log.table_name === 'payments') to = `/erp/treasury/payments/${encodeURIComponent(log.record_id)}`;
+      else if (log.table_name === 'tasks' && data.board_id) to = `/erp/tasks?board_id=${encodeURIComponent(data.board_id)}&task_id=${encodeURIComponent(log.record_id)}`;
+      else if (log.table_name === 'intake_records') to = `/erp/treasury/intake?record=${encodeURIComponent(log.record_id)}`;
+      else if (log.table_name === 'products') to = `/productos/${encodeURIComponent(log.record_id)}`;
+      else if (log.table_name === 'hr_vales') to = '/erp/rrhh/vales';
+      else if (log.table_name === 'treasury_obligations') to = '/erp/treasury/taxes-services?view=reports';
+      else if (document) {
+        const category = document.document_types?.category;
+        const isPurchase = document.document_types?.direction < 0;
+        to = category === 'QUOTE'
+          ? `/erp/budgets/${encodeURIComponent(log.record_id)}`
+          : category === 'ORDER'
+            ? isPurchase ? `/erp/purchases/orders/${encodeURIComponent(log.record_id)}` : `/erp/orders/${encodeURIComponent(log.record_id)}`
+            : category === 'REMITO'
+              ? isPurchase ? `/erp/purchases/remitos/${encodeURIComponent(log.record_id)}` : `/erp/remitos/${encodeURIComponent(log.record_id)}`
+              : isPurchase ? `/erp/purchases/purchases-documents/${encodeURIComponent(log.record_id)}` : `/erp/sales/${encodeURIComponent(log.record_id)}`;
+      }
+      return {
+        id: `${log.table_name}:${log.record_id}:${log.id}`,
+        table: labels[log.table_name] ?? log.table_name,
+        kind: log.table_name,
+        title,
+        action: 'Cargaste',
+        date: log.changed_at.toISOString(),
+        detail,
+        to,
+      };
+    });
 
     const pendingItems = [
       ...pendingDocuments.map((document) => {
@@ -728,11 +812,7 @@ export class DashboardService {
           DEBIT_NOTE: { 0: 'Borrador', 1: 'Pendiente de confirmación' },
         };
         const to = isPurchase
-          ? category === 'ORDER'
-            ? `/erp/purchases/orders/${document.id}`
-            : category === 'REMITO'
-              ? `/erp/purchases/remitos/${document.id}`
-              : `/erp/purchases/purchases-documents/${document.id}`
+          ? category === 'ORDER' ? `/erp/purchases/orders/${document.id}` : category === 'REMITO' ? `/erp/purchases/remitos/${document.id}` : `/erp/purchases/purchases-documents/${document.id}`
           : `/erp/sales/${document.id}`;
         return {
           id: document.id,
@@ -754,19 +834,57 @@ export class DashboardService {
         date: record.created_at.toISOString(),
         to: `/erp/treasury/intake?record=${record.id}`,
       })),
+      ...pendingTasks.map(task => ({
+        id: task.id,
+        kind: 'TASK' as const,
+        title: task.title,
+        detail: task.board?.name ?? 'Tablero de tareas',
+        reference: task.due_at ? `Vence ${task.due_at.toISOString().slice(0, 10)} · ${task.priority}` : task.priority,
+        status: 'Pendiente',
+        date: (task.due_at ?? task.created_at).toISOString(),
+        to: `/erp/tasks?board_id=${encodeURIComponent(task.board_id)}&task_id=${encodeURIComponent(task.id)}`,
+      })),
     ].sort((a, b) => a.date.localeCompare(b.date));
 
+    const completedTasks = completedTasksToday.map(task => ({
+      id: task.id,
+      title: task.title,
+      board: task.board?.name ?? 'Tablero de tareas',
+      date: task.completed_at!.toISOString(),
+      to: `/erp/tasks?board_id=${encodeURIComponent(task.board_id)}&task_id=${encodeURIComponent(task.id)}`,
+    }));
+    const recentActivity = todayActivities.slice(0, 5).map(activity => ({ table: activity.table, action: activity.action, date: activity.date, detail: activity.detail }));
+
     return {
-      recentActivity: recentActivity.map((log) => ({
-        table: tableLabels[log.table_name] || log.table_name,
-        action: actionLabels[log.action] || log.action,
-        date: log.changed_at.toISOString(),
-        detail: log.new_data ? (log.new_data as any).number || (log.new_data as any).description || '' : '',
-      })),
+      activityDate: dateKey,
+      todayActivities,
+      activityCount,
+      activityPage,
+      activityHasMore: activityPage * activityPageSize < activityCount,
+      tasksEnabled,
+      completedTasks,
+      completedTasksCount: completedTasksTodayCount,
+      recentActivity,
       pendingDocuments: pendingItems.length,
       pendingItems,
       monthlyPayments,
       monthlyAmount: Number(monthlyAmountResult._sum.amount ?? 0),
     };
+  }
+
+  private resolveArgentinaDateKey(value?: string) {
+    const fallback = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Argentina/Buenos_Aires', year: 'numeric', month: '2-digit', day: '2-digit',
+    }).formatToParts(new Date());
+    const today = `${fallback.find(part => part.type === 'year')?.value}-${fallback.find(part => part.type === 'month')?.value}-${fallback.find(part => part.type === 'day')?.value}`;
+    if (!value) return today;
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    if (!match) throw new BadRequestException('La fecha debe tener el formato YYYY-MM-DD.');
+    const [, year, month, day] = match;
+    const normalized = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+    if (normalized.getUTCFullYear() !== Number(year) || normalized.getUTCMonth() + 1 !== Number(month) || normalized.getUTCDate() !== Number(day)) {
+      throw new BadRequestException('La fecha seleccionada no es válida.');
+    }
+    return value;
   }
 }

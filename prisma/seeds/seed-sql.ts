@@ -28,6 +28,7 @@ export const RBAC_PERMISSIONS = [
   { code: 'users.read_roles', description: 'Ver roles de un usuario' },
   { code: 'users.assign_roles', description: 'Asignar roles a usuarios' },
   { code: 'users.read_permissions', description: 'Ver permisos efectivos de un usuario' },
+  { code: 'audit.read', description: 'Ver la auditoría de cambios de la empresa' },
 
   // ─── Master Data - Products ────────────────────────────────
   { code: 'products.read', description: 'Ver productos' },
@@ -501,7 +502,7 @@ export const RBAC_ROLES = [
     description: 'Acceso a módulos de negocio sin administración de roles',
     is_system: true,
     permissionCodes: RBAC_PERMISSIONS.filter(
-      (p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.') && !p.code.startsWith('management_reports.'),
+      (p) => !p.code.startsWith('roles.') && !p.code.startsWith('users.') && !p.code.startsWith('permissions.') && !p.code.startsWith('management_reports.') && p.code !== 'audit.read',
     ).map((p) => p.code),
   },
   {
@@ -580,7 +581,7 @@ export const RBAC_ROLES = [
     name: 'Observador',
     description: 'Solo lectura',
     is_system: true,
-    permissionCodes: RBAC_PERMISSIONS.filter((p) => p.code.endsWith('.read') && !p.code.startsWith('management_reports.')).map((p) => p.code),
+    permissionCodes: RBAC_PERMISSIONS.filter((p) => p.code.endsWith('.read') && !p.code.startsWith('management_reports.') && p.code !== 'audit.read').map((p) => p.code),
   },
   {
     code: 'capturist',

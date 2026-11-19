@@ -90,6 +90,23 @@ const STATUS_MAPS: Record<string, Record<number, string>> = {
   RECEIPT: INVOICE_STATUSES,
 }
 
+export type DocumentStatusExclusion = { category: string; status: number }
+
+/** Parseo tolerante del filtro de estados ocultos: CATEGORY:status,CATEGORY:status. */
+export function parseExcludedDocumentStatuses(value?: string): DocumentStatusExclusion[] {
+  if (!value) return []
+  const unique = new Map<string, DocumentStatusExclusion>()
+  for (const item of value.split(',')) {
+    const match = /^([A-Z_]+):(\d+)$/.exec(item.trim())
+    if (!match) continue
+    const [, category, rawStatus] = match
+    const status = Number(rawStatus)
+    if (!Object.prototype.hasOwnProperty.call(STATUS_MAPS[category] ?? {}, status)) continue
+    unique.set(`${category}:${status}`, { category, status })
+  }
+  return [...unique.values()]
+}
+
 const COLOR_MAPS: Record<string, Record<number, BadgeColor>> = {
   QUOTE: QUOTE_STATUS_COLORS,
   ORDER: ORDER_STATUS_COLORS,

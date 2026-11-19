@@ -3,6 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { MANAGEMENT_REPORT_PERMISSIONS } from '../management-report-permissions';
 
+const AUDIT_PERMISSION = { code: 'audit.read', description: 'Ver la auditoría de cambios de la empresa' };
+
 @Injectable()
 export class PermissionsService {
   constructor(private db: PrismaService) {}
@@ -14,18 +16,19 @@ export class PermissionsService {
 
   async findAll() {
     const prisma = this.prisma;
-    // Older tenant databases may only have management_reports.read. Add the
-    // individual report switches lazily when an admin opens role permissions.
-    const existingReportPermissions = await prisma.permissions.findMany({
-      where: { code: { in: MANAGEMENT_REPORT_PERMISSIONS.map(({ code }) => code) } },
+    // Older tenant databases may predate individual report and audit switches.
+    // Add those permission definitions lazily when an admin opens role permissions.
+    const permissionDefinitions = [...MANAGEMENT_REPORT_PERMISSIONS, AUDIT_PERMISSION];
+    const existingPermissions = await prisma.permissions.findMany({
+      where: { code: { in: permissionDefinitions.map(({ code }) => code) } },
       select: { code: true },
     });
-    const existingCodes = new Set(existingReportPermissions.map(({ code }) => code));
-    const missingReportPermissions = MANAGEMENT_REPORT_PERMISSIONS
+    const existingCodes = new Set(existingPermissions.map(({ code }) => code));
+    const missingPermissions = permissionDefinitions
       .filter(({ code }) => !existingCodes.has(code))
       .map(({ code, description }) => ({ code, description }));
-    if (missingReportPermissions.length) {
-      await prisma.permissions.createMany({ data: missingReportPermissions, skipDuplicates: true });
+    if (missingPermissions.length) {
+      await prisma.permissions.createMany({ data: missingPermissions, skipDuplicates: true });
     }
 
     return prisma.permissions.findMany({

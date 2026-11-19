@@ -22,6 +22,7 @@ import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { DocumentAccessService } from '@/access-control/services/document-access.service';
 import { PermissionContextBuilder } from '@/access-control/authorization/permission-context.builder';
+import { parseExcludedDocumentStatuses } from '../documents/types/document-statuses';
 
 @UseGuards(JwtAuthGuard)
 @Controller('documents/sales')
@@ -171,6 +172,7 @@ export class DocumentsSalesController {
     @Query('sort') sort?: string,
     @Query('order') order?: 'asc' | 'desc',
     @Query('excludeCancelled') excludeCancelled?: string,
+    @Query('excludeStatuses') excludeStatuses?: string,
     @Query('filters') filters?: string,
     @Query('deliveryStatus') deliveryStatus?: string,
     @Query('excludeOpeningBalances') excludeOpeningBalances?: string,
@@ -212,6 +214,7 @@ export class DocumentsSalesController {
       effectiveDeliveryStatus,
       excludeOpeningBalances === 'true',
       sellerId,
+      parseExcludedDocumentStatuses(excludeStatuses),
     );
     const canViewAmounts = await this.canViewOrderAmounts(user.id, companyRole);
     if (Array.isArray(documents)) {

@@ -8,6 +8,7 @@ import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
 import { RequirePermissions } from '@/access-control/decorators/require-permissions.decorator';
 import { DocumentAccessService } from '@/access-control/services/document-access.service';
+import { parseExcludedDocumentStatuses } from '../documents/types/document-statuses';
 
 @Controller('documents/purchases-documents')
 @UseGuards(JwtAuthGuard)
@@ -56,6 +57,7 @@ export class DocumentsPurchasesController {
     @Query('sort') sort?: string,
     @Query('order') order?: 'asc' | 'desc',
     @Query('excludeCancelled') excludeCancelled?: string,
+    @Query('excludeStatuses') excludeStatuses?: string,
     @Query('filters') filters?: string,
     @Query('excludeOpeningBalances') excludeOpeningBalances?: string,
   ) {
@@ -83,6 +85,7 @@ export class DocumentsPurchasesController {
       excludeCancelled === 'true',
       filters,
       excludeOpeningBalances === 'true',
+      parseExcludedDocumentStatuses(excludeStatuses),
     );
   }
 

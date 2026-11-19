@@ -76,6 +76,10 @@ export class CreateDocumentsTypeDto {
   is_electronic?: boolean;
 
   @IsOptional()
+  @IsBoolean()
+  requires_fiscal_authorization?: boolean | null;
+
+  @IsOptional()
   custom_fields_config?: any;
 
   @IsOptional()

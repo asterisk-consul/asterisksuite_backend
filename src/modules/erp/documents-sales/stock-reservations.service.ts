@@ -171,6 +171,7 @@ export class StockReservationsService {
                 select: {
                   name: true,
                   sku: true,
+                  manages_stock: true,
                   unit: { select: { symbol: true } },
                 },
               },
@@ -191,7 +192,10 @@ export class StockReservationsService {
     }
 
     const productIds = [
-      ...new Set(order.document_items.map((item: any) => item.product_id).filter(Boolean)),
+      ...new Set(order.document_items
+        .filter((item: any) => item.products?.manages_stock !== false)
+        .map((item: any) => item.product_id)
+        .filter(Boolean)),
     ] as string[];
     const stockRows = productIds.length
       ? await this.prisma.warehouse_stock.findMany({
@@ -239,11 +243,30 @@ export class StockReservationsService {
     const number = (value: unknown) => Number(value ?? 0);
 
     const items = order.document_items.map((item: any) => {
+      const requested = Number(item.quantity);
+      if (item.products?.manages_stock === false) {
+        return {
+          item_id: item.id,
+          product_id: item.product_id,
+          name: item.products?.name ?? 'Producto',
+          sku: item.products?.sku ?? null,
+          unit: item.products?.unit?.symbol ?? 'u.',
+          manages_stock: false,
+          requested,
+          physical_stock: 0,
+          reserved_physical: 0,
+          available_now: 0,
+          transit_available: 0,
+          shortage: 0,
+          status: 'NOT_TRACKED',
+          warehouses: [],
+          arrivals: [],
+        };
+      }
       const rows = stockRows.filter((row: any) => row.product_id === item.product_id);
       const physicalRows = rows.filter((row: any) => !row.warehouses.is_virtual);
       const transitRows = rows.filter((row: any) => row.warehouses.is_virtual);
       const available = (row: any) => Math.max(number(row.quantity) - number(row.reserved_quantity), 0);
-      const requested = number(item.quantity);
       const availableNow = physicalRows.reduce((sum: number, row: any) => sum + available(row), 0);
       const availableTransit = transitRows.reduce((sum: number, row: any) => sum + available(row), 0);
 
@@ -253,6 +276,7 @@ export class StockReservationsService {
         name: item.products?.name ?? 'Producto',
         sku: item.products?.sku ?? null,
         unit: item.products?.unit?.symbol ?? 'u.',
+        manages_stock: true,
         requested,
         physical_stock: physicalRows.reduce((sum: number, row: any) => sum + number(row.quantity), 0),
         reserved_physical: physicalRows.reduce((sum: number, row: any) => sum + number(row.reserved_quantity), 0),
@@ -286,11 +310,13 @@ export class StockReservationsService {
       };
     });
 
-    const withoutPhysicalStock = items.filter((item: any) => item.available_now <= 0).length;
-    const withShortage = items.filter((item: any) => item.available_now < item.requested).length;
+    const trackedItems = items.filter((item: any) => item.manages_stock);
+    const withoutPhysicalStock = trackedItems.filter((item: any) => item.available_now <= 0).length;
+    const withShortage = trackedItems.filter((item: any) => item.available_now < item.requested).length;
     const blocksConfirmation = Boolean(
       settings.reserve_stock_on_order_confirmation &&
       items.some((item: any) => {
+        if (!item.manages_stock) return false;
         const totalReservable = item.available_now + item.transit_available;
         if (totalReservable <= 0) return !settings.allow_backorder_without_stock;
         return (
@@ -306,7 +332,8 @@ export class StockReservationsService {
       items,
       summary: {
         total_items: items.length,
-        available_items: items.length - withShortage,
+        tracked_items: trackedItems.length,
+        available_items: trackedItems.length - withShortage,
         with_shortage: withShortage,
         without_physical_stock: withoutPhysicalStock,
         all_available: withShortage === 0,
@@ -328,7 +355,7 @@ export class StockReservationsService {
           document_types: { select: { category: true, direction: true } },
           document_items: {
             where: { deleted_at: null },
-            include: { products: { select: { name: true, sku: true } } },
+            include: { products: { select: { name: true, sku: true, manages_stock: true } } },
           },
         },
       }),
@@ -343,7 +370,7 @@ export class StockReservationsService {
 
     const created: any[] = [];
     for (const item of order.document_items) {
-      if (!item.product_id) continue;
+      if (!item.product_id || item.products?.manages_stock === false) continue;
       const requested = new Prisma.Decimal(item.quantity);
       const productLabel = item.products?.sku
         ? `${item.products.name} (${item.products.sku})`
@@ -420,7 +447,7 @@ export class StockReservationsService {
   async consumeForRemito(tx: Tx, remito: any, userId: string) {
     if (!remito.parent_document_id) return;
     for (const item of remito.document_items) {
-      if (!item.product_id) continue;
+      if (!item.product_id || item.products?.manages_stock === false) continue;
       let remaining = new Prisma.Decimal(item.quantity);
       let reservations = await tx.stock_reservations.findMany({
         where: {

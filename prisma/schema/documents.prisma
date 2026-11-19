@@ -186,6 +186,7 @@ model document_types {
   afip_code                      String?                   @db.VarChar(5) // 01, 06, 11, etc.
   requires_cae                   Boolean                   @default(false)
   is_electronic                  Boolean                   @default(false)
+  requires_fiscal_authorization  Boolean?
   custom_fields_config           Json?
   enabled_statuses               Json? // Array de enteros: [0,1,2,3] o null = todos
   hidden_amount_statuses         Json? // Estados de OV en los que los importes requieren sales.orders.view_amounts

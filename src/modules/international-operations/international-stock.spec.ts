@@ -6,6 +6,7 @@ jest.mock('./transit-reservations', () => ({ relocateTransitReservations: jest.f
 describe('international order and invoice transit coverage', () => {
   function setup() {
     const docs = new Map<string, any>();
+    const productStockTracking = new Map<string, boolean>();
     const movements: any[] = [];
     const stock = new Map<string, number>();
     const container = { id: 'container', container_number: 'C-1', status: 'SHIPPED', transit_warehouse_id: 'transit' };
@@ -21,6 +22,13 @@ describe('international order and invoice transit coverage', () => {
         }),
         findMany: jest.fn().mockResolvedValue([]),
       },
+      products: {
+        findMany: jest.fn().mockImplementation(({ where }) =>
+          where.id.in
+            .filter((id: string) => productStockTracking.get(id) !== false)
+            .map((id: string) => ({ id })),
+        ),
+      },
       international_operation_documents: {
         findFirst: jest.fn().mockResolvedValue(null),
         findMany: jest.fn().mockImplementation(({ where }) => {
@@ -35,7 +43,8 @@ describe('international order and invoice transit coverage', () => {
       },
       warehouse_stock: { upsert: jest.fn().mockImplementation(({ create, update }) => { stock.set(create.product_id, (stock.get(create.product_id) ?? 0) + Number(update.quantity.increment)); }) },
     };
-    function add(id: string, category: string, quantity = 10, parentId?: string) {
+    function add(id: string, category: string, quantity = 10, parentId?: string, managesStock = true) {
+      productStockTracking.set('product', managesStock);
       const doc = { id, status: 2, deleted_at: null, parent_document_id: parentId, document_types: { category, direction: -1 }, expense_type: 'MERCHANDISE', document_items: [{ product_id: 'product', quantity, stock_quantity: quantity }] };
       docs.set(id, doc);
       return doc;
@@ -50,6 +59,14 @@ describe('international order and invoice transit coverage', () => {
     expect(stock.get('product')).toBe(10);
     expect(movements[0]).toMatchObject({ reference_type: 'intl_order_transit', reference_id: 'order', direction: 'IN', created_by: 'user' });
     expect(tx.$queryRaw.mock.invocationCallOrder[0]).toBeLessThan(tx.warehouse_stock_movements.create.mock.invocationCallOrder[0]);
+  });
+
+  it('does not register products with stock control disabled', async () => {
+    const { tx, add, movements, stock } = setup();
+    add('order', 'ORDER', 10, undefined, false);
+    await expect(registerInternationalPurchaseInTransit(tx, 'order', 'container', 'user')).resolves.toBe(false);
+    expect(stock.has('product')).toBe(false);
+    expect(movements).toHaveLength(0);
   });
 
   it('does not enter the same units again when the OC is invoiced', async () => {

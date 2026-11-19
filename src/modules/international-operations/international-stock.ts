@@ -16,15 +16,26 @@ const TRANSIT_STOCK_STATUSES = new Set([
 
 function quantitiesByProduct(
   items: Array<{ product_id: string | null; quantity: unknown; stock_quantity?: unknown }>,
+  stockManagedProductIds?: Set<string>,
 ) {
   const quantities = new Map<string, Prisma.Decimal>();
   for (const item of items) {
-    if (!item.product_id) continue;
+    if (!item.product_id || (stockManagedProductIds && !stockManagedProductIds.has(item.product_id))) continue;
     const current = quantities.get(item.product_id) ?? new Prisma.Decimal(0);
     const stockQuantity = item.stock_quantity ?? item.quantity;
     quantities.set(item.product_id, current.add(new Prisma.Decimal(stockQuantity as any)));
   }
   return quantities;
+}
+
+async function getStockManagedProductIds(tx: any, productIds: string[]) {
+  const uniqueIds = [...new Set(productIds.filter(Boolean))];
+  if (!uniqueIds.length) return new Set<string>();
+  const products = await tx.products.findMany({
+    where: { id: { in: uniqueIds }, manages_stock: true },
+    select: { id: true },
+  });
+  return new Set<string>(products.map((product: any) => product.id));
 }
 
 async function getTransitWarehouse(tx: any, containerId: string) {
@@ -81,22 +92,26 @@ export async function registerInternationalPurchaseInTransit(
     include: { document: { include: { document_items: { where: { deleted_at: null }, select: { product_id: true, quantity: true, stock_quantity: true } } } } },
   });
   if (!family.some((link: any) => link.document_id === documentId)) return false;
+  const stockManagedProductIds = await getStockManagedProductIds(
+    tx,
+    family.flatMap((link: any) => link.document.document_items.map((item: any) => item.product_id).filter(Boolean)),
+  );
   const quantities = new Map<string, Prisma.Decimal>();
   for (const link of family) {
     if (link.document.deleted_at || link.document.status !== 2) continue;
-    for (const [productId, quantity] of quantitiesByProduct(link.document.document_items)) {
+    for (const [productId, quantity] of quantitiesByProduct(link.document.document_items, stockManagedProductIds)) {
       const previous = quantities.get(productId) ?? new Prisma.Decimal(0);
       if (quantity.greaterThan(previous)) quantities.set(productId, quantity);
     }
   }
-  if (!quantities.size) throw new BadRequestException('El comprobante de mercadería no contiene productos para ingresar en tránsito');
+  if (!quantities.size) return false;
   // Count historical inbound movements, including quantities already received.
   // Comparing with today's warehouse balance would re-enter consumed stock.
   const movements = await tx.warehouse_stock_movements.findMany({
     where: { warehouse_id: container.transit_warehouse_id, reference_type: { in: [TRANSIT_ORDER_REFERENCE, TRANSIT_ENTRY_REFERENCE] }, reference_id: { in: family.map((link: any) => link.document_id) }, direction: 'IN', deleted_at: null },
     select: { product_id: true, quantity: true },
   });
-  const registered = quantitiesByProduct(movements);
+  const registered = quantitiesByProduct(movements, stockManagedProductIds);
   let changed = false;
   const isOrder = document.document_types.category === 'ORDER';
   for (const [productId, target] of quantities) {
@@ -145,8 +160,12 @@ export async function receiveInternationalRemitoFromTransit(
   if (existing) return false;
 
   const container = await getTransitWarehouse(tx, containerId);
+  const stockManagedProductIds = await getStockManagedProductIds(
+    tx,
+    document.document_items.map((item: any) => item.product_id).filter(Boolean),
+  );
   for (const item of document.document_items) {
-    if (!item.product_id) continue;
+    if (!item.product_id || !stockManagedProductIds.has(item.product_id)) continue;
     const destinationWarehouseId = item.warehouse_id ?? document.warehouse_id;
     if (!destinationWarehouseId) {
       throw new BadRequestException('Seleccioná el depósito real de destino para cada producto del remito');
@@ -231,6 +250,7 @@ export async function receiveInternationalRemitoFromTransit(
       warehouse_id: container.transit_warehouse_id,
       deleted_at: null,
       quantity: { gt: 0 },
+      products: { is: { manages_stock: true } },
     },
   });
   if (remainingProducts === 0) {

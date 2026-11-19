@@ -32,7 +32,7 @@ import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-aut
 import { StockReservationsService } from './stock-reservations.service';
 import { NotificationsService } from '@/modules/notifications/notifications.service';
 import { WhatsAppNotificationsService } from '@/modules/notifications/whatsapp-notifications.service';
-import { getCancelledDocumentStatus, getStatusLabel } from '../documents/types/document-statuses';
+import { getCancelledDocumentStatus, getStatusLabel, type DocumentStatusExclusion } from '../documents/types/document-statuses';
 import { assertCanTrashCancelledNote } from '../documents/utils/orphan-note-trash';
 import {
   getSalesCreditNoteTotalsByInvoice,
@@ -1255,9 +1255,19 @@ export class DocumentsSalesService {
       });
 
       if (docType?.category === 'REMITO') {
-        const missingWarehouse = items.filter((item) => !item.warehouse_id);
+        const productIds = [...new Set(items.map((item) => item.product_id).filter((id): id is string => Boolean(id)))];
+        const stockManagedProducts = productIds.length
+          ? await this.prisma.products.findMany({
+              where: { id: { in: productIds }, manages_stock: true },
+              select: { id: true },
+            })
+          : [];
+        const stockManagedProductIds = new Set(stockManagedProducts.map((product: any) => product.id));
+        const missingWarehouse = items.filter((item) =>
+          item.product_id && stockManagedProductIds.has(item.product_id) && !item.warehouse_id,
+        );
         if (missingWarehouse.length > 0) {
-          throw new BadRequestException('Todos los productos del remito deben tener un depósito de salida');
+          throw new BadRequestException('Todos los productos que manejan stock deben tener un depósito de salida');
         }
       }
 
@@ -1722,6 +1732,8 @@ export class DocumentsSalesService {
     excludeOpeningBalances = false,
 
     sellerId?: string,
+
+    excludeStatuses: DocumentStatusExclusion[] = [],
   ) {
     const and: any[] = [];
     const categories = Array.isArray(category) ? category : category ? [category] : [];
@@ -1826,6 +1838,15 @@ export class DocumentsSalesService {
           },
         }))
       : [];
+    const excludedStatusesByCategory = new Map<string, number[]>();
+    for (const { category: statusCategory, status: hiddenStatus } of excludeStatuses) {
+      const statuses = excludedStatusesByCategory.get(statusCategory) ?? [];
+      statuses.push(hiddenStatus);
+      excludedStatusesByCategory.set(statusCategory, statuses);
+    }
+    const hiddenStatusFilters = [...excludedStatusesByCategory].map(([statusCategory, hiddenStatuses]) => ({
+      NOT: { document_types: { category: statusCategory }, status: { in: [...new Set(hiddenStatuses)] } },
+    }));
     const where: any = {
         deleted_at: null,
 
@@ -1857,7 +1878,9 @@ export class DocumentsSalesService {
 
         ...(excludeOpeningBalances ? { source: { not: 'opening_balance' } } : {}),
 
-        ...(and.length || cancelledFilters.length ? { AND: [...and, ...cancelledFilters] } : {}),
+        ...(and.length || cancelledFilters.length || hiddenStatusFilters.length
+          ? { AND: [...and, ...cancelledFilters, ...hiddenStatusFilters] }
+          : {}),
     };
     const directionOrder = order === 'asc' ? 'asc' : 'desc';
     const sortableFields = new Set(['number', 'date', 'status', 'total', 'created_at']);
@@ -2831,7 +2854,7 @@ export class DocumentsSalesService {
         const direction = doc.document_types.direction === 1 ? 'OUT' : 'IN';
 
         for (const item of doc.document_items) {
-          if (!item.product_id) continue;
+          if (!item.product_id || item.products?.manages_stock === false) continue;
 
           const warehouseId = item.warehouse_id ?? doc.warehouse_id;
           if (!warehouseId) {

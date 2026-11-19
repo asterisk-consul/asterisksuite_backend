@@ -36,6 +36,7 @@ export class DocumentsTypesService {
   async create(dto: CreateDocumentsTypeDto) {
     const { document_sequence_id, document_sequence_ids, ...rest } = dto;
     rest.affects_stock = rest.category === 'REMITO';
+    if (rest.category !== 'REMITO' || rest.direction !== 1) rest.requires_fiscal_authorization = null;
 
     const sequenceIds = [...new Set(document_sequence_ids ?? (document_sequence_id ? [document_sequence_id] : []))];
     await this.ensureSequencesAreAvailable(sequenceIds);
@@ -128,7 +129,9 @@ export class DocumentsTypesService {
 
     const { document_sequence_ids, ...rest } = dto as any;
     const effectiveCategory = rest.category ?? exists.category;
+    const effectiveDirection = rest.direction ?? exists.direction;
     rest.affects_stock = effectiveCategory === 'REMITO';
+    if (effectiveCategory !== 'REMITO' || effectiveDirection !== 1) rest.requires_fiscal_authorization = null;
 
     return this.prisma.$transaction(async (tx) => {
       await tx.document_types.update({

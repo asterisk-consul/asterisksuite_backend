@@ -53,6 +53,7 @@ export type Document_typesMinAggregateOutputType = {
   afip_code: string | null
   requires_cae: boolean | null
   is_electronic: boolean | null
+  requires_fiscal_authorization: boolean | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -80,6 +81,7 @@ export type Document_typesMaxAggregateOutputType = {
   afip_code: string | null
   requires_cae: boolean | null
   is_electronic: boolean | null
+  requires_fiscal_authorization: boolean | null
   created_at: Date | null
   updated_at: Date | null
   deleted_at: Date | null
@@ -107,6 +109,7 @@ export type Document_typesCountAggregateOutputType = {
   afip_code: number
   requires_cae: number
   is_electronic: number
+  requires_fiscal_authorization: number
   custom_fields_config: number
   enabled_statuses: number
   hidden_amount_statuses: number
@@ -147,6 +150,7 @@ export type Document_typesMinAggregateInputType = {
   afip_code?: true
   requires_cae?: true
   is_electronic?: true
+  requires_fiscal_authorization?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -174,6 +178,7 @@ export type Document_typesMaxAggregateInputType = {
   afip_code?: true
   requires_cae?: true
   is_electronic?: true
+  requires_fiscal_authorization?: true
   created_at?: true
   updated_at?: true
   deleted_at?: true
@@ -201,6 +206,7 @@ export type Document_typesCountAggregateInputType = {
   afip_code?: true
   requires_cae?: true
   is_electronic?: true
+  requires_fiscal_authorization?: true
   custom_fields_config?: true
   enabled_statuses?: true
   hidden_amount_statuses?: true
@@ -318,6 +324,7 @@ export type Document_typesGroupByOutputType = {
   afip_code: string | null
   requires_cae: boolean
   is_electronic: boolean
+  requires_fiscal_authorization: boolean | null
   custom_fields_config: runtime.JsonValue | null
   enabled_statuses: runtime.JsonValue | null
   hidden_amount_statuses: runtime.JsonValue | null
@@ -371,6 +378,7 @@ export type document_typesWhereInput = {
   afip_code?: Prisma.StringNullableFilter<"document_types"> | string | null
   requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
   is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
+  requires_fiscal_authorization?: Prisma.BoolNullableFilter<"document_types"> | boolean | null
   custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
   enabled_statuses?: Prisma.JsonNullableFilter<"document_types">
   hidden_amount_statuses?: Prisma.JsonNullableFilter<"document_types">
@@ -407,6 +415,7 @@ export type document_typesOrderByWithRelationInput = {
   afip_code?: Prisma.SortOrderInput | Prisma.SortOrder
   requires_cae?: Prisma.SortOrder
   is_electronic?: Prisma.SortOrder
+  requires_fiscal_authorization?: Prisma.SortOrderInput | Prisma.SortOrder
   custom_fields_config?: Prisma.SortOrderInput | Prisma.SortOrder
   enabled_statuses?: Prisma.SortOrderInput | Prisma.SortOrder
   hidden_amount_statuses?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -446,6 +455,7 @@ export type document_typesWhereUniqueInput = Prisma.AtLeast<{
   afip_code?: Prisma.StringNullableFilter<"document_types"> | string | null
   requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
   is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
+  requires_fiscal_authorization?: Prisma.BoolNullableFilter<"document_types"> | boolean | null
   custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
   enabled_statuses?: Prisma.JsonNullableFilter<"document_types">
   hidden_amount_statuses?: Prisma.JsonNullableFilter<"document_types">
@@ -482,6 +492,7 @@ export type document_typesOrderByWithAggregationInput = {
   afip_code?: Prisma.SortOrderInput | Prisma.SortOrder
   requires_cae?: Prisma.SortOrder
   is_electronic?: Prisma.SortOrder
+  requires_fiscal_authorization?: Prisma.SortOrderInput | Prisma.SortOrder
   custom_fields_config?: Prisma.SortOrderInput | Prisma.SortOrder
   enabled_statuses?: Prisma.SortOrderInput | Prisma.SortOrder
   hidden_amount_statuses?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -520,6 +531,7 @@ export type document_typesScalarWhereWithAggregatesInput = {
   afip_code?: Prisma.StringNullableWithAggregatesFilter<"document_types"> | string | null
   requires_cae?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
   is_electronic?: Prisma.BoolWithAggregatesFilter<"document_types"> | boolean
+  requires_fiscal_authorization?: Prisma.BoolNullableWithAggregatesFilter<"document_types"> | boolean | null
   custom_fields_config?: Prisma.JsonNullableWithAggregatesFilter<"document_types">
   enabled_statuses?: Prisma.JsonNullableWithAggregatesFilter<"document_types">
   hidden_amount_statuses?: Prisma.JsonNullableWithAggregatesFilter<"document_types">
@@ -548,6 +560,7 @@ export type document_typesCreateInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -584,6 +597,7 @@ export type document_typesUncheckedCreateInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -616,6 +630,7 @@ export type document_typesUpdateInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -652,6 +667,7 @@ export type document_typesUncheckedUpdateInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -686,6 +702,7 @@ export type document_typesCreateManyInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -714,6 +731,7 @@ export type document_typesUpdateManyMutationInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -744,6 +762,7 @@ export type document_typesUncheckedUpdateManyInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -789,6 +808,7 @@ export type document_typesCountOrderByAggregateInput = {
   afip_code?: Prisma.SortOrder
   requires_cae?: Prisma.SortOrder
   is_electronic?: Prisma.SortOrder
+  requires_fiscal_authorization?: Prisma.SortOrder
   custom_fields_config?: Prisma.SortOrder
   enabled_statuses?: Prisma.SortOrder
   hidden_amount_statuses?: Prisma.SortOrder
@@ -823,6 +843,7 @@ export type document_typesMaxOrderByAggregateInput = {
   afip_code?: Prisma.SortOrder
   requires_cae?: Prisma.SortOrder
   is_electronic?: Prisma.SortOrder
+  requires_fiscal_authorization?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -850,6 +871,7 @@ export type document_typesMinOrderByAggregateInput = {
   afip_code?: Prisma.SortOrder
   requires_cae?: Prisma.SortOrder
   is_electronic?: Prisma.SortOrder
+  requires_fiscal_authorization?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
   deleted_at?: Prisma.SortOrder
@@ -916,6 +938,10 @@ export type document_typesUpdateOneRequiredWithoutDocument_type_sequencesNestedI
   upsert?: Prisma.document_typesUpsertWithoutDocument_type_sequencesInput
   connect?: Prisma.document_typesWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.document_typesUpdateToOneWithWhereWithoutDocument_type_sequencesInput, Prisma.document_typesUpdateWithoutDocument_type_sequencesInput>, Prisma.document_typesUncheckedUpdateWithoutDocument_type_sequencesInput>
+}
+
+export type NullableBoolFieldUpdateOperationsInput = {
+  set?: boolean | null
 }
 
 export type document_typesCreateNestedOneWithoutDocument_type_taxesInput = {
@@ -1019,6 +1045,7 @@ export type document_typesCreateWithoutDocument_sequencesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1053,6 +1080,7 @@ export type document_typesUncheckedCreateWithoutDocument_sequencesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1116,6 +1144,7 @@ export type document_typesScalarWhereInput = {
   afip_code?: Prisma.StringNullableFilter<"document_types"> | string | null
   requires_cae?: Prisma.BoolFilter<"document_types"> | boolean
   is_electronic?: Prisma.BoolFilter<"document_types"> | boolean
+  requires_fiscal_authorization?: Prisma.BoolNullableFilter<"document_types"> | boolean | null
   custom_fields_config?: Prisma.JsonNullableFilter<"document_types">
   enabled_statuses?: Prisma.JsonNullableFilter<"document_types">
   hidden_amount_statuses?: Prisma.JsonNullableFilter<"document_types">
@@ -1144,6 +1173,7 @@ export type document_typesCreateWithoutDocument_type_sequencesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1179,6 +1209,7 @@ export type document_typesUncheckedCreateWithoutDocument_type_sequencesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1226,6 +1257,7 @@ export type document_typesUpdateWithoutDocument_type_sequencesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1261,6 +1293,7 @@ export type document_typesUncheckedUpdateWithoutDocument_type_sequencesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1292,6 +1325,7 @@ export type document_typesCreateWithoutDocument_type_taxesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1327,6 +1361,7 @@ export type document_typesUncheckedCreateWithoutDocument_type_taxesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1374,6 +1409,7 @@ export type document_typesUpdateWithoutDocument_type_taxesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1409,6 +1445,7 @@ export type document_typesUncheckedUpdateWithoutDocument_type_taxesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1440,6 +1477,7 @@ export type document_typesCreateWithoutDocumentsInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1475,6 +1513,7 @@ export type document_typesUncheckedCreateWithoutDocumentsInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1522,6 +1561,7 @@ export type document_typesUpdateWithoutDocumentsInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1557,6 +1597,7 @@ export type document_typesUncheckedUpdateWithoutDocumentsInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1588,6 +1629,7 @@ export type document_typesCreateWithoutFiscal_authorizationsInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1623,6 +1665,7 @@ export type document_typesUncheckedCreateWithoutFiscal_authorizationsInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1670,6 +1713,7 @@ export type document_typesUpdateWithoutFiscal_authorizationsInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1705,6 +1749,7 @@ export type document_typesUncheckedUpdateWithoutFiscal_authorizationsInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1736,6 +1781,7 @@ export type document_typesCreateWithoutSystem_modulesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1770,6 +1816,7 @@ export type document_typesUncheckedCreateWithoutSystem_modulesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1829,6 +1876,7 @@ export type document_typesCreateManyDocument_sequencesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1857,6 +1905,7 @@ export type document_typesUpdateWithoutDocument_sequencesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1891,6 +1940,7 @@ export type document_typesUncheckedUpdateWithoutDocument_sequencesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1924,6 +1974,7 @@ export type document_typesUncheckedUpdateManyWithoutDocument_sequencesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1953,6 +2004,7 @@ export type document_typesCreateManySystem_modulesInput = {
   afip_code?: string | null
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -1981,6 +2033,7 @@ export type document_typesUpdateWithoutSystem_modulesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -2015,6 +2068,7 @@ export type document_typesUncheckedUpdateWithoutSystem_modulesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -2048,6 +2102,7 @@ export type document_typesUncheckedUpdateManyWithoutSystem_modulesInput = {
   afip_code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   requires_cae?: Prisma.BoolFieldUpdateOperationsInput | boolean
   is_electronic?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  requires_fiscal_authorization?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
   custom_fields_config?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   enabled_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   hidden_amount_statuses?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -2136,6 +2191,7 @@ export type document_typesSelect<ExtArgs extends runtime.Types.Extensions.Intern
   afip_code?: boolean
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean
   custom_fields_config?: boolean
   enabled_statuses?: boolean
   hidden_amount_statuses?: boolean
@@ -2173,6 +2229,7 @@ export type document_typesSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   afip_code?: boolean
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean
   custom_fields_config?: boolean
   enabled_statuses?: boolean
   hidden_amount_statuses?: boolean
@@ -2205,6 +2262,7 @@ export type document_typesSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   afip_code?: boolean
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean
   custom_fields_config?: boolean
   enabled_statuses?: boolean
   hidden_amount_statuses?: boolean
@@ -2237,6 +2295,7 @@ export type document_typesSelectScalar = {
   afip_code?: boolean
   requires_cae?: boolean
   is_electronic?: boolean
+  requires_fiscal_authorization?: boolean
   custom_fields_config?: boolean
   enabled_statuses?: boolean
   hidden_amount_statuses?: boolean
@@ -2248,7 +2307,7 @@ export type document_typesSelectScalar = {
   deleted_by?: boolean
 }
 
-export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "module_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "affects_payment" | "calculates_taxes" | "accepts_commercial_adjustments" | "active" | "category" | "letter_type" | "afip_code" | "requires_cae" | "is_electronic" | "custom_fields_config" | "enabled_statuses" | "hidden_amount_statuses" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_types"]>
+export type document_typesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "document_sequence_id" | "module_id" | "code" | "description" | "direction" | "affects_stock" | "affects_accounting" | "affects_tax_book" | "affects_payment" | "calculates_taxes" | "accepts_commercial_adjustments" | "active" | "category" | "letter_type" | "afip_code" | "requires_cae" | "is_electronic" | "requires_fiscal_authorization" | "custom_fields_config" | "enabled_statuses" | "hidden_amount_statuses" | "created_at" | "updated_at" | "deleted_at" | "created_by" | "updated_by" | "deleted_by", ExtArgs["result"]["document_types"]>
 export type document_typesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   document_type_taxes?: boolean | Prisma.document_types$document_type_taxesArgs<ExtArgs>
   document_sequences?: boolean | Prisma.document_types$document_sequencesArgs<ExtArgs>
@@ -2296,6 +2355,7 @@ export type $document_typesPayload<ExtArgs extends runtime.Types.Extensions.Inte
     afip_code: string | null
     requires_cae: boolean
     is_electronic: boolean
+    requires_fiscal_authorization: boolean | null
     custom_fields_config: runtime.JsonValue | null
     enabled_statuses: runtime.JsonValue | null
     hidden_amount_statuses: runtime.JsonValue | null
@@ -2752,6 +2812,7 @@ export interface document_typesFieldRefs {
   readonly afip_code: Prisma.FieldRef<"document_types", 'String'>
   readonly requires_cae: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly is_electronic: Prisma.FieldRef<"document_types", 'Boolean'>
+  readonly requires_fiscal_authorization: Prisma.FieldRef<"document_types", 'Boolean'>
   readonly custom_fields_config: Prisma.FieldRef<"document_types", 'Json'>
   readonly enabled_statuses: Prisma.FieldRef<"document_types", 'Json'>
   readonly hidden_amount_statuses: Prisma.FieldRef<"document_types", 'Json'>

@@ -134,13 +134,18 @@ export class FiscalAuthorizationsService {
     // El CAI configurado pertenece a la empresa emisora: aplica a remitos de
     // salida (ventas). Los remitos recibidos requieren capturar el CAI del proveedor.
     if (document.document_types?.category !== 'REMITO' || document.document_types?.direction !== 1) return null;
+    const requirement = document.document_types?.requires_fiscal_authorization;
+    if (requirement === false) return null;
+    const explicitlyRequired = requirement === true;
     const client: any = tx ?? this.prisma;
     const settings = await client.fiscal_authorization_settings.upsert({
       where: { settings_key: 'default' }, update: {}, create: { settings_key: 'default' },
     });
-    if (settings.missing_policy === 'OFF' && settings.expired_policy === 'OFF') return null;
+    if (!explicitlyRequired && settings.missing_policy === 'OFF' && settings.expired_policy === 'OFF') return null;
     if (!document.document_sequence_id) {
-      if (settings.missing_policy === 'BLOCK') throw new BadRequestException('El remito no tiene punto de venta para resolver el CAI');
+      if (explicitlyRequired || settings.missing_policy === 'BLOCK') {
+        throw new BadRequestException('El remito no tiene punto de venta para resolver el CAI');
+      }
       return null;
     }
     const date = this.startOfDay(document.date);
@@ -164,7 +169,7 @@ export class FiscalAuthorizationsService {
         where: { deleted_at: null, status: 'ACTIVE', document_type_id: document.document_type_id, document_sequence_id: document.document_sequence_id, valid_to: { lt: date } },
         orderBy: { valid_to: 'desc' },
       });
-      const policy = expired ? settings.expired_policy : settings.missing_policy;
+      const policy = explicitlyRequired ? 'BLOCK' : expired ? settings.expired_policy : settings.missing_policy;
       if (policy === 'BLOCK') throw new BadRequestException(expired ? `El CAI venció el ${expired.valid_to.toISOString().slice(0, 10)}` : 'No existe un CAI vigente para este remito y punto de venta');
       return null;
     }
@@ -249,6 +254,19 @@ export class FiscalAuthorizationsService {
     if (document.document_types?.category !== 'REMITO' || document.document_types?.direction !== 1) {
       throw new BadRequestException('El diagnóstico de CAI sólo aplica a remitos de venta');
     }
+    if (document.document_types?.requires_fiscal_authorization === false) {
+      const currentAuthorization = document.fiscal_authorization_id
+        ? await this.prisma.fiscal_authorizations.findFirst({ where: { id: document.fiscal_authorization_id } })
+        : null;
+      return {
+        status: 'NOT_REQUIRED_BY_TYPE',
+        currentAuthorization: this.presentAuthorization(currentAuthorization),
+        compatibleAuthorization: null,
+        candidates: [],
+        allowedAction: null,
+        document: { id: document.id, status: document.status, date: document.date, number: document.number },
+      };
+    }
 
     let currentAuthorization: any = null;
     if (document.fiscal_authorization_id) {
@@ -322,6 +340,9 @@ export class FiscalAuthorizationsService {
       if (document.document_types?.category !== 'REMITO' || document.document_types?.direction !== 1) {
         throw new BadRequestException('El reemplazo de CAI sólo aplica a remitos de venta');
       }
+      if (document.document_types?.requires_fiscal_authorization === false) {
+        throw new BadRequestException('Este tipo de documento está configurado para no requerir CAI');
+      }
       if (document.status > 1) {
         throw new BadRequestException('Sólo se puede reemplazar la autorización de remitos en borrador o pendientes');
       }
@@ -348,6 +369,9 @@ export class FiscalAuthorizationsService {
         const date = this.startOfDay(document.date);
         if (this.startOfDay(authorization.valid_from).getTime() > date.getTime() || this.startOfDay(authorization.valid_to).getTime() < date.getTime()) {
           throw new BadRequestException(`El CAI ${authorization.code} no está vigente en la fecha del remito`);
+        }
+        if (authorization.replacement_date && this.startOfDay(authorization.replacement_date).getTime() <= date.getTime()) {
+          throw new BadRequestException(`El CAI ${authorization.code} ya había sido reemplazado en la fecha del remito`);
         }
         const number = Number(document.number);
         const outOfRange = number < Number(authorization.range_from) || number > Number(authorization.range_to);
@@ -399,6 +423,9 @@ export class FiscalAuthorizationsService {
     if (!document) throw new NotFoundException('Documento no encontrado');
     try {
       const snapshot = await this.resolveForDocument(document);
+      if (!snapshot && document.document_types?.requires_fiscal_authorization === false) {
+        return { status: 'NOT_REQUIRED_BY_TYPE', message: 'Este tipo de documento está configurado para no requerir CAI.' };
+      }
       if (!snapshot) return { status: 'WARNING', message: 'El remito se confirmará sin autorización fiscal según la política configurada.' };
       const daysRemaining = Math.ceil((this.startOfDay(snapshot.fiscal_authorization_expires_at).getTime() - this.startOfDay(new Date()).getTime()) / 86400000);
       return { status: daysRemaining <= 30 ? 'WARNING' : 'OK', days_remaining: daysRemaining, ...snapshot };

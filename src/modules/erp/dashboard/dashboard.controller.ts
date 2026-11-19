@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@/auth/jwt/jwt-auth.guard';
 import { CurrentUser } from '@/auth/decorators/current-user.decorator';
 import type { AuthUser } from '@/auth/types/auth-user.interface';
@@ -49,8 +49,14 @@ export class DashboardController {
   }
 
   @Get('personal')
-  getPersonalData(@CurrentUser() user: AuthUser) {
-    return this.dashboardService.getPersonalData(user.id);
+  getPersonalData(
+    @CurrentUser() user: AuthUser,
+    @Query('date') date?: string,
+    @Query('activity_page') activityPage?: string,
+    @Req() request?: any,
+  ) {
+    const parsedPage = activityPage ? Number.parseInt(activityPage, 10) : 1;
+    return this.dashboardService.getPersonalData(user.id, date, Number.isFinite(parsedPage) ? parsedPage : 1, request?.companyUserRole);
   }
 
   @Get('notifications/stock-replenishment')

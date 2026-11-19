@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { AuditActionFilter, QueryAuditDto } from './dto/query-audit.dto';
 
@@ -124,7 +124,11 @@ export class AuditService {
     if (table) conditions.push({ table_name: table });
     if (record_id) conditions.push({ record_id });
     if (action) conditions.push({ action });
-    if (user_id) conditions.push({ changed_by: user_id });
+    if (user_id) conditions.push({ changed_by: user_id === '__system__' ? null : user_id });
+    if (query.date) {
+      const { start, end } = this.getArgentinaDayRange(query.date);
+      conditions.push({ changed_at: { gte: start, lt: end } });
+    }
     if (days) {
       const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
       conditions.push({ changed_at: { gte: since } });
@@ -201,6 +205,73 @@ export class AuditService {
         hasMore: offset + limit < total,
       },
     };
+  }
+
+  /** Resumen acotado a un día para la agenda de auditoría. */
+  async getAgenda(date?: string) {
+    const dateKey = date ?? this.resolveArgentinaToday();
+    const { start, end } = this.getArgentinaDayRange(dateKey);
+    const where = { changed_at: { gte: start, lt: end } };
+
+    const [actions, groupedUsers] = await Promise.all([
+      this.prisma.audit_logs.groupBy({
+        by: ['action'],
+        where,
+        _count: true,
+      }),
+      this.prisma.audit_logs.groupBy({
+        by: ['changed_by'],
+        where,
+        _count: true,
+        orderBy: { _count: { changed_by: 'desc' } },
+        take: 101,
+      }),
+    ]);
+
+    const visibleUserGroups = groupedUsers.slice(0, 100);
+    const userIds = visibleUserGroups.map((group) => group.changed_by).filter((id): id is string => Boolean(id));
+    const users = userIds.length
+      ? await this.db.getDefaultClient().users.findMany({
+          where: { id: { in: userIds } },
+          select: { id: true, name: true, email: true },
+        })
+      : [];
+    const usersById = new Map(users.map((user) => [user.id, user]));
+    const byAction = Object.fromEntries(actions.map((item) => [item.action, item._count])) as Record<string, number>;
+
+    return {
+      date: dateKey,
+      total: actions.reduce((total, item) => total + item._count, 0),
+      byAction,
+      users: visibleUserGroups.map((group) => ({
+        user_id: group.changed_by,
+        user: group.changed_by ? usersById.get(group.changed_by) ?? null : null,
+        count: group._count,
+      })),
+      usersTruncated: groupedUsers.length > 100,
+    };
+  }
+
+  private resolveArgentinaToday() {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Argentina/Buenos_Aires', year: 'numeric', month: '2-digit', day: '2-digit',
+    }).formatToParts(new Date());
+    return `${parts.find((part) => part.type === 'year')?.value}-${parts.find((part) => part.type === 'month')?.value}-${parts.find((part) => part.type === 'day')?.value}`;
+  }
+
+  private getArgentinaDayRange(date: string) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+    if (!match) throw new BadRequestException('La fecha debe tener el formato YYYY-MM-DD.');
+    const [, yearValue, monthValue, dayValue] = match;
+    const year = Number(yearValue);
+    const month = Number(monthValue);
+    const day = Number(dayValue);
+    const normalized = new Date(Date.UTC(year, month - 1, day));
+    if (normalized.getUTCFullYear() !== year || normalized.getUTCMonth() + 1 !== month || normalized.getUTCDate() !== day) {
+      throw new BadRequestException('La fecha seleccionada no es válida.');
+    }
+    const start = new Date(`${date}T00:00:00.000-03:00`);
+    return { start, end: new Date(start.getTime() + 24 * 60 * 60 * 1000) };
   }
 
   /**

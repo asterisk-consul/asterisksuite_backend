@@ -26,6 +26,7 @@
     "migrate:intercompany-transfers": "tsx scripts/apply-intercompany-transfer-migration.ts",
     "migrate:user-notifications": "tsx scripts/apply-user-notifications-migration.ts",
     "migrate:payment-tenders": "tsx scripts/apply-payment-tenders-migration.ts",
+    "migrate:document-type-fiscal-authorization": "tsx src/scripts/apply-document-type-fiscal-authorization-migration.ts",
     "migrate:sales-order-delivery-phones": "tsx src/scripts/apply-sales-order-delivery-phones-migration.ts",
     "migrate:task-timer": "tsx src/scripts/apply-task-timer-migration.ts",
     "migrate:task-change-notifications": "tsx src/scripts/apply-task-change-notifications-migration.ts",

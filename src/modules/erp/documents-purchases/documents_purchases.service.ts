@@ -30,7 +30,7 @@ import { CurrencyConversionService } from '../currencies/currency-conversion.ser
 import { FiscalValidationService } from '@/common/services/fiscal-validation.service';
 import { ProductPartyPricingService } from '../pricing/product-party-pricing/product-party-pricing.service';
 import { FiscalAuthorizationsService } from '../fiscal-authorizations/fiscal-authorizations.service';
-import { getCancelledDocumentStatus } from '../documents/types/document-statuses';
+import { getCancelledDocumentStatus, type DocumentStatusExclusion } from '../documents/types/document-statuses';
 import { assertCanTrashCancelledNote } from '../documents/utils/orphan-note-trash';
 import { getPurchaseCreditNoteTotalsByInvoice } from '../documents/utils/credit-note-balance';
 import {
@@ -1138,6 +1138,8 @@ export class DocumentsPurchasesService {
     rawFilters?: string,
 
     excludeOpeningBalances = false,
+
+    excludeStatuses: DocumentStatusExclusion[] = [],
   ) {
     const and: any[] = [];
     if (userId) and.push({ OR: [{ assigned_to: userId }, { assigned_to: null, created_by: userId }] });
@@ -1182,6 +1184,15 @@ export class DocumentsPurchasesService {
           },
         }))
       : [];
+    const excludedStatusesByCategory = new Map<string, number[]>();
+    for (const { category: statusCategory, status: hiddenStatus } of excludeStatuses) {
+      const statuses = excludedStatusesByCategory.get(statusCategory) ?? [];
+      statuses.push(hiddenStatus);
+      excludedStatusesByCategory.set(statusCategory, statuses);
+    }
+    const hiddenStatusFilters = [...excludedStatusesByCategory].map(([statusCategory, hiddenStatuses]) => ({
+      NOT: { document_types: { category: statusCategory }, status: { in: [...new Set(hiddenStatuses)] } },
+    }));
     const where: any = {
         deleted_at: null,
 
@@ -1204,7 +1215,9 @@ export class DocumentsPurchasesService {
 
         ...(excludeOpeningBalances ? { source: { not: 'opening_balance' } } : {}),
 
-        ...(and.length || cancelledFilters.length ? { AND: [...and, ...cancelledFilters] } : {}),
+        ...(and.length || cancelledFilters.length || hiddenStatusFilters.length
+          ? { AND: [...and, ...cancelledFilters, ...hiddenStatusFilters] }
+          : {}),
     };
     const directionOrder = order === 'asc' ? 'asc' : 'desc';
     const sortableFields = new Set(['number', 'date', 'status', 'total', 'created_at']);
@@ -1810,7 +1823,7 @@ export class DocumentsPurchasesService {
         // stock ingresan directamente al depósito elegido.
 
         for (const item of doc.document_items) {
-          if (!item.product_id) continue;
+          if (!item.product_id || item.products?.manages_stock === false) continue;
 
           const warehouseId = item.warehouse_id ?? doc.warehouse_id;
           if (!warehouseId) {

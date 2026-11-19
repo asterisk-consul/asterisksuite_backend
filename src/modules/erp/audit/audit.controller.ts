@@ -17,6 +17,12 @@ export class AuditController {
   }
 
   @RequirePermissions('audit.read')
+  @Get('agenda')
+  getAgenda(@Query('date') date?: string) {
+    return this.auditService.getAgenda(date);
+  }
+
+  @RequirePermissions('audit.read')
   @Get('stats')
   getStats(@Query('days') days?: string) {
     return this.auditService.getStats(days ? Number(days) : 7);
