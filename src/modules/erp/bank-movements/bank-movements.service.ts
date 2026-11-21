@@ -91,6 +91,8 @@ export interface AddChargeInput {
   convertedAmount?: number | null;
   description?: string | null;
   reference?: string | null;
+  referenceType?: string | null;
+  referenceId?: string | null;
   date?: Date;
   retention?: {
     jurisdiction?: string | null;
@@ -334,6 +336,8 @@ export class BankMovementsService {
             convertedAmount: raw.convertedAmount,
             description: raw.description ?? concept?.name ?? null,
             reference: raw.reference ?? null,
+            referenceType: raw.referenceType ?? null,
+            referenceId: raw.referenceId ?? null,
             paymentId: raw.paymentId ?? null,
             date: raw.date,
             operationId: raw.operationId ?? null,
@@ -365,6 +369,121 @@ export class BankMovementsService {
         created_by: raw.userId ?? null,
       },
     });
+  }
+
+  /**
+   * Creates every enabled automatic bank charge over the original movement base.
+   * Each automatic charge is always a debit from the bank account, including collections.
+   */
+  async addAutomaticBankTax(input: {
+    sourceNature: 'DEBIT' | 'CREDIT';
+    sourceDescription: string;
+    bankAccountId: string;
+    baseAmount: number;
+    currencyCode: string;
+    paymentId?: string | null;
+    operationId?: string | null;
+    referenceType: string;
+    referenceId: string;
+    exchangeRate?: number | null;
+    rateType?: string | null;
+    convertedAmount?: number | null;
+    date?: Date;
+    userId?: string | null;
+  }, prisma?: PrismaLike) {
+    const client = this.resolve(prisma);
+    const concepts = await client.bank_concepts.findMany({
+      where: { deleted_at: null, is_active: true, automatic_calculation: true },
+      include: { automatic_accounts: { where: { deleted_at: null }, select: { id: true } } },
+      orderBy: { name: 'asc' },
+    });
+    const baseAmount = money(Math.abs(Number(input.baseAmount)));
+    if (!Number.isFinite(baseAmount) || baseAmount === 0 || concepts.length === 0) return [];
+
+    const charges: Array<{ concept: any; percentage: number; taxAmount: number }> = [];
+    for (const concept of concepts) {
+      const movementNature = concept.automatic_movement_nature ?? 'BOTH';
+      if (movementNature !== 'BOTH' && movementNature !== input.sourceNature) continue;
+      if (concept.automatic_all_accounts === false &&
+          !concept.automatic_accounts.some((account: { id: string }) => account.id === input.bankAccountId)) continue;
+      const percentage = concept.default_percentage == null ? 0 : Number(concept.default_percentage);
+      if (!Number.isFinite(percentage) || percentage <= 0) continue;
+
+      const existing = await client.bank_account_movements.findFirst({
+        where: {
+          bank_concept_id: concept.id,
+          reference_type: 'automatic_bank_tax',
+          reference_id: input.referenceId,
+          deleted_at: null,
+        },
+        select: { id: true },
+      });
+      if (existing) continue;
+
+      const taxAmount = money((baseAmount * percentage) / 100);
+      if (taxAmount > 0) charges.push({ concept, percentage, taxAmount });
+    }
+    if (charges.length === 0) return [];
+
+    const account = await client.bank_accounts.findFirst({
+      where: { id: input.bankAccountId, deleted_at: null },
+      select: { balance: true },
+    });
+    const totalTax = charges.reduce((total, charge) => total + charge.taxAmount, 0);
+    if (account && Number(account.balance) - totalTax < -0.001) {
+      throw new BadRequestException('Saldo insuficiente para registrar el impuesto bancario');
+    }
+
+    const result: any[] = [];
+    for (const charge of charges) {
+      const common = {
+        bankAccountId: input.bankAccountId,
+        conceptId: charge.concept.id,
+        nature: 'DEBIT' as BankMovementNatureValue,
+        baseAmount,
+        percentage: charge.percentage,
+        taxAmount: charge.taxAmount,
+        totalAmount: charge.taxAmount,
+        currencyCode: input.currencyCode,
+        exchangeRate: input.exchangeRate,
+        rateType: input.rateType,
+        convertedAmount: input.convertedAmount,
+        operationId: input.operationId,
+        paymentId: input.paymentId,
+        date: input.date,
+        reference: `${input.referenceType}:${input.referenceId}`,
+        referenceType: 'automatic_bank_tax',
+        referenceId: input.referenceId,
+        description: `${charge.concept.name} (${charge.percentage}%) sobre ${input.sourceNature === 'DEBIT' ? 'débito' : 'crédito'} bancario — ${input.sourceDescription}`,
+        userId: input.userId,
+      };
+
+      result.push(input.paymentId
+        ? await this.addCharge(common, client)
+        : await this.addMovement({
+            bankAccountId: input.bankAccountId,
+            conceptId: charge.concept.id,
+            type: 'TAX',
+            nature: 'DEBIT',
+            amount: -charge.taxAmount,
+            baseAmount,
+            taxAmount: charge.taxAmount,
+            totalAmount: charge.taxAmount,
+            currencyCode: input.currencyCode,
+            exchangeRate: input.exchangeRate,
+            rateType: input.rateType,
+            convertedAmount: input.convertedAmount,
+            operationId: input.operationId,
+            paymentId: input.paymentId,
+            description: common.description,
+            reference: common.reference,
+            referenceType: common.referenceType,
+            referenceId: input.referenceId,
+            date: input.date,
+            userId: input.userId,
+          }, client));
+    }
+    return result;
   }
 
   // ═══════════════════════════════════════════

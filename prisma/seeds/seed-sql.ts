@@ -940,8 +940,12 @@ ON CONFLICT (code) DO UPDATE SET
   requires_receipt = EXCLUDED.requires_receipt,
   available_manual = EXCLUDED.available_manual,
   available_payments = EXCLUDED.available_payments,
-  available_settlements = EXCLUDED.available_settlements;
-`;
+ available_settlements = EXCLUDED.available_settlements;
+
+UPDATE bank_concepts
+SET automatic_calculation = true
+WHERE code = 'IMP_DEBITOS';
+ `;
 
 // ════════════════════════════════════════════════════════════════
 // SQL — SECUENCIAS DE DOCUMENTOS

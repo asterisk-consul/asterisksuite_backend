@@ -81,6 +81,7 @@ model treasury_obligations {
 // ─── CUENTAS BANCARIAS ──────────────────────────────────
 
 model bank_accounts {
+  automatic_concepts bank_concepts[] @relation("AutomaticConceptAccounts")
   id                    String  @id @default(uuid()) @db.Uuid
   name                  String  @db.VarChar(100)
   bank_name             String  @db.VarChar(100)

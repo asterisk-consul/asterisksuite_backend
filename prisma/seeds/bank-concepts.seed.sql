@@ -14,11 +14,11 @@ VALUES
   (gen_random_uuid(), 'COMISION_MANT', 'Comisión por mantenimiento', 'Cargo fijo mensual de mantenimiento', 'COMMISSION', '6201', true, 21.000, true, true, NULL, true);
 
 -- IMPUESTOS BANCARIOS
-INSERT INTO tenant.bank_concepts (id, code, name, description, concept_type, accounting_account, calculates_iva, iva_rate, generates_credit, impacts_iva_book, default_percentage, is_active)
+INSERT INTO tenant.bank_concepts (id, code, name, description, concept_type, accounting_account, calculates_iva, iva_rate, generates_credit, impacts_iva_book, default_percentage, automatic_calculation, is_active)
 VALUES
-  (gen_random_uuid(), 'IMP_DEBITOS', 'Imp. Débitos y Créditos', 'Impuesto a los débitos y créditos bancarios', 'TAX', '6202', false, NULL, false, false, 0.600, true),
-  (gen_random_uuid(), 'IMP_SELLOS', 'Imp. Sellos', 'Impuesto de sellos', 'TAX', '6202', false, NULL, false, false, 1.000, true),
-  (gen_random_uuid(), 'IMP_CHEQUE', 'Imp. al Cheque', 'Impuesto a los cheques', 'TAX', '6202', false, NULL, false, false, NULL, true);
+  (gen_random_uuid(), 'IMP_DEBITOS', 'Imp. Débitos y Créditos', 'Impuesto a los débitos y créditos bancarios', 'TAX', '6202', false, NULL, false, false, 0.600, true, true),
+  (gen_random_uuid(), 'IMP_SELLOS', 'Imp. Sellos', 'Impuesto de sellos', 'TAX', '6202', false, NULL, false, false, 1.000, false, true),
+  (gen_random_uuid(), 'IMP_CHEQUE', 'Imp. al Cheque', 'Impuesto a los cheques', 'TAX', '6202', false, NULL, false, false, NULL, false, true);
 
 -- GASTOS
 INSERT INTO tenant.bank_concepts (id, code, name, description, concept_type, accounting_account, calculates_iva, iva_rate, generates_credit, impacts_iva_book, default_percentage, is_active)

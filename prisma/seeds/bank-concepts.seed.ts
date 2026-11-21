@@ -38,7 +38,7 @@ const concepts = [
   { code: 'COMISION_MANT', name: 'Comisión mantenimiento', description: 'Cargo fijo mensual', concept_type: 'COMMISSION', accounting_account: '6201', calculates_iva: true, iva_rate: 21.0, generates_credit: true, impacts_iva_book: true, default_percentage: null },
 
   // IMPUESTOS BANCARIOS
-  { code: 'IMP_DEBITOS', name: 'Imp. Débitos y Créditos', description: 'Impuesto a débitos y créditos bancarios', concept_type: 'TAX', accounting_account: '6202', calculates_iva: false, iva_rate: null, generates_credit: false, impacts_iva_book: false, default_percentage: 0.6 },
+  { code: 'IMP_DEBITOS', name: 'Imp. Débitos y Créditos', description: 'Impuesto a débitos y créditos bancarios', concept_type: 'TAX', accounting_account: '6202', calculates_iva: false, iva_rate: null, generates_credit: false, impacts_iva_book: false, default_percentage: 0.6, automatic_calculation: true },
   { code: 'IMP_SELLOS', name: 'Imp. Sellos', description: 'Impuesto de sellos', concept_type: 'TAX', accounting_account: '6202', calculates_iva: false, iva_rate: null, generates_credit: false, impacts_iva_book: false, default_percentage: 1.0 },
   { code: 'IMP_CHEQUE', name: 'Imp. al Cheque', description: 'Impuesto a los cheques', concept_type: 'TAX', accounting_account: '6202', calculates_iva: false, iva_rate: null, generates_credit: false, impacts_iva_book: false, default_percentage: null },
 

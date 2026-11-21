@@ -342,6 +342,21 @@ export class ChecksService {
         },
         tx,
       );
+      await this.bankMovements.addAutomaticBankTax({
+        bankAccountId: check.bank_account_id!,
+        baseAmount: Number(check.amount),
+        sourceNature: 'CREDIT',
+        sourceDescription: `Cheque #${check.check_number} acreditado`,
+        currencyCode: check.currency_code,
+        exchangeRate: check.exchange_rate ? Number(check.exchange_rate) : null,
+        rateType: check.rate_type ?? null,
+        convertedAmount: check.converted_amount ? Number(check.converted_amount) : null,
+        paymentId: check.payment_id,
+        referenceType: 'check',
+        referenceId: check.id,
+        date: new Date(),
+        userId,
+      }, tx);
     });
 
     return this.findOne(id);
@@ -450,6 +465,21 @@ export class ChecksService {
         },
         tx,
       );
+      await this.bankMovements.addAutomaticBankTax({
+        bankAccountId: dto.bank_account_id!,
+        sourceNature: 'CREDIT',
+        sourceDescription: `Cheque #${check.check_number} depositado`,
+        baseAmount: depositAmount,
+        currencyCode: check.currency_code,
+        exchangeRate: check.exchange_rate ? Number(check.exchange_rate) : null,
+        rateType: check.rate_type ?? null,
+        convertedAmount: check.converted_amount ? Number(check.converted_amount) : null,
+        paymentId: check.payment_id,
+        referenceType: 'check',
+        referenceId: check.id,
+        date: effectiveDate,
+        userId,
+      }, tx);
     });
 
     return this.findOne(id);
@@ -578,9 +608,14 @@ export class ChecksService {
       where: {
         reference_type: 'check',
         reference_id: check.id,
+        type: check.is_own ? 'CHECK_ISSUED' : 'COLLECTION',
         deleted_at: null,
       },
       orderBy: { created_at: 'desc' },
+    });
+    const bankTaxMovements = await this.prisma.bank_account_movements.findMany({
+      where: { reference_type: 'automatic_bank_tax', reference_id: check.id, deleted_at: null },
+      orderBy: { created_at: 'asc' },
     });
     if (!cashMovement && !bankMovement) {
       throw new BadRequestException('No se encontró el movimiento financiero original del cheque');
@@ -679,6 +714,25 @@ export class ChecksService {
           description: `Reversión cheque #${check.check_number}`,
           userId,
         }, tx);
+        for (const bankTaxMovement of bankTaxMovements) {
+          await this.bankMovements.addMovement({
+            bankAccountId: check.bank_account_id,
+            operationId: operation.id,
+            type: 'ADJUSTMENT',
+            nature: Number(bankTaxMovement.amount) < 0 ? 'CREDIT' : 'DEBIT',
+            amount: -Number(bankTaxMovement.amount),
+            baseAmount: Number(bankTaxMovement.base_amount ?? 0),
+            taxAmount: Number(bankTaxMovement.tax_amount ?? 0),
+            totalAmount: Math.abs(Number(bankTaxMovement.amount)),
+            currencyCode: check.currency_code,
+            description: `Reversión impuesto cheque #${check.check_number}`,
+            referenceType: 'check_tax_reversal',
+            referenceId: check.id,
+            date: new Date(),
+            userId,
+            recalculate: false,
+          }, tx);
+        }
         await this.bankMovements.addMovement({
           bankAccountId: check.bank_account_id,
           operationId: operation.id,
@@ -838,6 +892,21 @@ export class ChecksService {
         },
         tx,
       );
+      await this.bankMovements.addAutomaticBankTax({
+        bankAccountId: check.bank_account_id!,
+        baseAmount: amount,
+        sourceNature: 'DEBIT',
+        sourceDescription: `Cheque propio #${check.check_number} debitado`,
+        currencyCode: check.currency_code,
+        exchangeRate: check.exchange_rate ? Number(check.exchange_rate) : null,
+        rateType: check.rate_type ?? null,
+        convertedAmount: check.converted_amount ? Number(check.converted_amount) : null,
+        paymentId: check.payment_id,
+        referenceType: 'check',
+        referenceId: check.id,
+        date: effectiveDate,
+        userId,
+      }, tx);
       await tx.checks.update({
         where: { id },
         data: {

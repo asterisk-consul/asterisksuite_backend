@@ -2987,13 +2987,30 @@ export class PaymentsService {
       prisma,
     );
 
+    await this.bankMovements.addAutomaticBankTax({
+      sourceNature: isOutflow ? 'DEBIT' : 'CREDIT',
+      sourceDescription: `${payment.type === 'COLLECTION' ? 'Cobro' : payment.type === 'EXPENSE' ? 'Gasto' : 'Pago'} #${payment.number}`,
+      bankAccountId: payment.bank_account_id,
+      baseAmount: amount,
+      currencyCode: payment.currency_code,
+      exchangeRate: payment.exchange_rate ? Number(payment.exchange_rate) : null,
+      rateType: payment.rate_type ?? null,
+      convertedAmount: payment.converted_amount ? Number(payment.converted_amount) : null,
+      paymentId: payment.id,
+      operationId: operation.id,
+      referenceType: 'payment',
+      referenceId: payment.id,
+      date: payment.date,
+      userId,
+    }, prisma);
+
     return operation;
   }
 
   private async createBankCharges(payment: any, operation: any, userId: string, tx?: any) {
     const prisma = tx || this.prisma;
     const charges = await prisma.payment_bank_charges.findMany({
-      where: { payment_id: payment.id, deleted_at: null },
+      where: { payment_id: payment.id, deleted_at: null, bank_account_movement_id: null },
       include: { bank_concept: true },
       orderBy: { created_at: 'asc' },
     });
